@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test } from '@jest/globals'
+import { jest, beforeEach, describe, expect, test } from '@jest/globals'
 import { screen } from 'shadow-dom-testing-library'
 import userEvent, { UserEvent } from '@testing-library/user-event'
 import { Book } from '../../book'
@@ -6,10 +6,12 @@ import './library'
 import { Library } from './library'
 import { fireEvent } from '@testing-library/dom'
 
+const onBookClick = jest.fn()
 let user: UserEvent
 let library: Library
 
 beforeEach(() => {
+    jest.resetAllMocks()
     library = document.createElement('bookshelf-library')
     user = userEvent.setup()
 
@@ -74,6 +76,18 @@ describe('Search', () => {
             'Web Components in Action',
             'Web Accessibility Cookbook',
         ])
+    })
+})
+
+describe('Clicking on a book cover', () => {
+    test('should call callback', async () => {
+        const intoThinAir = new Book('Into Thin Air')
+        library.books = [intoThinAir]
+        library.onBookClick = onBookClick
+
+        await user.click(screen.getByShadowText('Into Thin Air'))
+
+        expect(onBookClick).toHaveBeenCalledWith(intoThinAir)
     })
 })
 

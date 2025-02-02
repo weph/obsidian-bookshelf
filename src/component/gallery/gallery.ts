@@ -1,8 +1,10 @@
 import { Book } from '../../book'
 import './gallery-card'
+import { GalleryCard } from './gallery-card'
 
 export interface GalleryProps {
     books: Array<Book>
+    onBookClick: ((book: Book) => void) | null
 }
 
 class Gallery extends HTMLElement implements GalleryProps {
@@ -10,17 +12,28 @@ class Gallery extends HTMLElement implements GalleryProps {
 
     private _books: Array<Book> = []
 
+    public onBookClick: ((book: Book) => void) | null = null
+
     constructor() {
         super()
 
         this.root = this.attachShadow({ mode: 'open' })
+        this.root.addEventListener('click', (e) => {
+            if (this.onBookClick === null) {
+                return
+            }
+
+            const index = (e.target as GalleryCard).getAttribute('index') || ''
+            this.onBookClick(this._books[parseInt(index)])
+        })
     }
 
     private update() {
         const markup = this._books
             .map(
-                (book) =>
-                    `<div role="list"><bookshelf-gallery-card title="${book.title}" role="listitem"></bookshelf-gallery-card></div>`,
+                (book, index) => `<div role="list">
+                    <bookshelf-gallery-card index="${index}" title="${book.title}" role="listitem"></bookshelf-gallery-card>
+                </div>`,
             )
             .join('')
 

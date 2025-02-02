@@ -2,9 +2,13 @@ import type { Meta, StoryObj } from '@storybook/html'
 import type { GalleryProps } from './gallery'
 import { Book } from '../../book'
 import './gallery'
+import { fn } from '@storybook/test'
 
 const meta = {
     title: 'Gallery',
+    args: {
+        onBookClick: fn(),
+    },
     render: (args) => {
         const element = document.createElement('bookshelf-gallery')
 

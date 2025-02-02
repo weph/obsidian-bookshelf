@@ -3,6 +3,7 @@ import '../gallery/gallery'
 
 export interface LibraryProps {
     books: Array<Book>
+    onBookClick: ((book: Book) => void) | null
 }
 
 export class Library extends HTMLElement implements LibraryProps {
@@ -13,6 +14,8 @@ export class Library extends HTMLElement implements LibraryProps {
     private galleryContainer: HTMLElement
 
     private _books: Array<Book> = []
+
+    public _onBookClick: ((book: Book) => void) | null = null
 
     constructor() {
         super()
@@ -86,6 +89,7 @@ export class Library extends HTMLElement implements LibraryProps {
     private bookGallery(books: Array<Book>): HTMLElement {
         const gallery = document.createElement('bookshelf-gallery')
         gallery.books = books
+        gallery.onBookClick = this._onBookClick
 
         return gallery
     }
@@ -103,6 +107,11 @@ export class Library extends HTMLElement implements LibraryProps {
 
     set books(value: Array<Book>) {
         this._books = value
+        this.update()
+    }
+
+    set onBookClick(callback: ((book: Book) => void) | null) {
+        this._onBookClick = callback
         this.update()
     }
 }

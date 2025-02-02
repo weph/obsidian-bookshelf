@@ -2,6 +2,8 @@ import { ItemView, WorkspaceLeaf } from 'obsidian'
 import '../../component/library/library'
 import { Bookshelf } from '../../bookshelf'
 import { Library } from '../../component/library/library'
+import { Book } from '../../book'
+import { BookModal } from '../modal/book-modal'
 
 export const VIEW_TYPE_LIBRARY = 'library'
 
@@ -27,6 +29,7 @@ export class LibraryView extends ItemView {
         const container = this.containerEl.children[1]
 
         this.libraryComponent = this.containerEl.createEl('bookshelf-library')
+        this.libraryComponent.onBookClick = (book: Book) => new BookModal(this.app, book).open()
 
         container.replaceChildren(this.libraryComponent)
 

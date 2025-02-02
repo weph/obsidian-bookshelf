@@ -2,9 +2,13 @@ import type { Meta, StoryObj } from '@storybook/html'
 import type { LibraryProps } from './library'
 import { Book } from '../../book'
 import './library'
+import { fn } from '@storybook/test'
 
 const meta = {
     title: 'Library',
+    args: {
+        onBookClick: fn(),
+    },
     render: (args) => {
         const element = document.createElement('bookshelf-library')
 
