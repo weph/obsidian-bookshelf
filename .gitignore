@@ -25,3 +25,5 @@ data.json
 
 # stryker temp files
 .stryker-tmp
+
+*storybook.log
