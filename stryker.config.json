@@ -4,8 +4,8 @@
     "reporters": ["html", "clear-text", "progress"],
     "testRunner": "jest",
     "coverageAnalysis": "perTest",
-    "mutate": ["src/**/*.ts", "!src/**/*.spec.ts", "!src/bookshelf-error.ts"],
-    "ignorePatterns": [".*/**/*", "reports/**/*", "src/**/*.stories.ts", "src/component/**/*"],
+    "mutate": ["src/**/*.ts", "!src/**/*.spec.ts", "!src/bookshelf-error.ts", "!src/component/gallery/*"],
+    "ignorePatterns": [".*/**/*", "reports/**/*", "src/**/*.stories.ts"],
     "thresholds": {
         "high": 100,
         "low": 90,
