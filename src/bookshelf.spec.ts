@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, test } from '@jest/globals'
-import { Bookshelf, BookshelfError } from './bookshelf'
+import { Bookshelf } from './bookshelf'
 import { Book } from './book'
+import { BookshelfError } from './bookshelf-error'
 
 let bookshelf: Bookshelf
 

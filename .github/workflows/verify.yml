@@ -21,3 +21,6 @@ jobs:
 
             - name: 'Test'
               run: 'npm run test'
+
+            - name: 'Mutation Tests'
+              run: 'npm run test:mutation'

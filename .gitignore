@@ -22,3 +22,6 @@ data.json
 .DS_Store
 
 /reports
+
+# stryker temp files
+.stryker-tmp

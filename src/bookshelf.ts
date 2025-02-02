@@ -1,14 +1,5 @@
 import { Book } from './book'
-
-export class BookshelfError extends Error {
-    static identifierDoesntExist(identifier: string) {
-        return new BookshelfError(`A book with the identifier "${identifier}" does not exist`)
-    }
-
-    static identifierExists(identifier: string) {
-        return new BookshelfError(`A book with the identifier "${identifier}" already exists`)
-    }
-}
+import { BookshelfError } from './bookshelf-error'
 
 export class Bookshelf {
     private books = new Map<string, Book>()

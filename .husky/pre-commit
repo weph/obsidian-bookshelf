@@ -2,3 +2,4 @@ npm run lint
 npm run style:format
 git add -u
 npm run test
+npm run test:mutation

@@ -12,6 +12,7 @@
         "style:format": "npx prettier . --write",
         "test": "npx jest",
         "test:coverage": "npx jest --coverage",
+        "test:mutation": "npx stryker run",
         "prepare": "husky"
     },
     "keywords": [
@@ -22,8 +23,9 @@
     "devDependencies": {
         "@eslint/compat": "^1.2.6",
         "@eslint/js": "^9.19.0",
+        "@stryker-mutator/jest-runner": "^8.7.1",
+        "@stryker-mutator/typescript-checker": "^8.7.1",
         "@types/node": "^22",
-        "@vitest/coverage-v8": "^3.0.4",
         "builtin-modules": "^4.0.0",
         "esbuild": "^0.24.2",
         "eslint": "^9.19.0",
