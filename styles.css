@@ -1,0 +1,9 @@
+body {
+    --bookshelf--text--color-dimmed: var(--text-faint);
+
+    --bookshelf--library--header-background: var(--background-primary);
+    --bookshelf--library--header-padding: var(--size-4-3);
+
+    --bookshelf--gallery-card--background-color: var(--background-primary-alt);
+    --bookshelf--gallery-card--shadow: var(--shadow-s);
+}

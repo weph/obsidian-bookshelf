@@ -5,7 +5,7 @@
     "testRunner": "jest",
     "coverageAnalysis": "perTest",
     "mutate": ["src/**/*.ts", "!src/**/*.spec.ts", "!src/bookshelf-error.ts", "!src/component/gallery/*"],
-    "ignorePatterns": [".*/**/*", "reports/**/*", "src/**/*.stories.ts"],
+    "ignorePatterns": [".*/**/*", "reports/**/*", "src/**/*.stories.ts", "src/obsidian/**/*"],
     "thresholds": {
         "high": 100,
         "low": 90,

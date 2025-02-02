@@ -48,6 +48,7 @@
         "jest-environment-jsdom": "^29.7.0",
         "obsidian": "latest",
         "prettier": "3.4.2",
+        "radashi": "^12.3.4",
         "shadow-dom-testing-library": "^1.11.3",
         "storybook": "^8.5.3",
         "ts-jest": "^29.2.5",
