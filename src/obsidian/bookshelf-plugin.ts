@@ -5,6 +5,7 @@ import { Book } from '../book'
 import { debounce } from 'radashi'
 import { BookshelfPluginSettings, DEFAULT_SETTINGS } from './settings/bookshelf-plugin-settings'
 import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
+import { ObsidianMetadata } from '../metadata/metadata'
 
 export default class BookshelfPlugin extends Plugin {
     public settings: BookshelfPluginSettings
@@ -54,25 +55,23 @@ export default class BookshelfPlugin extends Plugin {
     private coverUrl(file: TFile): string {
         const coverProperty = this.settings.bookProperties.cover
         const resourcePath = this.app.vault.getResourcePath(file)
-        const meta = this.app.metadataCache.getFileCache(file)
+        const meta = new ObsidianMetadata(this.app.metadataCache.getFileCache(file) || {})
 
-        for (const coverLink of meta?.frontmatterLinks || []) {
-            if (coverLink.key === coverProperty) {
-                const coverFile = this.app.metadataCache.getFirstLinkpathDest(coverLink.link, '')
-                if (coverFile === null) {
-                    break
-                }
-
-                return this.app.vault.getResourcePath(coverFile)
-            }
-        }
-
-        const cover = meta?.frontmatter?.[coverProperty] || null
+        const cover = meta.value(coverProperty)
         if (cover === null) {
             return ''
         }
 
-        if (cover.startsWith('http')) {
+        if (typeof cover === 'object' && 'link' in cover) {
+            const coverFile = this.app.metadataCache.getFirstLinkpathDest(cover.link, '')
+            if (coverFile === null) {
+                return ''
+            }
+
+            return this.app.vault.getResourcePath(coverFile)
+        }
+
+        if (typeof cover === 'string' && cover.startsWith('http')) {
             return cover
         }
 
