@@ -3,14 +3,22 @@ import { Bookshelf } from '../bookshelf'
 import { LibraryView, VIEW_TYPE_LIBRARY } from './view/library-view'
 import { Book } from '../book'
 import { debounce } from 'radashi'
+import { BookshelfPluginSettings, DEFAULT_SETTINGS } from './settings/bookshelf-plugin-settings'
+import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
 
 export default class BookshelfPlugin extends Plugin {
+    public settings: BookshelfPluginSettings
+
     private bookshelf: Bookshelf
 
     private libraryView: LibraryView
 
     async onload() {
+        await this.loadSettings()
+
         this.bookshelf = new Bookshelf()
+
+        this.addSettingTab(new BookshelfSettingsTab(this.app, this))
 
         this.registerView(VIEW_TYPE_LIBRARY, (leaf) => {
             this.libraryView = new LibraryView(leaf, this.bookshelf)
@@ -26,6 +34,10 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     private async handleFile(file: TFile): Promise<void> {
+        if (!this.isBookNote(file)) {
+            return
+        }
+
         const identifier = file.path
 
         if (!this.bookshelf.has(identifier)) {
@@ -33,6 +45,10 @@ export default class BookshelfPlugin extends Plugin {
         }
 
         this.updateView()
+    }
+
+    private isBookNote(file: TFile): boolean {
+        return this.settings.booksFolder !== '' && file.path.startsWith(this.settings.booksFolder)
     }
 
     private updateView = debounce({ delay: 100 }, () => this.libraryView.update())
@@ -49,5 +65,13 @@ export default class BookshelfPlugin extends Plugin {
         const leaf = workspace.getLeaf('tab')
         await leaf.setViewState({ type: VIEW_TYPE_LIBRARY, active: true })
         await workspace.revealLeaf(leaf)
+    }
+
+    async loadSettings() {
+        this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData())
+    }
+
+    async saveSettings() {
+        await this.saveData(this.settings)
     }
 }
