@@ -1,6 +1,6 @@
 import { CachedMetadata, FrontmatterLinkCache } from 'obsidian'
 
-type PropertyValue = string | number | boolean | FrontmatterLinkCache
+export type PropertyValue = string | number | boolean | FrontmatterLinkCache
 
 export interface Metadata {
     value(property: string): PropertyValue | Array<PropertyValue> | null
@@ -23,5 +23,13 @@ export class ObsidianMetadata implements Metadata {
         }
 
         return this.links.get(property) || value
+    }
+}
+
+export class StaticMetadata implements Metadata {
+    constructor(private metadata: { [key: string]: PropertyValue | Array<PropertyValue> }) {}
+
+    public value(property: string): PropertyValue | Array<PropertyValue> | null {
+        return this.metadata[property] || null
     }
 }

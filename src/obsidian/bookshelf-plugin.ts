@@ -1,16 +1,18 @@
 import { Plugin, TFile } from 'obsidian'
 import { Bookshelf } from '../bookshelf'
 import { LibraryView, VIEW_TYPE_LIBRARY } from './view/library-view'
-import { Book } from '../book'
 import { debounce } from 'radashi'
 import { BookshelfPluginSettings, DEFAULT_SETTINGS } from './settings/bookshelf-plugin-settings'
 import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
 import { ObsidianMetadata } from '../metadata/metadata'
+import { BookFactory } from '../book-factory'
 
 export default class BookshelfPlugin extends Plugin {
     public settings: BookshelfPluginSettings
 
     private bookshelf: Bookshelf
+
+    private bookFactory: BookFactory
 
     private libraryView: LibraryView
 
@@ -18,6 +20,7 @@ export default class BookshelfPlugin extends Plugin {
         await this.loadSettings()
 
         this.bookshelf = new Bookshelf()
+        this.bookFactory = new BookFactory({ cover: this.settings.bookProperties.cover }, this.linkToUri.bind(this))
 
         this.addSettingTab(new BookshelfSettingsTab(this.app, this))
 
@@ -42,7 +45,9 @@ export default class BookshelfPlugin extends Plugin {
         const identifier = file.path
 
         if (!this.bookshelf.has(identifier)) {
-            this.bookshelf.add(identifier, new Book(file.basename, this.coverUrl(file)))
+            const metadata = new ObsidianMetadata(this.app.metadataCache.getFileCache(file) || {})
+
+            this.bookshelf.add(identifier, this.bookFactory.create(file.basename, metadata))
         }
 
         this.updateView()
@@ -52,35 +57,14 @@ export default class BookshelfPlugin extends Plugin {
         return this.settings.booksFolder !== '' && file.path.startsWith(this.settings.booksFolder)
     }
 
-    private coverUrl(file: TFile): string {
-        const coverProperty = this.settings.bookProperties.cover
-        const resourcePath = this.app.vault.getResourcePath(file)
-        const meta = new ObsidianMetadata(this.app.metadataCache.getFileCache(file) || {})
+    private linkToUri(link: string): string {
+        const coverFile = this.app.metadataCache.getFirstLinkpathDest(link, '')
 
-        const cover = meta.value(coverProperty)
-        if (cover === null) {
+        if (coverFile === null) {
             return ''
         }
 
-        if (typeof cover === 'object' && 'link' in cover) {
-            const coverFile = this.app.metadataCache.getFirstLinkpathDest(cover.link, '')
-            if (coverFile === null) {
-                return ''
-            }
-
-            return this.app.vault.getResourcePath(coverFile)
-        }
-
-        if (typeof cover === 'string' && cover.startsWith('http')) {
-            return cover
-        }
-
-        const directory = file.parent
-        if (directory === null) {
-            return ''
-        }
-
-        return `${resourcePath.replace(/^(.+)\/[^/]*/, '$1')}/attachments/${cover}`
+        return this.app.vault.getResourcePath(coverFile)
     }
 
     private updateView = debounce({ delay: 100 }, () => this.libraryView.update())
