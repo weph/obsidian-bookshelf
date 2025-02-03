@@ -38,5 +38,16 @@ export class BookshelfSettingsTab extends PluginSettingTab {
                     await this.plugin.saveSettings()
                 }),
             )
+
+        new Setting(containerEl)
+            .setName('Author')
+            .setDesc("Name of the property that holds the author's name(s)")
+            .addText((text) =>
+                text.setValue(this.plugin.settings.bookProperties.author).onChange(async (value) => {
+                    this.plugin.settings.bookProperties.author = value
+
+                    await this.plugin.saveSettings()
+                }),
+            )
     }
 }

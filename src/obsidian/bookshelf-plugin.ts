@@ -20,7 +20,13 @@ export default class BookshelfPlugin extends Plugin {
         await this.loadSettings()
 
         this.bookshelf = new Bookshelf()
-        this.bookFactory = new BookFactory({ cover: this.settings.bookProperties.cover }, this.linkToUri.bind(this))
+        this.bookFactory = new BookFactory(
+            {
+                cover: this.settings.bookProperties.cover,
+                author: this.settings.bookProperties.author,
+            },
+            this.linkToUri.bind(this),
+        )
 
         this.addSettingTab(new BookshelfSettingsTab(this.app, this))
 

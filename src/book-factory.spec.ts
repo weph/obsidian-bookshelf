@@ -1,8 +1,8 @@
-import { describe, expect, it } from '@jest/globals'
+import { describe, expect, it, test } from '@jest/globals'
 import { BookFactory } from './book-factory'
 import { StaticMetadata } from './metadata/metadata'
 
-const factory = new BookFactory({ cover: 'cover' }, (link) => `uri://${link}`)
+const factory = new BookFactory({ cover: 'cover', author: 'author' }, (link) => `uri://${link}`)
 
 describe('Title', () => {
     it('should be used as is', () => {
@@ -73,5 +73,32 @@ describe('Cover', () => {
         )
 
         expect(result.cover).toBe(`uri://image1`)
+    })
+})
+
+describe('Author', () => {
+    test.each([
+        [undefined, []],
+        [true, []],
+        [1, ['1']],
+        ['Jane Doe', ['Jane Doe']],
+        [
+            ['Jane Doe', 'John Doe'],
+            ['Jane Doe', 'John Doe'],
+        ],
+        [{ key: 'author', link: 'Jane Doe', original: '[[Jane Doe]]' }, ['Jane Doe']],
+        [{ key: 'author', link: 'Jane Doe', original: '[[Jane Doe]]', displayText: 'J. Doe' }, ['J. Doe']],
+        [
+            [
+                { key: 'author', link: 'Jane Doe', original: '[[Jane Doe]]', displayText: 'J. Doe' },
+                'Foo Bar',
+                { key: 'author', link: 'John Doe', original: '[[John Doe]]' },
+            ],
+            ['J. Doe', 'Foo Bar', 'John Doe'],
+        ],
+    ])('Metadata property "%s" should be %s', (value, expected) => {
+        const result = factory.create('Title', new StaticMetadata(value !== undefined ? { author: value } : {}))
+
+        expect(result.authors).toEqual(expected)
     })
 })

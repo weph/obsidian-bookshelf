@@ -1,10 +1,12 @@
 import { Metadata, PropertyValue } from './metadata/metadata'
 import { Book } from './book'
+import { Reference } from 'obsidian'
 
 type LinkToUri = (link: string) => string
 
 interface PropertyNames {
     cover: string
+    author: string
 }
 
 export class BookFactory {
@@ -14,7 +16,7 @@ export class BookFactory {
     ) {}
 
     public create(title: string, metadata: Metadata): Book {
-        return new Book(title, this.cover(metadata))
+        return new Book(title, this.cover(metadata), this.authors(metadata))
     }
 
     private cover(metadata: Metadata): string | undefined {
@@ -33,6 +35,36 @@ export class BookFactory {
         }
 
         return undefined
+    }
+
+    private authors(metadata: Metadata): Array<string> {
+        const value = metadata.value(this.propertyNames.author)
+
+        if (value === null || typeof value === 'boolean') {
+            return []
+        }
+
+        if (Array.isArray(value)) {
+            return value.map((v) => this.text(v))
+        }
+
+        if (typeof value === 'object' && 'link' in value) {
+            return [this.linkText(value)]
+        }
+
+        return [value.toString()]
+    }
+
+    private text(value: PropertyValue): string {
+        if (typeof value === 'object' && 'link' in value) {
+            return this.linkText(value)
+        }
+
+        return value.toString()
+    }
+
+    private linkText(link: Reference): string {
+        return link.displayText || link.link
     }
 
     private firstValue(property: string, metadata: Metadata): PropertyValue | null {

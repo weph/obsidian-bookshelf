@@ -7,7 +7,10 @@ export class BookModal extends Modal {
 
         const content = document.createDocumentFragment()
         const div = content.createDiv()
-        div.innerHTML = `<img src="${book.cover}" alt="${book.title}" width="100%" />`
+        div.innerHTML = `
+            ${book.authors?.length ? `<strong>by ${book.authors?.join(', ')}</strong>` : ''}
+            <img src="${book.cover}" alt="${book.title}" width="100%" />
+        `
 
         this.setTitle(book.title)
         this.setContent(content)
