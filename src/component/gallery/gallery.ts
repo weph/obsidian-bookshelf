@@ -32,7 +32,12 @@ class Gallery extends HTMLElement implements GalleryProps {
         const markup = this._books
             .map(
                 (book, index) => `<div role="list">
-                    <bookshelf-gallery-card index="${index}" title="${book.title}" role="listitem"></bookshelf-gallery-card>
+                    <bookshelf-gallery-card 
+                        index="${index}"
+                        title="${book.title}"
+                        ${book.cover ? `cover="${book.cover}"` : ''}
+                        role="listitem">
+                    </bookshelf-gallery-card>
                 </div>`,
             )
             .join('')

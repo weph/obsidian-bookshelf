@@ -41,7 +41,7 @@ export default class BookshelfPlugin extends Plugin {
         const identifier = file.path
 
         if (!this.bookshelf.has(identifier)) {
-            this.bookshelf.add(identifier, new Book(file.basename))
+            this.bookshelf.add(identifier, new Book(file.basename, this.coverUrl(file)))
         }
 
         this.updateView()
@@ -49,6 +49,39 @@ export default class BookshelfPlugin extends Plugin {
 
     private isBookNote(file: TFile): boolean {
         return this.settings.booksFolder !== '' && file.path.startsWith(this.settings.booksFolder)
+    }
+
+    private coverUrl(file: TFile): string {
+        const coverProperty = this.settings.bookProperties.cover
+        const resourcePath = this.app.vault.getResourcePath(file)
+        const meta = this.app.metadataCache.getFileCache(file)
+
+        for (const coverLink of meta?.frontmatterLinks || []) {
+            if (coverLink.key === coverProperty) {
+                const coverFile = this.app.metadataCache.getFirstLinkpathDest(coverLink.link, '')
+                if (coverFile === null) {
+                    break
+                }
+
+                return this.app.vault.getResourcePath(coverFile)
+            }
+        }
+
+        const cover = meta?.frontmatter?.[coverProperty] || null
+        if (cover === null) {
+            return ''
+        }
+
+        if (cover.startsWith('http')) {
+            return cover
+        }
+
+        const directory = file.parent
+        if (directory === null) {
+            return ''
+        }
+
+        return `${resourcePath.replace(/^(.+)\/[^/]*/, '$1')}/attachments/${cover}`
     }
 
     private updateView = debounce({ delay: 100 }, () => this.libraryView.update())

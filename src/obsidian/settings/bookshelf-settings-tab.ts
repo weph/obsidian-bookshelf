@@ -25,5 +25,18 @@ export class BookshelfSettingsTab extends PluginSettingTab {
                     await this.plugin.saveSettings()
                 }),
             )
+
+        new Setting(containerEl).setName('Book Properties').setHeading()
+
+        new Setting(containerEl)
+            .setName('Cover')
+            .setDesc("Name of the property that holds the book's cover link, filename or URL")
+            .addText((text) =>
+                text.setValue(this.plugin.settings.bookProperties.cover).onChange(async (value) => {
+                    this.plugin.settings.bookProperties.cover = value
+
+                    await this.plugin.saveSettings()
+                }),
+            )
     }
 }

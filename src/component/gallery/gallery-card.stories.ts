@@ -8,7 +8,9 @@ const meta = {
     render: (args) => {
         const element = document.createElement('bookshelf-gallery-card')
 
-        Object.assign(element, args)
+        for (const [attr, value] of Object.entries(args)) {
+            element.setAttribute(attr, value)
+        }
 
         return element
     },
@@ -18,6 +20,13 @@ export default meta
 type Story = StoryObj<GalleryCardProps>
 
 export const Primary: Story = {
+    args: {
+        title: 'Animal Farm',
+        cover: '/covers/animal-farm.jpg',
+    },
+}
+
+export const NoCover: Story = {
     args: {
         title: 'Animal Farm',
     },

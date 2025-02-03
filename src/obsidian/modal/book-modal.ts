@@ -5,6 +5,11 @@ export class BookModal extends Modal {
     constructor(app: App, book: Book) {
         super(app)
 
+        const content = document.createDocumentFragment()
+        const div = content.createDiv()
+        div.innerHTML = `<img src="${book.cover}" alt="${book.title}" width="100%" />`
+
         this.setTitle(book.title)
+        this.setContent(content)
     }
 }

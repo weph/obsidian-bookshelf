@@ -1,5 +1,6 @@
 export interface GalleryCardProps {
     title: string
+    cover?: string
 }
 
 export class GalleryCard extends HTMLElement implements GalleryCardProps {
@@ -12,8 +13,14 @@ export class GalleryCard extends HTMLElement implements GalleryCardProps {
     }
 
     connectedCallback() {
+        const cover = this.getAttribute('cover')
+        const title = this.getAttribute('title')
+
         this.root.innerHTML = `
-            <span id="title">${this.title}</span>
+            ${cover ? `<img src="${cover}" alt="${title}" />` : ''}
+            <div id="${cover ? 'overlay' : 'fallback-cover'}">
+				<span id="title">${title}</span>
+			</div>
             ${css()}
 		`
     }
@@ -34,11 +41,44 @@ function css(): string {
                 box-sizing: border-box;
             }
             
+            img {
+                display: block;
+                width: 100%;				
+            }
+            
+            #fallback-cover {
+                height: 100%;
+                display: flex;
+                flex-flow: column;
+                justify-content: center;
+                font-weight: bold;
+                text-align: center;
+            }
+
             #title {
                 display: block;
                 font-weight: bold;
                 text-align: center;
                 overflow-wrap: break-word;
+                cursor: default;
+            }
+            
+            #overlay {
+                display: none;
+                flex-flow: column;
+                justify-content: center;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                padding: 10px;
+                background-color: rgb(from var(--bookshelf--gallery-card--background-color) r g b / 0.8);
+                box-sizing: border-box;
+            }
+            
+            :host(:hover) #overlay {
+                display: flex;
             }
         </style>`
 }
