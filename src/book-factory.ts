@@ -28,15 +28,11 @@ export class BookFactory {
     private cover(metadata: Metadata): string | undefined {
         const cover = this.firstValue(this.propertyNames.cover, metadata)
 
-        if (cover === null) {
-            return undefined
-        }
-
         if (typeof cover === 'string') {
             return cover.startsWith('http') ? cover : this.linkToUri(cover)
         }
 
-        if (typeof cover === 'object' && 'link' in cover) {
+        if (this.isReference(cover)) {
             return this.linkToUri(cover.link)
         }
 
@@ -54,11 +50,7 @@ export class BookFactory {
             return value.map((v) => this.text(v))
         }
 
-        if (typeof value === 'object' && 'link' in value) {
-            return [this.linkText(value)]
-        }
-
-        return [value.toString()]
+        return [this.isReference(value) ? this.linkText(value) : value.toString()]
     }
 
     private published(metadata: Metadata): Date | undefined {
@@ -89,12 +81,12 @@ export class BookFactory {
         return undefined
     }
 
-    private text(value: PropertyValue): string {
-        if (typeof value === 'object' && 'link' in value) {
-            return this.linkText(value)
-        }
+    private isReference(value: PropertyValue | null) {
+        return value !== null && typeof value === 'object' && 'link' in value
+    }
 
-        return value.toString()
+    private text(value: PropertyValue): string {
+        return this.isReference(value) ? this.linkText(value) : value.toString()
     }
 
     private linkText(link: Reference): string {
