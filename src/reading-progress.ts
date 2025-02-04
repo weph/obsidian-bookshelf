@@ -1,6 +1,6 @@
 import { Book } from './book'
 
-interface ReadingProgress {
+export interface ReadingProgress {
     date: Date
     book: Book
     previous: ReadingProgress | null

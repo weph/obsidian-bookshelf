@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, test } from '@jest/globals'
 import { Bookshelf } from './bookshelf'
 import { Book } from './book'
 import { BookshelfError } from './bookshelf-error'
+import { ReadingProgress } from './reading-progress'
 
 let bookshelf: Bookshelf
 
@@ -57,6 +58,65 @@ describe('After adding a book', () => {
         expect(() => bookshelf.add('the-shining', other)).toThrow(BookshelfError.identifierExists('the-shining'))
     })
 })
+
+describe('Reading progress', () => {
+    const dracula = book('Dracula')
+    const shining = book('The Shining')
+
+    test('should be ordered by date', () => {
+        bookshelf.addReadingProgress(date(2025, 2, 3), dracula, 10, 1)
+        bookshelf.addReadingProgress(date(2025, 2, 4), shining, 50)
+        bookshelf.addReadingProgress(date(2025, 2, 5), dracula, 20)
+        bookshelf.addReadingProgress(date(2025, 2, 1), shining, 20, 10)
+
+        const progress = bookshelf.readingProgress()
+
+        expect(progress.map(readingProgressAsString)).toEqual([
+            '2025-02-01: The Shining: 10-20',
+            '2025-02-03: Dracula: 1-10',
+            '2025-02-04: The Shining: 21-50',
+            '2025-02-05: Dracula: 11-20',
+        ])
+    })
+
+    test('items on the same date should be returned in the order of addition', () => {
+        bookshelf.addReadingProgress(date(2025, 1, 1), dracula, 1)
+        bookshelf.addReadingProgress(date(2025, 1, 1), shining, 2)
+        bookshelf.addReadingProgress(date(2025, 1, 2), shining, 3)
+        bookshelf.addReadingProgress(date(2025, 1, 2), dracula, 4)
+
+        const progress = bookshelf.readingProgress()
+
+        expect(progress.map(readingProgressAsString)).toEqual([
+            '2025-01-01: Dracula: 1-1',
+            '2025-01-01: The Shining: 1-2',
+            '2025-01-02: The Shining: 3-3',
+            '2025-01-02: Dracula: 2-4',
+        ])
+    })
+
+    test('items should be connected properly even if added in arbitrary order', () => {
+        bookshelf.addReadingProgress(date(2025, 1, 1), dracula, 10)
+        bookshelf.addReadingProgress(date(2025, 1, 3), dracula, 30)
+        bookshelf.addReadingProgress(date(2025, 1, 2), dracula, 20)
+
+        const progress = bookshelf.readingProgress()
+
+        expect(progress.map(readingProgressAsString)).toEqual([
+            '2025-01-01: Dracula: 1-10',
+            '2025-01-02: Dracula: 11-20',
+            '2025-01-03: Dracula: 21-30',
+        ])
+    })
+})
+
+function readingProgressAsString(value: ReadingProgress): string {
+    return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.title}: ${value.startPage}-${value.endPage}`
+}
+
+function date(year: number, month: number, day: number): Date {
+    return new Date(year, month - 1, day, 0, 0, 0, 0)
+}
 
 function book(title: string): Book {
     return { title }
