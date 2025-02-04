@@ -49,5 +49,16 @@ export class BookshelfSettingsTab extends PluginSettingTab {
                     await this.plugin.saveSettings()
                 }),
             )
+
+        new Setting(containerEl)
+            .setName('Published')
+            .setDesc("Name of the property that holds the book's publishing date")
+            .addText((text) =>
+                text.setValue(this.plugin.settings.bookProperties.published).onChange(async (value) => {
+                    this.plugin.settings.bookProperties.published = value
+
+                    await this.plugin.saveSettings()
+                }),
+            )
     }
 }

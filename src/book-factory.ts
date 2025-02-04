@@ -7,6 +7,7 @@ type LinkToUri = (link: string) => string
 interface PropertyNames {
     cover: string
     author: string
+    published: string
 }
 
 export class BookFactory {
@@ -16,7 +17,12 @@ export class BookFactory {
     ) {}
 
     public create(title: string, metadata: Metadata): Book {
-        return { title, cover: this.cover(metadata), authors: this.authors(metadata) }
+        return {
+            title,
+            cover: this.cover(metadata),
+            authors: this.authors(metadata),
+            published: this.published(metadata),
+        }
     }
 
     private cover(metadata: Metadata): string | undefined {
@@ -53,6 +59,34 @@ export class BookFactory {
         }
 
         return [value.toString()]
+    }
+
+    private published(metadata: Metadata): Date | undefined {
+        const value = this.firstValue(this.propertyNames.published, metadata)
+
+        if (typeof value === 'number') {
+            return new Date(value, 0, 1)
+        }
+
+        if (typeof value === 'string') {
+            if (value === `${parseInt(value)}`) {
+                return new Date(parseInt(value), 0, 1)
+            }
+
+            const matches = value.trim().match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}):(\d{2}))?$/)
+            if (matches) {
+                return new Date(
+                    parseInt(matches[1]),
+                    parseInt(matches[2]) - 1,
+                    parseInt(matches[3]),
+                    matches[4] ? parseInt(matches[4]) : 0,
+                    matches[5] ? parseInt(matches[5]) : 0,
+                    matches[6] ? parseInt(matches[6]) : 0,
+                )
+            }
+        }
+
+        return undefined
     }
 
     private text(value: PropertyValue): string {

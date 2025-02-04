@@ -2,7 +2,14 @@ import { describe, expect, it, test } from '@jest/globals'
 import { BookFactory } from './book-factory'
 import { StaticMetadata } from './metadata/metadata'
 
-const factory = new BookFactory({ cover: 'cover', author: 'author' }, (link) => `uri://${link}`)
+const factory = new BookFactory(
+    {
+        cover: 'cover',
+        author: 'author',
+        published: 'published',
+    },
+    (link) => `uri://${link}`,
+)
 
 describe('Title', () => {
     it('should be used as is', () => {
@@ -100,5 +107,32 @@ describe('Author', () => {
         const result = factory.create('Title', new StaticMetadata(value !== undefined ? { author: value } : {}))
 
         expect(result.authors).toEqual(expected)
+    })
+})
+
+describe('Published', () => {
+    test.each([
+        [undefined, undefined],
+        [true, undefined],
+        ['foo', undefined],
+        ['1234-56-789', undefined],
+        ['12345-67-89', undefined],
+        [{ key: 'published', link: '2024', original: '[[2024]]' }, undefined],
+        [[true], undefined],
+        [['foo'], undefined],
+        [[{ key: 'published', link: '2024', original: '[[2024]]' }], undefined],
+        [2025, new Date(2025, 0, 1)],
+        [[2025, 2026], new Date(2025, 0, 1)],
+        ['2025', new Date(2025, 0, 1)],
+        [['2025', '2026'], new Date(2025, 0, 1)],
+        ['2024-06-14', new Date(2024, 5, 14)],
+        [' 2024-06-14   ', new Date(2024, 5, 14)],
+        [['2024-06-14'], new Date(2024, 5, 14)],
+        ['2024-06-14T18:30:45', new Date(2024, 5, 14, 18, 30, 45)],
+        [['2024-06-14T18:30:45'], new Date(2024, 5, 14, 18, 30, 45)],
+    ])('Metadata property "%s" should be %s', (value, expected) => {
+        const result = factory.create('Title', new StaticMetadata(value !== undefined ? { published: value } : {}))
+
+        expect(result.published).toEqual(expected)
     })
 })

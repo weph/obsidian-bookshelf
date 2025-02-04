@@ -9,6 +9,7 @@ export class BookModal extends Modal {
         const div = content.createDiv()
         div.innerHTML = `
             ${book.authors?.length ? `<strong>by ${book.authors?.join(', ')}</strong>` : ''}
+            ${book.published ? ` (${book.published})` : ''}
             <img src="${book.cover}" alt="${book.title}" width="100%" />
         `
 
