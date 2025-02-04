@@ -4,7 +4,13 @@
     "reporters": ["html", "clear-text", "progress"],
     "testRunner": "jest",
     "coverageAnalysis": "perTest",
-    "mutate": ["src/**/*.ts", "!src/**/*.spec.ts", "!src/bookshelf-error.ts", "!src/component/gallery/*"],
+    "mutate": [
+        "src/**/*.ts",
+        "!src/**/*.spec.ts",
+        "!src/bookshelf-error.ts",
+        "!src/component/book-details/*",
+        "!src/component/gallery/*"
+    ],
     "ignorePatterns": [".*/**/*", "reports/**/*", "src/**/*.stories.ts", "src/obsidian/**/*"],
     "thresholds": {
         "high": 100,

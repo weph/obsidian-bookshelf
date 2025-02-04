@@ -1,17 +1,15 @@
 import { App, Modal } from 'obsidian'
 import { Book } from '../../book'
+import '../../component/book-details/book-details'
 
 export class BookModal extends Modal {
     constructor(app: App, book: Book) {
         super(app)
 
         const content = document.createDocumentFragment()
-        const div = content.createDiv()
-        div.innerHTML = `
-            ${book.authors?.length ? `<strong>by ${book.authors?.join(', ')}</strong>` : ''}
-            ${book.published ? ` (${book.published})` : ''}
-            <img src="${book.cover}" alt="${book.title}" width="100%" />
-        `
+
+        const component = content.createEl('bookshelf-book-details')
+        component.book = book
 
         this.setTitle(book.title)
         this.setContent(content)
