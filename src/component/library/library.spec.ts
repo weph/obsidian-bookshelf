@@ -1,7 +1,6 @@
 import { jest, beforeEach, describe, expect, test } from '@jest/globals'
 import { screen } from 'shadow-dom-testing-library'
 import userEvent, { UserEvent } from '@testing-library/user-event'
-import { Book } from '../../book'
 import './library'
 import { Library } from './library'
 import { fireEvent } from '@testing-library/dom'
@@ -33,7 +32,7 @@ describe('Empty library', () => {
 
 describe('Library', () => {
     test('should show all books', async () => {
-        library.books = [new Book('Algorithms'), new Book('Refactoring')]
+        library.books = [{ title: 'Algorithms' }, { title: 'Refactoring' }]
 
         expect(cardTitles()).toEqual(['Algorithms', 'Refactoring'])
     })
@@ -42,10 +41,10 @@ describe('Library', () => {
 describe('Search', () => {
     beforeEach(() => {
         library.books = [
-            new Book('BDD in Action'),
-            new Book('Into Thin Air'),
-            new Book('Web Components in Action'),
-            new Book('Web Accessibility Cookbook'),
+            { title: 'BDD in Action' },
+            { title: 'Into Thin Air' },
+            { title: 'Web Components in Action' },
+            { title: 'Web Accessibility Cookbook' },
         ]
     })
 
@@ -81,7 +80,7 @@ describe('Search', () => {
 
 describe('Clicking on a book cover', () => {
     test('should call callback', async () => {
-        const intoThinAir = new Book('Into Thin Air')
+        const intoThinAir = { title: 'Into Thin Air' }
         library.books = [intoThinAir]
         library.onBookClick = onBookClick
 

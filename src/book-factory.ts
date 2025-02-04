@@ -16,7 +16,7 @@ export class BookFactory {
     ) {}
 
     public create(title: string, metadata: Metadata): Book {
-        return new Book(title, this.cover(metadata), this.authors(metadata))
+        return { title, cover: this.cover(metadata), authors: this.authors(metadata) }
     }
 
     private cover(metadata: Metadata): string | undefined {

@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/html'
 import type { GalleryProps } from './gallery'
-import { Book } from '../../book'
 import './gallery'
 import { fn } from '@storybook/test'
 
@@ -19,26 +18,32 @@ const meta = {
 } satisfies Meta<GalleryProps>
 
 const books = [
-    new Book('Algorithms', '/covers/algorithms.jpg'),
-    new Book(
-        'Continuous Delivery: Reliable Software Releases through Build, Test, and Deployment Automation',
-        '/covers/continuous-delivery.jpg',
-    ),
-    new Book(
-        'Code That Fits in Your Head: Heuristics for Software Engineering',
-        '/covers/code-that-fits-in-your-head.jpg',
-    ),
-    new Book('Design Patterns: Elements of Reusable Object-Oriented Software', '/covers/design-patterns.jpg'),
-    new Book('Domain-Driven Design: Tackling Complexity in the Heart of Software', '/covers/domain-driven-design.jpg'),
-    new Book('Extreme Programming Explained', '/covers/extreme-programming-explained.jpg'),
-    new Book('Growing Object-Oriented Software, Guided by Tests', '/covers/growing-object-oriented-software.jpg'),
-    new Book('Implementing Domain-driven Design', '/covers/implementing-domain-driven-design.jpg'),
-    new Book("Michael Abrash's Graphics Programming Black Book", '/covers/graphics-programming-black-book.jpg'),
-    new Book('Refactoring', '/covers/refactoring.jpg'),
-    new Book('Test-Driven Development by Example', '/covers/test-driven-development-by-example.jpg'),
-    new Book('The Mythical Man-Month', '/covers/the-mythical-man-month.jpg'),
-    new Book('The Pragmatic Programmer', '/covers/the-pragmatic-programmer.jpg'),
-    new Book('Working Effectively with Legacy Code', '/covers/working-effectively-with-legacy-code.jpg'),
+    { title: 'Algorithms', cover: '/covers/algorithms.jpg' },
+    {
+        title: 'Continuous Delivery: Reliable Software Releases through Build, Test, and Deployment Automation',
+        cover: '/covers/continuous-delivery.jpg',
+    },
+    {
+        title: 'Code That Fits in Your Head: Heuristics for Software Engineering',
+        cover: '/covers/code-that-fits-in-your-head.jpg',
+    },
+    { title: 'Design Patterns: Elements of Reusable Object-Oriented Software', cover: '/covers/design-patterns.jpg' },
+    {
+        title: 'Domain-Driven Design: Tackling Complexity in the Heart of Software',
+        cover: '/covers/domain-driven-design.jpg',
+    },
+    { title: 'Extreme Programming Explained', cover: '/covers/extreme-programming-explained.jpg' },
+    {
+        title: 'Growing Object-Oriented Software, Guided by Tests',
+        cover: '/covers/growing-object-oriented-software.jpg',
+    },
+    { title: 'Implementing Domain-driven Design', cover: '/covers/implementing-domain-driven-design.jpg' },
+    { title: "Michael Abrash's Graphics Programming Black Book", cover: '/covers/graphics-programming-black-book.jpg' },
+    { title: 'Refactoring', cover: '/covers/refactoring.jpg' },
+    { title: 'Test-Driven Development by Example', cover: '/covers/test-driven-development-by-example.jpg' },
+    { title: 'The Mythical Man-Month', cover: '/covers/the-mythical-man-month.jpg' },
+    { title: 'The Pragmatic Programmer', cover: '/covers/the-pragmatic-programmer.jpg' },
+    { title: 'Working Effectively with Legacy Code', cover: '/covers/working-effectively-with-legacy-code.jpg' },
 ]
 
 export default meta

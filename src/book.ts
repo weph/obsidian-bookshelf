@@ -1,7 +1,5 @@
-export class Book {
-    constructor(
-        public title: string,
-        public cover?: string,
-        public authors?: Array<string>,
-    ) {}
+export interface Book {
+    title: string
+    cover?: string
+    authors?: Array<string>
 }

@@ -59,5 +59,5 @@ describe('After adding a book', () => {
 })
 
 function book(title: string): Book {
-    return new Book(title)
+    return { title }
 }
