@@ -11,9 +11,14 @@ export class BookshelfSettingsTab extends PluginSettingTab {
     }
 
     display(): void {
-        const { containerEl } = this
+        this.containerEl.empty()
 
-        containerEl.empty()
+        this.addBooksSettings()
+        this.addBookProperties()
+    }
+
+    private addBooksSettings(): void {
+        const { containerEl } = this
 
         new Setting(containerEl)
             .setName('Books Folder')
@@ -25,6 +30,10 @@ export class BookshelfSettingsTab extends PluginSettingTab {
                     await this.plugin.saveSettings()
                 }),
             )
+    }
+
+    private addBookProperties(): void {
+        const { containerEl } = this
 
         new Setting(containerEl).setName('Book Properties').setHeading()
 
