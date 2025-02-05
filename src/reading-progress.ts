@@ -3,7 +3,6 @@ import { Book } from './book'
 export interface ReadingProgress {
     date: Date
     book: Book
-    previous: ReadingProgress | null
     startPage: number
     endPage: number
     pages: number

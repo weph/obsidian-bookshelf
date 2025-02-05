@@ -5,7 +5,7 @@ import { AbsoluteReadingProgress, ReadingProgress, RelativeProgress } from './re
 export class Bookshelf {
     private books = new Map<string, Book>()
 
-    private readingProgressItems: Array<ReadingProgress> = []
+    private readingProgressItems: Array<AbsoluteReadingProgress | RelativeProgress> = []
 
     public has(identifier: string): boolean {
         return this.books.has(identifier)
@@ -57,7 +57,7 @@ export class Bookshelf {
         }
     }
 
-    private previousReadingProgress(book: Book, position: number): ReadingProgress | null {
+    private previousReadingProgress(book: Book, position: number): AbsoluteReadingProgress | RelativeProgress | null {
         for (let i = position - 1; i >= 0; i--) {
             if (this.readingProgressItems[i].book === book) {
                 return this.readingProgressItems[i]
@@ -67,7 +67,7 @@ export class Bookshelf {
         return null
     }
 
-    private nextReadingProgress(book: Book, position: number): ReadingProgress | null {
+    private nextReadingProgress(book: Book, position: number): AbsoluteReadingProgress | RelativeProgress | null {
         for (let i = position + 1; i < this.readingProgressItems.length; i++) {
             if (this.readingProgressItems[i].book === book) {
                 return this.readingProgressItems[i]
