@@ -9,7 +9,8 @@
         "!src/**/*.spec.ts",
         "!src/bookshelf-error.ts",
         "!src/component/book-details/*",
-        "!src/component/gallery/*"
+        "!src/component/gallery/*",
+        "!src/component/reading-progress-bar-chart/*"
     ],
     "ignorePatterns": [".*/**/*", "reports/**/*", "src/**/*.stories.ts", "src/obsidian/**/*"],
     "thresholds": {
