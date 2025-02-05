@@ -5,6 +5,12 @@ export interface BookshelfPluginSettings {
         author: string
         published: string
     }
+    bookNote: {
+        dateFormat: string
+        patterns: {
+            progress: Array<string>
+        }
+    }
 }
 
 export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
@@ -13,5 +19,11 @@ export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
         cover: 'cover',
         author: 'author',
         published: 'published',
+    },
+    bookNote: {
+        dateFormat: 'yyyy-MM-dd',
+        patterns: {
+            progress: ['{date}: {endPage}', '{date}: {startPage}-{endPage}'],
+        },
     },
 }

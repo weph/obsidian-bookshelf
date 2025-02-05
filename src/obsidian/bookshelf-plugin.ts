@@ -6,6 +6,7 @@ import { BookshelfPluginSettings, DEFAULT_SETTINGS } from './settings/bookshelf-
 import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
 import { ObsidianMetadata } from '../metadata/metadata'
 import { BookFactory } from '../book-factory'
+import { BookNoteProgressPattern } from '../book-note-progress-pattern'
 
 export default class BookshelfPlugin extends Plugin {
     public settings: BookshelfPluginSettings
@@ -16,11 +17,22 @@ export default class BookshelfPlugin extends Plugin {
 
     private libraryView: LibraryView
 
+    private bookNoteProgressPatterns: Array<BookNoteProgressPattern> = []
+
     async onload() {
         await this.loadSettings()
 
         this.bookshelf = new Bookshelf()
         this.bookFactory = new BookFactory(this.settings.bookProperties, this.linkToUri.bind(this))
+
+        const dateFormat = this.settings.bookNote.dateFormat
+        for (const pattern of this.settings.bookNote.patterns.progress) {
+            try {
+                this.bookNoteProgressPatterns.push(new BookNoteProgressPattern(pattern, dateFormat))
+            } catch (error) {
+                console.error(`Error processing pattern "${pattern}: ${error}`)
+            }
+        }
 
         this.addSettingTab(new BookshelfSettingsTab(this.app, this))
 
@@ -44,10 +56,29 @@ export default class BookshelfPlugin extends Plugin {
 
         const identifier = file.path
 
+        const meta = this.app.metadataCache.getFileCache(file) || {}
         if (!this.bookshelf.has(identifier)) {
-            const metadata = new ObsidianMetadata(this.app.metadataCache.getFileCache(file) || {})
+            this.bookshelf.add(identifier, this.bookFactory.create(file.basename, new ObsidianMetadata(meta)))
+        }
 
-            this.bookshelf.add(identifier, this.bookFactory.create(file.basename, metadata))
+        const book = this.bookshelf.book(identifier)
+        const contents = await this.app.vault.cachedRead(file)
+        const lines = contents.split('\n')
+        for (const listItem of meta?.listItems || []) {
+            let matches = null
+            for (const pattern of this.bookNoteProgressPatterns) {
+                const value = lines[listItem.position.start.line].replace(/^[-*]\s+/, '')
+                matches = pattern.matches(value)
+                if (matches !== null) {
+                    break
+                }
+            }
+
+            if (matches === null) {
+                continue
+            }
+
+            this.bookshelf.addReadingProgress(matches.date, book, matches.endPage, matches.startPage)
         }
 
         this.updateView()

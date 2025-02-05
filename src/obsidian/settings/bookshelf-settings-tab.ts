@@ -15,6 +15,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         this.addBooksSettings()
         this.addBookProperties()
+        this.addBookNoteSettings()
     }
 
     private addBooksSettings(): void {
@@ -35,7 +36,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
     private addBookProperties(): void {
         const { containerEl } = this
 
-        new Setting(containerEl).setName('Book Properties').setHeading()
+        new Setting(containerEl).setName('Book Note Properties').setHeading()
 
         new Setting(containerEl)
             .setName('Cover')
@@ -69,5 +70,38 @@ export class BookshelfSettingsTab extends PluginSettingTab {
                     await this.plugin.saveSettings()
                 }),
             )
+    }
+
+    private addBookNoteSettings(): void {
+        const { containerEl } = this
+
+        new Setting(containerEl).setName('Book Note Patterns').setHeading()
+
+        const dateFormat = new Setting(containerEl).setName('Date Format')
+        dateFormat.addText((textArea) => {
+            textArea.setValue(this.plugin.settings.bookNote.dateFormat).onChange(async (value) => {
+                this.plugin.settings.bookNote.dateFormat = value
+
+                await this.plugin.saveSettings()
+            })
+
+            textArea.inputEl.style.width = '100%'
+        })
+
+        new Setting(containerEl)
+            .setName('Progress Patterns')
+            .setDesc('{date}, {book}, {startPage}, {endPage}, {*}')
+            .addTextArea((textArea) => {
+                textArea
+                    .setValue(this.plugin.settings.bookNote.patterns.progress.join('\n'))
+                    .onChange(async (value) => {
+                        this.plugin.settings.bookNote.patterns.progress = value.split('\n').filter((x) => x)
+
+                        await this.plugin.saveSettings()
+                    })
+
+                textArea.inputEl.style.width = '100%'
+                textArea.inputEl.rows = 4
+            })
     }
 }
