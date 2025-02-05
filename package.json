@@ -36,6 +36,7 @@
         "@stryker-mutator/typescript-checker": "^8.7.1",
         "@testing-library/dom": "^10.4.0",
         "@testing-library/user-event": "^14.6.1",
+        "@types/luxon": "^3.4.2",
         "@types/node": "^22",
         "builtin-modules": "^4.0.0",
         "esbuild": "^0.24.2",
@@ -64,5 +65,8 @@
         "extends": [
             "plugin:storybook/recommended"
         ]
+    },
+    "dependencies": {
+        "luxon": "^3.5.0"
     }
 }
