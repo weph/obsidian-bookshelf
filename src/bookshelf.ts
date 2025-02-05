@@ -1,11 +1,11 @@
 import { Book } from './book'
 import { BookshelfError } from './bookshelf-error'
-import { AbsoluteReadingProgress, ReadingProgress, RelativeProgress } from './reading-progress'
+import { AbsoluteReadingProgress, ReadingProgress, RelativeReadingProgress } from './reading-progress'
 
 export class Bookshelf {
     private books = new Map<string, Book>()
 
-    private readingProgressItems: Array<AbsoluteReadingProgress | RelativeProgress> = []
+    private readingProgressItems: Array<AbsoluteReadingProgress | RelativeReadingProgress> = []
 
     public has(identifier: string): boolean {
         return this.books.has(identifier)
@@ -47,7 +47,7 @@ export class Bookshelf {
         const item =
             startPage !== undefined
                 ? new AbsoluteReadingProgress(date, book, previous, startPage, endPage)
-                : new RelativeProgress(date, book, previous, endPage)
+                : new RelativeReadingProgress(date, book, previous, endPage)
 
         this.readingProgressItems.splice(pos, 0, item)
 
@@ -57,7 +57,10 @@ export class Bookshelf {
         }
     }
 
-    private previousReadingProgress(book: Book, position: number): AbsoluteReadingProgress | RelativeProgress | null {
+    private previousReadingProgress(
+        book: Book,
+        position: number,
+    ): AbsoluteReadingProgress | RelativeReadingProgress | null {
         for (let i = position - 1; i >= 0; i--) {
             if (this.readingProgressItems[i].book === book) {
                 return this.readingProgressItems[i]
@@ -67,7 +70,10 @@ export class Bookshelf {
         return null
     }
 
-    private nextReadingProgress(book: Book, position: number): AbsoluteReadingProgress | RelativeProgress | null {
+    private nextReadingProgress(
+        book: Book,
+        position: number,
+    ): AbsoluteReadingProgress | RelativeReadingProgress | null {
         for (let i = position + 1; i < this.readingProgressItems.length; i++) {
             if (this.readingProgressItems[i].book === book) {
                 return this.readingProgressItems[i]

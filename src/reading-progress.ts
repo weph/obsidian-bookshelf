@@ -22,7 +22,7 @@ export class AbsoluteReadingProgress implements ReadingProgress {
     }
 }
 
-export class RelativeProgress implements ReadingProgress {
+export class RelativeReadingProgress implements ReadingProgress {
     constructor(
         public date: Date,
         public book: Book,
