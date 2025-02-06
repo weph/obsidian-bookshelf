@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/html'
 import './book-details'
 import { BookDetailsProps } from './book-details'
+import { BookBuilder } from '../../support/book-builder'
 
 const meta = {
     title: 'Book Details',
@@ -18,17 +19,17 @@ type Story = StoryObj<BookDetailsProps>
 
 export const Primary: Story = {
     args: {
-        book: {
-            title: 'Test-Driven Development by Example',
-            cover: '/covers/test-driven-development-by-example.jpg',
-            authors: ['Kent Beck'],
-            published: new Date(2002, 0, 1),
-        },
+        book: new BookBuilder()
+            .with('title', 'Test-Driven Development by Example')
+            .with('cover', '/covers/test-driven-development-by-example.jpg')
+            .with('authors', ['Kent Beck'])
+            .with('published', new Date(2002, 0, 1))
+            .build(),
     },
 }
 
 export const Empty: Story = {
     args: {
-        book: { title: 'Book With Just A Title' },
+        book: new BookBuilder().with('title', 'Book With Just A Title').build(),
     },
 }

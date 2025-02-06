@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/html'
 import './reading-progress-bar-chart'
 import { ReadingProgressBarChartProps } from './reading-progress-bar-chart'
+import { BookBuilder } from '../../support/book-builder'
 
 const meta = {
     title: 'Reading Progress Bar Chart',
@@ -16,7 +17,7 @@ const meta = {
 export default meta
 type Story = StoryObj<ReadingProgressBarChartProps>
 
-const book = { title: 'Book' }
+const book = new BookBuilder().build()
 
 export const Primary: Story = {
     args: {

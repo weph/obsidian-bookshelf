@@ -4,6 +4,8 @@ import userEvent, { UserEvent } from '@testing-library/user-event'
 import './library'
 import { Library } from './library'
 import { fireEvent } from '@testing-library/dom'
+import { Book } from '../../book'
+import { BookBuilder } from '../../support/book-builder'
 
 const onBookClick = jest.fn()
 let user: UserEvent
@@ -32,7 +34,7 @@ describe('Empty library', () => {
 
 describe('Library', () => {
     test('should show all books', async () => {
-        library.books = [{ title: 'Algorithms' }, { title: 'Refactoring' }]
+        library.books = [book('Algorithms'), book('Refactoring')]
 
         expect(cardTitles()).toEqual(['Algorithms', 'Refactoring'])
     })
@@ -41,10 +43,10 @@ describe('Library', () => {
 describe('Search', () => {
     beforeEach(() => {
         library.books = [
-            { title: 'BDD in Action' },
-            { title: 'Into Thin Air' },
-            { title: 'Web Components in Action' },
-            { title: 'Web Accessibility Cookbook' },
+            book('BDD in Action'),
+            book('Into Thin Air'),
+            book('Web Components in Action'),
+            book('Web Accessibility Cookbook'),
         ]
     })
 
@@ -80,7 +82,7 @@ describe('Search', () => {
 
 describe('Clicking on a book cover', () => {
     test('should call callback', async () => {
-        const intoThinAir = { title: 'Into Thin Air' }
+        const intoThinAir = book('Into Thin Air')
         library.books = [intoThinAir]
         library.onBookClick = onBookClick
 
@@ -103,4 +105,8 @@ function cardTitles(): Array<string> {
 function resetSearch(element: HTMLInputElement): void {
     element.value = ''
     fireEvent(element, new InputEvent('search'))
+}
+
+function book(title: string): Book {
+    return new BookBuilder().with('title', title).build()
 }

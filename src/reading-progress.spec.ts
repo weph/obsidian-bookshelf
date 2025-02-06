@@ -1,7 +1,8 @@
 import { describe, expect, test } from '@jest/globals'
 import { AbsoluteReadingProgress, RelativeReadingProgress } from './reading-progress'
+import { BookBuilder } from './support/book-builder'
 
-const book = { title: 'Book' }
+const book = new BookBuilder().build()
 
 describe('Absolute Reading Progress', () => {
     test('pages should include start and end page', () => {
