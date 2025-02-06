@@ -1,6 +1,10 @@
-import { Book } from './book'
+import { Book, BookMetadata } from './book'
 import { BookshelfError } from './bookshelf-error'
 import { AbsoluteReadingProgress, ReadingProgress, RelativeReadingProgress } from './reading-progress'
+
+class BookshelfBook implements Book {
+    constructor(public metadata: BookMetadata) {}
+}
 
 export class Bookshelf {
     private books = new Map<string, Book>()
@@ -11,12 +15,12 @@ export class Bookshelf {
         return this.books.has(identifier)
     }
 
-    public add(identifier: string, book: Book): void {
+    public add(identifier: string, metadata: BookMetadata): void {
         if (this.books.has(identifier)) {
             throw BookshelfError.identifierExists(identifier)
         }
 
-        this.books.set(identifier, book)
+        this.books.set(identifier, new BookshelfBook(metadata))
     }
 
     public book(identifier: string): Book {
@@ -33,7 +37,9 @@ export class Bookshelf {
         return this.books.values()
     }
 
-    public addReadingProgress(date: Date, book: Book, endPage: number, startPage?: number): void {
+    public addReadingProgress(date: Date, identifier: string, endPage: number, startPage?: number): void {
+        const book = this.book(identifier)
+
         let pos = 0
         while (
             pos < this.readingProgressItems.length &&

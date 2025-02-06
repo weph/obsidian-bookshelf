@@ -34,8 +34,8 @@ class Gallery extends HTMLElement implements GalleryProps {
                 (book, index) => `<div role="list">
                     <bookshelf-gallery-card 
                         index="${index}"
-                        title="${book.title}"
-                        ${book.cover ? `cover="${book.cover}"` : ''}
+                        title="${book.metadata.title}"
+                        ${book.metadata.cover ? `cover="${book.metadata.cover}"` : ''}
                         role="listitem">
                     </bookshelf-gallery-card>
                 </div>`,

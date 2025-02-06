@@ -11,7 +11,7 @@ export class BookModal extends Modal {
         const component = content.createEl('bookshelf-book-details')
         component.book = book
 
-        this.setTitle(book.title)
+        this.setTitle(book.metadata.title)
         this.setContent(content)
     }
 }

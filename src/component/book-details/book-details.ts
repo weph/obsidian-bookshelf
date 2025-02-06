@@ -16,10 +16,10 @@ export class BookDetails extends HTMLElement implements BookDetailsProps {
     }
 
     private update(): void {
-        const cover = this.book.cover
-        const title = this.book.title
-        const authors = this.book.authors
-        const published = this.book.published
+        const cover = this.book.metadata.cover
+        const title = this.book.metadata.title
+        const authors = this.book.metadata.authors
+        const published = this.book.metadata.published
 
         this.root.innerHTML = `
             <main>

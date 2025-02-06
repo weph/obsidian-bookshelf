@@ -5,7 +5,7 @@ import { debounce } from 'radashi'
 import { BookshelfPluginSettings, DEFAULT_SETTINGS } from './settings/bookshelf-plugin-settings'
 import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
 import { ObsidianMetadata } from '../metadata/metadata'
-import { BookFactory } from '../book-factory'
+import { BookMetadataFactory } from '../book-metadata-factory'
 import { BookNoteProgressPattern } from '../book-note-progress-pattern'
 
 export default class BookshelfPlugin extends Plugin {
@@ -13,7 +13,7 @@ export default class BookshelfPlugin extends Plugin {
 
     private bookshelf: Bookshelf
 
-    private bookFactory: BookFactory
+    private bookFactory: BookMetadataFactory
 
     private libraryView: LibraryView
 
@@ -23,7 +23,7 @@ export default class BookshelfPlugin extends Plugin {
         await this.loadSettings()
 
         this.bookshelf = new Bookshelf()
-        this.bookFactory = new BookFactory(this.settings.bookProperties, this.linkToUri.bind(this))
+        this.bookFactory = new BookMetadataFactory(this.settings.bookProperties, this.linkToUri.bind(this))
 
         const dateFormat = this.settings.bookNote.dateFormat
         for (const pattern of this.settings.bookNote.patterns.progress) {
@@ -61,7 +61,6 @@ export default class BookshelfPlugin extends Plugin {
             this.bookshelf.add(identifier, this.bookFactory.create(file.basename, new ObsidianMetadata(meta)))
         }
 
-        const book = this.bookshelf.book(identifier)
         const contents = await this.app.vault.cachedRead(file)
         const lines = contents.split('\n')
         for (const listItem of meta?.listItems || []) {
@@ -78,7 +77,7 @@ export default class BookshelfPlugin extends Plugin {
                 continue
             }
 
-            this.bookshelf.addReadingProgress(matches.date, book, matches.endPage, matches.startPage)
+            this.bookshelf.addReadingProgress(matches.date, identifier, matches.endPage, matches.startPage)
         }
 
         this.updateView()

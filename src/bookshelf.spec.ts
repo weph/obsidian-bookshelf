@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test } from '@jest/globals'
 import { Bookshelf } from './bookshelf'
-import { Book } from './book'
+import { BookMetadata } from './book'
 import { BookshelfError } from './bookshelf-error'
 import { ReadingProgress } from './reading-progress'
 
@@ -20,7 +20,7 @@ test('It should return all books added to the bookshelf', () => {
 
     const result = bookshelf.all()
 
-    expect(Array.from(result)).toEqual([shining, animalFarm, dracula])
+    expect(Array.from(result).map((b) => b.metadata)).toEqual([shining, animalFarm, dracula])
 })
 
 describe('Non-existing book', () => {
@@ -45,7 +45,7 @@ describe('After adding a book', () => {
     })
 
     test('it can be retrieved', () => {
-        expect(bookshelf.book('the-shining')).toBe(shining)
+        expect(bookshelf.book('the-shining').metadata).toBe(shining)
     })
 
     test('it can not be added again', () => {
@@ -60,8 +60,13 @@ describe('After adding a book', () => {
 })
 
 describe('Reading progress', () => {
-    const dracula = book('Dracula')
-    const shining = book('The Shining')
+    const dracula = 'dracula'
+    const shining = 'shining'
+
+    beforeEach(() => {
+        bookshelf.add(dracula, book('Dracula'))
+        bookshelf.add(shining, book('The Shining'))
+    })
 
     test('should be ordered by date', () => {
         bookshelf.addReadingProgress(date(2025, 2, 3), dracula, 10, 1)
@@ -111,13 +116,13 @@ describe('Reading progress', () => {
 })
 
 function readingProgressAsString(value: ReadingProgress): string {
-    return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.title}: ${value.startPage}-${value.endPage}`
+    return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.metadata.title}: ${value.startPage}-${value.endPage}`
 }
 
 function date(year: number, month: number, day: number): Date {
     return new Date(year, month - 1, day, 0, 0, 0, 0)
 }
 
-function book(title: string): Book {
+function book(title: string): BookMetadata {
     return { title }
 }

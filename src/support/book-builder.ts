@@ -1,24 +1,26 @@
-import { Book } from '../book'
+import { Book, BookMetadata } from '../book'
 
 export class BookBuilder {
-    private properties: Partial<Book>
+    private metadata: Partial<BookMetadata>
 
-    constructor(properties: Partial<Book> = {}) {
-        this.properties = properties
+    constructor(metadata: Partial<BookMetadata> = {}) {
+        this.metadata = metadata
     }
 
-    public with<K extends keyof Book>(property: K, value: Book[K]): BookBuilder {
-        return new BookBuilder({ ...this.properties, [property]: value })
+    public with<K extends keyof BookMetadata>(property: K, value: BookMetadata[K]): BookBuilder {
+        return new BookBuilder({ ...this.metadata, [property]: value })
     }
 
     public build(): Book {
         return {
-            ...this.defaults(),
-            ...this.properties,
+            metadata: {
+                ...this.defaultMetadata(),
+                ...this.metadata,
+            },
         }
     }
 
-    private defaults(): Book {
+    private defaultMetadata(): BookMetadata {
         return {
             title: 'Book Title',
         }

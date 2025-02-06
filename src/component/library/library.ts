@@ -77,7 +77,7 @@ export class Library extends HTMLElement implements LibraryProps {
         }
 
         const search = this.searchInput.value
-        const books = this.books.filter((b) => b.title.toLowerCase().includes(search.toLowerCase()))
+        const books = this.books.filter((b) => b.metadata.title.toLowerCase().includes(search.toLowerCase()))
 
         if (search && books.length === 0) {
             return this.emptyState('No books found', 'Try a different search term or check your spelling.')

@@ -1,5 +1,5 @@
 import { Metadata, PropertyValue } from './metadata/metadata'
-import { Book } from './book'
+import { BookMetadata } from './book'
 import { Reference } from 'obsidian'
 
 type LinkToUri = (link: string) => string
@@ -10,13 +10,13 @@ interface PropertyNames {
     published: string
 }
 
-export class BookFactory {
+export class BookMetadataFactory {
     constructor(
         private propertyNames: PropertyNames,
         private linkToUri: LinkToUri,
     ) {}
 
-    public create(title: string, metadata: Metadata): Book {
+    public create(title: string, metadata: Metadata): BookMetadata {
         return {
             title,
             cover: this.cover(metadata),
