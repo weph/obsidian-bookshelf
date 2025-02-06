@@ -16,7 +16,7 @@ export default class BookshelfPlugin extends Plugin {
 
     private bookFactory: BookMetadataFactory
 
-    private libraryView: LibraryView
+    private libraryView: LibraryView | null = null
 
     private bookNoteProgressPatterns: Array<BookNoteProgressPattern> = []
 
@@ -158,7 +158,7 @@ export default class BookshelfPlugin extends Plugin {
         return this.app.vault.getResourcePath(coverFile)
     }
 
-    private updateView = debounce({ delay: 100 }, () => this.libraryView.update())
+    private updateView = debounce({ delay: 100 }, () => this.libraryView?.update())
 
     private async activateView(): Promise<void> {
         const { workspace } = this.app
