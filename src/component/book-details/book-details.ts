@@ -1,4 +1,6 @@
 import { Book } from '../../book'
+import '../reading-progress-bar-chart/reading-progress-bar-chart'
+import { ReadingProgressBarChart } from '../reading-progress-bar-chart/reading-progress-bar-chart'
 
 export interface BookDetailsProps {
     book: Book
@@ -8,6 +10,8 @@ export class BookDetails extends HTMLElement implements BookDetailsProps {
     private root: ShadowRoot
 
     private _book: Book
+
+    private readingProgressChart: ReadingProgressBarChart
 
     constructor() {
         super()
@@ -23,16 +27,19 @@ export class BookDetails extends HTMLElement implements BookDetailsProps {
 
         this.root.innerHTML = `
             <main>
-                <div id="cover">
-                    ${cover ? `<img src="${cover}" alt="${title}" />` : ''}
+                <div id="top">
+                    <div id="cover">
+                        ${cover ? `<img src="${cover}" alt="${title}" />` : ''}
+                    </div>
+                    <ul id="details">
+                        ${authors?.length ? `<li><strong>Author:</strong> ${authors.join(', ')}</li>` : ''}
+                        ${published ? `<li><strong>Published:</strong> ${published.getFullYear()}</li>` : ''}
+                    </ul>
                 </div>
-                <ul id="details">
-                    ${authors?.length ? `<li><strong>Author:</strong> ${authors.join(', ')}</li>` : ''}
-                    ${published ? `<li><strong>Published:</strong> ${published.getFullYear()}</li>` : ''}
-                </ul>
+                <bookshelf-reading-progress-bar-chart></bookshelf-reading-progress-bar-chart>
             </main>
             <style>
-                main {
+                #top {
                     display: flex;
                     flex-direction: row;
                     gap: 15px;
@@ -58,6 +65,11 @@ export class BookDetails extends HTMLElement implements BookDetailsProps {
                 }
             </style>
         `
+
+        this.readingProgressChart = this.root.querySelector(
+            'bookshelf-reading-progress-bar-chart',
+        ) as ReadingProgressBarChart
+        this.readingProgressChart.readingProgress = this.book.readingProgress
     }
 
     get book() {
