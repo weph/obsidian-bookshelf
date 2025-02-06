@@ -84,12 +84,8 @@ export default class BookshelfPlugin extends Plugin {
             this.bookshelf.add(identifier, this.bookFactory.create(file.basename, new ObsidianMetadata(meta)))
         }
 
-        const contents = await this.app.vault.cachedRead(file)
-        const lines = contents.split('\n')
-        for (const listItem of meta?.listItems || []) {
-            const value = lines[listItem.position.start.line].replace(/^[-*]\s+/, '')
-
-            const matches = this.bookNoteProgressPatterns.matches(value)
+        for await (const listItem of this.listItems(file)) {
+            const matches = this.bookNoteProgressPatterns.matches(listItem)
             if (matches === null) {
                 continue
             }
@@ -108,14 +104,8 @@ export default class BookshelfPlugin extends Plugin {
 
         const date = new Date(parseInt(dateMatches[1]), parseInt(dateMatches[2]) - 1, parseInt(dateMatches[3]))
 
-        const contents = await this.app.vault.cachedRead(file)
-        const meta = this.app.metadataCache.getFileCache(file)
-        const lines = contents.split('\n')
-
-        for (const listItem of meta?.listItems || []) {
-            const value = lines[listItem.position.start.line].replace(/^[-*]\s+/, '')
-
-            const matches = this.dailyNoteProgressPatterns.matches(value)
+        for await (const listItem of this.listItems(file)) {
+            const matches = this.dailyNoteProgressPatterns.matches(listItem)
             if (matches === null) {
                 continue
             }
@@ -137,6 +127,16 @@ export default class BookshelfPlugin extends Plugin {
         }
 
         this.updateView()
+    }
+
+    private async *listItems(file: TFile): AsyncGenerator<string> {
+        const contents = await this.app.vault.cachedRead(file)
+        const meta = this.app.metadataCache.getFileCache(file)
+        const lines = contents.split('\n')
+
+        for (const listItem of meta?.listItems || []) {
+            yield lines[listItem.position.start.line].replace(/^[-*]\s+/, '')
+        }
     }
 
     private isBookNote(file: TFile): boolean {
