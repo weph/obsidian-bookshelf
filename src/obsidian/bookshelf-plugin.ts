@@ -6,8 +6,9 @@ import { BookshelfPluginSettings, DEFAULT_SETTINGS } from './settings/bookshelf-
 import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
 import { ObsidianMetadata } from '../metadata/metadata'
 import { BookMetadataFactory } from '../book-metadata-factory'
-import { BookNoteProgressPattern } from '../book-note-progress-pattern'
-import { DailyNoteProgressPattern } from '../daily-note-progress-pattern'
+import { BookNoteProgressPattern, BookNoteProgressPatternMatches } from '../book-note-progress-pattern'
+import { DailyNoteProgressPattern, DailyNoteProgressPatternMatches } from '../daily-note-progress-pattern'
+import { PatternCollection } from '../pattern-collection'
 
 export default class BookshelfPlugin extends Plugin {
     public settings: BookshelfPluginSettings
@@ -18,9 +19,9 @@ export default class BookshelfPlugin extends Plugin {
 
     private libraryView: LibraryView | null = null
 
-    private bookNoteProgressPatterns: Array<BookNoteProgressPattern> = []
+    private bookNoteProgressPatterns: PatternCollection<BookNoteProgressPatternMatches>
 
-    private dailyNoteProgressPatterns: Array<DailyNoteProgressPattern> = []
+    private dailyNoteProgressPatterns: PatternCollection<DailyNoteProgressPatternMatches>
 
     async onload() {
         await this.loadSettings()
@@ -28,22 +29,28 @@ export default class BookshelfPlugin extends Plugin {
         this.bookshelf = new Bookshelf()
         this.bookFactory = new BookMetadataFactory(this.settings.bookProperties, this.linkToUri.bind(this))
 
+        const bookNotePatterns = []
         const dateFormat = this.settings.bookNote.dateFormat
         for (const pattern of this.settings.bookNote.patterns.progress) {
             try {
-                this.bookNoteProgressPatterns.push(new BookNoteProgressPattern(pattern, dateFormat))
+                bookNotePatterns.push(new BookNoteProgressPattern(pattern, dateFormat))
             } catch (error) {
                 console.error(`Error processing pattern "${pattern}: ${error}`)
             }
         }
 
+        this.bookNoteProgressPatterns = new PatternCollection(bookNotePatterns)
+
+        const dailyNotePatterns = []
         for (const pattern of this.settings.dailyNote.patterns.progress) {
             try {
-                this.dailyNoteProgressPatterns.push(new DailyNoteProgressPattern(pattern))
+                dailyNotePatterns.push(new DailyNoteProgressPattern(pattern))
             } catch (error) {
                 console.error(`Error processing pattern "${pattern}: ${error}`)
             }
         }
+
+        this.dailyNoteProgressPatterns = new PatternCollection(dailyNotePatterns)
 
         this.addSettingTab(new BookshelfSettingsTab(this.app, this))
 
@@ -80,15 +87,9 @@ export default class BookshelfPlugin extends Plugin {
         const contents = await this.app.vault.cachedRead(file)
         const lines = contents.split('\n')
         for (const listItem of meta?.listItems || []) {
-            let matches = null
-            for (const pattern of this.bookNoteProgressPatterns) {
-                const value = lines[listItem.position.start.line].replace(/^[-*]\s+/, '')
-                matches = pattern.matches(value)
-                if (matches !== null) {
-                    break
-                }
-            }
+            const value = lines[listItem.position.start.line].replace(/^[-*]\s+/, '')
 
+            const matches = this.bookNoteProgressPatterns.matches(value)
             if (matches === null) {
                 continue
             }
@@ -112,15 +113,9 @@ export default class BookshelfPlugin extends Plugin {
         const lines = contents.split('\n')
 
         for (const listItem of meta?.listItems || []) {
-            let matches = null
-            for (const pattern of this.dailyNoteProgressPatterns) {
-                const value = lines[listItem.position.start.line].replace(/^[-*]\s+/, '')
-                matches = pattern.matches(value)
-                if (matches !== null) {
-                    break
-                }
-            }
+            const value = lines[listItem.position.start.line].replace(/^[-*]\s+/, '')
 
+            const matches = this.dailyNoteProgressPatterns.matches(value)
             if (matches === null) {
                 continue
             }
