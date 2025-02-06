@@ -11,6 +11,11 @@ export interface BookshelfPluginSettings {
             progress: Array<string>
         }
     }
+    dailyNote: {
+        patterns: {
+            progress: Array<string>
+        }
+    }
 }
 
 export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
@@ -24,6 +29,11 @@ export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
         dateFormat: 'yyyy-MM-dd',
         patterns: {
             progress: ['{date}: {endPage}', '{date}: {startPage}-{endPage}'],
+        },
+    },
+    dailyNote: {
+        patterns: {
+            progress: ['Read {book}: {endPage}', 'Read {book}: {startPage}-{endPage}'],
         },
     },
 }

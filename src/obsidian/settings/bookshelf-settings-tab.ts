@@ -16,6 +16,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
         this.addBooksSettings()
         this.addBookProperties()
         this.addBookNoteSettings()
+        this.addDailyNoteSettings()
     }
 
     private addBooksSettings(): void {
@@ -96,6 +97,28 @@ export class BookshelfSettingsTab extends PluginSettingTab {
                     .setValue(this.plugin.settings.bookNote.patterns.progress.join('\n'))
                     .onChange(async (value) => {
                         this.plugin.settings.bookNote.patterns.progress = value.split('\n').filter((x) => x)
+
+                        await this.plugin.saveSettings()
+                    })
+
+                textArea.inputEl.style.width = '100%'
+                textArea.inputEl.rows = 4
+            })
+    }
+
+    private addDailyNoteSettings(): void {
+        const { containerEl } = this
+
+        new Setting(containerEl).setName('Daily Note Patterns').setHeading()
+
+        new Setting(containerEl)
+            .setName('Progress Patterns')
+            .setDesc('{book}, {startPage}, {endPage}, {*}')
+            .addTextArea((textArea) => {
+                textArea
+                    .setValue(this.plugin.settings.dailyNote.patterns.progress.join('\n'))
+                    .onChange(async (value) => {
+                        this.plugin.settings.dailyNote.patterns.progress = value.split('\n').filter((x) => x)
 
                         await this.plugin.saveSettings()
                     })
