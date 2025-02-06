@@ -3,7 +3,14 @@ import { BookshelfError } from './bookshelf-error'
 import { AbsoluteReadingProgress, ReadingProgress, RelativeReadingProgress } from './reading-progress'
 
 class BookshelfBook implements Book {
-    constructor(public metadata: BookMetadata) {}
+    constructor(
+        public metadata: BookMetadata,
+        private readonly bookshelf: Bookshelf,
+    ) {}
+
+    get readingProgress(): Array<ReadingProgress> {
+        return this.bookshelf.readingProgress().filter((rp) => rp.book === this)
+    }
 }
 
 export class Bookshelf {
@@ -20,7 +27,7 @@ export class Bookshelf {
             throw BookshelfError.identifierExists(identifier)
         }
 
-        this.books.set(identifier, new BookshelfBook(metadata))
+        this.books.set(identifier, new BookshelfBook(metadata, this))
     }
 
     public book(identifier: string): Book {

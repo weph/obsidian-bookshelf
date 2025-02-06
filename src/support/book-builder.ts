@@ -17,6 +17,7 @@ export class BookBuilder {
                 ...this.defaultMetadata(),
                 ...this.metadata,
             },
+            readingProgress: [],
         }
     }
 

@@ -84,6 +84,22 @@ describe('Reading progress', () => {
         ])
     })
 
+    test('should by reflected in book', () => {
+        bookshelf.addReadingProgress(date(2025, 2, 3), dracula, 10, 1)
+        bookshelf.addReadingProgress(date(2025, 2, 4), shining, 50)
+        bookshelf.addReadingProgress(date(2025, 2, 5), dracula, 20)
+        bookshelf.addReadingProgress(date(2025, 2, 1), shining, 20, 10)
+
+        expect(bookshelf.book(dracula).readingProgress.map(readingProgressAsString)).toEqual([
+            '2025-02-03: Dracula: 1-10',
+            '2025-02-05: Dracula: 11-20',
+        ])
+        expect(bookshelf.book(shining).readingProgress.map(readingProgressAsString)).toEqual([
+            '2025-02-01: The Shining: 10-20',
+            '2025-02-04: The Shining: 21-50',
+        ])
+    })
+
     test('items on the same date should be returned in the order of addition', () => {
         bookshelf.addReadingProgress(date(2025, 1, 1), dracula, 1)
         bookshelf.addReadingProgress(date(2025, 1, 1), shining, 2)

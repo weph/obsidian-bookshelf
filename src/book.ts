@@ -1,3 +1,5 @@
+import { ReadingProgress } from './reading-progress'
+
 export interface BookMetadata {
     readonly title: string
     readonly cover?: string
@@ -7,4 +9,5 @@ export interface BookMetadata {
 
 export interface Book {
     metadata: BookMetadata
+    readingProgress: Array<ReadingProgress>
 }
