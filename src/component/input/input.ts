@@ -26,8 +26,10 @@ export class Input extends HTMLElement implements InputProps {
 
         // Stryker disable all
         this.realInput.style.height = 'var(--bookshelf--ui--input--height)'
+        this.realInput.style.borderStyle = 'solid'
         this.realInput.style.borderRadius = 'var(--bookshelf--ui--input--border-radius)'
         this.realInput.style.borderWidth = 'var(--bookshelf--ui--input--border-width)'
+        this.realInput.style.borderColor = 'var(--bookshelf--ui--dropdown--border-color)'
         this.realInput.style.fontWeight = 'var(--bookshelf--ui--input--font-weight)'
         this.realInput.style.padding = 'var(--bookshelf--ui--input--padding)'
         // Stryker restore all

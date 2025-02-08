@@ -6,6 +6,7 @@ body {
     --bookshelf--ui--input--padding: var(--size-4-1) var(--size-4-2);
 
     --bookshelf--ui--dropdown--height: var(--input-height);
+    --bookshelf--ui--dropdown--border-color: var(--background-modifier-border);
     --bookshelf--ui--dropdown--border-radius: var(--input-radius);
     --bookshelf--ui--dropdown--border-width: 0;
     --bookshelf--ui--dropdown--font-weight: var(--input-font-weight);
