@@ -4,11 +4,13 @@ import './library'
 import { fn } from '@storybook/test'
 import { Book } from '../../book'
 import { BookBuilder } from '../../support/book-builder'
+import { defaultBookSortOptions } from '../../default-book-sort-options'
 
 const meta = {
     title: 'Library',
     args: {
         onBookClick: fn(),
+        sortOptions: defaultBookSortOptions(),
     },
     render: (args) => {
         const element = document.createElement('bookshelf-library')

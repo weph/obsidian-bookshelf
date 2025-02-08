@@ -1,4 +1,4 @@
-import { jest, beforeEach, describe, expect, test } from '@jest/globals'
+import { beforeEach, describe, expect, jest, test } from '@jest/globals'
 import { screen } from 'shadow-dom-testing-library'
 import userEvent, { UserEvent } from '@testing-library/user-event'
 import './library'
@@ -6,6 +6,7 @@ import { Library } from './library'
 import { fireEvent } from '@testing-library/dom'
 import { Book } from '../../book'
 import { BookBuilder } from '../../support/book-builder'
+import { BookSortOptions } from '../../book-sort-options'
 
 const onBookClick = jest.fn()
 let user: UserEvent
@@ -77,6 +78,37 @@ describe('Search', () => {
             'Web Components in Action',
             'Web Accessibility Cookbook',
         ])
+    })
+})
+
+describe('Sorting', () => {
+    beforeEach(() => {
+        library.books = [book('Pet Sematary'), book('Of Mice and Men'), book('Animal Farm')]
+    })
+
+    describe('No sort options exist', () => {
+        test('Books should be shown in order of addition', () => {
+            expect(cardTitles()).toEqual(['Pet Sematary', 'Of Mice and Men', 'Animal Farm'])
+        })
+    })
+
+    describe('Sort options exist', () => {
+        beforeEach(() => {
+            const sortOptions = new BookSortOptions()
+            sortOptions.add('asc', (a, b) => a.metadata.title.localeCompare(b.metadata.title))
+            sortOptions.add('desc', (a, b) => b.metadata.title.localeCompare(a.metadata.title))
+            library.sortOptions = sortOptions
+        })
+
+        test('Books should be ordered by first sort option by default', () => {
+            expect(cardTitles()).toEqual(['Animal Farm', 'Of Mice and Men', 'Pet Sematary'])
+        })
+
+        test('Books should be ordered by selected sort option', async () => {
+            await userEvent.selectOptions(screen.getByShadowLabelText('Sort'), 'desc')
+
+            expect(cardTitles()).toEqual(['Pet Sematary', 'Of Mice and Men', 'Animal Farm'])
+        })
     })
 })
 
