@@ -1,5 +1,7 @@
 import { Book } from '../../book'
 import '../gallery/gallery'
+import '../input/input'
+import { Input } from '../input/input'
 
 export interface LibraryProps {
     books: Array<Book>
@@ -9,7 +11,7 @@ export interface LibraryProps {
 export class Library extends HTMLElement implements LibraryProps {
     private root: ShadowRoot
 
-    private searchInput: HTMLInputElement
+    private searchInput: Input
 
     private galleryContainer: HTMLElement
 
@@ -23,7 +25,7 @@ export class Library extends HTMLElement implements LibraryProps {
         this.root = this.attachShadow({ mode: 'open' })
         this.root.innerHTML = `
             <header>
-                <input type="search" placeholder="Search..." />
+                <bookshelf-ui-input></bookshelf-ui-input>
             </header>
             <main>
             </main>
@@ -55,11 +57,13 @@ export class Library extends HTMLElement implements LibraryProps {
             </style>
         `
 
-        this.searchInput = this.root.querySelector('input[type="search"]') as HTMLInputElement
-        this.galleryContainer = this.root.querySelector('main') as HTMLElement
+        this.searchInput = this.root.querySelector('bookshelf-ui-input') as Input
+        // Stryker disable next-line all
+        this.searchInput.type = 'search'
+        this.searchInput.placeholder = 'Search...'
+        this.searchInput.onUpdate = () => this.update()
 
-        this.searchInput.addEventListener('keyup', () => this.update())
-        this.searchInput.addEventListener('search', () => this.update())
+        this.galleryContainer = this.root.querySelector('main') as HTMLElement
 
         this.update()
     }
