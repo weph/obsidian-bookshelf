@@ -12,6 +12,7 @@
         "!src/component/book-details/*",
         "!src/component/gallery/*",
         "!src/component/reading-progress-bar-chart/*",
+        "!src/component/statistics/*",
         "!src/support/*"
     ],
     "ignorePatterns": [".*/**/*", "reports/**/*", "src/**/*.stories.ts", "src/obsidian/**/*"],

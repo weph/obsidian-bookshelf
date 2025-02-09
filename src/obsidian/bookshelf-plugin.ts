@@ -9,6 +9,7 @@ import { BookMetadataFactory } from '../book-metadata-factory'
 import { BookNoteProgressPattern, BookNoteProgressPatternMatches } from '../book-note-progress-pattern'
 import { DailyNoteProgressPattern, DailyNoteProgressPatternMatches } from '../daily-note-progress-pattern'
 import { PatternCollection } from '../pattern-collection'
+import { StatisticsView, VIEW_TYPE_STATISTICS } from './view/statistics-view'
 
 export default class BookshelfPlugin extends Plugin {
     public settings: BookshelfPluginSettings
@@ -18,6 +19,8 @@ export default class BookshelfPlugin extends Plugin {
     private bookFactory: BookMetadataFactory
 
     private libraryView: LibraryView | null = null
+
+    private statisticsView: StatisticsView | null = null
 
     private bookNoteProgressPatterns: PatternCollection<BookNoteProgressPatternMatches>
 
@@ -60,9 +63,14 @@ export default class BookshelfPlugin extends Plugin {
             return this.libraryView
         })
 
-        this.addRibbonIcon('library-big', 'Bookshelf', () => {
-            this.activateView()
+        this.registerView(VIEW_TYPE_STATISTICS, (leaf) => {
+            this.statisticsView = new StatisticsView(leaf, this.bookshelf)
+
+            return this.statisticsView
         })
+
+        this.addRibbonIcon('library-big', 'Bookshelf: Library', () => this.activateView(VIEW_TYPE_LIBRARY))
+        this.addRibbonIcon('chart-spline', 'Bookshelf: Statistics', () => this.activateView(VIEW_TYPE_STATISTICS))
 
         this.app.metadataCache.on('resolve', async (file) => await this.handleFile(file))
     }
@@ -155,17 +163,17 @@ export default class BookshelfPlugin extends Plugin {
 
     private updateView = debounce({ delay: 100 }, () => this.libraryView?.update())
 
-    private async activateView(): Promise<void> {
+    private async activateView(viewType: string): Promise<void> {
         const { workspace } = this.app
 
-        const leaves = workspace.getLeavesOfType(VIEW_TYPE_LIBRARY)
+        const leaves = workspace.getLeavesOfType(viewType)
         if (leaves.length > 0) {
             await workspace.revealLeaf(leaves[0])
             return
         }
 
         const leaf = workspace.getLeaf('tab')
-        await leaf.setViewState({ type: VIEW_TYPE_LIBRARY, active: true })
+        await leaf.setViewState({ type: viewType, active: true })
         await workspace.revealLeaf(leaf)
     }
 
