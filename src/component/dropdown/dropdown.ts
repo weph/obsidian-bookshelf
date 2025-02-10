@@ -6,6 +6,7 @@ interface Option {
 export interface DropdownProps {
     options: Array<Option>
     onChange: (value: string) => void
+    value: string
 }
 
 export class Dropdown extends HTMLElement implements DropdownProps {
@@ -58,6 +59,10 @@ export class Dropdown extends HTMLElement implements DropdownProps {
 
     get value(): string {
         return this.select.value
+    }
+
+    set value(value: string) {
+        this.select.value = value
     }
 
     private update(): void {

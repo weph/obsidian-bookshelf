@@ -20,6 +20,12 @@ beforeEach(() => {
     document.body.replaceChildren(dropdown)
 })
 
+it('should show selected value', () => {
+    dropdown.value = 'bar'
+
+    expect(screen.getByShadowLabelText('my-dropdown')).toHaveDisplayValue('Bar')
+})
+
 describe('onChange', () => {
     it('should notify about changes', async () => {
         await userEvent.selectOptions(screen.getByShadowLabelText('my-dropdown'), 'Bar')

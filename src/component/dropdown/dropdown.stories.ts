@@ -28,3 +28,13 @@ export const Primary: Story = {
         ],
     },
 }
+
+export const PreselectedValue: Story = {
+    args: {
+        options: [
+            { value: 'foo', label: 'Foo' },
+            { value: 'bar', label: 'Bar' },
+        ],
+        value: 'bar',
+    },
+}
