@@ -15,10 +15,10 @@ const meta = {
 
         return element
     },
-} satisfies Meta<DropdownProps>
+} satisfies Meta<DropdownProps<string>>
 
 export default meta
-type Story = StoryObj<DropdownProps>
+type Story = StoryObj<DropdownProps<string>>
 
 export const Primary: Story = {
     args: {

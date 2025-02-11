@@ -1,22 +1,24 @@
-interface Option {
-    value: string
+interface Option<T> {
+    value: T
     label: string
 }
 
-export interface DropdownProps {
-    options: Array<Option>
-    onChange: (value: string) => void
-    value: string
+export interface DropdownProps<T> {
+    options: Array<Option<T>>
+    onChange: (value: T) => void
+    value: T
 }
 
-export class Dropdown extends HTMLElement implements DropdownProps {
+export class Dropdown<T = never> extends HTMLElement implements DropdownProps<T> {
     private root: ShadowRoot
 
     private readonly select: HTMLSelectElement
 
     private readonly onUpdateListener: () => void
 
-    public onChange: (value: string) => void = () => {}
+    private _options: Array<Option<T>> = []
+
+    public onChange: (value: T) => void = () => {}
 
     constructor() {
         super()
@@ -57,20 +59,21 @@ export class Dropdown extends HTMLElement implements DropdownProps {
         this.select.removeEventListener('change', this.onUpdateListener)
     }
 
-    get value(): string {
-        return this.select.value
+    get value(): T {
+        return this._options[parseInt(this.select.value)]?.value
     }
 
-    set value(value: string) {
-        this.select.value = value
+    set value(value: T) {
+        this.select.value = this._options.findIndex((o) => o.value === value).toString()
     }
 
     private update(): void {
         this.onChange(this.value)
     }
 
-    set options(value: Array<Option>) {
-        this.select.replaceChildren(...value.map((o) => this.option(o.value, o.label)))
+    set options(value: Array<Option<T>>) {
+        this._options = value
+        this.select.replaceChildren(...value.map((o, i) => this.option(i.toString(), o.label)))
     }
 
     private option(value: string, label: string): HTMLOptionElement {

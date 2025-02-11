@@ -17,7 +17,7 @@ export class Library extends HTMLElement implements LibraryProps {
 
     private searchInput: Input
 
-    private dropdown: Dropdown
+    private dropdown: Dropdown<string>
 
     private galleryContainer: HTMLElement
 
