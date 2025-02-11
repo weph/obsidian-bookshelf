@@ -142,6 +142,20 @@ describe('Statistics', () => {
         bookshelf.add(shining, book('The Shining'))
     })
 
+    describe('Years', () => {
+        test('should be empty if there is no activity', () => {
+            expect(bookshelf.statistics().years()).toEqual([])
+        })
+
+        test('should include only years with activities', () => {
+            bookshelf.addReadingProgress(date(2024, 1, 1), dracula, 1)
+            bookshelf.addReadingProgress(date(2025, 12, 31), dracula, 1)
+            bookshelf.addReadingProgress(date(2027, 7, 15), dracula, 1)
+
+            expect(bookshelf.statistics().years()).toEqual([2024, 2025, 2027])
+        })
+    })
+
     describe('Pages Read', () => {
         test('should be empty if there is no reading progress', () => {
             expect(pagesReadAsObject(bookshelf.statistics().pagesRead(Interval.Day))).toEqual({})

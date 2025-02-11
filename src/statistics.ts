@@ -11,6 +11,16 @@ export enum Interval {
 export class Statistics {
     constructor(private readingProgress: Array<ReadingProgress>) {}
 
+    public years(): Array<number> {
+        const years = new Set<number>()
+
+        for (const item of this.readingProgress) {
+            years.add(item.date.getFullYear())
+        }
+
+        return Array.from(years.values())
+    }
+
     public pagesRead(interval: Interval): Map<Date, number> {
         if (this.readingProgress.length === 0) {
             return new Map<Date, number>()
