@@ -1,13 +1,40 @@
-import Chart from 'chart.js/auto'
+import Chart, { TimeUnit } from 'chart.js/auto'
 import 'chartjs-adapter-luxon'
 import { Interval, Statistics } from '../../../statistics'
+import { Dropdown } from '../../dropdown/dropdown'
 
 export interface ReadingProgressBarChartProps {
     statistics: Statistics
 }
 
+interface IntervalValue {
+    chart: TimeUnit
+    statistics: Interval
+}
+
 export class PagesReadChart extends HTMLElement implements ReadingProgressBarChartProps {
     private root: ShadowRoot
+
+    private intervals: { [key: string]: IntervalValue } = {
+        year: {
+            chart: 'year',
+            statistics: Interval.Year,
+        },
+        month: {
+            chart: 'month',
+            statistics: Interval.Month,
+        },
+        week: {
+            chart: 'week',
+            statistics: Interval.Week,
+        },
+        day: {
+            chart: 'day',
+            statistics: Interval.Day,
+        },
+    }
+
+    private intervalDropdown: Dropdown<IntervalValue>
 
     private canvas: HTMLCanvasElement
 
@@ -19,7 +46,29 @@ export class PagesReadChart extends HTMLElement implements ReadingProgressBarCha
         super()
 
         this.root = this.attachShadow({ mode: 'open' })
+        this.intervalDropdown = document.createElement('bookshelf-ui-dropdown')
+        this.intervalDropdown.options = [
+            {
+                value: this.intervals.year,
+                label: 'Year',
+            },
+            {
+                value: this.intervals.month,
+                label: 'Month',
+            },
+            {
+                value: this.intervals.week,
+                label: 'Week',
+            },
+            {
+                value: this.intervals.day,
+                label: 'Day',
+            },
+        ]
+        this.intervalDropdown.value = this.intervals.month
+        this.intervalDropdown.onChange = () => this.update()
         this.canvas = document.createElement('canvas')
+        this.root.appendChild(this.intervalDropdown)
         this.root.appendChild(this.canvas)
     }
 
@@ -64,6 +113,12 @@ export class PagesReadChart extends HTMLElement implements ReadingProgressBarCha
             return
         }
 
+        this.chart.options!.scales!.x = {
+            type: 'timeseries',
+            time: {
+                unit: this.intervalDropdown.value.chart,
+            },
+        }
         this.chart.data.datasets[0].data = this.pages()
         this.chart.update()
     }
@@ -75,7 +130,7 @@ export class PagesReadChart extends HTMLElement implements ReadingProgressBarCha
             return result
         }
 
-        for (const [date, count] of this._statistics.pagesRead(Interval.Month).entries()) {
+        for (const [date, count] of this._statistics.pagesRead(this.intervalDropdown.value.statistics).entries()) {
             result.push({ x: date.getTime(), y: count })
         }
 
