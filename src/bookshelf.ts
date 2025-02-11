@@ -1,6 +1,7 @@
 import { Book, BookMetadata } from './book'
 import { BookshelfError } from './bookshelf-error'
 import { AbsoluteReadingProgress, ReadingProgress, RelativeReadingProgress } from './reading-progress'
+import { Statistics } from './statistics'
 
 class BookshelfBook implements Book {
     constructor(
@@ -98,5 +99,14 @@ export class Bookshelf {
 
     public readingProgress(): Array<ReadingProgress> {
         return this.readingProgressItems
+    }
+
+    public statistics(year: number | null = null): Statistics {
+        const items =
+            year === null
+                ? this.readingProgressItems
+                : this.readingProgressItems.filter((i) => i.date.getFullYear() === year)
+
+        return new Statistics(items)
     }
 }
