@@ -34,6 +34,6 @@ export class StatisticsView extends ItemView {
     }
 
     public update(): void {
-        this.component.readingProgress = this.bookshelf.readingProgress()
+        this.component.statistics = this.bookshelf.statistics()
     }
 }

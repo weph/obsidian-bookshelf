@@ -2,7 +2,7 @@ import { Interval } from './statistics'
 import { DateTime } from 'luxon'
 
 export class AggregatedTimeSeries {
-    private static dateObjects = new Map<string, Date>()
+    private dateObjects = new Map<string, Date>()
 
     private readonly result = new Map<Date, number>()
 
@@ -51,10 +51,10 @@ export class AggregatedTimeSeries {
 
     private dateObject(dateAsString: DateTime): Date {
         const asString = dateAsString.toFormat('yyyy-MM-dd')
-        if (!AggregatedTimeSeries.dateObjects.has(asString)) {
-            AggregatedTimeSeries.dateObjects.set(asString, dateAsString.toJSDate())
+        if (!this.dateObjects.has(asString)) {
+            this.dateObjects.set(asString, dateAsString.toJSDate())
         }
 
-        return AggregatedTimeSeries.dateObjects.get(asString)!
+        return this.dateObjects.get(asString)!
     }
 }

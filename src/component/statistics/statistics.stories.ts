@@ -3,6 +3,7 @@ import './statistics'
 import { StatisticsProps } from './statistics'
 import { AbsoluteReadingProgress } from '../../reading-progress'
 import { BookBuilder } from '../../support/book-builder'
+import { Statistics } from '../../statistics'
 
 const meta = {
     title: 'Statistics',
@@ -22,13 +23,13 @@ const book = new BookBuilder().build()
 
 export const Primary: Story = {
     args: {
-        readingProgress: [
+        statistics: new Statistics([
             new AbsoluteReadingProgress(new Date(2025, 0, 1), book, null, 1, 50),
             new AbsoluteReadingProgress(new Date(2025, 0, 2), book, null, 51, 110),
-            new AbsoluteReadingProgress(new Date(2025, 0, 3), book, null, 111, 130),
-            new AbsoluteReadingProgress(new Date(2025, 0, 5), book, null, 141, 200),
-            new AbsoluteReadingProgress(new Date(2025, 0, 6), book, null, 201, 240),
-        ],
+            new AbsoluteReadingProgress(new Date(2025, 1, 1), book, null, 111, 130),
+            new AbsoluteReadingProgress(new Date(2025, 2, 5), book, null, 141, 200),
+            new AbsoluteReadingProgress(new Date(2025, 2, 6), book, null, 201, 240),
+        ]),
     },
 }
 

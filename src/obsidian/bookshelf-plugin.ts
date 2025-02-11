@@ -161,7 +161,10 @@ export default class BookshelfPlugin extends Plugin {
         return this.app.vault.getResourcePath(coverFile)
     }
 
-    private updateView = debounce({ delay: 100 }, () => this.libraryView?.update())
+    private updateView = debounce({ delay: 100 }, () => {
+        this.libraryView?.update()
+        this.statisticsView?.update()
+    })
 
     private async activateView(viewType: string): Promise<void> {
         const { workspace } = this.app

@@ -1,29 +1,28 @@
-import { ReadingProgressBarChart } from '../reading-progress-bar-chart/reading-progress-bar-chart'
-import { ReadingProgress } from '../../reading-progress'
+import { PagesReadChart } from './pages-read-chart/pages-read-chart'
+import { Statistics as StatisticsData } from '../../statistics'
+import './pages-read-chart/pages-read-chart'
 
 export interface StatisticsProps {
-    readingProgress: Array<ReadingProgress>
+    statistics: StatisticsData
 }
 
 export class Statistics extends HTMLElement implements StatisticsProps {
     private root: ShadowRoot
 
-    private readingProgressChart: ReadingProgressBarChart
+    private pagesReadChart: PagesReadChart
 
     constructor() {
         super()
 
         this.root = this.attachShadow({ mode: 'open' })
-        this.root.innerHTML = `<bookshelf-reading-progress-bar-chart></bookshelf-reading-progress-bar-chart>`
+        this.root.innerHTML = `<bookshelf-statistics-pages-read-chart></bookshelf-statistics-pages-read-chart>`
 
-        this.readingProgressChart = this.root.querySelector(
-            'bookshelf-reading-progress-bar-chart',
-        ) as ReadingProgressBarChart
+        this.pagesReadChart = this.root.querySelector('bookshelf-statistics-pages-read-chart')!
     }
 
-    set readingProgress(value: Array<ReadingProgress>) {
-        customElements.whenDefined('bookshelf-reading-progress-bar-chart').then(() => {
-            this.readingProgressChart.readingProgress = value
+    set statistics(value: StatisticsData) {
+        customElements.whenDefined('bookshelf-statistics-pages-read-chart').then(() => {
+            this.pagesReadChart.statistics = value
         })
     }
 }
