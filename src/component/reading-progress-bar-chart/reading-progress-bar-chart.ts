@@ -1,9 +1,9 @@
-import { ReadingProgress } from '../../reading-progress'
+import { ReadingJourneyItem } from '../../reading-journey'
 import Chart from 'chart.js/auto'
 import 'chartjs-adapter-luxon'
 
 export interface ReadingProgressBarChartProps {
-    readingProgress: Array<ReadingProgress>
+    readingJourney: Array<ReadingJourneyItem>
 }
 
 export class ReadingProgressBarChart extends HTMLElement implements ReadingProgressBarChartProps {
@@ -13,7 +13,7 @@ export class ReadingProgressBarChart extends HTMLElement implements ReadingProgr
 
     private chart: Chart
 
-    private _readingProgress: Array<ReadingProgress> = []
+    private _readingProgress: Array<ReadingJourneyItem> = []
 
     constructor() {
         super()
@@ -65,10 +65,12 @@ export class ReadingProgressBarChart extends HTMLElement implements ReadingProgr
     }
 
     private pages(): Array<{ x: number; y: number }> {
-        return this._readingProgress.map((item) => ({ x: item.date.getTime(), y: item.pages }))
+        return this._readingProgress
+            .filter((item) => item.action === 'progress')
+            .map((item) => ({ x: item.date.getTime(), y: item.pages }))
     }
 
-    set readingProgress(readingProgress: Array<ReadingProgress>) {
+    set readingJourney(readingProgress: Array<ReadingJourneyItem>) {
         this._readingProgress = readingProgress
         this.update()
     }

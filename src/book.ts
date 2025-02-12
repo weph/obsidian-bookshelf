@@ -1,4 +1,4 @@
-import { ReadingProgress } from './reading-progress'
+import { ReadingJourneyItem } from './reading-journey'
 
 export interface BookMetadata {
     readonly title: string
@@ -9,5 +9,5 @@ export interface BookMetadata {
 
 export interface Book {
     metadata: BookMetadata
-    readingProgress: Array<ReadingProgress>
+    readingJourney: Array<ReadingJourneyItem>
 }

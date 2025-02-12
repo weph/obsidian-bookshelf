@@ -1,20 +1,23 @@
 import { Book, BookMetadata } from '../book'
-import { ReadingProgress } from '../reading-progress'
+import { ReadingJourneyItem } from '../reading-journey'
 
 export class BookBuilder {
     constructor(
         private readonly metadata: Partial<BookMetadata> = {},
-        private readonly readingProgress: Array<Omit<ReadingProgress, 'book'>> = [],
+        private readonly readingJourney: Array<Omit<ReadingJourneyItem, 'book'>> = [],
     ) {}
 
     public with<K extends keyof BookMetadata>(property: K, value: BookMetadata[K]): BookBuilder {
-        return new BookBuilder({ ...this.metadata, [property]: value }, this.readingProgress)
+        return new BookBuilder({ ...this.metadata, [property]: value }, this.readingJourney)
     }
 
     public withReadingProgress(date: Date, startPage: number, endPage: number): BookBuilder {
         const pages = endPage - startPage + 1
 
-        return new BookBuilder(this.metadata, [...this.readingProgress, { date, startPage, endPage, pages: pages }])
+        return new BookBuilder(this.metadata, [
+            ...this.readingJourney,
+            { action: 'progress', date, startPage, endPage, pages: pages },
+        ])
     }
 
     public build(): Book {
@@ -23,10 +26,10 @@ export class BookBuilder {
                 ...this.defaultMetadata(),
                 ...this.metadata,
             },
-            readingProgress: [],
+            readingJourney: [],
         }
 
-        book.readingProgress = this.readingProgress.map((rp) => ({ ...rp, book }))
+        book.readingJourney = this.readingJourney.map((rp) => ({ ...rp, book }))
 
         return book
     }

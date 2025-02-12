@@ -69,7 +69,7 @@ export class BookDetails extends HTMLElement implements BookDetailsProps {
         this.readingProgressChart = this.root.querySelector(
             'bookshelf-reading-progress-bar-chart',
         ) as ReadingProgressBarChart
-        this.readingProgressChart.readingProgress = this.book.readingProgress
+        this.readingProgressChart.readingJourney = this.book.readingJourney
     }
 
     get book() {

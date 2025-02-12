@@ -1,6 +1,9 @@
 import { Book } from './book'
 
-export interface ReadingProgress {
+export type ReadingJourneyItem = ReadingJourneyProgressItem
+
+interface ReadingJourneyProgressItem {
+    action: 'progress'
     date: Date
     book: Book
     startPage: number
@@ -8,11 +11,13 @@ export interface ReadingProgress {
     pages: number
 }
 
-export class AbsoluteReadingProgress implements ReadingProgress {
+export class AbsoluteReadingProgress implements ReadingJourneyProgressItem {
+    public readonly action = 'progress'
+
     constructor(
         public date: Date,
         public book: Book,
-        public previous: ReadingProgress | null,
+        public previous: ReadingJourneyProgressItem | null,
         public startPage: number,
         public endPage: number,
     ) {}
@@ -22,11 +27,13 @@ export class AbsoluteReadingProgress implements ReadingProgress {
     }
 }
 
-export class RelativeReadingProgress implements ReadingProgress {
+export class RelativeReadingProgress implements ReadingJourneyProgressItem {
+    public readonly action = 'progress'
+
     constructor(
         public date: Date,
         public book: Book,
-        public previous: ReadingProgress | null,
+        public previous: ReadingJourneyProgressItem | null,
         public endPage: number,
     ) {}
 

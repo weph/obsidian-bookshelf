@@ -1,4 +1,4 @@
-import { ReadingProgress } from './reading-progress'
+import { ReadingJourneyItem } from './reading-journey'
 import { AggregatedTimeSeries } from './aggregated-time-series'
 
 export enum Interval {
@@ -9,12 +9,12 @@ export enum Interval {
 }
 
 export class Statistics {
-    constructor(private readingProgress: Array<ReadingProgress>) {}
+    constructor(private readingJourney: Array<ReadingJourneyItem>) {}
 
     public years(): Array<number> {
         const years = new Set<number>()
 
-        for (const item of this.readingProgress) {
+        for (const item of this.readingJourney) {
             years.add(item.date.getFullYear())
         }
 
@@ -22,15 +22,15 @@ export class Statistics {
     }
 
     public pagesRead(interval: Interval): Map<Date, number> {
-        if (this.readingProgress.length === 0) {
+        if (this.readingJourney.length === 0) {
             return new Map<Date, number>()
         }
 
-        const start = this.readingProgress[0].date
-        const end = this.readingProgress[this.readingProgress.length - 1].date
+        const start = this.readingJourney[0].date
+        const end = this.readingJourney[this.readingJourney.length - 1].date
         const series = new AggregatedTimeSeries(start, end, interval)
 
-        for (const item of this.readingProgress) {
+        for (const item of this.readingJourney) {
             series.add(item.date, item.pages)
         }
 

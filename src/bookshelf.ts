@@ -1,6 +1,6 @@
 import { Book, BookMetadata } from './book'
 import { BookshelfError } from './bookshelf-error'
-import { AbsoluteReadingProgress, ReadingProgress, RelativeReadingProgress } from './reading-progress'
+import { AbsoluteReadingProgress, ReadingJourneyItem, RelativeReadingProgress } from './reading-journey'
 import { Statistics } from './statistics'
 
 class BookshelfBook implements Book {
@@ -9,15 +9,15 @@ class BookshelfBook implements Book {
         private readonly bookshelf: Bookshelf,
     ) {}
 
-    get readingProgress(): Array<ReadingProgress> {
-        return this.bookshelf.readingProgress().filter((rp) => rp.book === this)
+    get readingJourney(): Array<ReadingJourneyItem> {
+        return this.bookshelf.readingJourney().filter((rp) => rp.book === this)
     }
 }
 
 export class Bookshelf {
     private books = new Map<string, Book>()
 
-    private readingProgressItems: Array<AbsoluteReadingProgress | RelativeReadingProgress> = []
+    private readingJourneyItems: Array<AbsoluteReadingProgress | RelativeReadingProgress> = []
 
     public has(identifier: string): boolean {
         return this.books.has(identifier)
@@ -50,8 +50,8 @@ export class Bookshelf {
 
         let pos = 0
         while (
-            pos < this.readingProgressItems.length &&
-            this.readingProgressItems[pos].date.getTime() <= date.getTime()
+            pos < this.readingJourneyItems.length &&
+            this.readingJourneyItems[pos].date.getTime() <= date.getTime()
         ) {
             ++pos
         }
@@ -63,7 +63,7 @@ export class Bookshelf {
                 ? new AbsoluteReadingProgress(date, book, previous, startPage, endPage)
                 : new RelativeReadingProgress(date, book, previous, endPage)
 
-        this.readingProgressItems.splice(pos, 0, item)
+        this.readingJourneyItems.splice(pos, 0, item)
 
         const next = this.nextReadingProgress(book, pos)
         if (next) {
@@ -76,8 +76,8 @@ export class Bookshelf {
         position: number,
     ): AbsoluteReadingProgress | RelativeReadingProgress | null {
         for (let i = position - 1; i >= 0; i--) {
-            if (this.readingProgressItems[i].book === book) {
-                return this.readingProgressItems[i]
+            if (this.readingJourneyItems[i].book === book) {
+                return this.readingJourneyItems[i]
             }
         }
 
@@ -88,24 +88,24 @@ export class Bookshelf {
         book: Book,
         position: number,
     ): AbsoluteReadingProgress | RelativeReadingProgress | null {
-        for (let i = position + 1; i < this.readingProgressItems.length; i++) {
-            if (this.readingProgressItems[i].book === book) {
-                return this.readingProgressItems[i]
+        for (let i = position + 1; i < this.readingJourneyItems.length; i++) {
+            if (this.readingJourneyItems[i].book === book) {
+                return this.readingJourneyItems[i]
             }
         }
 
         return null
     }
 
-    public readingProgress(): Array<ReadingProgress> {
-        return this.readingProgressItems
+    public readingJourney(): Array<ReadingJourneyItem> {
+        return this.readingJourneyItems
     }
 
     public statistics(year: number | null = null): Statistics {
         const items =
             year === null
-                ? this.readingProgressItems
-                : this.readingProgressItems.filter((i) => i.date.getFullYear() === year)
+                ? this.readingJourneyItems
+                : this.readingJourneyItems.filter((i) => i.date.getFullYear() === year)
 
         return new Statistics(items)
     }
