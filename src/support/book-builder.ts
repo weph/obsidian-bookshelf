@@ -1,10 +1,13 @@
 import { Book, BookMetadata } from '../book'
 import { ReadingJourneyItem } from '../reading-journey'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type OmitUnion<T, K extends keyof any> = T extends any ? Omit<T, K> : never
+
 export class BookBuilder {
     constructor(
         private readonly metadata: Partial<BookMetadata> = {},
-        private readonly readingJourney: Array<Omit<ReadingJourneyItem, 'book'>> = [],
+        private readonly readingJourney: Array<OmitUnion<ReadingJourneyItem, 'book'>> = [],
     ) {}
 
     public with<K extends keyof BookMetadata>(property: K, value: BookMetadata[K]): BookBuilder {

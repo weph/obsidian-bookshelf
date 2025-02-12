@@ -61,7 +61,7 @@ describe('After adding a book', () => {
     })
 })
 
-describe('Reading progress', () => {
+describe('Reading journey', () => {
     const dracula = 'dracula'
     const shining = 'shining'
 
@@ -71,18 +71,32 @@ describe('Reading progress', () => {
     })
 
     test('should be ordered by date', () => {
+        bookshelf.addActionToJourney(date(2025, 2, 3), dracula, 'started')
         bookshelf.addReadingProgress(date(2025, 2, 3), dracula, 10, 1)
+        bookshelf.addActionToJourney(date(2025, 2, 4), dracula, 'abandoned')
+        bookshelf.addActionToJourney(date(2025, 2, 5), dracula, 'started')
         bookshelf.addReadingProgress(date(2025, 2, 4), shining, 50)
+        bookshelf.addActionToJourney(date(2025, 2, 4), shining, 'abandoned')
         bookshelf.addReadingProgress(date(2025, 2, 5), dracula, 20)
+        bookshelf.addReadingProgress(date(2025, 2, 10), dracula, 100)
+        bookshelf.addActionToJourney(date(2025, 2, 10), dracula, 'finished')
+        bookshelf.addActionToJourney(date(2025, 2, 1), shining, 'started')
         bookshelf.addReadingProgress(date(2025, 2, 1), shining, 20, 10)
 
         const journey = bookshelf.readingJourney()
 
         expect(journey.map(readingProgressAsString)).toEqual([
+            '2025-02-01: The Shining: started',
             '2025-02-01: The Shining: 10-20',
+            '2025-02-03: Dracula: started',
             '2025-02-03: Dracula: 1-10',
+            '2025-02-04: Dracula: abandoned',
             '2025-02-04: The Shining: 21-50',
+            '2025-02-04: The Shining: abandoned',
+            '2025-02-05: Dracula: started',
             '2025-02-05: Dracula: 11-20',
+            '2025-02-10: Dracula: 21-100',
+            '2025-02-10: Dracula: finished',
         ])
     })
 
@@ -261,6 +275,10 @@ describe('Statistics', () => {
 })
 
 function readingProgressAsString(value: ReadingJourneyItem): string {
+    if (value.action !== 'progress') {
+        return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.metadata.title}: ${value.action}`
+    }
+
     return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.metadata.title}: ${value.startPage}-${value.endPage}`
 }
 

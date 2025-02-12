@@ -1,8 +1,14 @@
 import { Book } from './book'
 
-export type ReadingJourneyItem = ReadingJourneyProgressItem
+export type ReadingJourneyItem = ReadingJourneyItemAction | ReadingJourneyProgressItem
 
-interface ReadingJourneyProgressItem {
+export interface ReadingJourneyItemAction {
+    action: 'started' | 'finished' | 'abandoned'
+    date: Date
+    book: Book
+}
+
+export interface ReadingJourneyProgressItem {
     action: 'progress'
     date: Date
     book: Book

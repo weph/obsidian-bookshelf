@@ -31,6 +31,10 @@ export class Statistics {
         const series = new AggregatedTimeSeries(start, end, interval)
 
         for (const item of this.readingJourney) {
+            if (item.action !== 'progress') {
+                continue
+            }
+
             series.add(item.date, item.pages)
         }
 

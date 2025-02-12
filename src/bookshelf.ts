@@ -1,6 +1,11 @@
 import { Book, BookMetadata } from './book'
 import { BookshelfError } from './bookshelf-error'
-import { AbsoluteReadingProgress, ReadingJourneyItem, RelativeReadingProgress } from './reading-journey'
+import {
+    AbsoluteReadingProgress,
+    ReadingJourneyItem,
+    ReadingJourneyItemAction,
+    RelativeReadingProgress,
+} from './reading-journey'
 import { Statistics } from './statistics'
 
 class BookshelfBook implements Book {
@@ -17,7 +22,8 @@ class BookshelfBook implements Book {
 export class Bookshelf {
     private books = new Map<string, Book>()
 
-    private readingJourneyItems: Array<AbsoluteReadingProgress | RelativeReadingProgress> = []
+    private readingJourneyItems: Array<ReadingJourneyItemAction | AbsoluteReadingProgress | RelativeReadingProgress> =
+        []
 
     public has(identifier: string): boolean {
         return this.books.has(identifier)
@@ -43,6 +49,20 @@ export class Bookshelf {
 
     public all(): Iterable<Book> {
         return this.books.values()
+    }
+
+    public addActionToJourney(date: Date, identifier: string, action: 'started' | 'finished' | 'abandoned'): void {
+        const book = this.book(identifier)
+
+        let pos = 0
+        while (
+            pos < this.readingJourneyItems.length &&
+            this.readingJourneyItems[pos].date.getTime() <= date.getTime()
+        ) {
+            ++pos
+        }
+
+        this.readingJourneyItems.splice(pos, 0, { action, date, book })
     }
 
     public addReadingProgress(date: Date, identifier: string, endPage: number, startPage?: number): void {
@@ -76,8 +96,9 @@ export class Bookshelf {
         position: number,
     ): AbsoluteReadingProgress | RelativeReadingProgress | null {
         for (let i = position - 1; i >= 0; i--) {
-            if (this.readingJourneyItems[i].book === book) {
-                return this.readingJourneyItems[i]
+            const item = this.readingJourneyItems[i]
+            if (item.action === 'progress' && item.book === book) {
+                return item
             }
         }
 
@@ -89,8 +110,9 @@ export class Bookshelf {
         position: number,
     ): AbsoluteReadingProgress | RelativeReadingProgress | null {
         for (let i = position + 1; i < this.readingJourneyItems.length; i++) {
-            if (this.readingJourneyItems[i].book === book) {
-                return this.readingJourneyItems[i]
+            const item = this.readingJourneyItems[i]
+            if (item.action === 'progress' && item.book === book) {
+                return item
             }
         }
 
