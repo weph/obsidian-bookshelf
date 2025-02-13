@@ -8,6 +8,12 @@ export enum Interval {
     Year,
 }
 
+type Actions = {
+    started: number
+    finished: number
+    abandoned: number
+}
+
 export class Statistics {
     constructor(private readingJourney: Array<ReadingJourneyItem>) {}
 
@@ -19,6 +25,22 @@ export class Statistics {
         }
 
         return Array.from(years.values())
+    }
+
+    public actions(): Actions {
+        const result = {
+            started: 0,
+            finished: 0,
+            abandoned: 0,
+        }
+
+        for (const item of this.readingJourney) {
+            if (item.action !== 'progress') {
+                ++result[item.action]
+            }
+        }
+
+        return result
     }
 
     public pagesRead(interval: Interval): Map<Date, number> {

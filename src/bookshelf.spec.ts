@@ -170,6 +170,34 @@ describe('Statistics', () => {
         })
     })
 
+    describe('Actions', () => {
+        test('Total', () => {
+            bookshelf.addActionToJourney(date(2024, 12, 30), dracula, 'started')
+            bookshelf.addActionToJourney(date(2024, 12, 31), dracula, 'finished')
+            bookshelf.addActionToJourney(date(2025, 1, 2), shining, 'started')
+            bookshelf.addActionToJourney(date(2025, 1, 3), shining, 'finished')
+            bookshelf.addActionToJourney(date(2025, 1, 4), dracula, 'started')
+            bookshelf.addActionToJourney(date(2025, 1, 5), dracula, 'abandoned')
+
+            const result = bookshelf.statistics().actions()
+
+            expect(result).toEqual({ started: 3, finished: 2, abandoned: 1 })
+        })
+
+        test('Filtered by year', () => {
+            bookshelf.addActionToJourney(date(2024, 12, 30), dracula, 'started')
+            bookshelf.addActionToJourney(date(2024, 12, 31), dracula, 'finished')
+            bookshelf.addActionToJourney(date(2025, 1, 2), shining, 'started')
+            bookshelf.addActionToJourney(date(2025, 1, 3), shining, 'finished')
+            bookshelf.addActionToJourney(date(2025, 1, 4), dracula, 'started')
+            bookshelf.addActionToJourney(date(2025, 1, 5), dracula, 'abandoned')
+
+            expect(bookshelf.statistics(2024).actions()).toEqual({ started: 1, finished: 1, abandoned: 0 })
+            expect(bookshelf.statistics(2025).actions()).toEqual({ started: 2, finished: 1, abandoned: 1 })
+            expect(bookshelf.statistics(2026).actions()).toEqual({ started: 0, finished: 0, abandoned: 0 })
+        })
+    })
+
     describe('Pages Read', () => {
         test('should be empty if there is no reading progress', () => {
             expect(pagesReadAsObject(bookshelf.statistics().pagesRead(Interval.Day))).toEqual({})

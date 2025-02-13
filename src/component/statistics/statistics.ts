@@ -24,7 +24,40 @@ export class Statistics extends HTMLElement implements StatisticsProps {
         this.root = this.attachShadow({ mode: 'open' })
         this.root.innerHTML = `
             <bookshelf-ui-dropdown></bookshelf-ui-dropdown>
-            <bookshelf-statistics-pages-read-chart></bookshelf-statistics-pages-read-chart>
+            <div class="container">
+                <h2>Books</h2>
+                <div id="counts"></div>            
+            </div>
+            <div class="container">
+                <h2>Number of Pages</h2>
+                <bookshelf-statistics-pages-read-chart></bookshelf-statistics-pages-read-chart>
+            </div>
+            <style>
+                .container {
+                    margin-bottom: 4rem;
+                }
+                
+                h2 {
+                    text-align: center;
+                }
+                
+                #counts {
+                    display: flex;
+                    justify-content: center;
+                    flex-direction: row;
+                    flex-wrap: nowrap;
+                    align-items: baseline;
+                    gap: 5rem;
+                }
+                
+                #counts div {
+                    text-align: center;
+                }
+                
+                #counts .number {
+                    font-size: 3rem;
+                }
+            </style>
         `
 
         this.yearsDropdown = this.root.querySelector('bookshelf-ui-dropdown')!
@@ -35,6 +68,22 @@ export class Statistics extends HTMLElement implements StatisticsProps {
 
     private update(): void {
         const statistics = this._bookshelf.statistics(this._year)
+
+        const actions = statistics.actions()
+        this.root.querySelector('#counts')!.innerHTML = `
+            <div>
+                <div class="number">${actions.started}</div>
+                Started
+            </div>
+            <div>
+                <div class="number">${actions.finished}</div>
+                Finished
+            </div>
+            <div>
+                <div class="number">${actions.abandoned}</div>
+                Abandoned
+            </div>
+        `
 
         customElements.whenDefined('bookshelf-statistics-pages-read-chart').then(() => {
             this.pagesReadChart.statistics = statistics
