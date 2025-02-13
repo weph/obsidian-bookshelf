@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, test } from '@jest/globals'
 import { Bookshelf } from './bookshelf'
 import { BookMetadata } from './book'
 import { BookshelfError } from './bookshelf-error'
-import { ReadingJourneyItem } from './reading-journey'
+import { ReadingJourneyItem } from './reading-journey/reading-journey'
 import { Interval } from './statistics'
 import { DateTime } from 'luxon'
 

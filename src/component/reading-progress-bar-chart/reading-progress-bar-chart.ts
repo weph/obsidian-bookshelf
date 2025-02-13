@@ -1,4 +1,4 @@
-import { ReadingJourneyItem } from '../../reading-journey'
+import { ReadingJourneyItem } from '../../reading-journey/reading-journey'
 import Chart from 'chart.js/auto'
 import 'chartjs-adapter-luxon'
 

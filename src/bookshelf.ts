@@ -5,7 +5,7 @@ import {
     ReadingJourneyItem,
     ReadingJourneyItemAction,
     RelativeReadingProgress,
-} from './reading-journey'
+} from './reading-journey/reading-journey'
 import { Statistics } from './statistics'
 
 class BookshelfBook implements Book {

@@ -6,9 +6,15 @@ import { BookshelfPluginSettings, DEFAULT_SETTINGS } from './settings/bookshelf-
 import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
 import { ObsidianMetadata } from '../metadata/metadata'
 import { BookMetadataFactory } from '../book-metadata-factory'
-import { BookNoteProgressPattern, BookNoteProgressPatternMatches } from '../book-note-progress-pattern'
-import { DailyNoteProgressPattern, DailyNoteProgressPatternMatches } from '../daily-note-progress-pattern'
-import { PatternCollection } from '../pattern-collection'
+import {
+    BookNoteProgressPattern,
+    BookNoteProgressPatternMatches,
+} from '../reading-journey/pattern/book-note/book-note-progress-pattern'
+import {
+    DailyNoteProgressPattern,
+    DailyNoteProgressPatternMatches,
+} from '../reading-journey/pattern/daily-note/daily-note-progress-pattern'
+import { PatternCollection } from '../reading-journey/pattern/pattern-collection'
 import { StatisticsView, VIEW_TYPE_STATISTICS } from './view/statistics-view'
 
 export default class BookshelfPlugin extends Plugin {
