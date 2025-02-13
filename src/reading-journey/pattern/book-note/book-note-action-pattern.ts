@@ -1,18 +1,17 @@
 import { DateTime } from 'luxon'
 import { BookNotePatternMatches } from './book-note-pattern'
 
-export interface BookNoteProgressPatternMatches {
-    action: 'progress'
+export interface BookNoteActionPatternMatches {
+    action: 'started' | 'finished' | 'abandoned'
     date: Date
-    startPage?: number
-    endPage: number
 }
 
-export class BookNoteProgressPattern {
+export class BookNoteActionPattern {
     private readonly regex: RegExp
 
     constructor(
         pattern: string,
+        private action: 'started' | 'finished' | 'abandoned',
         private dateFormat: string,
     ) {
         const placeholders = new Map<string, number>()
@@ -22,10 +21,6 @@ export class BookNoteProgressPattern {
 
         if (!placeholders.has('{date}')) {
             throw new Error('Pattern must include {date} placeholder')
-        }
-
-        if (!placeholders.has('{endPage}')) {
-            throw new Error('Pattern must include {endPage} placeholder')
         }
 
         for (const [placeholder, usages] of placeholders.entries()) {
@@ -38,11 +33,7 @@ export class BookNoteProgressPattern {
             }
         }
 
-        const regex = pattern
-            .replace(/\{\*}/g, '.*?')
-            .replace('{date}', '(?<date>.+)')
-            .replace('{startPage}', '(?<startPage>\\d+)')
-            .replace('{endPage}', '(?<endPage>\\d+)')
+        const regex = pattern.replace(/\{\*}/g, '.*?').replace('{date}', '(?<date>.+)')
 
         this.regex = new RegExp(`^${regex}$`)
     }
@@ -57,8 +48,6 @@ export class BookNoteProgressPattern {
 
         // Stryker disable next-line StringLiteral: date cannot be undefined but TS doesn't know that
         const dateStr = groups?.['date'] || ''
-        // Stryker disable next-line StringLiteral: endPage cannot be undefined but TS doesn't know that
-        const endPage = groups?.['endPage'] || ''
 
         const dateObject = DateTime.fromFormat(dateStr, this.dateFormat)
         if (!dateObject.isValid) {
@@ -66,10 +55,8 @@ export class BookNoteProgressPattern {
         }
 
         return {
-            action: 'progress',
             date: dateObject.toJSDate(),
-            startPage: groups?.['startPage'] ? parseInt(groups['startPage']) : undefined,
-            endPage: parseInt(endPage),
+            action: this.action,
         }
     }
 }

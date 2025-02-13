@@ -6,13 +6,10 @@ import { BookshelfPluginSettings, DEFAULT_SETTINGS } from './settings/bookshelf-
 import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
 import { ObsidianMetadata } from '../metadata/metadata'
 import { BookMetadataFactory } from '../book-metadata-factory'
-import {
-    BookNoteProgressPattern,
-    BookNoteProgressPatternMatches,
-} from '../reading-journey/pattern/book-note/book-note-progress-pattern'
 import { PatternCollection } from '../reading-journey/pattern/pattern-collection'
 import { StatisticsView, VIEW_TYPE_STATISTICS } from './view/statistics-view'
 import { DailyNotePatternMatches, dailyNotePatterns } from '../reading-journey/pattern/daily-note/daily-note-pattern'
+import { BookNotePatternMatches, bookNotePatterns } from '../reading-journey/pattern/book-note/book-note-pattern'
 
 export default class BookshelfPlugin extends Plugin {
     public settings: BookshelfPluginSettings
@@ -25,7 +22,7 @@ export default class BookshelfPlugin extends Plugin {
 
     private statisticsView: StatisticsView | null = null
 
-    private bookNoteProgressPatterns: PatternCollection<BookNoteProgressPatternMatches>
+    private bookNotePatterns: PatternCollection<BookNotePatternMatches>
 
     private dailyNotePatterns: PatternCollection<DailyNotePatternMatches>
 
@@ -35,17 +32,7 @@ export default class BookshelfPlugin extends Plugin {
         this.bookshelf = new Bookshelf()
         this.bookFactory = new BookMetadataFactory(this.settings.bookProperties, this.linkToUri.bind(this))
 
-        const bookNotePatterns = []
-        const dateFormat = this.settings.bookNote.dateFormat
-        for (const pattern of this.settings.bookNote.patterns.progress) {
-            try {
-                bookNotePatterns.push(new BookNoteProgressPattern(pattern, dateFormat))
-            } catch (error) {
-                console.error(`Error processing pattern "${pattern}: ${error}`)
-            }
-        }
-
-        this.bookNoteProgressPatterns = new PatternCollection(bookNotePatterns)
+        this.bookNotePatterns = bookNotePatterns(this.settings.bookNote.patterns, this.settings.bookNote.dateFormat)
         this.dailyNotePatterns = dailyNotePatterns(this.settings.dailyNote.patterns)
 
         this.addSettingTab(new BookshelfSettingsTab(this.app, this))
@@ -86,12 +73,17 @@ export default class BookshelfPlugin extends Plugin {
         }
 
         for await (const listItem of this.listItems(file)) {
-            const matches = this.bookNoteProgressPatterns.matches(listItem)
+            const matches = this.bookNotePatterns.matches(listItem)
             if (matches === null) {
                 continue
             }
 
-            this.bookshelf.addReadingProgress(matches.date, identifier, matches.endPage, matches.startPage)
+            if (matches.action === 'progress') {
+                this.bookshelf.addReadingProgress(matches.date, identifier, matches.endPage, matches.startPage)
+                continue
+            }
+
+            this.bookshelf.addActionToJourney(matches.date, identifier, matches.action)
         }
 
         this.updateView()

@@ -64,22 +64,22 @@ it.each([
     {
         pattern: '{date}: {endPage}',
         input: '2024-01-15: 10',
-        expected: { date: new Date(2024, 0, 15), endPage: 10 },
+        expected: { action: 'progress', date: new Date(2024, 0, 15), endPage: 10 },
     },
     {
         pattern: '{date}: {startPage}-{endPage}',
         input: '2024-01-15: 5-10',
-        expected: { date: new Date(2024, 0, 15), startPage: 5, endPage: 10 },
+        expected: { action: 'progress', date: new Date(2024, 0, 15), startPage: 5, endPage: 10 },
     },
     {
         pattern: '{date}: {startPage}{*}{endPage}',
         input: '2024-01-15: 5 to 10',
-        expected: { date: new Date(2024, 0, 15), startPage: 5, endPage: 10 },
+        expected: { action: 'progress', date: new Date(2024, 0, 15), startPage: 5, endPage: 10 },
     },
     {
         pattern: '{date}: {*}{startPage}{*}{endPage}',
         input: '2024-01-15: from 5 to 10',
-        expected: { date: new Date(2024, 0, 15), startPage: 5, endPage: 10 },
+        expected: { action: 'progress', date: new Date(2024, 0, 15), startPage: 5, endPage: 10 },
     },
 ])('pattern "$pattern" and input "$input" => $expected', ({ pattern, input, expected }) => {
     const result = new BookNoteProgressPattern(pattern, 'yyyy-MM-dd').matches(input)

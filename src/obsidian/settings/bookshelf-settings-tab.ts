@@ -90,8 +90,54 @@ export class BookshelfSettingsTab extends PluginSettingTab {
         })
 
         new Setting(containerEl)
+            .setName('Started Patterns')
+            .setDesc('{date}, {*}')
+            .addTextArea((textArea) => {
+                textArea.setValue(this.plugin.settings.bookNote.patterns.started.join('\n')).onChange(async (value) => {
+                    this.plugin.settings.bookNote.patterns.started = value.split('\n').filter((x) => x)
+
+                    await this.plugin.saveSettings()
+                })
+
+                textArea.inputEl.style.width = '100%'
+                textArea.inputEl.rows = 4
+            })
+
+        new Setting(containerEl)
+            .setName('Abandoned Patterns')
+            .setDesc('{date}, {*}')
+            .addTextArea((textArea) => {
+                textArea
+                    .setValue(this.plugin.settings.bookNote.patterns.abandoned.join('\n'))
+                    .onChange(async (value) => {
+                        this.plugin.settings.bookNote.patterns.abandoned = value.split('\n').filter((x) => x)
+
+                        await this.plugin.saveSettings()
+                    })
+
+                textArea.inputEl.style.width = '100%'
+                textArea.inputEl.rows = 4
+            })
+
+        new Setting(containerEl)
+            .setName('Finished Patterns')
+            .setDesc('{date}, {*}')
+            .addTextArea((textArea) => {
+                textArea
+                    .setValue(this.plugin.settings.bookNote.patterns.finished.join('\n'))
+                    .onChange(async (value) => {
+                        this.plugin.settings.bookNote.patterns.finished = value.split('\n').filter((x) => x)
+
+                        await this.plugin.saveSettings()
+                    })
+
+                textArea.inputEl.style.width = '100%'
+                textArea.inputEl.rows = 4
+            })
+
+        new Setting(containerEl)
             .setName('Progress Patterns')
-            .setDesc('{date}, {book}, {startPage}, {endPage}, {*}')
+            .setDesc('{date}, {startPage}, {endPage}, {*}')
             .addTextArea((textArea) => {
                 textArea
                     .setValue(this.plugin.settings.bookNote.patterns.progress.join('\n'))

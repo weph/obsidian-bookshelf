@@ -8,6 +8,9 @@ export interface BookshelfPluginSettings {
     bookNote: {
         dateFormat: string
         patterns: {
+            started: Array<string>
+            finished: Array<string>
+            abandoned: Array<string>
             progress: Array<string>
         }
     }
@@ -31,6 +34,9 @@ export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
     bookNote: {
         dateFormat: 'yyyy-MM-dd',
         patterns: {
+            started: ['{date}: Started'],
+            finished: ['{date}: Finished'],
+            abandoned: ['{date}: Abandoned'],
             progress: ['{date}: {endPage}', '{date}: {startPage}-{endPage}'],
         },
     },
