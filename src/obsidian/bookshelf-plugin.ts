@@ -1,7 +1,7 @@
 import { Plugin, TFile } from 'obsidian'
 import { Bookshelf } from '../bookshelf'
 import { LibraryView, VIEW_TYPE_LIBRARY } from './view/library-view'
-import { debounce, assign } from 'radashi'
+import { assign, debounce } from 'radashi'
 import { BookshelfPluginSettings, DEFAULT_SETTINGS } from './settings/bookshelf-plugin-settings'
 import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
 import { ObsidianMetadata } from '../metadata/metadata'
@@ -10,18 +10,9 @@ import {
     BookNoteProgressPattern,
     BookNoteProgressPatternMatches,
 } from '../reading-journey/pattern/book-note/book-note-progress-pattern'
-import {
-    DailyNoteProgressPattern,
-    DailyNoteProgressPatternMatches,
-} from '../reading-journey/pattern/daily-note/daily-note-progress-pattern'
 import { PatternCollection } from '../reading-journey/pattern/pattern-collection'
 import { StatisticsView, VIEW_TYPE_STATISTICS } from './view/statistics-view'
-import {
-    DailyNoteActionPattern,
-    DailyNoteActionPatternMatches,
-} from '../reading-journey/pattern/daily-note/daily-note-action-pattern'
-
-type DailyNotePattern = DailyNoteProgressPatternMatches | DailyNoteActionPatternMatches
+import { DailyNotePatternMatches, dailyNotePatterns } from '../reading-journey/pattern/daily-note/daily-note-pattern'
 
 export default class BookshelfPlugin extends Plugin {
     public settings: BookshelfPluginSettings
@@ -36,7 +27,7 @@ export default class BookshelfPlugin extends Plugin {
 
     private bookNoteProgressPatterns: PatternCollection<BookNoteProgressPatternMatches>
 
-    private dailyNoteProgressPatterns: PatternCollection<DailyNotePattern>
+    private dailyNotePatterns: PatternCollection<DailyNotePatternMatches>
 
     async onload() {
         await this.loadSettings()
@@ -55,41 +46,7 @@ export default class BookshelfPlugin extends Plugin {
         }
 
         this.bookNoteProgressPatterns = new PatternCollection(bookNotePatterns)
-
-        const dailyNotePatterns = []
-        for (const pattern of this.settings.dailyNote.patterns.progress) {
-            try {
-                dailyNotePatterns.push(new DailyNoteProgressPattern(pattern))
-            } catch (error) {
-                console.error(`Error processing pattern "${pattern}: ${error}`)
-            }
-        }
-
-        for (const pattern of this.settings.dailyNote.patterns.started) {
-            try {
-                dailyNotePatterns.push(new DailyNoteActionPattern(pattern, 'started'))
-            } catch (error) {
-                console.error(`Error processing pattern "${pattern}: ${error}`)
-            }
-        }
-
-        for (const pattern of this.settings.dailyNote.patterns.finished) {
-            try {
-                dailyNotePatterns.push(new DailyNoteActionPattern(pattern, 'finished'))
-            } catch (error) {
-                console.error(`Error processing pattern "${pattern}: ${error}`)
-            }
-        }
-
-        for (const pattern of this.settings.dailyNote.patterns.abandoned) {
-            try {
-                dailyNotePatterns.push(new DailyNoteActionPattern(pattern, 'abandoned'))
-            } catch (error) {
-                console.error(`Error processing pattern "${pattern}: ${error}`)
-            }
-        }
-
-        this.dailyNoteProgressPatterns = new PatternCollection(dailyNotePatterns)
+        this.dailyNotePatterns = dailyNotePatterns(this.settings.dailyNote.patterns)
 
         this.addSettingTab(new BookshelfSettingsTab(this.app, this))
 
@@ -149,7 +106,7 @@ export default class BookshelfPlugin extends Plugin {
         const date = new Date(parseInt(dateMatches[1]), parseInt(dateMatches[2]) - 1, parseInt(dateMatches[3]))
 
         for await (const listItem of this.listItems(file)) {
-            const matches = this.dailyNoteProgressPatterns.matches(listItem)
+            const matches = this.dailyNotePatterns.matches(listItem)
             if (matches === null) {
                 continue
             }
