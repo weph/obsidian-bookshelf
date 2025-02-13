@@ -55,22 +55,22 @@ it.each([
     {
         pattern: '{book}: {endPage}',
         input: '[[Dracula]]: 10',
-        expected: { book: '[[Dracula]]', endPage: 10 },
+        expected: { action: 'progress', book: '[[Dracula]]', endPage: 10 },
     },
     {
         pattern: '{book}: {startPage}-{endPage}',
         input: '[[Dracula]]: 5-10',
-        expected: { book: '[[Dracula]]', startPage: 5, endPage: 10 },
+        expected: { action: 'progress', book: '[[Dracula]]', startPage: 5, endPage: 10 },
     },
     {
         pattern: '{book}: {startPage}{*}{endPage}',
         input: '[[Dracula]]: 5 to 10',
-        expected: { book: '[[Dracula]]', startPage: 5, endPage: 10 },
+        expected: { action: 'progress', book: '[[Dracula]]', startPage: 5, endPage: 10 },
     },
     {
         pattern: '{book}: {*}{startPage}{*}{endPage}',
         input: '[[Dracula]]: from 5 to 10',
-        expected: { book: '[[Dracula]]', startPage: 5, endPage: 10 },
+        expected: { action: 'progress', book: '[[Dracula]]', startPage: 5, endPage: 10 },
     },
 ])('pattern "$pattern" and input "$input" => $expected', ({ pattern, input, expected }) => {
     const result = new DailyNoteProgressPattern(pattern).matches(input)

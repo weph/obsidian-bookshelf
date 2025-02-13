@@ -1,16 +1,17 @@
 import { DailyNotePatternMatches } from './daily-note-pattern'
 
-export interface DailyNoteProgressPatternMatches {
-    action: 'progress'
+export interface DailyNoteActionPatternMatches {
+    action: 'started' | 'finished' | 'abandoned'
     book: string
-    startPage?: number
-    endPage: number
 }
 
-export class DailyNoteProgressPattern {
+export class DailyNoteActionPattern {
     private readonly regex: RegExp
 
-    constructor(pattern: string) {
+    constructor(
+        pattern: string,
+        private action: 'started' | 'finished' | 'abandoned',
+    ) {
         const placeholders = new Map<string, number>()
         for (const match of pattern.matchAll(/\{.+?}/g)) {
             placeholders.set(match[0], (placeholders.get(match[0]) || 0) + 1)
@@ -18,10 +19,6 @@ export class DailyNoteProgressPattern {
 
         if (!placeholders.has('{book}')) {
             throw new Error('Pattern must include {book} placeholder')
-        }
-
-        if (!placeholders.has('{endPage}')) {
-            throw new Error('Pattern must include {endPage} placeholder')
         }
 
         for (const [placeholder, usages] of placeholders.entries()) {
@@ -34,11 +31,7 @@ export class DailyNoteProgressPattern {
             }
         }
 
-        const regex = pattern
-            .replace(/\{\*}/g, '.*?')
-            .replace('{book}', '(?<book>.+)')
-            .replace('{startPage}', '(?<startPage>\\d+)')
-            .replace('{endPage}', '(?<endPage>\\d+)')
+        const regex = pattern.replace(/\{\*}/g, '.*?').replace('{book}', '(?<book>.+)')
 
         this.regex = new RegExp(`^${regex}$`)
     }
@@ -53,14 +46,10 @@ export class DailyNoteProgressPattern {
 
         // Stryker disable next-line StringLiteral: date cannot be undefined but TS doesn't know that
         const book = groups?.['book'] || ''
-        // Stryker disable next-line StringLiteral: endPage cannot be undefined but TS doesn't know that
-        const endPage = groups?.['endPage'] || ''
 
         return {
-            action: 'progress',
             book,
-            startPage: groups?.['startPage'] ? parseInt(groups['startPage']) : undefined,
-            endPage: parseInt(endPage),
+            action: this.action,
         }
     }
 }

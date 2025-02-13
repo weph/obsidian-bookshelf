@@ -1,7 +1,7 @@
 import { Plugin, TFile } from 'obsidian'
 import { Bookshelf } from '../bookshelf'
 import { LibraryView, VIEW_TYPE_LIBRARY } from './view/library-view'
-import { debounce } from 'radashi'
+import { debounce, assign } from 'radashi'
 import { BookshelfPluginSettings, DEFAULT_SETTINGS } from './settings/bookshelf-plugin-settings'
 import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
 import { ObsidianMetadata } from '../metadata/metadata'
@@ -16,6 +16,12 @@ import {
 } from '../reading-journey/pattern/daily-note/daily-note-progress-pattern'
 import { PatternCollection } from '../reading-journey/pattern/pattern-collection'
 import { StatisticsView, VIEW_TYPE_STATISTICS } from './view/statistics-view'
+import {
+    DailyNoteActionPattern,
+    DailyNoteActionPatternMatches,
+} from '../reading-journey/pattern/daily-note/daily-note-action-pattern'
+
+type DailyNotePattern = DailyNoteProgressPatternMatches | DailyNoteActionPatternMatches
 
 export default class BookshelfPlugin extends Plugin {
     public settings: BookshelfPluginSettings
@@ -30,7 +36,7 @@ export default class BookshelfPlugin extends Plugin {
 
     private bookNoteProgressPatterns: PatternCollection<BookNoteProgressPatternMatches>
 
-    private dailyNoteProgressPatterns: PatternCollection<DailyNoteProgressPatternMatches>
+    private dailyNoteProgressPatterns: PatternCollection<DailyNotePattern>
 
     async onload() {
         await this.loadSettings()
@@ -54,6 +60,30 @@ export default class BookshelfPlugin extends Plugin {
         for (const pattern of this.settings.dailyNote.patterns.progress) {
             try {
                 dailyNotePatterns.push(new DailyNoteProgressPattern(pattern))
+            } catch (error) {
+                console.error(`Error processing pattern "${pattern}: ${error}`)
+            }
+        }
+
+        for (const pattern of this.settings.dailyNote.patterns.started) {
+            try {
+                dailyNotePatterns.push(new DailyNoteActionPattern(pattern, 'started'))
+            } catch (error) {
+                console.error(`Error processing pattern "${pattern}: ${error}`)
+            }
+        }
+
+        for (const pattern of this.settings.dailyNote.patterns.finished) {
+            try {
+                dailyNotePatterns.push(new DailyNoteActionPattern(pattern, 'finished'))
+            } catch (error) {
+                console.error(`Error processing pattern "${pattern}: ${error}`)
+            }
+        }
+
+        for (const pattern of this.settings.dailyNote.patterns.abandoned) {
+            try {
+                dailyNotePatterns.push(new DailyNoteActionPattern(pattern, 'abandoned'))
             } catch (error) {
                 console.error(`Error processing pattern "${pattern}: ${error}`)
             }
@@ -137,7 +167,12 @@ export default class BookshelfPlugin extends Plugin {
                 this.bookshelf.add(identifier, { title: identifier })
             }
 
-            this.bookshelf.addReadingProgress(date, identifier, matches.endPage, matches.startPage)
+            if (matches.action === 'progress') {
+                this.bookshelf.addReadingProgress(date, identifier, matches.endPage, matches.startPage)
+                continue
+            }
+
+            this.bookshelf.addActionToJourney(date, identifier, matches.action)
         }
 
         this.updateView()
@@ -187,7 +222,7 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     async loadSettings() {
-        this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData())
+        this.settings = assign(DEFAULT_SETTINGS, await this.loadData())
     }
 
     async saveSettings() {

@@ -112,6 +112,54 @@ export class BookshelfSettingsTab extends PluginSettingTab {
         new Setting(containerEl).setName('Daily Note Patterns').setHeading()
 
         new Setting(containerEl)
+            .setName('Started Patterns')
+            .setDesc('{book}, {*}')
+            .addTextArea((textArea) => {
+                textArea
+                    .setValue(this.plugin.settings.dailyNote.patterns.started.join('\n'))
+                    .onChange(async (value) => {
+                        this.plugin.settings.dailyNote.patterns.started = value.split('\n').filter((x) => x)
+
+                        await this.plugin.saveSettings()
+                    })
+
+                textArea.inputEl.style.width = '100%'
+                textArea.inputEl.rows = 4
+            })
+
+        new Setting(containerEl)
+            .setName('Abandoned Patterns')
+            .setDesc('{book}, {*}')
+            .addTextArea((textArea) => {
+                textArea
+                    .setValue(this.plugin.settings.dailyNote.patterns.abandoned.join('\n'))
+                    .onChange(async (value) => {
+                        this.plugin.settings.dailyNote.patterns.abandoned = value.split('\n').filter((x) => x)
+
+                        await this.plugin.saveSettings()
+                    })
+
+                textArea.inputEl.style.width = '100%'
+                textArea.inputEl.rows = 4
+            })
+
+        new Setting(containerEl)
+            .setName('Finished Patterns')
+            .setDesc('{book}, {*}')
+            .addTextArea((textArea) => {
+                textArea
+                    .setValue(this.plugin.settings.dailyNote.patterns.finished.join('\n'))
+                    .onChange(async (value) => {
+                        this.plugin.settings.dailyNote.patterns.finished = value.split('\n').filter((x) => x)
+
+                        await this.plugin.saveSettings()
+                    })
+
+                textArea.inputEl.style.width = '100%'
+                textArea.inputEl.rows = 4
+            })
+
+        new Setting(containerEl)
             .setName('Progress Patterns')
             .setDesc('{book}, {startPage}, {endPage}, {*}')
             .addTextArea((textArea) => {
