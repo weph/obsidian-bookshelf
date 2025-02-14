@@ -1,11 +1,6 @@
 import { Book, BookMetadata } from './book'
 import { BookshelfError } from './bookshelf-error'
-import {
-    AbsoluteReadingProgress,
-    ReadingJourneyItem,
-    ReadingJourneyItemAction,
-    RelativeReadingProgress,
-} from './reading-journey/reading-journey'
+import { ReadingJourneyItem, ReadingJourneyLog } from './reading-journey/reading-journey'
 import { Statistics } from './statistics'
 
 class BookshelfBook implements Book {
@@ -22,8 +17,7 @@ class BookshelfBook implements Book {
 export class Bookshelf {
     private books = new Map<string, Book>()
 
-    private readingJourneyItems: Array<ReadingJourneyItemAction | AbsoluteReadingProgress | RelativeReadingProgress> =
-        []
+    private readingJourneyLog = new ReadingJourneyLog()
 
     public has(identifier: string): boolean {
         return this.books.has(identifier)
@@ -52,82 +46,20 @@ export class Bookshelf {
     }
 
     public addActionToJourney(date: Date, identifier: string, action: 'started' | 'finished' | 'abandoned'): void {
-        const book = this.book(identifier)
-
-        let pos = 0
-        while (
-            pos < this.readingJourneyItems.length &&
-            this.readingJourneyItems[pos].date.getTime() <= date.getTime()
-        ) {
-            ++pos
-        }
-
-        this.readingJourneyItems.splice(pos, 0, { action, date, book })
+        this.readingJourneyLog.addActionToJourney(date, this.book(identifier), action)
     }
 
     public addReadingProgress(date: Date, identifier: string, endPage: number, startPage?: number): void {
-        const book = this.book(identifier)
-
-        let pos = 0
-        while (
-            pos < this.readingJourneyItems.length &&
-            this.readingJourneyItems[pos].date.getTime() <= date.getTime()
-        ) {
-            ++pos
-        }
-
-        const previous = this.previousReadingProgress(book, pos)
-
-        const item =
-            startPage !== undefined
-                ? new AbsoluteReadingProgress(date, book, previous, startPage, endPage)
-                : new RelativeReadingProgress(date, book, previous, endPage)
-
-        this.readingJourneyItems.splice(pos, 0, item)
-
-        const next = this.nextReadingProgress(book, pos)
-        if (next) {
-            next.previous = item
-        }
-    }
-
-    private previousReadingProgress(
-        book: Book,
-        position: number,
-    ): AbsoluteReadingProgress | RelativeReadingProgress | null {
-        for (let i = position - 1; i >= 0; i--) {
-            const item = this.readingJourneyItems[i]
-            if (item.action === 'progress' && item.book === book) {
-                return item
-            }
-        }
-
-        return null
-    }
-
-    private nextReadingProgress(
-        book: Book,
-        position: number,
-    ): AbsoluteReadingProgress | RelativeReadingProgress | null {
-        for (let i = position + 1; i < this.readingJourneyItems.length; i++) {
-            const item = this.readingJourneyItems[i]
-            if (item.action === 'progress' && item.book === book) {
-                return item
-            }
-        }
-
-        return null
+        this.readingJourneyLog.addReadingProgress(date, this.book(identifier), endPage, startPage)
     }
 
     public readingJourney(): Array<ReadingJourneyItem> {
-        return this.readingJourneyItems
+        return this.readingJourneyLog.readingJourney()
     }
 
     public statistics(year: number | null = null): Statistics {
         const items =
-            year === null
-                ? this.readingJourneyItems
-                : this.readingJourneyItems.filter((i) => i.date.getFullYear() === year)
+            year === null ? this.readingJourney() : this.readingJourney().filter((i) => i.date.getFullYear() === year)
 
         return new Statistics(items)
     }

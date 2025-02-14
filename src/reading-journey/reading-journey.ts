@@ -55,3 +55,69 @@ export class RelativeReadingProgress implements ReadingJourneyProgressItem {
         return this.endPage - this.startPage + 1
     }
 }
+
+export class ReadingJourneyLog {
+    private items: Array<ReadingJourneyItemAction | AbsoluteReadingProgress | RelativeReadingProgress> = []
+
+    public addActionToJourney(date: Date, book: Book, action: 'started' | 'finished' | 'abandoned'): void {
+        let pos = 0
+        while (pos < this.items.length && this.items[pos].date.getTime() <= date.getTime()) {
+            ++pos
+        }
+
+        this.items.splice(pos, 0, { action, date, book })
+    }
+
+    public addReadingProgress(date: Date, book: Book, endPage: number, startPage?: number): void {
+        let pos = 0
+        while (pos < this.items.length && this.items[pos].date.getTime() <= date.getTime()) {
+            ++pos
+        }
+
+        const previous = this.previousReadingProgress(book, pos)
+
+        const item =
+            startPage !== undefined
+                ? new AbsoluteReadingProgress(date, book, previous, startPage, endPage)
+                : new RelativeReadingProgress(date, book, previous, endPage)
+
+        this.items.splice(pos, 0, item)
+
+        const next = this.nextReadingProgress(book, pos)
+        if (next) {
+            next.previous = item
+        }
+    }
+
+    private previousReadingProgress(
+        book: Book,
+        position: number,
+    ): AbsoluteReadingProgress | RelativeReadingProgress | null {
+        for (let i = position - 1; i >= 0; i--) {
+            const item = this.items[i]
+            if (item.action === 'progress' && item.book === book) {
+                return item
+            }
+        }
+
+        return null
+    }
+
+    private nextReadingProgress(
+        book: Book,
+        position: number,
+    ): AbsoluteReadingProgress | RelativeReadingProgress | null {
+        for (let i = position + 1; i < this.items.length; i++) {
+            const item = this.items[i]
+            if (item.action === 'progress' && item.book === book) {
+                return item
+            }
+        }
+
+        return null
+    }
+
+    public readingJourney(): Array<ReadingJourneyItem> {
+        return this.items
+    }
+}
