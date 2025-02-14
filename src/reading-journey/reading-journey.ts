@@ -60,22 +60,12 @@ export class ReadingJourneyLog {
     private items: Array<ReadingJourneyItemAction | AbsoluteReadingProgress | RelativeReadingProgress> = []
 
     public addActionToJourney(date: Date, book: Book, action: 'started' | 'finished' | 'abandoned'): void {
-        let pos = 0
-        while (pos < this.items.length && this.items[pos].date.getTime() <= date.getTime()) {
-            ++pos
-        }
-
-        this.items.splice(pos, 0, { action, date, book })
+        this.items.splice(this.positionForDate(date), 0, { action, date, book })
     }
 
     public addReadingProgress(date: Date, book: Book, endPage: number, startPage?: number): void {
-        let pos = 0
-        while (pos < this.items.length && this.items[pos].date.getTime() <= date.getTime()) {
-            ++pos
-        }
-
+        const pos = this.positionForDate(date)
         const previous = this.previousReadingProgress(book, pos)
-
         const item =
             startPage !== undefined
                 ? new AbsoluteReadingProgress(date, book, previous, startPage, endPage)
@@ -87,6 +77,16 @@ export class ReadingJourneyLog {
         if (next) {
             next.previous = item
         }
+    }
+
+    private positionForDate(date: Date): number {
+        let pos = 0
+
+        while (pos < this.items.length && this.items[pos].date.getTime() <= date.getTime()) {
+            ++pos
+        }
+
+        return pos
     }
 
     private previousReadingProgress(
