@@ -65,7 +65,6 @@ export default class BookshelfPlugin extends Plugin {
             return
         }
 
-        const source = file.path
         const identifier = file.path
 
         const meta = this.app.metadataCache.getFileCache(file) || {}
@@ -73,26 +72,12 @@ export default class BookshelfPlugin extends Plugin {
             this.bookshelf.add(identifier, this.bookFactory.create(file.basename, new ObsidianMetadata(meta)))
         }
 
-        this.bookshelf.removeFromJourneyBySource(source)
-        for await (const listItem of this.listItems(file)) {
-            const matches = this.bookNotePatterns.matches(listItem)
-            if (matches === null) {
-                continue
-            }
-
-            if (matches.action === 'progress') {
-                this.bookshelf.addReadingProgress(
-                    matches.date,
-                    identifier,
-                    matches.endPage,
-                    matches.startPage || null,
-                    source,
-                )
-                continue
-            }
-
-            this.bookshelf.addActionToJourney(matches.date, identifier, matches.action, source)
-        }
+        await this.processReadingJourney(
+            file,
+            this.bookNotePatterns,
+            () => identifier,
+            (matches) => matches.date,
+        )
 
         this.updateView()
     }
@@ -103,24 +88,40 @@ export default class BookshelfPlugin extends Plugin {
             return
         }
 
-        const source = file.path
         const date = new Date(parseInt(dateMatches[1]), parseInt(dateMatches[2]) - 1, parseInt(dateMatches[3]))
+
+        await this.processReadingJourney(
+            file,
+            this.dailyNotePatterns,
+            (matches) => {
+                const bookName = matches.book.replace('[[', '').replace(']]', '')
+                const bookFile = this.app.metadataCache.getFirstLinkpathDest(bookName, '')
+
+                return bookFile === null ? bookName : bookFile.path
+            },
+            () => date,
+        )
+
+        this.updateView()
+    }
+
+    private async processReadingJourney<T extends BookNotePatternMatches | DailyNotePatternMatches>(
+        file: TFile,
+        patterns: PatternCollection<T>,
+        identifierValue: (matches: T) => string,
+        dateValue: (matches: T) => Date,
+    ): Promise<void> {
+        const source = file.path
 
         this.bookshelf.removeFromJourneyBySource(source)
         for await (const listItem of this.listItems(file)) {
-            const matches = this.dailyNotePatterns.matches(listItem)
+            const matches = patterns.matches(listItem)
             if (matches === null) {
                 continue
             }
 
-            const bookName = matches.book.replace('[[', '').replace(']]', '')
-            const bookFile = this.app.metadataCache.getFirstLinkpathDest(bookName, '')
-
-            if (bookFile === null) {
-                continue
-            }
-
-            const identifier = bookFile.path
+            const identifier = identifierValue(matches)
+            const date = dateValue(matches)
 
             if (!this.bookshelf.has(identifier)) {
                 this.bookshelf.add(identifier, { title: identifier })
@@ -133,8 +134,6 @@ export default class BookshelfPlugin extends Plugin {
 
             this.bookshelf.addActionToJourney(date, identifier, matches.action, source)
         }
-
-        this.updateView()
     }
 
     private async *listItems(file: TFile): AsyncGenerator<string> {
