@@ -50,7 +50,7 @@ export class Bookshelf {
     }
 
     public addReadingProgress(date: Date, identifier: string, endPage: number, startPage?: number): void {
-        this.readingJourneyLog.addReadingProgress(date, this.book(identifier), endPage, startPage)
+        this.readingJourneyLog.addReadingProgress(date, this.book(identifier), startPage || null, endPage)
     }
 
     public readingJourney(): Array<ReadingJourneyItem> {

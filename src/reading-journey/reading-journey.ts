@@ -17,33 +17,22 @@ export interface ReadingJourneyProgressItem {
     pages: number
 }
 
-export class AbsoluteReadingProgress implements ReadingJourneyProgressItem {
+export class ReadingProgress implements ReadingJourneyProgressItem {
     public readonly action = 'progress'
 
     constructor(
-        public date: Date,
-        public book: Book,
+        public readonly date: Date,
+        public readonly book: Book,
         public previous: ReadingJourneyProgressItem | null,
-        public startPage: number,
-        public endPage: number,
-    ) {}
-
-    get pages(): number {
-        return this.endPage - this.startPage + 1
-    }
-}
-
-export class RelativeReadingProgress implements ReadingJourneyProgressItem {
-    public readonly action = 'progress'
-
-    constructor(
-        public date: Date,
-        public book: Book,
-        public previous: ReadingJourneyProgressItem | null,
-        public endPage: number,
+        private readonly _startPage: number | null,
+        public readonly endPage: number,
     ) {}
 
     get startPage(): number {
+        if (this._startPage) {
+            return this._startPage
+        }
+
         if (this.previous === null) {
             return 1
         }
@@ -57,19 +46,16 @@ export class RelativeReadingProgress implements ReadingJourneyProgressItem {
 }
 
 export class ReadingJourneyLog {
-    private items: Array<ReadingJourneyItemAction | AbsoluteReadingProgress | RelativeReadingProgress> = []
+    private items: Array<ReadingJourneyItemAction | ReadingProgress> = []
 
     public addActionToJourney(date: Date, book: Book, action: 'started' | 'finished' | 'abandoned'): void {
         this.items.splice(this.positionForDate(date), 0, { action, date, book })
     }
 
-    public addReadingProgress(date: Date, book: Book, endPage: number, startPage?: number): void {
+    public addReadingProgress(date: Date, book: Book, startPage: number | null, endPage: number): void {
         const pos = this.positionForDate(date)
         const previous = this.previousReadingProgress(book, pos)
-        const item =
-            startPage !== undefined
-                ? new AbsoluteReadingProgress(date, book, previous, startPage, endPage)
-                : new RelativeReadingProgress(date, book, previous, endPage)
+        const item = new ReadingProgress(date, book, previous, startPage, endPage)
 
         this.items.splice(pos, 0, item)
 
@@ -89,10 +75,7 @@ export class ReadingJourneyLog {
         return pos
     }
 
-    private previousReadingProgress(
-        book: Book,
-        position: number,
-    ): AbsoluteReadingProgress | RelativeReadingProgress | null {
+    private previousReadingProgress(book: Book, position: number): ReadingProgress | null {
         for (let i = position - 1; i >= 0; i--) {
             const item = this.items[i]
             if (item.action === 'progress' && item.book === book) {
@@ -103,10 +86,7 @@ export class ReadingJourneyLog {
         return null
     }
 
-    private nextReadingProgress(
-        book: Book,
-        position: number,
-    ): AbsoluteReadingProgress | RelativeReadingProgress | null {
+    private nextReadingProgress(book: Book, position: number): ReadingProgress | null {
         for (let i = position + 1; i < this.items.length; i++) {
             const item = this.items[i]
             if (item.action === 'progress' && item.book === book) {
