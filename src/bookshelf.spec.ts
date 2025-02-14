@@ -71,17 +71,17 @@ describe('Reading journey', () => {
     })
 
     test('should be ordered by date', () => {
-        bookshelf.addActionToJourney(date(2025, 2, 3), dracula, 'started')
-        bookshelf.addReadingProgress(date(2025, 2, 3), dracula, 10, 1)
-        bookshelf.addActionToJourney(date(2025, 2, 4), dracula, 'abandoned')
-        bookshelf.addActionToJourney(date(2025, 2, 5), dracula, 'started')
-        bookshelf.addReadingProgress(date(2025, 2, 4), shining, 50)
-        bookshelf.addActionToJourney(date(2025, 2, 4), shining, 'abandoned')
-        bookshelf.addReadingProgress(date(2025, 2, 5), dracula, 20)
-        bookshelf.addReadingProgress(date(2025, 2, 10), dracula, 100)
-        bookshelf.addActionToJourney(date(2025, 2, 10), dracula, 'finished')
-        bookshelf.addActionToJourney(date(2025, 2, 1), shining, 'started')
-        bookshelf.addReadingProgress(date(2025, 2, 1), shining, 20, 10)
+        bookshelf.addActionToJourney(date(2025, 2, 3), dracula, 'started', '')
+        bookshelf.addReadingProgress(date(2025, 2, 3), dracula, 10, 1, '')
+        bookshelf.addActionToJourney(date(2025, 2, 4), dracula, 'abandoned', '')
+        bookshelf.addActionToJourney(date(2025, 2, 5), dracula, 'started', '')
+        bookshelf.addReadingProgress(date(2025, 2, 4), shining, 50, null, '')
+        bookshelf.addActionToJourney(date(2025, 2, 4), shining, 'abandoned', '')
+        bookshelf.addReadingProgress(date(2025, 2, 5), dracula, 20, null, '')
+        bookshelf.addReadingProgress(date(2025, 2, 10), dracula, 100, null, '')
+        bookshelf.addActionToJourney(date(2025, 2, 10), dracula, 'finished', '')
+        bookshelf.addActionToJourney(date(2025, 2, 1), shining, 'started', '')
+        bookshelf.addReadingProgress(date(2025, 2, 1), shining, 20, 10, '')
 
         const journey = bookshelf.readingJourney()
 
@@ -101,10 +101,10 @@ describe('Reading journey', () => {
     })
 
     test('should by reflected in book', () => {
-        bookshelf.addReadingProgress(date(2025, 2, 3), dracula, 10, 1)
-        bookshelf.addReadingProgress(date(2025, 2, 4), shining, 50)
-        bookshelf.addReadingProgress(date(2025, 2, 5), dracula, 20)
-        bookshelf.addReadingProgress(date(2025, 2, 1), shining, 20, 10)
+        bookshelf.addReadingProgress(date(2025, 2, 3), dracula, 10, 1, '')
+        bookshelf.addReadingProgress(date(2025, 2, 4), shining, 50, null, '')
+        bookshelf.addReadingProgress(date(2025, 2, 5), dracula, 20, null, '')
+        bookshelf.addReadingProgress(date(2025, 2, 1), shining, 20, 10, '')
 
         expect(bookshelf.book(dracula).readingJourney.map(readingProgressAsString)).toEqual([
             '2025-02-03: Dracula: 1-10',
@@ -117,10 +117,10 @@ describe('Reading journey', () => {
     })
 
     test('items on the same date should be returned in the order of addition', () => {
-        bookshelf.addReadingProgress(date(2025, 1, 1), dracula, 1)
-        bookshelf.addReadingProgress(date(2025, 1, 1), shining, 2)
-        bookshelf.addReadingProgress(date(2025, 1, 2), shining, 3)
-        bookshelf.addReadingProgress(date(2025, 1, 2), dracula, 4)
+        bookshelf.addReadingProgress(date(2025, 1, 1), dracula, 1, null, '')
+        bookshelf.addReadingProgress(date(2025, 1, 1), shining, 2, null, '')
+        bookshelf.addReadingProgress(date(2025, 1, 2), shining, 3, null, '')
+        bookshelf.addReadingProgress(date(2025, 1, 2), dracula, 4, null, '')
 
         const journey = bookshelf.readingJourney()
 
@@ -133,9 +133,9 @@ describe('Reading journey', () => {
     })
 
     test('items should be connected properly even if added in arbitrary order', () => {
-        bookshelf.addReadingProgress(date(2025, 1, 1), dracula, 10)
-        bookshelf.addReadingProgress(date(2025, 1, 3), dracula, 30)
-        bookshelf.addReadingProgress(date(2025, 1, 2), dracula, 20)
+        bookshelf.addReadingProgress(date(2025, 1, 1), dracula, 10, null, '')
+        bookshelf.addReadingProgress(date(2025, 1, 3), dracula, 30, null, '')
+        bookshelf.addReadingProgress(date(2025, 1, 2), dracula, 20, null, '')
 
         const journey = bookshelf.readingJourney()
 
@@ -143,6 +143,32 @@ describe('Reading journey', () => {
             '2025-01-01: Dracula: 1-10',
             '2025-01-02: Dracula: 11-20',
             '2025-01-03: Dracula: 21-30',
+        ])
+    })
+
+    test('can be removed by source', () => {
+        bookshelf.addActionToJourney(date(2025, 2, 3), dracula, 'started', '2025-02-03.md')
+        bookshelf.addReadingProgress(date(2025, 2, 3), dracula, 10, 1, '2025-02-03.md')
+        bookshelf.addActionToJourney(date(2025, 2, 4), dracula, 'abandoned', '2025-02-04.md')
+        bookshelf.addActionToJourney(date(2025, 2, 5), dracula, 'started', '2025-02-05.md')
+        bookshelf.addReadingProgress(date(2025, 2, 4), shining, 50, null, 'the-shining.md')
+        bookshelf.addActionToJourney(date(2025, 2, 4), shining, 'abandoned', 'the-shining.md')
+        bookshelf.addReadingProgress(date(2025, 2, 5), dracula, 20, null, '2025-02-06.md')
+        bookshelf.addReadingProgress(date(2025, 2, 10), dracula, 100, null, '2025-02-10.md')
+        bookshelf.addActionToJourney(date(2025, 2, 10), dracula, 'finished', '2025-02-10.md')
+        bookshelf.addActionToJourney(date(2025, 2, 1), shining, 'started', 'the-shining.md')
+        bookshelf.addReadingProgress(date(2025, 2, 1), shining, 20, 10, 'the-shining.md')
+
+        bookshelf.removeFromJourneyBySource('the-shining.md')
+
+        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+            '2025-02-03: Dracula: started',
+            '2025-02-03: Dracula: 1-10',
+            '2025-02-04: Dracula: abandoned',
+            '2025-02-05: Dracula: started',
+            '2025-02-05: Dracula: 11-20',
+            '2025-02-10: Dracula: 21-100',
+            '2025-02-10: Dracula: finished',
         ])
     })
 })
@@ -162,9 +188,9 @@ describe('Statistics', () => {
         })
 
         test('should include only years with activities', () => {
-            bookshelf.addReadingProgress(date(2024, 1, 1), dracula, 1)
-            bookshelf.addReadingProgress(date(2025, 12, 31), dracula, 1)
-            bookshelf.addReadingProgress(date(2027, 7, 15), dracula, 1)
+            bookshelf.addReadingProgress(date(2024, 1, 1), dracula, 1, null, '')
+            bookshelf.addReadingProgress(date(2025, 12, 31), dracula, 1, null, '')
+            bookshelf.addReadingProgress(date(2027, 7, 15), dracula, 1, null, '')
 
             expect(bookshelf.statistics().years()).toEqual([2024, 2025, 2027])
         })
@@ -172,12 +198,12 @@ describe('Statistics', () => {
 
     describe('Actions', () => {
         test('Total', () => {
-            bookshelf.addActionToJourney(date(2024, 12, 30), dracula, 'started')
-            bookshelf.addActionToJourney(date(2024, 12, 31), dracula, 'finished')
-            bookshelf.addActionToJourney(date(2025, 1, 2), shining, 'started')
-            bookshelf.addActionToJourney(date(2025, 1, 3), shining, 'finished')
-            bookshelf.addActionToJourney(date(2025, 1, 4), dracula, 'started')
-            bookshelf.addActionToJourney(date(2025, 1, 5), dracula, 'abandoned')
+            bookshelf.addActionToJourney(date(2024, 12, 30), dracula, 'started', '')
+            bookshelf.addActionToJourney(date(2024, 12, 31), dracula, 'finished', '')
+            bookshelf.addActionToJourney(date(2025, 1, 2), shining, 'started', '')
+            bookshelf.addActionToJourney(date(2025, 1, 3), shining, 'finished', '')
+            bookshelf.addActionToJourney(date(2025, 1, 4), dracula, 'started', '')
+            bookshelf.addActionToJourney(date(2025, 1, 5), dracula, 'abandoned', '')
 
             const result = bookshelf.statistics().actions()
 
@@ -185,12 +211,12 @@ describe('Statistics', () => {
         })
 
         test('Filtered by year', () => {
-            bookshelf.addActionToJourney(date(2024, 12, 30), dracula, 'started')
-            bookshelf.addActionToJourney(date(2024, 12, 31), dracula, 'finished')
-            bookshelf.addActionToJourney(date(2025, 1, 2), shining, 'started')
-            bookshelf.addActionToJourney(date(2025, 1, 3), shining, 'finished')
-            bookshelf.addActionToJourney(date(2025, 1, 4), dracula, 'started')
-            bookshelf.addActionToJourney(date(2025, 1, 5), dracula, 'abandoned')
+            bookshelf.addActionToJourney(date(2024, 12, 30), dracula, 'started', '')
+            bookshelf.addActionToJourney(date(2024, 12, 31), dracula, 'finished', '')
+            bookshelf.addActionToJourney(date(2025, 1, 2), shining, 'started', '')
+            bookshelf.addActionToJourney(date(2025, 1, 3), shining, 'finished', '')
+            bookshelf.addActionToJourney(date(2025, 1, 4), dracula, 'started', '')
+            bookshelf.addActionToJourney(date(2025, 1, 5), dracula, 'abandoned', '')
 
             expect(bookshelf.statistics(2024).actions()).toEqual({ started: 1, finished: 1, abandoned: 0 })
             expect(bookshelf.statistics(2025).actions()).toEqual({ started: 2, finished: 1, abandoned: 1 })
@@ -204,10 +230,10 @@ describe('Statistics', () => {
         })
 
         test('should be limited if given a year', () => {
-            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 1)
-            bookshelf.addReadingProgress(date(2025, 1, 1), shining, 10)
-            bookshelf.addReadingProgress(date(2025, 12, 31), shining, 20)
-            bookshelf.addReadingProgress(date(2026, 1, 1), dracula, 30)
+            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 1, null, '')
+            bookshelf.addReadingProgress(date(2025, 1, 1), shining, 10, null, '')
+            bookshelf.addReadingProgress(date(2025, 12, 31), shining, 20, null, '')
+            bookshelf.addReadingProgress(date(2026, 1, 1), dracula, 30, null, '')
 
             const result2024 = bookshelf.statistics(2024).pagesRead(Interval.Year)
             const result2025 = bookshelf.statistics(2025).pagesRead(Interval.Year)
@@ -219,12 +245,12 @@ describe('Statistics', () => {
         })
 
         test('can be grouped per day', () => {
-            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 10)
-            bookshelf.addReadingProgress(date(2025, 1, 2), dracula, 20)
-            bookshelf.addReadingProgress(date(2025, 1, 2), shining, 50)
-            bookshelf.addReadingProgress(date(2025, 1, 3), shining, 100)
-            bookshelf.addReadingProgress(date(2025, 1, 5), dracula, 30)
-            bookshelf.addReadingProgress(date(2025, 1, 7), dracula, 60)
+            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 10, null, '')
+            bookshelf.addReadingProgress(date(2025, 1, 2), dracula, 20, null, '')
+            bookshelf.addReadingProgress(date(2025, 1, 2), shining, 50, null, '')
+            bookshelf.addReadingProgress(date(2025, 1, 3), shining, 100, null, '')
+            bookshelf.addReadingProgress(date(2025, 1, 5), dracula, 30, null, '')
+            bookshelf.addReadingProgress(date(2025, 1, 7), dracula, 60, null, '')
 
             const result = bookshelf.statistics().pagesRead(Interval.Day)
 
@@ -241,11 +267,11 @@ describe('Statistics', () => {
         })
 
         test('can be grouped per week', () => {
-            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 10)
-            bookshelf.addReadingProgress(date(2025, 1, 9), dracula, 20)
-            bookshelf.addReadingProgress(date(2025, 1, 21), shining, 100)
-            bookshelf.addReadingProgress(date(2025, 1, 21), dracula, 30)
-            bookshelf.addReadingProgress(date(2025, 2, 1), dracula, 60)
+            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 10, null, '')
+            bookshelf.addReadingProgress(date(2025, 1, 9), dracula, 20, null, '')
+            bookshelf.addReadingProgress(date(2025, 1, 21), shining, 100, null, '')
+            bookshelf.addReadingProgress(date(2025, 1, 21), dracula, 30, null, '')
+            bookshelf.addReadingProgress(date(2025, 2, 1), dracula, 60, null, '')
 
             const result = bookshelf.statistics().pagesRead(Interval.Week)
 
@@ -259,11 +285,11 @@ describe('Statistics', () => {
         })
 
         test('can be grouped per month', () => {
-            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 10)
-            bookshelf.addReadingProgress(date(2025, 1, 31), dracula, 20)
-            bookshelf.addReadingProgress(date(2025, 2, 15), shining, 100)
-            bookshelf.addReadingProgress(date(2025, 2, 15), dracula, 30)
-            bookshelf.addReadingProgress(date(2025, 4, 2), dracula, 60)
+            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 10, null, '')
+            bookshelf.addReadingProgress(date(2025, 1, 31), dracula, 20, null, '')
+            bookshelf.addReadingProgress(date(2025, 2, 15), shining, 100, null, '')
+            bookshelf.addReadingProgress(date(2025, 2, 15), dracula, 30, null, '')
+            bookshelf.addReadingProgress(date(2025, 4, 2), dracula, 60, null, '')
 
             const result = bookshelf.statistics().pagesRead(Interval.Month)
 
@@ -277,9 +303,9 @@ describe('Statistics', () => {
         })
 
         test('can be grouped per year', () => {
-            bookshelf.addReadingProgress(date(2023, 1, 1), dracula, 10)
-            bookshelf.addReadingProgress(date(2025, 2, 15), shining, 100)
-            bookshelf.addReadingProgress(date(2025, 3, 2), dracula, 50)
+            bookshelf.addReadingProgress(date(2023, 1, 1), dracula, 10, null, '')
+            bookshelf.addReadingProgress(date(2025, 2, 15), shining, 100, null, '')
+            bookshelf.addReadingProgress(date(2025, 3, 2), dracula, 50, null, '')
 
             const result = bookshelf.statistics().pagesRead(Interval.Year)
 

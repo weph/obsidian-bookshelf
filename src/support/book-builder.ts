@@ -19,7 +19,7 @@ export class BookBuilder {
 
         return new BookBuilder(this.metadata, [
             ...this.readingJourney,
-            { action: 'progress', date, startPage, endPage, pages: pages },
+            { action: 'progress', date, startPage, endPage, pages: pages, source: '' },
         ])
     }
 

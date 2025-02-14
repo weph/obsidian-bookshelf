@@ -45,12 +45,27 @@ export class Bookshelf {
         return this.books.values()
     }
 
-    public addActionToJourney(date: Date, identifier: string, action: 'started' | 'finished' | 'abandoned'): void {
-        this.readingJourneyLog.addActionToJourney(date, this.book(identifier), action)
+    public addActionToJourney(
+        date: Date,
+        identifier: string,
+        action: 'started' | 'finished' | 'abandoned',
+        source: string,
+    ): void {
+        this.readingJourneyLog.addActionToJourney(date, this.book(identifier), action, source)
     }
 
-    public addReadingProgress(date: Date, identifier: string, endPage: number, startPage?: number): void {
-        this.readingJourneyLog.addReadingProgress(date, this.book(identifier), startPage || null, endPage)
+    public addReadingProgress(
+        date: Date,
+        identifier: string,
+        endPage: number,
+        startPage: number | null,
+        source: string,
+    ): void {
+        this.readingJourneyLog.addReadingProgress(date, this.book(identifier), startPage || null, endPage, source)
+    }
+
+    public removeFromJourneyBySource(source: string): void {
+        this.readingJourneyLog.removeBySource(source)
     }
 
     public readingJourney(): Array<ReadingJourneyItem> {

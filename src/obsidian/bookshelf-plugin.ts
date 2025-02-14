@@ -65,6 +65,7 @@ export default class BookshelfPlugin extends Plugin {
             return
         }
 
+        const source = file.path
         const identifier = file.path
 
         const meta = this.app.metadataCache.getFileCache(file) || {}
@@ -72,6 +73,7 @@ export default class BookshelfPlugin extends Plugin {
             this.bookshelf.add(identifier, this.bookFactory.create(file.basename, new ObsidianMetadata(meta)))
         }
 
+        this.bookshelf.removeFromJourneyBySource(source)
         for await (const listItem of this.listItems(file)) {
             const matches = this.bookNotePatterns.matches(listItem)
             if (matches === null) {
@@ -79,11 +81,17 @@ export default class BookshelfPlugin extends Plugin {
             }
 
             if (matches.action === 'progress') {
-                this.bookshelf.addReadingProgress(matches.date, identifier, matches.endPage, matches.startPage)
+                this.bookshelf.addReadingProgress(
+                    matches.date,
+                    identifier,
+                    matches.endPage,
+                    matches.startPage || null,
+                    source,
+                )
                 continue
             }
 
-            this.bookshelf.addActionToJourney(matches.date, identifier, matches.action)
+            this.bookshelf.addActionToJourney(matches.date, identifier, matches.action, source)
         }
 
         this.updateView()
@@ -95,8 +103,10 @@ export default class BookshelfPlugin extends Plugin {
             return
         }
 
+        const source = file.path
         const date = new Date(parseInt(dateMatches[1]), parseInt(dateMatches[2]) - 1, parseInt(dateMatches[3]))
 
+        this.bookshelf.removeFromJourneyBySource(source)
         for await (const listItem of this.listItems(file)) {
             const matches = this.dailyNotePatterns.matches(listItem)
             if (matches === null) {
@@ -117,11 +127,11 @@ export default class BookshelfPlugin extends Plugin {
             }
 
             if (matches.action === 'progress') {
-                this.bookshelf.addReadingProgress(date, identifier, matches.endPage, matches.startPage)
+                this.bookshelf.addReadingProgress(date, identifier, matches.endPage, matches.startPage || null, source)
                 continue
             }
 
-            this.bookshelf.addActionToJourney(date, identifier, matches.action)
+            this.bookshelf.addActionToJourney(date, identifier, matches.action, source)
         }
 
         this.updateView()
