@@ -7,6 +7,7 @@ const factory = new BookMetadataFactory(
         cover: 'cover',
         author: 'author',
         published: 'published',
+        tags: 'tags',
     },
     (link) => `uri://${link}`,
 )
@@ -134,5 +135,25 @@ describe('Published', () => {
         const result = factory.create('Title', new StaticMetadata(value !== undefined ? { published: value } : {}))
 
         expect(result.published).toEqual(expected)
+    })
+})
+
+describe('Tags', () => {
+    it('should be undefined if property is not set', () => {
+        const result = factory.create('Title', new StaticMetadata({}))
+
+        expect(result.tags).toBeUndefined()
+    })
+
+    it('should be used as is if property value is an array', () => {
+        const result = factory.create('Title', new StaticMetadata({ tags: ['foo', 'bar'] }))
+
+        expect(result.tags).toEqual(['foo', 'bar'])
+    })
+
+    it('should be converted to an array if it is a string', () => {
+        const result = factory.create('Title', new StaticMetadata({ tags: 'foo' }))
+
+        expect(result.tags).toEqual(['foo'])
     })
 })

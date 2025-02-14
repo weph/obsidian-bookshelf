@@ -8,6 +8,7 @@ interface PropertyNames {
     cover: string
     author: string
     published: string
+    tags: string
 }
 
 export class BookMetadataFactory {
@@ -22,6 +23,7 @@ export class BookMetadataFactory {
             cover: this.cover(metadata),
             authors: this.authors(metadata),
             published: this.published(metadata),
+            tags: this.tags(metadata),
         }
     }
 
@@ -76,6 +78,20 @@ export class BookMetadataFactory {
                     matches[6] ? parseInt(matches[6]) : 0,
                 )
             }
+        }
+
+        return undefined
+    }
+
+    private tags(metadata: Metadata) {
+        const value = metadata.value('tags')
+
+        if (Array.isArray(value)) {
+            return value.map((v) => this.text(v))
+        }
+
+        if (typeof value === 'string') {
+            return [value]
         }
 
         return undefined

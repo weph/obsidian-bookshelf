@@ -4,6 +4,7 @@ export interface BookshelfPluginSettings {
         cover: string
         author: string
         published: string
+        tags: string
     }
     bookNote: {
         dateFormat: string
@@ -30,6 +31,7 @@ export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
         cover: 'cover',
         author: 'author',
         published: 'published',
+        tags: 'tags',
     },
     bookNote: {
         dateFormat: 'yyyy-MM-dd',
