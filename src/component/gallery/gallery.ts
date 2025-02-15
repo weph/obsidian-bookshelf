@@ -7,7 +7,7 @@ export interface GalleryProps {
     onBookClick: ((book: Book) => void) | null
 }
 
-class Gallery extends HTMLElement implements GalleryProps {
+export class Gallery extends HTMLElement implements GalleryProps {
     private root: ShadowRoot
 
     private _books: Array<Book> = []

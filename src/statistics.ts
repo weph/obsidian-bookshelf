@@ -1,5 +1,6 @@
 import { ReadingJourneyItem } from './reading-journey/reading-journey'
 import { AggregatedTimeSeries } from './aggregated-time-series'
+import { Book } from './book'
 
 export enum Interval {
     Day,
@@ -65,5 +66,15 @@ export class Statistics {
 
     public totalNumberOfPages(): number {
         return this.readingJourney.reduce((acc, item) => acc + (item.action === 'progress' ? item.pages : 0), 0)
+    }
+
+    public books(): Array<Book> {
+        const result = new Set<Book>()
+
+        for (const item of this.readingJourney) {
+            result.add(item.book)
+        }
+
+        return Array.from(result.values())
     }
 }

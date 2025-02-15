@@ -2,6 +2,7 @@ import { PagesReadChart } from './pages-read-chart/pages-read-chart'
 import './pages-read-chart/pages-read-chart'
 import { Dropdown } from '../dropdown/dropdown'
 import { Bookshelf } from '../../bookshelf'
+import { Gallery } from '../gallery/gallery'
 
 export interface StatisticsProps {
     bookshelf: Bookshelf
@@ -13,6 +14,8 @@ export class Statistics extends HTMLElement implements StatisticsProps {
     private yearsDropdown: Dropdown<number | null>
 
     private pagesReadChart: PagesReadChart
+
+    private gallery: Gallery
 
     private _bookshelf: Bookshelf
 
@@ -32,6 +35,7 @@ export class Statistics extends HTMLElement implements StatisticsProps {
                 <h2>Pages</h2>
                 <div id="page-counts" class="counts"></div>
                 <bookshelf-statistics-pages-read-chart></bookshelf-statistics-pages-read-chart>
+                <bookshelf-gallery></bookshelf-gallery>
             </div>
             <style>
                 .container {
@@ -64,6 +68,7 @@ export class Statistics extends HTMLElement implements StatisticsProps {
 
         this.yearsDropdown = this.root.querySelector('bookshelf-ui-dropdown')!
         this.pagesReadChart = this.root.querySelector('bookshelf-statistics-pages-read-chart')!
+        this.gallery = this.root.querySelector('bookshelf-gallery')!
 
         this.yearsDropdown.onChange = (value) => (this.year = value)
     }
@@ -93,6 +98,8 @@ export class Statistics extends HTMLElement implements StatisticsProps {
                 total
             </div>
         `
+
+        this.gallery.books = statistics.books()
 
         customElements.whenDefined('bookshelf-statistics-pages-read-chart').then(() => {
             this.pagesReadChart.statistics = statistics

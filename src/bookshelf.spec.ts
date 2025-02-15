@@ -343,6 +343,52 @@ describe('Statistics', () => {
             expect(bookshelf.statistics(2026).totalNumberOfPages()).toEqual(29)
         })
     })
+
+    describe('Books', () => {
+        test('should be empty if there is no reading progress', () => {
+            expect(bookshelf.statistics().books()).toEqual([])
+        })
+
+        test('should return a unique list of books', () => {
+            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 1, null, '')
+            bookshelf.addReadingProgress(date(2025, 1, 1), shining, 10, null, '')
+            bookshelf.addReadingProgress(date(2025, 12, 31), shining, 20, null, '')
+            bookshelf.addReadingProgress(date(2026, 1, 1), dracula, 30, null, '')
+
+            expect(
+                bookshelf
+                    .statistics()
+                    .books()
+                    .map((b) => b.metadata.title),
+            ).toEqual(['Dracula', 'The Shining'])
+        })
+
+        test('should be limited if given a year', () => {
+            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 1, null, '')
+            bookshelf.addReadingProgress(date(2025, 1, 1), dracula, 30, null, '')
+            bookshelf.addReadingProgress(date(2025, 1, 2), shining, 10, null, '')
+            bookshelf.addReadingProgress(date(2026, 1, 1), shining, 20, null, '')
+
+            expect(
+                bookshelf
+                    .statistics(2024)
+                    .books()
+                    .map((b) => b.metadata.title),
+            ).toEqual(['Dracula'])
+            expect(
+                bookshelf
+                    .statistics(2025)
+                    .books()
+                    .map((b) => b.metadata.title),
+            ).toEqual(['Dracula', 'The Shining'])
+            expect(
+                bookshelf
+                    .statistics(2026)
+                    .books()
+                    .map((b) => b.metadata.title),
+            ).toEqual(['The Shining'])
+        })
+    })
 })
 
 function readingProgressAsString(value: ReadingJourneyItem): string {
