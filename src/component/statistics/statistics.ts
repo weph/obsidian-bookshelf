@@ -26,10 +26,11 @@ export class Statistics extends HTMLElement implements StatisticsProps {
             <bookshelf-ui-dropdown></bookshelf-ui-dropdown>
             <div class="container">
                 <h2>Books</h2>
-                <div id="counts"></div>            
+                <div id="book-counts" class="counts"></div>            
             </div>
             <div class="container">
-                <h2>Number of Pages</h2>
+                <h2>Pages</h2>
+                <div id="page-counts" class="counts"></div>
                 <bookshelf-statistics-pages-read-chart></bookshelf-statistics-pages-read-chart>
             </div>
             <style>
@@ -42,7 +43,7 @@ export class Statistics extends HTMLElement implements StatisticsProps {
                     text-align: center;
                 }
                 
-                #counts {
+                .counts {
                     display: flex;
                     justify-content: center;
                     flex-direction: row;
@@ -51,11 +52,11 @@ export class Statistics extends HTMLElement implements StatisticsProps {
                     gap: 5rem;
                 }
                 
-                #counts div {
+                .counts div {
                     text-align: center;
                 }
                 
-                #counts .number {
+                .counts .number {
                     font-size: 3rem;
                 }
             </style>
@@ -71,18 +72,25 @@ export class Statistics extends HTMLElement implements StatisticsProps {
         const statistics = this._bookshelf.statistics(this._year)
 
         const actions = statistics.actions()
-        this.root.querySelector('#counts')!.innerHTML = `
+        this.root.querySelector('#book-counts')!.innerHTML = `
             <div>
                 <div class="number">${actions.started}</div>
-                Started
+                started
             </div>
             <div>
                 <div class="number">${actions.finished}</div>
-                Finished
+                finished
             </div>
             <div>
                 <div class="number">${actions.abandoned}</div>
-                Abandoned
+                abandoned
+            </div>
+        `
+
+        this.root.querySelector('#page-counts')!.innerHTML = `
+            <div>
+                <div class="number">${statistics.totalNumberOfPages().toLocaleString()}</div>
+                total
             </div>
         `
 

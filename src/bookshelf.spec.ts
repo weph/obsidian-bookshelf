@@ -326,6 +326,23 @@ describe('Statistics', () => {
             return result
         }
     })
+
+    describe('Total number of pages', () => {
+        test('should be 0 if there is no reading progress', () => {
+            expect(bookshelf.statistics().totalNumberOfPages()).toEqual(0)
+        })
+
+        test('should be limited if given a year', () => {
+            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 1, null, '')
+            bookshelf.addReadingProgress(date(2025, 1, 1), shining, 10, null, '')
+            bookshelf.addReadingProgress(date(2025, 12, 31), shining, 20, null, '')
+            bookshelf.addReadingProgress(date(2026, 1, 1), dracula, 30, null, '')
+
+            expect(bookshelf.statistics(2024).totalNumberOfPages()).toEqual(1)
+            expect(bookshelf.statistics(2025).totalNumberOfPages()).toEqual(20)
+            expect(bookshelf.statistics(2026).totalNumberOfPages()).toEqual(29)
+        })
+    })
 })
 
 function readingProgressAsString(value: ReadingJourneyItem): string {

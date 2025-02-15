@@ -62,4 +62,8 @@ export class Statistics {
 
         return series.asMap()
     }
+
+    public totalNumberOfPages(): number {
+        return this.readingJourney.reduce((acc, item) => acc + (item.action === 'progress' ? item.pages : 0), 0)
+    }
 }
