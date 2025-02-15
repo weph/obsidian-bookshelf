@@ -72,4 +72,8 @@ export class Statistics {
     public books(): Array<Book> {
         return Array.from(this.readingJourney.books())
     }
+
+    public tagUsage(): Map<string, number> {
+        return this.readingJourney.tagUsage()
+    }
 }

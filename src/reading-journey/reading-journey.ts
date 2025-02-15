@@ -25,4 +25,16 @@ export class ReadingJourney {
 
         return result
     }
+
+    public tagUsage(): Map<string, number> {
+        const result = new Map()
+
+        for (const book of this.books()) {
+            for (const tag of book.metadata.tags || []) {
+                result.set(tag, (result.get(tag) || 0) + 1)
+            }
+        }
+
+        return result
+    }
 }

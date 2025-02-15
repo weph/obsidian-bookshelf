@@ -1,8 +1,10 @@
 import { PagesReadChart } from './pages-read-chart/pages-read-chart'
 import './pages-read-chart/pages-read-chart'
+import './tag-usage-chart/tag-usage-chart'
 import { Dropdown } from '../dropdown/dropdown'
 import { Bookshelf } from '../../bookshelf'
 import { Gallery } from '../gallery/gallery'
+import { TagUsageChart } from './tag-usage-chart/tag-usage-chart'
 
 export interface StatisticsProps {
     bookshelf: Bookshelf
@@ -14,6 +16,8 @@ export class Statistics extends HTMLElement implements StatisticsProps {
     private yearsDropdown: Dropdown<number | null>
 
     private pagesReadChart: PagesReadChart
+
+    private tagUsageChart: TagUsageChart
 
     private gallery: Gallery
 
@@ -35,6 +39,10 @@ export class Statistics extends HTMLElement implements StatisticsProps {
                 <h2>Pages</h2>
                 <div id="page-counts" class="counts"></div>
                 <bookshelf-statistics-pages-read-chart></bookshelf-statistics-pages-read-chart>
+            </div>
+            <div class="container">
+                <h2>Most Frequently Used Tags</h2>
+                <bookshelf-statistics-tag-usage-chart></bookshelf-statistics-tag-usage-chart>
             </div>
             <div class="container">
                 <h2>Books</h2>
@@ -72,6 +80,7 @@ export class Statistics extends HTMLElement implements StatisticsProps {
 
         this.yearsDropdown = this.root.querySelector('bookshelf-ui-dropdown')!
         this.pagesReadChart = this.root.querySelector('bookshelf-statistics-pages-read-chart')!
+        this.tagUsageChart = this.root.querySelector('bookshelf-statistics-tag-usage-chart')!
         this.gallery = this.root.querySelector('bookshelf-gallery')!
 
         this.yearsDropdown.onChange = (value) => (this.year = value)
@@ -107,6 +116,10 @@ export class Statistics extends HTMLElement implements StatisticsProps {
 
         customElements.whenDefined('bookshelf-statistics-pages-read-chart').then(() => {
             this.pagesReadChart.statistics = statistics
+        })
+
+        customElements.whenDefined('bookshelf-statistics-tag-usage-chart').then(() => {
+            this.tagUsageChart.statistics = statistics
         })
     }
 
