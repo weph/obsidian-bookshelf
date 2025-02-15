@@ -1,4 +1,5 @@
 import { Book } from '../book'
+import { ReadingJourney } from './reading-journey'
 
 export type ReadingJourneyItem = ReadingJourneyItemAction | ReadingJourneyProgressItem
 
@@ -109,7 +110,7 @@ export class ReadingJourneyLog {
         return null
     }
 
-    public readingJourney(): Array<ReadingJourneyItem> {
-        return this.items
+    public readingJourney(): ReadingJourney {
+        return new ReadingJourney(this.items)
     }
 }

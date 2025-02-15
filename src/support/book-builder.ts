@@ -1,5 +1,6 @@
 import { Book, BookMetadata } from '../book'
 import { ReadingJourneyItem } from '../reading-journey/reading-journey-log'
+import { ReadingJourney } from '../reading-journey/reading-journey'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type OmitUnion<T, K extends keyof any> = T extends any ? Omit<T, K> : never
@@ -29,10 +30,10 @@ export class BookBuilder {
                 ...this.defaultMetadata(),
                 ...this.metadata,
             },
-            readingJourney: [],
+            readingJourney: new ReadingJourney([]),
         }
 
-        book.readingJourney = this.readingJourney.map((rp) => ({ ...rp, book }))
+        book.readingJourney = new ReadingJourney(this.readingJourney.map((rp) => ({ ...rp, book })))
 
         return book
     }

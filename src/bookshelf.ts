@@ -1,7 +1,8 @@
 import { Book, BookMetadata } from './book'
 import { BookshelfError } from './bookshelf-error'
-import { ReadingJourneyItem, ReadingJourneyLog } from './reading-journey/reading-journey-log'
+import { ReadingJourneyLog } from './reading-journey/reading-journey-log'
 import { Statistics } from './statistics'
+import { ReadingJourney } from './reading-journey/reading-journey'
 
 class BookshelfBook implements Book {
     constructor(
@@ -9,7 +10,7 @@ class BookshelfBook implements Book {
         private readonly bookshelf: Bookshelf,
     ) {}
 
-    get readingJourney(): Array<ReadingJourneyItem> {
+    get readingJourney(): ReadingJourney {
         return this.bookshelf.readingJourney().filter((rp) => rp.book === this)
     }
 }
@@ -68,13 +69,17 @@ export class Bookshelf {
         this.readingJourneyLog.removeBySource(source)
     }
 
-    public readingJourney(): Array<ReadingJourneyItem> {
+    public readingJourney(): ReadingJourney {
         return this.readingJourneyLog.readingJourney()
     }
 
     public statistics(year: number | null = null): Statistics {
         const items =
-            year === null ? this.readingJourney() : this.readingJourney().filter((i) => i.date.getFullYear() === year)
+            year === null
+                ? this.readingJourney().items()
+                : this.readingJourney()
+                      .items()
+                      .filter((i) => i.date.getFullYear() === year)
 
         return new Statistics(items)
     }
