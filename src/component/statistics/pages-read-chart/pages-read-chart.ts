@@ -67,9 +67,14 @@ export class PagesReadChart extends HTMLElement implements ReadingProgressBarCha
         ]
         this.intervalDropdown.value = this.intervals.month
         this.intervalDropdown.onChange = () => this.update()
+        const chartContainer = document.createElement('div')
+        chartContainer.style.width = '100%'
+        chartContainer.style.aspectRatio = '2/1'
         this.canvas = document.createElement('canvas')
+        this.canvas.style.position = 'relative'
+        chartContainer.appendChild(this.canvas)
         this.root.appendChild(this.intervalDropdown)
-        this.root.appendChild(this.canvas)
+        this.root.appendChild(chartContainer)
     }
 
     public connectedCallback() {
@@ -88,6 +93,8 @@ export class PagesReadChart extends HTMLElement implements ReadingProgressBarCha
                 ],
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: true,
                 plugins: {
                     legend: {
                         display: false,

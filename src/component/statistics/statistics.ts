@@ -34,7 +34,8 @@ export class Statistics extends HTMLElement implements StatisticsProps {
             </div>
             <style>
                 .container {
-                    margin-bottom: 4rem;
+                    max-width: 1080px;
+                    margin: 0 auto 4rem auto;
                 }
                 
                 h2 {
@@ -45,7 +46,7 @@ export class Statistics extends HTMLElement implements StatisticsProps {
                     display: flex;
                     justify-content: center;
                     flex-direction: row;
-                    flex-wrap: nowrap;
+                    flex-wrap: wrap;
                     align-items: baseline;
                     gap: 5rem;
                 }
