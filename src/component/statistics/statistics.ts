@@ -35,12 +35,16 @@ export class Statistics extends HTMLElement implements StatisticsProps {
                 <h2>Pages</h2>
                 <div id="page-counts" class="counts"></div>
                 <bookshelf-statistics-pages-read-chart></bookshelf-statistics-pages-read-chart>
+            </div>
+            <div class="container">
+                <h2>Books</h2>
                 <bookshelf-gallery></bookshelf-gallery>
             </div>
             <style>
                 .container {
                     max-width: 1080px;
                     margin: 0 auto 4rem auto;
+                    padding: 0 2rem;
                 }
                 
                 h2 {

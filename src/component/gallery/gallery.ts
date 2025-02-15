@@ -58,7 +58,7 @@ function css(): string {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, 150px);
                 grid-gap: 15px;
-                padding: 15px;
+                justify-content: center;
             }
         </style>`
 }
