@@ -1,6 +1,6 @@
-import { ReadingJourneyItem } from './reading-journey/reading-journey-log'
 import { AggregatedTimeSeries } from './aggregated-time-series'
 import { Book } from './book'
+import { ReadingJourney } from './reading-journey/reading-journey'
 
 export enum Interval {
     Day,
@@ -16,12 +16,12 @@ type Actions = {
 }
 
 export class Statistics {
-    constructor(private readingJourney: Array<ReadingJourneyItem>) {}
+    constructor(private readingJourney: ReadingJourney) {}
 
     public years(): Array<number> {
         const years = new Set<number>()
 
-        for (const item of this.readingJourney) {
+        for (const item of this.readingJourney.items()) {
             years.add(item.date.getFullYear())
         }
 
@@ -35,7 +35,7 @@ export class Statistics {
             abandoned: 0,
         }
 
-        for (const item of this.readingJourney) {
+        for (const item of this.readingJourney.items()) {
             if (item.action !== 'progress') {
                 ++result[item.action]
             }
@@ -45,15 +45,16 @@ export class Statistics {
     }
 
     public pagesRead(interval: Interval): Map<Date, number> {
-        if (this.readingJourney.length === 0) {
+        const items = this.readingJourney.items()
+        if (items.length === 0) {
             return new Map<Date, number>()
         }
 
-        const start = this.readingJourney[0].date
-        const end = this.readingJourney[this.readingJourney.length - 1].date
+        const start = items[0].date
+        const end = items[items.length - 1].date
         const series = new AggregatedTimeSeries(start, end, interval)
 
-        for (const item of this.readingJourney) {
+        for (const item of items) {
             if (item.action !== 'progress') {
                 continue
             }
@@ -65,16 +66,10 @@ export class Statistics {
     }
 
     public totalNumberOfPages(): number {
-        return this.readingJourney.reduce((acc, item) => acc + (item.action === 'progress' ? item.pages : 0), 0)
+        return this.readingJourney.items().reduce((acc, item) => acc + (item.action === 'progress' ? item.pages : 0), 0)
     }
 
     public books(): Array<Book> {
-        const result = new Set<Book>()
-
-        for (const item of this.readingJourney) {
-            result.add(item.book)
-        }
-
-        return Array.from(result.values())
+        return Array.from(this.readingJourney.books())
     }
 }

@@ -74,13 +74,9 @@ export class Bookshelf {
     }
 
     public statistics(year: number | null = null): Statistics {
-        const items =
-            year === null
-                ? this.readingJourney().items()
-                : this.readingJourney()
-                      .items()
-                      .filter((i) => i.date.getFullYear() === year)
+        const journey =
+            year === null ? this.readingJourney() : this.readingJourney().filter((i) => i.date.getFullYear() === year)
 
-        return new Statistics(items)
+        return new Statistics(journey)
     }
 }
