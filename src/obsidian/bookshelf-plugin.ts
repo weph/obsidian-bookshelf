@@ -142,7 +142,7 @@ export default class BookshelfPlugin extends Plugin {
         const lines = contents.split('\n')
 
         for (const listItem of meta?.listItems || []) {
-            yield lines[listItem.position.start.line].replace(/^[-*]\s+/, '')
+            yield lines[listItem.position.start.line].replace(/^[-*]\s+/, '').trim()
         }
     }
 
