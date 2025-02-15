@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals'
-import { ReadingProgress } from './reading-journey'
+import { ReadingProgress } from './reading-journey-log'
 import { BookBuilder } from '../support/book-builder'
 
 const book = new BookBuilder().build()

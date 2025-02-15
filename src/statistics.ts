@@ -1,4 +1,4 @@
-import { ReadingJourneyItem } from './reading-journey/reading-journey'
+import { ReadingJourneyItem } from './reading-journey/reading-journey-log'
 import { AggregatedTimeSeries } from './aggregated-time-series'
 import { Book } from './book'
 

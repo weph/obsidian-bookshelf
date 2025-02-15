@@ -1,4 +1,4 @@
-import { ReadingJourneyItem } from './reading-journey/reading-journey'
+import { ReadingJourneyItem } from './reading-journey/reading-journey-log'
 
 export interface BookMetadata {
     readonly title: string

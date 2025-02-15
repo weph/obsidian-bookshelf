@@ -1,6 +1,6 @@
 import { Book, BookMetadata } from './book'
 import { BookshelfError } from './bookshelf-error'
-import { ReadingJourneyItem, ReadingJourneyLog } from './reading-journey/reading-journey'
+import { ReadingJourneyItem, ReadingJourneyLog } from './reading-journey/reading-journey-log'
 import { Statistics } from './statistics'
 
 class BookshelfBook implements Book {
