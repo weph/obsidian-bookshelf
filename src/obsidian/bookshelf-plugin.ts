@@ -18,10 +18,6 @@ export default class BookshelfPlugin extends Plugin {
 
     private bookFactory: BookMetadataFactory
 
-    private libraryView: LibraryView | null = null
-
-    private statisticsView: StatisticsView | null = null
-
     private bookNotePatterns: PatternCollection<BookNotePatternMatches>
 
     private dailyNotePatterns: PatternCollection<DailyNotePatternMatches>
@@ -37,17 +33,8 @@ export default class BookshelfPlugin extends Plugin {
 
         this.addSettingTab(new BookshelfSettingsTab(this.app, this))
 
-        this.registerView(VIEW_TYPE_LIBRARY, (leaf) => {
-            this.libraryView = new LibraryView(leaf, this.bookshelf)
-
-            return this.libraryView
-        })
-
-        this.registerView(VIEW_TYPE_STATISTICS, (leaf) => {
-            this.statisticsView = new StatisticsView(leaf, this.bookshelf)
-
-            return this.statisticsView
-        })
+        this.registerView(VIEW_TYPE_LIBRARY, (leaf) => new LibraryView(leaf, this.bookshelf))
+        this.registerView(VIEW_TYPE_STATISTICS, (leaf) => new StatisticsView(leaf, this.bookshelf))
 
         this.addRibbonIcon('library-big', 'Bookshelf: Library', () => this.activateView(VIEW_TYPE_LIBRARY))
         this.addRibbonIcon('chart-spline', 'Bookshelf: Statistics', () => this.activateView(VIEW_TYPE_STATISTICS))
@@ -165,8 +152,13 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     private updateView = debounce({ delay: 100 }, () => {
-        this.libraryView?.update()
-        this.statisticsView?.update()
+        for (const view of [VIEW_TYPE_LIBRARY, VIEW_TYPE_STATISTICS]) {
+            for (const leaf of this.app.workspace.getLeavesOfType(view)) {
+                if ('update' in leaf.view && typeof leaf.view.update === 'function') {
+                    leaf.view.update()
+                }
+            }
+        }
     })
 
     private async activateView(viewType: string): Promise<void> {
