@@ -4,12 +4,13 @@ import { LibraryView, VIEW_TYPE_LIBRARY } from './view/library-view'
 import { assign, debounce } from 'radashi'
 import { BookshelfPluginSettings, DEFAULT_SETTINGS } from './settings/bookshelf-plugin-settings'
 import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
-import { ObsidianMetadata } from '../metadata/metadata'
 import { BookMetadataFactory } from '../book-metadata-factory'
 import { PatternCollection } from '../reading-journey/pattern/pattern-collection'
 import { StatisticsView, VIEW_TYPE_STATISTICS } from './view/statistics-view'
 import { DailyNotePatternMatches, dailyNotePatterns } from '../reading-journey/pattern/daily-note/daily-note-pattern'
 import { BookNotePatternMatches, bookNotePatterns } from '../reading-journey/pattern/book-note/book-note-pattern'
+import { Note } from '../note'
+import { ObsidianNote } from './obsidian-note'
 
 export default class BookshelfPlugin extends Plugin {
     public settings: BookshelfPluginSettings
@@ -44,19 +45,20 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     private async handleFile(file: TFile): Promise<void> {
-        await this.handleBookNote(file)
-        await this.handleDailyNote(file)
+        const note = new ObsidianNote(file, this.app)
+
+        await this.handleBookNote(note)
+        await this.handleDailyNote(note)
     }
 
-    private async handleBookNote(file: TFile): Promise<void> {
-        if (!this.isBookNote(file)) {
+    private async handleBookNote(note: Note): Promise<void> {
+        if (!this.isBookNote(note)) {
             return
         }
 
-        const identifier = file.path
+        const identifier = note.identifier
 
-        const meta = this.app.metadataCache.getFileCache(file) || {}
-        const bookMetadata = this.bookFactory.create(file.basename, new ObsidianMetadata(meta))
+        const bookMetadata = this.bookFactory.create(note.basename, note.metadata)
         if (this.bookshelf.has(identifier)) {
             this.bookshelf.update(identifier, bookMetadata)
         } else {
@@ -64,7 +66,7 @@ export default class BookshelfPlugin extends Plugin {
         }
 
         await this.processReadingJourney(
-            file,
+            note,
             this.bookNotePatterns,
             () => identifier,
             (matches) => matches.date,
@@ -73,8 +75,8 @@ export default class BookshelfPlugin extends Plugin {
         this.updateView()
     }
 
-    private async handleDailyNote(file: TFile): Promise<void> {
-        const dateMatches = file.basename.match(/(\d{4})-(\d{2})-(\d{2})/)
+    private async handleDailyNote(note: Note): Promise<void> {
+        const dateMatches = note.basename.match(/(\d{4})-(\d{2})-(\d{2})/)
         if (dateMatches === null) {
             return
         }
@@ -82,7 +84,7 @@ export default class BookshelfPlugin extends Plugin {
         const date = new Date(parseInt(dateMatches[1]), parseInt(dateMatches[2]) - 1, parseInt(dateMatches[3]))
 
         await this.processReadingJourney(
-            file,
+            note,
             this.dailyNotePatterns,
             (matches) => {
                 const bookName = matches.book.replace('[[', '').replace(']]', '')
@@ -97,15 +99,15 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     private async processReadingJourney<T extends BookNotePatternMatches | DailyNotePatternMatches>(
-        file: TFile,
+        note: Note,
         patterns: PatternCollection<T>,
         identifierValue: (matches: T) => string,
         dateValue: (matches: T) => Date,
     ): Promise<void> {
-        const source = file.path
+        const source = note.path
 
         this.bookshelf.removeFromJourneyBySource(source)
-        for await (const listItem of this.listItems(file)) {
+        for await (const listItem of note.listItems()) {
             const matches = patterns.matches(listItem)
             if (matches === null) {
                 continue
@@ -127,18 +129,8 @@ export default class BookshelfPlugin extends Plugin {
         }
     }
 
-    private async *listItems(file: TFile): AsyncGenerator<string> {
-        const contents = await this.app.vault.cachedRead(file)
-        const meta = this.app.metadataCache.getFileCache(file)
-        const lines = contents.split('\n')
-
-        for (const listItem of meta?.listItems || []) {
-            yield lines[listItem.position.start.line].replace(/^[-*]\s+/, '').trim()
-        }
-    }
-
-    private isBookNote(file: TFile): boolean {
-        return this.settings.booksFolder !== '' && file.path.startsWith(this.settings.booksFolder)
+    private isBookNote(note: Note): boolean {
+        return this.settings.booksFolder !== '' && note.path.startsWith(this.settings.booksFolder)
     }
 
     private linkToUri(link: string): string {
