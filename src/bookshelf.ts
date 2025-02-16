@@ -88,7 +88,7 @@ export class Bookshelf {
     ): Promise<void> {
         const source = note.path
 
-        this.removeFromJourneyBySource(source)
+        this.readingJourneyLog.removeBySource(source)
         for await (const listItem of note.listItems()) {
             const matches = patterns.matches(listItem)
             if (matches === null) {
@@ -158,10 +158,6 @@ export class Bookshelf {
         source: string,
     ): void {
         this.readingJourneyLog.addReadingProgress(date, this.book(identifier), startPage || null, endPage, source)
-    }
-
-    public removeFromJourneyBySource(source: string): void {
-        this.readingJourneyLog.removeBySource(source)
     }
 
     public readingJourney(): ReadingJourney {
