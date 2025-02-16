@@ -231,10 +231,6 @@ test('It should return all books added to the bookshelf', () => {
 })
 
 describe('Non-existing book', () => {
-    test('does not exist', () => {
-        expect(bookshelf.has('unknown-book')).toBeFalsy()
-    })
-
     test('cannot be retrieved', () => {
         expect(() => bookshelf.book('the-shining')).toThrow(BookshelfError.identifierDoesntExist('the-shining'))
     })
@@ -245,10 +241,6 @@ describe('After adding a book', () => {
 
     beforeEach(() => {
         bookshelf.add('the-shining', shining)
-    })
-
-    test('it does exist', () => {
-        expect(bookshelf.has('the-shining')).toBeTruthy()
     })
 
     test('it can be retrieved', () => {

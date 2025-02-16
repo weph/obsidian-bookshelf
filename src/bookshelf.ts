@@ -111,7 +111,7 @@ export class Bookshelf {
         }
     }
 
-    public has(identifier: string): boolean {
+    private has(identifier: string): boolean {
         return this.books.has(identifier)
     }
 
