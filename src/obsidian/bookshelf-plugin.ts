@@ -53,6 +53,7 @@ export default class BookshelfPlugin extends Plugin {
         this.addRibbonIcon('chart-spline', 'Bookshelf: Statistics', () => this.activateView(VIEW_TYPE_STATISTICS))
 
         this.app.metadataCache.on('resolve', async (file) => await this.handleFile(file))
+        this.app.metadataCache.on('changed', async (file) => await this.handleFile(file))
     }
 
     private async handleFile(file: TFile): Promise<void> {
@@ -68,8 +69,11 @@ export default class BookshelfPlugin extends Plugin {
         const identifier = file.path
 
         const meta = this.app.metadataCache.getFileCache(file) || {}
-        if (!this.bookshelf.has(identifier)) {
-            this.bookshelf.add(identifier, this.bookFactory.create(file.basename, new ObsidianMetadata(meta)))
+        const bookMetadata = this.bookFactory.create(file.basename, new ObsidianMetadata(meta))
+        if (this.bookshelf.has(identifier)) {
+            this.bookshelf.update(identifier, bookMetadata)
+        } else {
+            this.bookshelf.add(identifier, bookMetadata)
         }
 
         await this.processReadingJourney(

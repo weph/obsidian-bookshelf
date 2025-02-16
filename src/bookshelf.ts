@@ -32,6 +32,10 @@ export class Bookshelf {
         this.books.set(identifier, new BookshelfBook(metadata, this))
     }
 
+    public update(identifier: string, metadata: BookMetadata): void {
+        this.book(identifier).metadata = metadata
+    }
+
     public book(identifier: string): Book {
         const result = this.books.get(identifier)
 
