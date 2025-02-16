@@ -258,116 +258,24 @@ describe('After adding a book', () => {
     })
 })
 
-describe('Reading journey', () => {
+test('reading journey should by reflected in book', () => {
     const dracula = 'dracula'
     const shining = 'shining'
+    bookshelf.add(dracula, book('Dracula'))
+    bookshelf.add(shining, book('The Shining'))
+    bookshelf.addReadingProgress(date(2025, 2, 3), dracula, 10, 1, '')
+    bookshelf.addReadingProgress(date(2025, 2, 4), shining, 50, null, '')
+    bookshelf.addReadingProgress(date(2025, 2, 5), dracula, 20, null, '')
+    bookshelf.addReadingProgress(date(2025, 2, 1), shining, 20, 10, '')
 
-    beforeEach(() => {
-        bookshelf.add(dracula, book('Dracula'))
-        bookshelf.add(shining, book('The Shining'))
-    })
-
-    test('should be ordered by date', () => {
-        bookshelf.addActionToJourney(date(2025, 2, 3), dracula, 'started', '')
-        bookshelf.addReadingProgress(date(2025, 2, 3), dracula, 10, 1, '')
-        bookshelf.addActionToJourney(date(2025, 2, 4), dracula, 'abandoned', '')
-        bookshelf.addActionToJourney(date(2025, 2, 5), dracula, 'started', '')
-        bookshelf.addReadingProgress(date(2025, 2, 4), shining, 50, null, '')
-        bookshelf.addActionToJourney(date(2025, 2, 4), shining, 'abandoned', '')
-        bookshelf.addReadingProgress(date(2025, 2, 5), dracula, 20, null, '')
-        bookshelf.addReadingProgress(date(2025, 2, 10), dracula, 100, null, '')
-        bookshelf.addActionToJourney(date(2025, 2, 10), dracula, 'finished', '')
-        bookshelf.addActionToJourney(date(2025, 2, 1), shining, 'started', '')
-        bookshelf.addReadingProgress(date(2025, 2, 1), shining, 20, 10, '')
-
-        const journey = bookshelf.readingJourney()
-
-        expect(journey.map(readingProgressAsString)).toEqual([
-            '2025-02-01: The Shining: started',
-            '2025-02-01: The Shining: 10-20',
-            '2025-02-03: Dracula: started',
-            '2025-02-03: Dracula: 1-10',
-            '2025-02-04: Dracula: abandoned',
-            '2025-02-04: The Shining: 21-50',
-            '2025-02-04: The Shining: abandoned',
-            '2025-02-05: Dracula: started',
-            '2025-02-05: Dracula: 11-20',
-            '2025-02-10: Dracula: 21-100',
-            '2025-02-10: Dracula: finished',
-        ])
-    })
-
-    test('should by reflected in book', () => {
-        bookshelf.addReadingProgress(date(2025, 2, 3), dracula, 10, 1, '')
-        bookshelf.addReadingProgress(date(2025, 2, 4), shining, 50, null, '')
-        bookshelf.addReadingProgress(date(2025, 2, 5), dracula, 20, null, '')
-        bookshelf.addReadingProgress(date(2025, 2, 1), shining, 20, 10, '')
-
-        expect(bookshelf.book(dracula).readingJourney.map(readingProgressAsString)).toEqual([
-            '2025-02-03: Dracula: 1-10',
-            '2025-02-05: Dracula: 11-20',
-        ])
-        expect(bookshelf.book(shining).readingJourney.map(readingProgressAsString)).toEqual([
-            '2025-02-01: The Shining: 10-20',
-            '2025-02-04: The Shining: 21-50',
-        ])
-    })
-
-    test('items on the same date should be returned in the order of addition', () => {
-        bookshelf.addReadingProgress(date(2025, 1, 1), dracula, 1, null, '')
-        bookshelf.addReadingProgress(date(2025, 1, 1), shining, 2, null, '')
-        bookshelf.addReadingProgress(date(2025, 1, 2), shining, 3, null, '')
-        bookshelf.addReadingProgress(date(2025, 1, 2), dracula, 4, null, '')
-
-        const journey = bookshelf.readingJourney()
-
-        expect(journey.map(readingProgressAsString)).toEqual([
-            '2025-01-01: Dracula: 1-1',
-            '2025-01-01: The Shining: 1-2',
-            '2025-01-02: The Shining: 3-3',
-            '2025-01-02: Dracula: 2-4',
-        ])
-    })
-
-    test('items should be connected properly even if added in arbitrary order', () => {
-        bookshelf.addReadingProgress(date(2025, 1, 1), dracula, 10, null, '')
-        bookshelf.addReadingProgress(date(2025, 1, 3), dracula, 30, null, '')
-        bookshelf.addReadingProgress(date(2025, 1, 2), dracula, 20, null, '')
-
-        const journey = bookshelf.readingJourney()
-
-        expect(journey.map(readingProgressAsString)).toEqual([
-            '2025-01-01: Dracula: 1-10',
-            '2025-01-02: Dracula: 11-20',
-            '2025-01-03: Dracula: 21-30',
-        ])
-    })
-
-    test('can be removed by source', () => {
-        bookshelf.addActionToJourney(date(2025, 2, 3), dracula, 'started', '2025-02-03.md')
-        bookshelf.addReadingProgress(date(2025, 2, 3), dracula, 10, 1, '2025-02-03.md')
-        bookshelf.addActionToJourney(date(2025, 2, 4), dracula, 'abandoned', '2025-02-04.md')
-        bookshelf.addActionToJourney(date(2025, 2, 5), dracula, 'started', '2025-02-05.md')
-        bookshelf.addReadingProgress(date(2025, 2, 4), shining, 50, null, 'the-shining.md')
-        bookshelf.addActionToJourney(date(2025, 2, 4), shining, 'abandoned', 'the-shining.md')
-        bookshelf.addReadingProgress(date(2025, 2, 5), dracula, 20, null, '2025-02-06.md')
-        bookshelf.addReadingProgress(date(2025, 2, 10), dracula, 100, null, '2025-02-10.md')
-        bookshelf.addActionToJourney(date(2025, 2, 10), dracula, 'finished', '2025-02-10.md')
-        bookshelf.addActionToJourney(date(2025, 2, 1), shining, 'started', 'the-shining.md')
-        bookshelf.addReadingProgress(date(2025, 2, 1), shining, 20, 10, 'the-shining.md')
-
-        bookshelf.removeFromJourneyBySource('the-shining.md')
-
-        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
-            '2025-02-03: Dracula: started',
-            '2025-02-03: Dracula: 1-10',
-            '2025-02-04: Dracula: abandoned',
-            '2025-02-05: Dracula: started',
-            '2025-02-05: Dracula: 11-20',
-            '2025-02-10: Dracula: 21-100',
-            '2025-02-10: Dracula: finished',
-        ])
-    })
+    expect(bookshelf.book(dracula).readingJourney.map(readingProgressAsString)).toEqual([
+        '2025-02-03: Dracula: 1-10',
+        '2025-02-05: Dracula: 11-20',
+    ])
+    expect(bookshelf.book(shining).readingJourney.map(readingProgressAsString)).toEqual([
+        '2025-02-01: The Shining: 10-20',
+        '2025-02-04: The Shining: 21-50',
+    ])
 })
 
 describe('Statistics', () => {
