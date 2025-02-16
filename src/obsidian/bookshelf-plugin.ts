@@ -17,8 +17,6 @@ export default class BookshelfPlugin extends Plugin {
 
     private bookshelf: Bookshelf
 
-    private bookNotePatterns: PatternCollection<BookNotePatternMatches>
-
     private dailyNotePatterns: PatternCollection<DailyNotePatternMatches>
 
     async onload() {
@@ -27,9 +25,9 @@ export default class BookshelfPlugin extends Plugin {
         this.bookshelf = new Bookshelf(
             this.settings.booksFolder,
             new BookMetadataFactory(this.settings.bookProperties, this.linkToUri.bind(this)),
+            bookNotePatterns(this.settings.bookNote.patterns, this.settings.bookNote.dateFormat),
         )
 
-        this.bookNotePatterns = bookNotePatterns(this.settings.bookNote.patterns, this.settings.bookNote.dateFormat)
         this.dailyNotePatterns = dailyNotePatterns(this.settings.dailyNote.patterns)
 
         this.addSettingTab(new BookshelfSettingsTab(this.app, this))
@@ -48,24 +46,7 @@ export default class BookshelfPlugin extends Plugin {
         const note = new ObsidianNote(file, this.app)
 
         await this.bookshelf.process(note)
-        await this.handleBookNote(note)
         await this.handleDailyNote(note)
-    }
-
-    private async handleBookNote(note: Note): Promise<void> {
-        if (!this.isBookNote(note)) {
-            return
-        }
-
-        const identifier = note.identifier
-
-        await this.processReadingJourney(
-            note,
-            this.bookNotePatterns,
-            () => identifier,
-            (matches) => matches.date,
-        )
-
         this.updateView()
     }
 
@@ -123,10 +104,6 @@ export default class BookshelfPlugin extends Plugin {
 
             this.bookshelf.addActionToJourney(date, identifier, matches.action, source)
         }
-    }
-
-    private isBookNote(note: Note): boolean {
-        return this.settings.booksFolder !== '' && note.path.startsWith(this.settings.booksFolder)
     }
 
     private linkToUri(link: string): string {

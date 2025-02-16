@@ -5,6 +5,9 @@ import { Statistics } from './statistics'
 import { ReadingJourney } from './reading-journey/reading-journey'
 import { Note } from './note'
 import { BookMetadataFactory } from './book-metadata-factory'
+import { BookNotePatternMatches } from './reading-journey/pattern/book-note/book-note-pattern'
+import { DailyNotePatternMatches } from './reading-journey/pattern/daily-note/daily-note-pattern'
+import { PatternCollection } from './reading-journey/pattern/pattern-collection'
 
 class BookshelfBook implements Book {
     constructor(
@@ -25,6 +28,7 @@ export class Bookshelf {
     constructor(
         private readonly booksFolder: string,
         private readonly bookMetadataFactory: BookMetadataFactory,
+        private readonly bookNotePatterns: PatternCollection<BookNotePatternMatches>,
     ) {}
 
     public async process(note: Note): Promise<void> {
@@ -44,10 +48,44 @@ export class Bookshelf {
         } else {
             this.add(identifier, bookMetadata)
         }
+
+        await this.processReadingJourney(
+            note,
+            this.bookNotePatterns,
+            () => identifier,
+            (matches) => matches.date,
+        )
     }
 
     private isBookNote(note: Note): boolean {
         return note.path.startsWith(this.booksFolder)
+    }
+
+    private async processReadingJourney<T extends BookNotePatternMatches | DailyNotePatternMatches>(
+        note: Note,
+        patterns: PatternCollection<T>,
+        identifierValue: (matches: T) => string,
+        dateValue: (matches: T) => Date,
+    ): Promise<void> {
+        const source = note.path
+
+        this.removeFromJourneyBySource(source)
+        for await (const listItem of note.listItems()) {
+            const matches = patterns.matches(listItem)
+            if (matches === null) {
+                continue
+            }
+
+            const identifier = identifierValue(matches)
+            const date = dateValue(matches)
+
+            if (matches.action === 'progress') {
+                this.addReadingProgress(date, identifier, matches.endPage, matches.startPage || null, source)
+                continue
+            }
+
+            this.addActionToJourney(date, identifier, matches.action, source)
+        }
     }
 
     public has(identifier: string): boolean {

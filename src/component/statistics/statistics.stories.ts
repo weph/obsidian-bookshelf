@@ -3,6 +3,9 @@ import './statistics'
 import { StatisticsProps } from './statistics'
 import { Bookshelf } from '../../bookshelf'
 import { BookMetadataFactory } from '../../book-metadata-factory'
+import { PatternCollection } from '../../reading-journey/pattern/pattern-collection'
+import { BookNoteActionPattern } from '../../reading-journey/pattern/book-note/book-note-action-pattern'
+import { BookNoteProgressPattern } from '../../reading-journey/pattern/book-note/book-note-progress-pattern'
 
 const meta = {
     title: 'Statistics',
@@ -29,6 +32,13 @@ const bookshelf = new Bookshelf(
         },
         (link) => link,
     ),
+    new PatternCollection([
+        new BookNoteActionPattern('{date}: Started reading', 'started', 'yyyy-MM-dd'),
+        new BookNoteActionPattern('{date}: Abandoned book', 'abandoned', 'yyyy-MM-dd'),
+        new BookNoteActionPattern('{date}: Finished reading', 'finished', 'yyyy-MM-dd'),
+        new BookNoteProgressPattern('{date}: {startPage}-{endPage}', 'yyyy-MM-dd'),
+        new BookNoteProgressPattern('{date}: {endPage}', 'yyyy-MM-dd'),
+    ]),
 )
 bookshelf.add('book', { title: 'Book' })
 bookshelf.addReadingProgress(new Date(2025, 0, 1), 'book', 50, 1, '')

@@ -8,6 +8,9 @@ import { DateTime } from 'luxon'
 import { FakeNote } from './support/fake-note'
 import { StaticMetadata } from './metadata/metadata'
 import { BookMetadataFactory } from './book-metadata-factory'
+import { PatternCollection } from './reading-journey/pattern/pattern-collection'
+import { BookNoteActionPattern } from './reading-journey/pattern/book-note/book-note-action-pattern'
+import { BookNoteProgressPattern } from './reading-journey/pattern/book-note/book-note-progress-pattern'
 
 let bookshelf: Bookshelf
 
@@ -23,6 +26,13 @@ beforeEach(() => {
             },
             (link) => link,
         ),
+        new PatternCollection([
+            new BookNoteActionPattern('{date}: Started reading', 'started', 'yyyy-MM-dd'),
+            new BookNoteActionPattern('{date}: Abandoned book', 'abandoned', 'yyyy-MM-dd'),
+            new BookNoteActionPattern('{date}: Finished reading', 'finished', 'yyyy-MM-dd'),
+            new BookNoteProgressPattern('{date}: {startPage}-{endPage}', 'yyyy-MM-dd'),
+            new BookNoteProgressPattern('{date}: {endPage}', 'yyyy-MM-dd'),
+        ]),
     )
 })
 
@@ -94,6 +104,50 @@ describe('Note processing', () => {
             published: new Date(1977, 0, 28),
             tags: ['novel', 'horror'],
         })
+    })
+
+    test('It should create reading journey from book note', async () => {
+        await bookshelf.process(
+            new FakeNote('Books/The Shining.md', new StaticMetadata({}), [
+                '2025-01-01: Started reading',
+                '2025-01-01: 10-150',
+                '2025-01-02: 250',
+                '2025-01-03: 447',
+                '2025-01-03: Finished reading',
+            ]),
+        )
+
+        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+            '2025-01-01: The Shining: started',
+            '2025-01-01: The Shining: 10-150',
+            '2025-01-02: The Shining: 151-250',
+            '2025-01-03: The Shining: 251-447',
+            '2025-01-03: The Shining: finished',
+        ])
+    })
+
+    test('It should update reading journey from book note', async () => {
+        await bookshelf.process(
+            new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-01-01: Started reading']),
+        )
+
+        await bookshelf.process(
+            new FakeNote('Books/The Shining.md', new StaticMetadata({}), [
+                '2025-01-01: Started reading',
+                '2025-01-01: 10-150',
+                '2025-01-02: 250',
+                '2025-01-03: 447',
+                '2025-01-03: Finished reading',
+            ]),
+        )
+
+        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+            '2025-01-01: The Shining: started',
+            '2025-01-01: The Shining: 10-150',
+            '2025-01-02: The Shining: 151-250',
+            '2025-01-03: The Shining: 251-447',
+            '2025-01-03: The Shining: finished',
+        ])
     })
 })
 
