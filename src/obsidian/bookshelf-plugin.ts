@@ -86,16 +86,18 @@ export default class BookshelfPlugin extends Plugin {
         await this.processReadingJourney(
             note,
             this.dailyNotePatterns,
-            (matches) => {
-                const bookName = matches.book.replace('[[', '').replace(']]', '')
-                const bookFile = this.app.metadataCache.getFirstLinkpathDest(bookName, '')
-
-                return bookFile === null ? bookName : bookFile.path
-            },
+            (matches) => this.bookIdentifier(matches.book),
             () => date,
         )
 
         this.updateView()
+    }
+
+    private bookIdentifier(input: string): string {
+        const bookName = input.replace('[[', '').replace(']]', '')
+        const bookFile = this.app.metadataCache.getFirstLinkpathDest(bookName, '')
+
+        return bookFile === null ? bookName : bookFile.path
     }
 
     private async processReadingJourney<T extends BookNotePatternMatches | DailyNotePatternMatches>(
