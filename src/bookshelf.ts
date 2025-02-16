@@ -3,6 +3,8 @@ import { BookshelfError } from './bookshelf-error'
 import { ReadingJourneyLog } from './reading-journey/reading-journey-log'
 import { Statistics } from './statistics'
 import { ReadingJourney } from './reading-journey/reading-journey'
+import { Note } from './note'
+import { BookMetadataFactory } from './book-metadata-factory'
 
 class BookshelfBook implements Book {
     constructor(
@@ -19,6 +21,34 @@ export class Bookshelf {
     private books = new Map<string, Book>()
 
     private readingJourneyLog = new ReadingJourneyLog()
+
+    constructor(
+        private readonly booksFolder: string,
+        private readonly bookMetadataFactory: BookMetadataFactory,
+    ) {}
+
+    public async process(note: Note): Promise<void> {
+        await this.handleBookNote(note)
+    }
+
+    private async handleBookNote(note: Note): Promise<void> {
+        if (!this.isBookNote(note)) {
+            return
+        }
+
+        const identifier = note.identifier
+
+        const bookMetadata = this.bookMetadataFactory.create(note.basename, note.metadata)
+        if (this.has(identifier)) {
+            this.update(identifier, bookMetadata)
+        } else {
+            this.add(identifier, bookMetadata)
+        }
+    }
+
+    private isBookNote(note: Note): boolean {
+        return note.path.startsWith(this.booksFolder)
+    }
 
     public has(identifier: string): boolean {
         return this.books.has(identifier)

@@ -17,8 +17,6 @@ export default class BookshelfPlugin extends Plugin {
 
     private bookshelf: Bookshelf
 
-    private bookFactory: BookMetadataFactory
-
     private bookNotePatterns: PatternCollection<BookNotePatternMatches>
 
     private dailyNotePatterns: PatternCollection<DailyNotePatternMatches>
@@ -26,8 +24,10 @@ export default class BookshelfPlugin extends Plugin {
     async onload() {
         await this.loadSettings()
 
-        this.bookshelf = new Bookshelf()
-        this.bookFactory = new BookMetadataFactory(this.settings.bookProperties, this.linkToUri.bind(this))
+        this.bookshelf = new Bookshelf(
+            this.settings.booksFolder,
+            new BookMetadataFactory(this.settings.bookProperties, this.linkToUri.bind(this)),
+        )
 
         this.bookNotePatterns = bookNotePatterns(this.settings.bookNote.patterns, this.settings.bookNote.dateFormat)
         this.dailyNotePatterns = dailyNotePatterns(this.settings.dailyNote.patterns)
@@ -47,6 +47,7 @@ export default class BookshelfPlugin extends Plugin {
     private async handleFile(file: TFile): Promise<void> {
         const note = new ObsidianNote(file, this.app)
 
+        await this.bookshelf.process(note)
         await this.handleBookNote(note)
         await this.handleDailyNote(note)
     }
@@ -57,13 +58,6 @@ export default class BookshelfPlugin extends Plugin {
         }
 
         const identifier = note.identifier
-
-        const bookMetadata = this.bookFactory.create(note.basename, note.metadata)
-        if (this.bookshelf.has(identifier)) {
-            this.bookshelf.update(identifier, bookMetadata)
-        } else {
-            this.bookshelf.add(identifier, bookMetadata)
-        }
 
         await this.processReadingJourney(
             note,

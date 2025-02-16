@@ -5,11 +5,96 @@ import { BookshelfError } from './bookshelf-error'
 import { ReadingJourneyItem } from './reading-journey/reading-journey-log'
 import { Interval } from './statistics'
 import { DateTime } from 'luxon'
+import { FakeNote } from './support/fake-note'
+import { StaticMetadata } from './metadata/metadata'
+import { BookMetadataFactory } from './book-metadata-factory'
 
 let bookshelf: Bookshelf
 
 beforeEach(() => {
-    bookshelf = new Bookshelf()
+    bookshelf = new Bookshelf(
+        'Books',
+        new BookMetadataFactory(
+            {
+                cover: 'cover',
+                author: 'author',
+                published: 'published',
+                tags: 'tags',
+            },
+            (link) => link,
+        ),
+    )
+})
+
+describe('Note processing', () => {
+    test('It should ignore unrelated notes', async () => {
+        await bookshelf.process(new FakeNote('Reading List.md', new StaticMetadata({}), []))
+
+        expect(Array.from(bookshelf.all())).toEqual([])
+    })
+
+    test('It should create book from book note', async () => {
+        await bookshelf.process(
+            new FakeNote(
+                'Books/The Shining.md',
+                new StaticMetadata({
+                    cover: 'the-shining.jpg',
+                    author: ['Stephen King'],
+                    published: '1977-01-28',
+                    tags: ['novel', 'horror'],
+                }),
+                [],
+            ),
+        )
+
+        const result = Array.from(bookshelf.all())
+        expect(result).toHaveLength(1)
+        expect(result[0].metadata).toEqual({
+            title: 'The Shining',
+            cover: 'the-shining.jpg',
+            authors: ['Stephen King'],
+            published: new Date(1977, 0, 28),
+            tags: ['novel', 'horror'],
+        })
+    })
+
+    test('It should update book from book note', async () => {
+        await bookshelf.process(
+            new FakeNote(
+                'Books/The Shining.md',
+                new StaticMetadata({
+                    cover: 'no-cover.jpg',
+                    author: ['Steve Kong'],
+                    published: '1999-12-25',
+                    tags: ['comedy'],
+                }),
+                [],
+            ),
+        )
+
+        await bookshelf.process(
+            new FakeNote(
+                'Books/The Shining.md',
+                new StaticMetadata({
+                    cover: 'the-shining.jpg',
+                    author: ['Stephen King'],
+                    published: '1977-01-28',
+                    tags: ['novel', 'horror'],
+                }),
+                [],
+            ),
+        )
+
+        const result = Array.from(bookshelf.all())
+        expect(result).toHaveLength(1)
+        expect(result[0].metadata).toEqual({
+            title: 'The Shining',
+            cover: 'the-shining.jpg',
+            authors: ['Stephen King'],
+            published: new Date(1977, 0, 28),
+            tags: ['novel', 'horror'],
+        })
+    })
 })
 
 test('It should return all books added to the bookshelf', () => {
