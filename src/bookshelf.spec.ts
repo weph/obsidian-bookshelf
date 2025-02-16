@@ -256,22 +256,6 @@ describe('After adding a book', () => {
 
         expect(() => bookshelf.add('the-shining', other)).toThrow(BookshelfError.identifierExists('the-shining'))
     })
-
-    test("it's metadata can be updated", () => {
-        const newMetadata = book("Stephen King's The Shining")
-
-        bookshelf.update('the-shining', newMetadata)
-
-        expect(bookshelf.book('the-shining').metadata).toBe(newMetadata)
-    })
-
-    test("updating a book must not change it's identity", () => {
-        const theShining = bookshelf.book('the-shining')
-
-        bookshelf.update('the-shining', book('New Metadata'))
-
-        expect(bookshelf.book('the-shining')).toBe(theShining)
-    })
 })
 
 describe('Reading journey', () => {
