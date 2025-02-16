@@ -29,10 +29,13 @@ export class Bookshelf {
         private readonly booksFolder: string,
         private readonly bookMetadataFactory: BookMetadataFactory,
         private readonly bookNotePatterns: PatternCollection<BookNotePatternMatches>,
+        private readonly dailyNotePatterns: PatternCollection<DailyNotePatternMatches>,
+        private readonly bookIdentifier: (input: string) => string,
     ) {}
 
     public async process(note: Note): Promise<void> {
         await this.handleBookNote(note)
+        await this.handleDailyNote(note)
     }
 
     private async handleBookNote(note: Note): Promise<void> {
@@ -57,6 +60,22 @@ export class Bookshelf {
         )
     }
 
+    private async handleDailyNote(note: Note): Promise<void> {
+        const dateMatches = note.basename.match(/(\d{4})-(\d{2})-(\d{2})/)
+        if (dateMatches === null) {
+            return
+        }
+
+        const date = new Date(parseInt(dateMatches[1]), parseInt(dateMatches[2]) - 1, parseInt(dateMatches[3]))
+
+        await this.processReadingJourney(
+            note,
+            this.dailyNotePatterns,
+            (matches) => this.bookIdentifier(matches.book),
+            () => date,
+        )
+    }
+
     private isBookNote(note: Note): boolean {
         return note.path.startsWith(this.booksFolder)
     }
@@ -78,6 +97,10 @@ export class Bookshelf {
 
             const identifier = identifierValue(matches)
             const date = dateValue(matches)
+
+            if (!this.has(identifier)) {
+                this.add(identifier, { title: identifier })
+            }
 
             if (matches.action === 'progress') {
                 this.addReadingProgress(date, identifier, matches.endPage, matches.startPage || null, source)

@@ -5,19 +5,15 @@ import { assign, debounce } from 'radashi'
 import { BookshelfPluginSettings, DEFAULT_SETTINGS } from './settings/bookshelf-plugin-settings'
 import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
 import { BookMetadataFactory } from '../book-metadata-factory'
-import { PatternCollection } from '../reading-journey/pattern/pattern-collection'
 import { StatisticsView, VIEW_TYPE_STATISTICS } from './view/statistics-view'
-import { DailyNotePatternMatches, dailyNotePatterns } from '../reading-journey/pattern/daily-note/daily-note-pattern'
-import { BookNotePatternMatches, bookNotePatterns } from '../reading-journey/pattern/book-note/book-note-pattern'
-import { Note } from '../note'
+import { dailyNotePatterns } from '../reading-journey/pattern/daily-note/daily-note-pattern'
+import { bookNotePatterns } from '../reading-journey/pattern/book-note/book-note-pattern'
 import { ObsidianNote } from './obsidian-note'
 
 export default class BookshelfPlugin extends Plugin {
     public settings: BookshelfPluginSettings
 
     private bookshelf: Bookshelf
-
-    private dailyNotePatterns: PatternCollection<DailyNotePatternMatches>
 
     async onload() {
         await this.loadSettings()
@@ -26,9 +22,9 @@ export default class BookshelfPlugin extends Plugin {
             this.settings.booksFolder,
             new BookMetadataFactory(this.settings.bookProperties, this.linkToUri.bind(this)),
             bookNotePatterns(this.settings.bookNote.patterns, this.settings.bookNote.dateFormat),
+            dailyNotePatterns(this.settings.dailyNote.patterns),
+            this.bookIdentifier.bind(this),
         )
-
-        this.dailyNotePatterns = dailyNotePatterns(this.settings.dailyNote.patterns)
 
         this.addSettingTab(new BookshelfSettingsTab(this.app, this))
 
@@ -46,25 +42,6 @@ export default class BookshelfPlugin extends Plugin {
         const note = new ObsidianNote(file, this.app)
 
         await this.bookshelf.process(note)
-        await this.handleDailyNote(note)
-        this.updateView()
-    }
-
-    private async handleDailyNote(note: Note): Promise<void> {
-        const dateMatches = note.basename.match(/(\d{4})-(\d{2})-(\d{2})/)
-        if (dateMatches === null) {
-            return
-        }
-
-        const date = new Date(parseInt(dateMatches[1]), parseInt(dateMatches[2]) - 1, parseInt(dateMatches[3]))
-
-        await this.processReadingJourney(
-            note,
-            this.dailyNotePatterns,
-            (matches) => this.bookIdentifier(matches.book),
-            () => date,
-        )
-
         this.updateView()
     }
 
@@ -73,37 +50,6 @@ export default class BookshelfPlugin extends Plugin {
         const bookFile = this.app.metadataCache.getFirstLinkpathDest(bookName, '')
 
         return bookFile === null ? bookName : bookFile.path
-    }
-
-    private async processReadingJourney<T extends BookNotePatternMatches | DailyNotePatternMatches>(
-        note: Note,
-        patterns: PatternCollection<T>,
-        identifierValue: (matches: T) => string,
-        dateValue: (matches: T) => Date,
-    ): Promise<void> {
-        const source = note.path
-
-        this.bookshelf.removeFromJourneyBySource(source)
-        for await (const listItem of note.listItems()) {
-            const matches = patterns.matches(listItem)
-            if (matches === null) {
-                continue
-            }
-
-            const identifier = identifierValue(matches)
-            const date = dateValue(matches)
-
-            if (!this.bookshelf.has(identifier)) {
-                this.bookshelf.add(identifier, { title: identifier })
-            }
-
-            if (matches.action === 'progress') {
-                this.bookshelf.addReadingProgress(date, identifier, matches.endPage, matches.startPage || null, source)
-                continue
-            }
-
-            this.bookshelf.addActionToJourney(date, identifier, matches.action, source)
-        }
     }
 
     private linkToUri(link: string): string {

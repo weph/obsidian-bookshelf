@@ -11,6 +11,8 @@ import { BookMetadataFactory } from './book-metadata-factory'
 import { PatternCollection } from './reading-journey/pattern/pattern-collection'
 import { BookNoteActionPattern } from './reading-journey/pattern/book-note/book-note-action-pattern'
 import { BookNoteProgressPattern } from './reading-journey/pattern/book-note/book-note-progress-pattern'
+import { DailyNoteActionPattern } from './reading-journey/pattern/daily-note/daily-note-action-pattern'
+import { DailyNoteProgressPattern } from './reading-journey/pattern/daily-note/daily-note-progress-pattern'
 
 let bookshelf: Bookshelf
 
@@ -33,6 +35,14 @@ beforeEach(() => {
             new BookNoteProgressPattern('{date}: {startPage}-{endPage}', 'yyyy-MM-dd'),
             new BookNoteProgressPattern('{date}: {endPage}', 'yyyy-MM-dd'),
         ]),
+        new PatternCollection([
+            new DailyNoteActionPattern('Started reading {book}', 'started'),
+            new DailyNoteActionPattern('Abandoned {book}', 'abandoned'),
+            new DailyNoteActionPattern('Finished reading {book}', 'finished'),
+            new DailyNoteProgressPattern('Read {book}: {startPage}-{endPage}'),
+            new DailyNoteProgressPattern('Read {book}: {endPage}'),
+        ]),
+        (identifier) => identifier,
     )
 })
 
@@ -147,6 +157,62 @@ describe('Note processing', () => {
             '2025-01-02: The Shining: 151-250',
             '2025-01-03: The Shining: 251-447',
             '2025-01-03: The Shining: finished',
+        ])
+    })
+
+    test('It should create book note for book referenced in daily note if it does not exist yet', async () => {
+        await bookshelf.process(new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading The Shining']))
+
+        const result = Array.from(bookshelf.all())
+        expect(result).toHaveLength(1)
+        expect(result[0].metadata).toEqual({ title: 'The Shining' })
+    })
+
+    // todo: maybe it's better to allow only WikiLinks and not do all this "if
+    // it's just text, let's try to figure out what note this belongs or create
+    // a new book note if nothing can be found"
+    test.skip('It should link reading journey entry from daily note to existing book', async () => {
+        await bookshelf.process(new FakeNote('Books/The Shining.md', new StaticMetadata({}), []))
+
+        await bookshelf.process(new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading The Shining']))
+
+        const result = Array.from(bookshelf.all())
+        expect(result.map((b) => b.metadata.title)).toEqual(['The Shining'])
+    })
+
+    test('It should create reading journey from daily note note', async () => {
+        await bookshelf.process(
+            new FakeNote('2025-01-01.md', new StaticMetadata({}), [
+                'Started reading The Shining',
+                'Read The Shining: 10-100',
+                'Read The Shining: 101-447',
+                'Finished reading The Shining',
+            ]),
+        )
+
+        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+            '2025-01-01: The Shining: started',
+            '2025-01-01: The Shining: 10-100',
+            '2025-01-01: The Shining: 101-447',
+            '2025-01-01: The Shining: finished',
+        ])
+    })
+
+    test('It should update reading journey from daily note note', async () => {
+        await bookshelf.process(new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading The Shining']))
+
+        await bookshelf.process(
+            new FakeNote('2025-01-01.md', new StaticMetadata({}), [
+                'Started reading The Shining',
+                'Read The Shining: 10-447',
+                'Finished reading The Shining',
+            ]),
+        )
+
+        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+            '2025-01-01: The Shining: started',
+            '2025-01-01: The Shining: 10-447',
+            '2025-01-01: The Shining: finished',
         ])
     })
 })
