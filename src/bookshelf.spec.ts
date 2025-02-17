@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, test } from '@jest/globals'
 import { Bookshelf } from './bookshelf'
-import { BookMetadata } from './book'
 import { BookshelfError } from './bookshelf-error'
 import { ReadingJourneyItem } from './reading-journey/reading-journey-log'
 import { Interval } from './statistics'
@@ -116,6 +115,18 @@ describe('Note processing', () => {
         })
     })
 
+    test("Updating a book must not change it's identity", async () => {
+        const note = new FakeNote('Books/The Shining.md', new StaticMetadata({ author: ['Steve Kong'] }), [])
+        await bookshelf.process(note)
+        const book = bookshelf.book(note.identifier)
+
+        await bookshelf.process(
+            new FakeNote('Books/The Shining.md', new StaticMetadata({ author: ['Stephen King'] }), []),
+        )
+
+        expect(bookshelf.book(note.identifier)).toBe(book)
+    })
+
     test('It should create reading journey from book note', async () => {
         await bookshelf.process(
             new FakeNote('Books/The Shining.md', new StaticMetadata({}), [
@@ -217,17 +228,14 @@ describe('Note processing', () => {
     })
 })
 
-test('It should return all books added to the bookshelf', () => {
-    const shining = book('The Shining')
-    const animalFarm = book('Animal Farm')
-    const dracula = book('Dracula')
-    bookshelf.add('shining', shining)
-    bookshelf.add('animal-farm', animalFarm)
-    bookshelf.add('dracula', dracula)
+test('It should return all books added to the bookshelf', async () => {
+    await bookshelf.process(new FakeNote('Books/The Shining.md', new StaticMetadata({}), []))
+    await bookshelf.process(new FakeNote('Books/Animal Farm.md', new StaticMetadata({}), []))
+    await bookshelf.process(new FakeNote('Books/Dracula.md', new StaticMetadata({}), []))
 
     const result = bookshelf.all()
 
-    expect(Array.from(result).map((b) => b.metadata)).toEqual([shining, animalFarm, dracula])
+    expect(Array.from(result).map((b) => b.metadata.title)).toEqual(['The Shining', 'Animal Farm', 'Dracula'])
 })
 
 describe('Non-existing book', () => {
@@ -236,43 +244,19 @@ describe('Non-existing book', () => {
     })
 })
 
-describe('After adding a book', () => {
-    const shining = book('The Shining')
+test('reading journey should by reflected in book', async () => {
+    await bookshelf.process(
+        new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-02-03: 1-10', '2025-02-05: 20']),
+    )
+    await bookshelf.process(
+        new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-02-01: 10-20', '2025-02-04: 50']),
+    )
 
-    beforeEach(() => {
-        bookshelf.add('the-shining', shining)
-    })
-
-    test('it can be retrieved', () => {
-        expect(bookshelf.book('the-shining').metadata).toBe(shining)
-    })
-
-    test('it can not be added again', () => {
-        expect(() => bookshelf.add('the-shining', shining)).toThrow(BookshelfError.identifierExists('the-shining'))
-    })
-
-    test('no other book can be added using the same identifier', () => {
-        const other = book('Another Book')
-
-        expect(() => bookshelf.add('the-shining', other)).toThrow(BookshelfError.identifierExists('the-shining'))
-    })
-})
-
-test('reading journey should by reflected in book', () => {
-    const dracula = 'dracula'
-    const shining = 'shining'
-    bookshelf.add(dracula, book('Dracula'))
-    bookshelf.add(shining, book('The Shining'))
-    bookshelf.addReadingProgress(date(2025, 2, 3), dracula, 10, 1, '')
-    bookshelf.addReadingProgress(date(2025, 2, 4), shining, 50, null, '')
-    bookshelf.addReadingProgress(date(2025, 2, 5), dracula, 20, null, '')
-    bookshelf.addReadingProgress(date(2025, 2, 1), shining, 20, 10, '')
-
-    expect(bookshelf.book(dracula).readingJourney.map(readingProgressAsString)).toEqual([
+    expect(bookshelf.book('Books/Dracula.md').readingJourney.map(readingProgressAsString)).toEqual([
         '2025-02-03: Dracula: 1-10',
         '2025-02-05: Dracula: 11-20',
     ])
-    expect(bookshelf.book(shining).readingJourney.map(readingProgressAsString)).toEqual([
+    expect(bookshelf.book('Books/The Shining.md').readingJourney.map(readingProgressAsString)).toEqual([
         '2025-02-01: The Shining: 10-20',
         '2025-02-04: The Shining: 21-50',
     ])
@@ -523,12 +507,4 @@ function readingProgressAsString(value: ReadingJourneyItem): string {
     }
 
     return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.metadata.title}: ${value.startPage}-${value.endPage}`
-}
-
-function date(year: number, month: number, day: number): Date {
-    return new Date(year, month - 1, day, 0, 0, 0, 0)
-}
-
-function book(title: string): BookMetadata {
-    return { title }
 }

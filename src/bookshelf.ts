@@ -102,12 +102,20 @@ export class Bookshelf {
                 this.add(identifier, { title: identifier })
             }
 
+            const book = this.book(identifier)
+
             if (matches.action === 'progress') {
-                this.addReadingProgress(date, identifier, matches.endPage, matches.startPage || null, source)
+                this.readingJourneyLog.addReadingProgress(
+                    date,
+                    book,
+                    matches.startPage || null,
+                    matches.endPage,
+                    source,
+                )
                 continue
             }
 
-            this.readingJourneyLog.addActionToJourney(date, this.book(identifier), matches.action, source)
+            this.readingJourneyLog.addActionToJourney(date, book, matches.action, source)
         }
     }
 
@@ -115,11 +123,7 @@ export class Bookshelf {
         return this.books.has(identifier)
     }
 
-    public add(identifier: string, metadata: BookMetadata): void {
-        if (this.books.has(identifier)) {
-            throw BookshelfError.identifierExists(identifier)
-        }
-
+    private add(identifier: string, metadata: BookMetadata): void {
         this.books.set(identifier, new BookshelfBook(metadata, this))
     }
 
@@ -139,15 +143,6 @@ export class Bookshelf {
 
     public all(): Iterable<Book> {
         return this.books.values()
-    }
-    public addReadingProgress(
-        date: Date,
-        identifier: string,
-        endPage: number,
-        startPage: number | null,
-        source: string,
-    ): void {
-        this.readingJourneyLog.addReadingProgress(date, this.book(identifier), startPage || null, endPage, source)
     }
 
     public readingJourney(): ReadingJourney {

@@ -8,6 +8,8 @@ import { BookNoteActionPattern } from '../../reading-journey/pattern/book-note/b
 import { BookNoteProgressPattern } from '../../reading-journey/pattern/book-note/book-note-progress-pattern'
 import { DailyNoteActionPattern } from '../../reading-journey/pattern/daily-note/daily-note-action-pattern'
 import { DailyNoteProgressPattern } from '../../reading-journey/pattern/daily-note/daily-note-progress-pattern'
+import { FakeNote } from '../../support/fake-note'
+import { StaticMetadata } from '../../metadata/metadata'
 
 const meta = {
     title: 'Statistics',
@@ -50,12 +52,16 @@ const bookshelf = new Bookshelf(
     ]),
     (identifier) => identifier,
 )
-bookshelf.add('book', { title: 'Book' })
-bookshelf.addReadingProgress(new Date(2025, 0, 1), 'book', 50, 1, '')
-bookshelf.addReadingProgress(new Date(2025, 0, 2), 'book', 110, 51, '')
-bookshelf.addReadingProgress(new Date(2025, 1, 1), 'book', 130, 111, '')
-bookshelf.addReadingProgress(new Date(2025, 2, 5), 'book', 200, 141, '')
-bookshelf.addReadingProgress(new Date(2025, 2, 6), 'book', 240, 201, '')
+
+bookshelf.process(
+    new FakeNote('Books/Book.md', new StaticMetadata({}), [
+        '2025-01-01: 1-50',
+        '2025-01-02: 51-110',
+        '2025-02-01: 111-130',
+        '2025-03-05: 131-200',
+        '2025-03-06: 201-240',
+    ]),
+)
 
 export const Primary: Story = {
     args: {
