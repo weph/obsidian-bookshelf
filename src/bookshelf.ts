@@ -107,7 +107,7 @@ export class Bookshelf {
                 continue
             }
 
-            this.addActionToJourney(date, identifier, matches.action, source)
+            this.readingJourneyLog.addActionToJourney(date, this.book(identifier), matches.action, source)
         }
     }
 
@@ -140,16 +140,6 @@ export class Bookshelf {
     public all(): Iterable<Book> {
         return this.books.values()
     }
-
-    public addActionToJourney(
-        date: Date,
-        identifier: string,
-        action: 'started' | 'finished' | 'abandoned',
-        source: string,
-    ): void {
-        this.readingJourneyLog.addActionToJourney(date, this.book(identifier), action, source)
-    }
-
     public addReadingProgress(
         date: Date,
         identifier: string,
