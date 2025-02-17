@@ -279,50 +279,49 @@ test('reading journey should by reflected in book', () => {
 })
 
 describe('Statistics', () => {
-    const dracula = 'dracula'
-    const shining = 'shining'
-
-    beforeEach(() => {
-        bookshelf.add(dracula, book('Dracula'))
-        bookshelf.add(shining, book('The Shining'))
-    })
-
     describe('Years', () => {
         test('should be empty if there is no activity', () => {
             expect(bookshelf.statistics().years()).toEqual([])
         })
 
-        test('should include only years with activities', () => {
-            bookshelf.addReadingProgress(date(2024, 1, 1), dracula, 1, null, '')
-            bookshelf.addReadingProgress(date(2025, 12, 31), dracula, 1, null, '')
-            bookshelf.addReadingProgress(date(2027, 7, 15), dracula, 1, null, '')
+        test('should include only years with activities', async () => {
+            await bookshelf.process(
+                new FakeNote('Books/Dracula.md', new StaticMetadata({}), [
+                    '2024-01-01: Started reading',
+                    '2025-12-31: 10-150',
+                    '2027-07-15: Finished reading',
+                ]),
+            )
 
             expect(bookshelf.statistics().years()).toEqual([2024, 2025, 2027])
         })
     })
 
     describe('Actions', () => {
-        test('Total', () => {
-            bookshelf.addActionToJourney(date(2024, 12, 30), dracula, 'started', '')
-            bookshelf.addActionToJourney(date(2024, 12, 31), dracula, 'finished', '')
-            bookshelf.addActionToJourney(date(2025, 1, 2), shining, 'started', '')
-            bookshelf.addActionToJourney(date(2025, 1, 3), shining, 'finished', '')
-            bookshelf.addActionToJourney(date(2025, 1, 4), dracula, 'started', '')
-            bookshelf.addActionToJourney(date(2025, 1, 5), dracula, 'abandoned', '')
+        beforeEach(async () => {
+            await bookshelf.process(
+                new FakeNote('Books/Dracula.md', new StaticMetadata({}), [
+                    '2024-12-30: Started reading',
+                    '2024-12-31: Finished reading',
+                    '2025-01-04: Started reading',
+                    '2025-01-05: Abandoned book',
+                ]),
+            )
+            await bookshelf.process(
+                new FakeNote('Books/The Shining.md', new StaticMetadata({}), [
+                    '2025-01-02: Started reading',
+                    '2025-01-03: Finished reading',
+                ]),
+            )
+        })
 
+        test('Total', () => {
             const result = bookshelf.statistics().actions()
 
             expect(result).toEqual({ started: 3, finished: 2, abandoned: 1 })
         })
 
         test('Filtered by year', () => {
-            bookshelf.addActionToJourney(date(2024, 12, 30), dracula, 'started', '')
-            bookshelf.addActionToJourney(date(2024, 12, 31), dracula, 'finished', '')
-            bookshelf.addActionToJourney(date(2025, 1, 2), shining, 'started', '')
-            bookshelf.addActionToJourney(date(2025, 1, 3), shining, 'finished', '')
-            bookshelf.addActionToJourney(date(2025, 1, 4), dracula, 'started', '')
-            bookshelf.addActionToJourney(date(2025, 1, 5), dracula, 'abandoned', '')
-
             expect(bookshelf.statistics(2024).actions()).toEqual({ started: 1, finished: 1, abandoned: 0 })
             expect(bookshelf.statistics(2025).actions()).toEqual({ started: 2, finished: 1, abandoned: 1 })
             expect(bookshelf.statistics(2026).actions()).toEqual({ started: 0, finished: 0, abandoned: 0 })
@@ -334,11 +333,13 @@ describe('Statistics', () => {
             expect(pagesReadAsObject(bookshelf.statistics().pagesRead(Interval.Day))).toEqual({})
         })
 
-        test('should be limited if given a year', () => {
-            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 1, null, '')
-            bookshelf.addReadingProgress(date(2025, 1, 1), shining, 10, null, '')
-            bookshelf.addReadingProgress(date(2025, 12, 31), shining, 20, null, '')
-            bookshelf.addReadingProgress(date(2026, 1, 1), dracula, 30, null, '')
+        test('should be limited if given a year', async () => {
+            await bookshelf.process(
+                new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2024-12-31: 1', '2026-01-01: 30']),
+            )
+            await bookshelf.process(
+                new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-01-01: 10', '2025-12-31: 20']),
+            )
 
             const result2024 = bookshelf.statistics(2024).pagesRead(Interval.Year)
             const result2025 = bookshelf.statistics(2025).pagesRead(Interval.Year)
@@ -349,13 +350,18 @@ describe('Statistics', () => {
             expect(pagesReadAsObject(result2026)).toEqual({ '2026-01-01': 29 })
         })
 
-        test('can be grouped per day', () => {
-            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 10, null, '')
-            bookshelf.addReadingProgress(date(2025, 1, 2), dracula, 20, null, '')
-            bookshelf.addReadingProgress(date(2025, 1, 2), shining, 50, null, '')
-            bookshelf.addReadingProgress(date(2025, 1, 3), shining, 100, null, '')
-            bookshelf.addReadingProgress(date(2025, 1, 5), dracula, 30, null, '')
-            bookshelf.addReadingProgress(date(2025, 1, 7), dracula, 60, null, '')
+        test('can be grouped by day', async () => {
+            await bookshelf.process(
+                new FakeNote('Books/Dracula.md', new StaticMetadata({}), [
+                    '2024-12-31: 10',
+                    '2025-01-02: 20',
+                    '2025-01-05: 30',
+                    '2025-01-07: 60',
+                ]),
+            )
+            await bookshelf.process(
+                new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-01-02: 50', '2025-01-03: 100']),
+            )
 
             const result = bookshelf.statistics().pagesRead(Interval.Day)
 
@@ -371,12 +377,16 @@ describe('Statistics', () => {
             })
         })
 
-        test('can be grouped per week', () => {
-            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 10, null, '')
-            bookshelf.addReadingProgress(date(2025, 1, 9), dracula, 20, null, '')
-            bookshelf.addReadingProgress(date(2025, 1, 21), shining, 100, null, '')
-            bookshelf.addReadingProgress(date(2025, 1, 21), dracula, 30, null, '')
-            bookshelf.addReadingProgress(date(2025, 2, 1), dracula, 60, null, '')
+        test('can be grouped by week', async () => {
+            await bookshelf.process(
+                new FakeNote('Books/Dracula.md', new StaticMetadata({}), [
+                    '2024-12-31: 10',
+                    '2025-01-09: 20',
+                    '2025-01-21: 30',
+                    '2025-02-01: 60',
+                ]),
+            )
+            await bookshelf.process(new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-01-21: 100']))
 
             const result = bookshelf.statistics().pagesRead(Interval.Week)
 
@@ -389,12 +399,16 @@ describe('Statistics', () => {
             })
         })
 
-        test('can be grouped per month', () => {
-            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 10, null, '')
-            bookshelf.addReadingProgress(date(2025, 1, 31), dracula, 20, null, '')
-            bookshelf.addReadingProgress(date(2025, 2, 15), shining, 100, null, '')
-            bookshelf.addReadingProgress(date(2025, 2, 15), dracula, 30, null, '')
-            bookshelf.addReadingProgress(date(2025, 4, 2), dracula, 60, null, '')
+        test('can be grouped by month', async () => {
+            await bookshelf.process(
+                new FakeNote('Books/Dracula.md', new StaticMetadata({}), [
+                    '2024-12-31: 10',
+                    '2025-01-31: 20',
+                    '2025-02-15: 30',
+                    '2025-04-02: 60',
+                ]),
+            )
+            await bookshelf.process(new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-02-15: 100']))
 
             const result = bookshelf.statistics().pagesRead(Interval.Month)
 
@@ -407,10 +421,11 @@ describe('Statistics', () => {
             })
         })
 
-        test('can be grouped per year', () => {
-            bookshelf.addReadingProgress(date(2023, 1, 1), dracula, 10, null, '')
-            bookshelf.addReadingProgress(date(2025, 2, 15), shining, 100, null, '')
-            bookshelf.addReadingProgress(date(2025, 3, 2), dracula, 50, null, '')
+        test('can be grouped by year', async () => {
+            await bookshelf.process(
+                new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2023-01-01: 10', '2025-03-02: 50']),
+            )
+            await bookshelf.process(new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-02-15: 100']))
 
             const result = bookshelf.statistics().pagesRead(Interval.Year)
 
@@ -437,11 +452,13 @@ describe('Statistics', () => {
             expect(bookshelf.statistics().totalNumberOfPages()).toEqual(0)
         })
 
-        test('should be limited if given a year', () => {
-            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 1, null, '')
-            bookshelf.addReadingProgress(date(2025, 1, 1), shining, 10, null, '')
-            bookshelf.addReadingProgress(date(2025, 12, 31), shining, 20, null, '')
-            bookshelf.addReadingProgress(date(2026, 1, 1), dracula, 30, null, '')
+        test('should be limited if given a year', async () => {
+            await bookshelf.process(
+                new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2024-12-31: 1', '2026-01-01: 30']),
+            )
+            await bookshelf.process(
+                new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-01-01: 10', '2025-12-31: 20']),
+            )
 
             expect(bookshelf.statistics(2024).totalNumberOfPages()).toEqual(1)
             expect(bookshelf.statistics(2025).totalNumberOfPages()).toEqual(20)
@@ -454,11 +471,13 @@ describe('Statistics', () => {
             expect(bookshelf.statistics().books()).toEqual([])
         })
 
-        test('should return a unique list of books', () => {
-            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 1, null, '')
-            bookshelf.addReadingProgress(date(2025, 1, 1), shining, 10, null, '')
-            bookshelf.addReadingProgress(date(2025, 12, 31), shining, 20, null, '')
-            bookshelf.addReadingProgress(date(2026, 1, 1), dracula, 30, null, '')
+        test('should return a unique list of books', async () => {
+            await bookshelf.process(
+                new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2024-12-31: 1', '2026-01-01: 30']),
+            )
+            await bookshelf.process(
+                new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-01-01: 10', '2025-12-31: 20']),
+            )
 
             expect(
                 bookshelf
@@ -468,11 +487,13 @@ describe('Statistics', () => {
             ).toEqual(['Dracula', 'The Shining'])
         })
 
-        test('should be limited if given a year', () => {
-            bookshelf.addReadingProgress(date(2024, 12, 31), dracula, 1, null, '')
-            bookshelf.addReadingProgress(date(2025, 1, 1), dracula, 30, null, '')
-            bookshelf.addReadingProgress(date(2025, 1, 2), shining, 10, null, '')
-            bookshelf.addReadingProgress(date(2026, 1, 1), shining, 20, null, '')
+        test('should be limited if given a year', async () => {
+            await bookshelf.process(
+                new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2024-12-31: 1', '2025-01-01: 30']),
+            )
+            await bookshelf.process(
+                new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-01-02: 10', '2026-01-01: 20']),
+            )
 
             expect(
                 bookshelf
