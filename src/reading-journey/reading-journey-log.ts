@@ -1,8 +1,6 @@
 import { Book } from '../book'
 import { ReadingJourney } from './reading-journey'
 
-export type ReadingJourneyItem = ReadingJourneyItemAction | ReadingJourneyProgressItem
-
 interface ReadingJournalItemBase {
     date: Date
     book: Book
@@ -19,6 +17,18 @@ export interface ReadingJourneyProgressItem extends ReadingJournalItemBase {
     endPage: number
     pages: number
 }
+
+export type ReadingJourneyItem = ReadingJourneyItemAction | ReadingJourneyProgressItem
+
+type ReadingJourneyItemActionInput = ReadingJourneyItemAction
+
+interface ReadingJourneyItemProgressInput extends ReadingJournalItemBase {
+    action: 'progress'
+    startPage: number | null
+    endPage: number
+}
+
+export type ReadingJourneyItemInput = ReadingJourneyItemActionInput | ReadingJourneyItemProgressInput
 
 export class ReadingProgress implements ReadingJourneyProgressItem {
     public readonly action = 'progress'
@@ -58,13 +68,36 @@ export class ReadingJourneyLog {
         action: 'started' | 'finished' | 'abandoned',
         source: string,
     ): void {
-        this.items.splice(this.positionForDate(date), 0, { action, date, book, source })
+        this.add({ action, date, book, source })
     }
 
     public addReadingProgress(date: Date, book: Book, startPage: number | null, endPage: number, source: string): void {
+        this.add({ action: 'progress', date, book, source, startPage, endPage })
+    }
+
+    public add(item: ReadingJourneyItemInput): void {
+        switch (item.action) {
+            case 'started':
+            case 'finished':
+            case 'abandoned':
+                return this.addAction(item)
+            case 'progress':
+                return this.addProgress(item)
+        }
+    }
+
+    private addAction(item: ReadingJourneyItemActionInput): void {
+        const { date, action, book, source } = item
+
+        this.items.splice(this.positionForDate(date), 0, { action, date, book, source })
+    }
+
+    public addProgress(input: ReadingJourneyItemProgressInput): void {
+        const { date, book, source, startPage, endPage } = input
+
         const pos = this.positionForDate(date)
         const previous = this.previousReadingProgress(book, pos)
-        const item = new ReadingProgress(date, book, previous, startPage, endPage, source)
+        const item = new ReadingProgress(date, book, previous, startPage || null, endPage, source)
 
         this.items.splice(pos, 0, item)
 
