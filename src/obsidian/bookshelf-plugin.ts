@@ -10,6 +10,12 @@ import { dailyNotePatterns } from '../reading-journey/pattern/daily-note/daily-n
 import { bookNotePatterns } from '../reading-journey/pattern/book-note/book-note-pattern'
 import { ObsidianNote } from './obsidian-note'
 
+export interface DailyNotesSettings {
+    enabled: boolean
+    format: string
+    folder: string | null
+}
+
 export default class BookshelfPlugin extends Plugin {
     public settings: BookshelfPluginSettings
 
@@ -20,6 +26,7 @@ export default class BookshelfPlugin extends Plugin {
 
         this.bookshelf = new Bookshelf(
             this.settings.booksFolder,
+            this.dailyNotesSettings(),
             new BookMetadataFactory(this.settings.bookProperties, this.linkToUri.bind(this)),
             bookNotePatterns(this.settings.bookNote.patterns, this.settings.bookNote.dateFormat),
             dailyNotePatterns(this.settings.dailyNote.patterns),
@@ -36,6 +43,16 @@ export default class BookshelfPlugin extends Plugin {
 
         this.app.metadataCache.on('resolve', async (file) => await this.handleFile(file))
         this.app.metadataCache.on('changed', async (file) => await this.handleFile(file))
+    }
+
+    private dailyNotesSettings(): DailyNotesSettings {
+        // @ts-expect-error internalPlugins is not exposed
+        const plugin = this.app.internalPlugins.getEnabledPluginById('daily-notes')
+        if (plugin === null) {
+            return { enabled: false, format: '', folder: null }
+        }
+
+        return { enabled: true, format: plugin.options.format || 'YYYY-MM-DD', folder: plugin.options.folder || null }
     }
 
     private async handleFile(file: TFile): Promise<void> {

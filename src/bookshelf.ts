@@ -8,6 +8,7 @@ import { BookMetadataFactory } from './book-metadata-factory'
 import { BookNotePatternMatches } from './reading-journey/pattern/book-note/book-note-pattern'
 import { DailyNotePatternMatches } from './reading-journey/pattern/daily-note/daily-note-pattern'
 import { PatternCollection } from './reading-journey/pattern/pattern-collection'
+import { DailyNotesSettings } from './obsidian/bookshelf-plugin'
 
 class BookshelfBook implements Book {
     constructor(
@@ -27,6 +28,7 @@ export class Bookshelf {
 
     constructor(
         private readonly booksFolder: string,
+        private readonly dailyNoteSettings: DailyNotesSettings,
         private readonly bookMetadataFactory: BookMetadataFactory,
         private readonly bookNotePatterns: PatternCollection<BookNotePatternMatches>,
         private readonly dailyNotePatterns: PatternCollection<DailyNotePatternMatches>,
@@ -61,18 +63,16 @@ export class Bookshelf {
     }
 
     private async handleDailyNote(note: Note): Promise<void> {
-        const dateMatches = note.basename.match(/(\d{4})-(\d{2})-(\d{2})/)
-        if (dateMatches === null) {
+        const date = window.moment(note.basename, this.dailyNoteSettings.format, true)
+        if (!date.isValid()) {
             return
         }
-
-        const date = new Date(parseInt(dateMatches[1]), parseInt(dateMatches[2]) - 1, parseInt(dateMatches[3]))
 
         await this.processReadingJourney(
             note,
             this.dailyNotePatterns,
             (matches) => this.bookIdentifier(matches.book),
-            () => date,
+            () => date.toDate(),
         )
     }
 

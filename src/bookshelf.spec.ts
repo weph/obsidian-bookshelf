@@ -18,6 +18,11 @@ let bookshelf: Bookshelf
 beforeEach(() => {
     bookshelf = new Bookshelf(
         'Books',
+        {
+            enabled: true,
+            format: 'YYYY-MM-DD',
+            folder: null,
+        },
         new BookMetadataFactory(
             {
                 cover: 'cover',
@@ -226,6 +231,15 @@ describe('Note processing', () => {
             '2025-01-01: The Shining: finished',
         ])
     })
+
+    test.each([['2000-50-99.md'], ['aaaa-bb-cc.md'], ['01/01/2025.md'], ['01.01.2025.md']])(
+        "It should ignore notes if they don't match the daily note file format (example: %s)",
+        async (path) => {
+            await bookshelf.process(new FakeNote(path, new StaticMetadata({}), ['Started reading The Shining']))
+
+            expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([])
+        },
+    )
 })
 
 test('It should return all books added to the bookshelf', async () => {

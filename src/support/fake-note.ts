@@ -13,7 +13,7 @@ export class FakeNote implements Note {
     }
 
     get basename(): string {
-        return this.path.replace(/.*\/([^/]+)\.md/, '$1')
+        return this.path.replace(/.*?\/?([^/]+)\.md/, '$1')
     }
 
     public async *listItems(): AsyncGenerator<string> {

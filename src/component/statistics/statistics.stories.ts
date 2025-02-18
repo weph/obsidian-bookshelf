@@ -27,6 +27,11 @@ type Story = StoryObj<StatisticsProps>
 
 const bookshelf = new Bookshelf(
     'Books',
+    {
+        enabled: true,
+        format: 'YYYY-MM-DD',
+        folder: null,
+    },
     new BookMetadataFactory(
         {
             cover: 'cover',
