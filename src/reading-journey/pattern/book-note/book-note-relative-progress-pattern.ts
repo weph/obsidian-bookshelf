@@ -1,23 +1,26 @@
-import { DailyNotePatternMatches } from './daily-note-pattern'
+import { DateTime } from 'luxon'
+import { BookNotePatternMatches } from './book-note-pattern'
 
-export interface DailyNoteProgressPatternMatches {
-    action: 'progress'
-    book: string
-    startPage?: number
+export interface BookNoteRelativeProgressPatternMatches {
+    action: 'relative-progress'
+    date: Date
     endPage: number
 }
 
-export class DailyNoteProgressPattern {
+export class BookNoteRelativeProgressPattern {
     private readonly regex: RegExp
 
-    constructor(pattern: string) {
+    constructor(
+        pattern: string,
+        private dateFormat: string,
+    ) {
         const placeholders = new Map<string, number>()
         for (const match of pattern.matchAll(/\{.+?}/g)) {
             placeholders.set(match[0], (placeholders.get(match[0]) || 0) + 1)
         }
 
-        if (!placeholders.has('{book}')) {
-            throw new Error('Pattern must include {book} placeholder')
+        if (!placeholders.has('{date}')) {
+            throw new Error('Pattern must include {date} placeholder')
         }
 
         if (!placeholders.has('{endPage}')) {
@@ -36,14 +39,13 @@ export class DailyNoteProgressPattern {
 
         const regex = pattern
             .replace(/\{\*}/g, '.*?')
-            .replace('{book}', '(?<book>.+)')
-            .replace('{startPage}', '(?<startPage>\\d+)')
+            .replace('{date}', '(?<date>.+)')
             .replace('{endPage}', '(?<endPage>\\d+)')
 
         this.regex = new RegExp(`^${regex}$`)
     }
 
-    public matches(value: string): DailyNotePatternMatches | null {
+    public matches(value: string): BookNotePatternMatches | null {
         const matches = value.match(this.regex)
         if (matches === null) {
             return null
@@ -52,14 +54,18 @@ export class DailyNoteProgressPattern {
         const groups = matches.groups
 
         // Stryker disable next-line StringLiteral: date cannot be undefined but TS doesn't know that
-        const book = groups?.['book'] || ''
+        const dateStr = groups?.['date'] || ''
         // Stryker disable next-line StringLiteral: endPage cannot be undefined but TS doesn't know that
         const endPage = groups?.['endPage'] || ''
 
+        const dateObject = DateTime.fromFormat(dateStr, this.dateFormat)
+        if (!dateObject.isValid) {
+            return null
+        }
+
         return {
-            action: 'progress',
-            book,
-            startPage: groups?.['startPage'] ? parseInt(groups['startPage']) : undefined,
+            action: 'relative-progress',
+            date: dateObject.toJSDate(),
             endPage: parseInt(endPage),
         }
     }

@@ -104,14 +104,13 @@ export class Bookshelf {
 
             const book = this.book(identifier)
 
-            if (matches.action === 'progress') {
-                this.readingJourneyLog.addReadingProgress(
-                    date,
-                    book,
-                    matches.startPage || null,
-                    matches.endPage,
-                    source,
-                )
+            if (matches.action === 'relative-progress') {
+                this.readingJourneyLog.addReadingProgress(date, book, null, matches.endPage, source)
+                continue
+            }
+
+            if (matches.action === 'absolute-progress') {
+                this.readingJourneyLog.addReadingProgress(date, book, matches.startPage, matches.endPage, source)
                 continue
             }
 

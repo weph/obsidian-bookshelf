@@ -1,11 +1,22 @@
-import { DailyNoteProgressPattern, DailyNoteProgressPatternMatches } from './daily-note-progress-pattern'
+import {
+    DailyNoteAbsoluteProgressPattern,
+    DailyNoteAbsoluteProgressPatternMatches,
+} from './daily-note-absolute-progress-pattern'
 import { DailyNoteActionPattern, DailyNoteActionPatternMatches } from './daily-note-action-pattern'
 import { PatternCollection } from '../pattern-collection'
+import {
+    DailyNoteRelativeProgressPattern,
+    DailyNoteRelativeProgressPatternMatches,
+} from './daily-note-relative-progress-pattern'
 
-export type DailyNotePatternMatches = DailyNoteProgressPatternMatches | DailyNoteActionPatternMatches
+export type DailyNotePatternMatches =
+    | DailyNoteRelativeProgressPatternMatches
+    | DailyNoteAbsoluteProgressPatternMatches
+    | DailyNoteActionPatternMatches
 
 interface Patterns {
-    progress: Array<string>
+    absoluteProgress: Array<string>
+    relativeProgress: Array<string>
     started: Array<string>
     finished: Array<string>
     abandoned: Array<string>
@@ -38,9 +49,17 @@ export function dailyNotePatterns(patterns: Patterns): PatternCollection<DailyNo
         }
     }
 
-    for (const pattern of patterns.progress) {
+    for (const pattern of patterns.absoluteProgress) {
         try {
-            result.push(new DailyNoteProgressPattern(pattern))
+            result.push(new DailyNoteAbsoluteProgressPattern(pattern))
+        } catch (error) {
+            console.error(`Error processing pattern "${pattern}: ${error}`)
+        }
+    }
+
+    for (const pattern of patterns.relativeProgress) {
+        try {
+            result.push(new DailyNoteRelativeProgressPattern(pattern))
         } catch (error) {
             console.error(`Error processing pattern "${pattern}: ${error}`)
         }

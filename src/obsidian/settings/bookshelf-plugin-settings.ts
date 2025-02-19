@@ -12,7 +12,8 @@ export interface BookshelfPluginSettings {
             started: Array<string>
             finished: Array<string>
             abandoned: Array<string>
-            progress: Array<string>
+            absoluteProgress: Array<string>
+            relativeProgress: Array<string>
         }
     }
     dailyNote: {
@@ -20,7 +21,8 @@ export interface BookshelfPluginSettings {
             started: Array<string>
             finished: Array<string>
             abandoned: Array<string>
-            progress: Array<string>
+            absoluteProgress: Array<string>
+            relativeProgress: Array<string>
         }
     }
 }
@@ -39,7 +41,8 @@ export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
             started: ['{date}: Started'],
             finished: ['{date}: Finished'],
             abandoned: ['{date}: Abandoned'],
-            progress: ['{date}: {endPage}', '{date}: {startPage}-{endPage}'],
+            absoluteProgress: ['{date}: {startPage}-{endPage}'],
+            relativeProgress: ['{date}: {endPage}'],
         },
     },
     dailyNote: {
@@ -47,7 +50,8 @@ export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
             started: ['Started: {book}'],
             finished: ['Finished: {book}'],
             abandoned: ['Abandoned: {book}'],
-            progress: ['Read {book}: {endPage}', 'Read {book}: {startPage}-{endPage}'],
+            absoluteProgress: ['Read {book}: {startPage}-{endPage}'],
+            relativeProgress: ['Read {book}: {endPage}'],
         },
     },
 }

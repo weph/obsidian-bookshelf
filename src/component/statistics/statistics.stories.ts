@@ -5,9 +5,9 @@ import { Bookshelf } from '../../bookshelf'
 import { BookMetadataFactory } from '../../book-metadata-factory'
 import { PatternCollection } from '../../reading-journey/pattern/pattern-collection'
 import { BookNoteActionPattern } from '../../reading-journey/pattern/book-note/book-note-action-pattern'
-import { BookNoteProgressPattern } from '../../reading-journey/pattern/book-note/book-note-progress-pattern'
+import { BookNoteRelativeProgressPattern } from '../../reading-journey/pattern/book-note/book-note-relative-progress-pattern'
 import { DailyNoteActionPattern } from '../../reading-journey/pattern/daily-note/daily-note-action-pattern'
-import { DailyNoteProgressPattern } from '../../reading-journey/pattern/daily-note/daily-note-progress-pattern'
+import { DailyNoteAbsoluteProgressPattern } from '../../reading-journey/pattern/daily-note/daily-note-absolute-progress-pattern'
 import { FakeNote } from '../../support/fake-note'
 import { StaticMetadata } from '../../metadata/metadata'
 
@@ -45,15 +45,15 @@ const bookshelf = new Bookshelf(
         new BookNoteActionPattern('{date}: Started reading', 'started', 'yyyy-MM-dd'),
         new BookNoteActionPattern('{date}: Abandoned book', 'abandoned', 'yyyy-MM-dd'),
         new BookNoteActionPattern('{date}: Finished reading', 'finished', 'yyyy-MM-dd'),
-        new BookNoteProgressPattern('{date}: {startPage}-{endPage}', 'yyyy-MM-dd'),
-        new BookNoteProgressPattern('{date}: {endPage}', 'yyyy-MM-dd'),
+        new BookNoteRelativeProgressPattern('{date}: {startPage}-{endPage}', 'yyyy-MM-dd'),
+        new BookNoteRelativeProgressPattern('{date}: {endPage}', 'yyyy-MM-dd'),
     ]),
     new PatternCollection([
         new DailyNoteActionPattern('Started reading {book}', 'started'),
         new DailyNoteActionPattern('Abandoned {book}', 'abandoned'),
         new DailyNoteActionPattern('Finished reading {book}', 'finished'),
-        new DailyNoteProgressPattern('Read {book}: {startPage}-{endPage}'),
-        new DailyNoteProgressPattern('Read {book}: {endPage}'),
+        new DailyNoteAbsoluteProgressPattern('Read {book}: {startPage}-{endPage}'),
+        new DailyNoteAbsoluteProgressPattern('Read {book}: {endPage}'),
     ]),
     (identifier) => identifier,
 )
