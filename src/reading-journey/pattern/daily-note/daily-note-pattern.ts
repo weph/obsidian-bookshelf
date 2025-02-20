@@ -15,54 +15,44 @@ export type DailyNotePatternMatches =
     | DailyNoteActionPatternMatches
 
 interface Patterns {
-    absoluteProgress: Array<string>
-    relativeProgress: Array<string>
-    started: Array<string>
-    finished: Array<string>
-    abandoned: Array<string>
+    absoluteProgress: string
+    relativeProgress: string
+    started: string
+    finished: string
+    abandoned: string
 }
 
 export function dailyNotePatterns(patterns: Patterns): PatternCollection<DailyNotePatternMatches> {
     const result = []
 
-    for (const pattern of patterns.started) {
-        try {
-            result.push(new DailyNoteActionPattern(pattern, 'started'))
-        } catch (error) {
-            console.error(`Error processing pattern "${pattern}: ${error}`)
-        }
+    try {
+        result.push(new DailyNoteActionPattern(patterns.started, 'started'))
+    } catch (error) {
+        console.error(`Error processing pattern "${patterns.started}: ${error}`)
     }
 
-    for (const pattern of patterns.finished) {
-        try {
-            result.push(new DailyNoteActionPattern(pattern, 'finished'))
-        } catch (error) {
-            console.error(`Error processing pattern "${pattern}: ${error}`)
-        }
+    try {
+        result.push(new DailyNoteActionPattern(patterns.finished, 'finished'))
+    } catch (error) {
+        console.error(`Error processing pattern "${patterns.finished}: ${error}`)
     }
 
-    for (const pattern of patterns.abandoned) {
-        try {
-            result.push(new DailyNoteActionPattern(pattern, 'abandoned'))
-        } catch (error) {
-            console.error(`Error processing pattern "${pattern}: ${error}`)
-        }
+    try {
+        result.push(new DailyNoteActionPattern(patterns.abandoned, 'abandoned'))
+    } catch (error) {
+        console.error(`Error processing pattern "${patterns.abandoned}: ${error}`)
     }
 
-    for (const pattern of patterns.absoluteProgress) {
-        try {
-            result.push(new DailyNoteAbsoluteProgressPattern(pattern))
-        } catch (error) {
-            console.error(`Error processing pattern "${pattern}: ${error}`)
-        }
+    try {
+        result.push(new DailyNoteAbsoluteProgressPattern(patterns.absoluteProgress))
+    } catch (error) {
+        console.error(`Error processing pattern "${patterns.absoluteProgress}: ${error}`)
     }
 
-    for (const pattern of patterns.relativeProgress) {
-        try {
-            result.push(new DailyNoteRelativeProgressPattern(pattern))
-        } catch (error) {
-            console.error(`Error processing pattern "${pattern}: ${error}`)
-        }
+    try {
+        result.push(new DailyNoteRelativeProgressPattern(patterns.relativeProgress))
+    } catch (error) {
+        console.error(`Error processing pattern "${patterns.relativeProgress}: ${error}`)
     }
 
     return new PatternCollection(result)

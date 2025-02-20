@@ -15,54 +15,44 @@ export type BookNotePatternMatches =
     | BookNoteActionPatternMatches
 
 interface Patterns {
-    absoluteProgress: Array<string>
-    relativeProgress: Array<string>
-    started: Array<string>
-    finished: Array<string>
-    abandoned: Array<string>
+    absoluteProgress: string
+    relativeProgress: string
+    started: string
+    finished: string
+    abandoned: string
 }
 
 export function bookNotePatterns(patterns: Patterns, dateFormat: string): PatternCollection<BookNotePatternMatches> {
     const result = []
 
-    for (const pattern of patterns.started) {
-        try {
-            result.push(new BookNoteActionPattern(pattern, 'started', dateFormat))
-        } catch (error) {
-            console.error(`Error processing pattern "${pattern}: ${error}`)
-        }
+    try {
+        result.push(new BookNoteActionPattern(patterns.started, 'started', dateFormat))
+    } catch (error) {
+        console.error(`Error processing pattern "${patterns.started}: ${error}`)
     }
 
-    for (const pattern of patterns.finished) {
-        try {
-            result.push(new BookNoteActionPattern(pattern, 'finished', dateFormat))
-        } catch (error) {
-            console.error(`Error processing pattern "${pattern}: ${error}`)
-        }
+    try {
+        result.push(new BookNoteActionPattern(patterns.finished, 'finished', dateFormat))
+    } catch (error) {
+        console.error(`Error processing pattern "${patterns.finished}: ${error}`)
     }
 
-    for (const pattern of patterns.abandoned) {
-        try {
-            result.push(new BookNoteActionPattern(pattern, 'abandoned', dateFormat))
-        } catch (error) {
-            console.error(`Error processing pattern "${pattern}: ${error}`)
-        }
+    try {
+        result.push(new BookNoteActionPattern(patterns.abandoned, 'abandoned', dateFormat))
+    } catch (error) {
+        console.error(`Error processing pattern "${patterns.abandoned}: ${error}`)
     }
 
-    for (const pattern of patterns.absoluteProgress) {
-        try {
-            result.push(new BookNoteAbsoluteProgressPattern(pattern, dateFormat))
-        } catch (error) {
-            console.error(`Error processing pattern "${pattern}: ${error}`)
-        }
+    try {
+        result.push(new BookNoteAbsoluteProgressPattern(patterns.absoluteProgress, dateFormat))
+    } catch (error) {
+        console.error(`Error processing pattern "${patterns.absoluteProgress}: ${error}`)
     }
 
-    for (const pattern of patterns.relativeProgress) {
-        try {
-            result.push(new BookNoteRelativeProgressPattern(pattern, dateFormat))
-        } catch (error) {
-            console.error(`Error processing pattern "${pattern}: ${error}`)
-        }
+    try {
+        result.push(new BookNoteRelativeProgressPattern(patterns.relativeProgress, dateFormat))
+    } catch (error) {
+        console.error(`Error processing pattern "${patterns.relativeProgress}: ${error}`)
     }
 
     return new PatternCollection(result)

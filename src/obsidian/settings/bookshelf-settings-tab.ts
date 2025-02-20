@@ -90,81 +90,68 @@ export class BookshelfSettingsTab extends PluginSettingTab {
         })
 
         new Setting(containerEl)
-            .setName('Started Patterns')
+            .setName('Started Book')
             .setDesc('{date}, {*}')
-            .addTextArea((textArea) => {
-                textArea.setValue(this.plugin.settings.bookNote.patterns.started.join('\n')).onChange(async (value) => {
-                    this.plugin.settings.bookNote.patterns.started = value.split('\n').filter((x) => x)
+            .addText((field) => {
+                field.setValue(this.plugin.settings.bookNote.patterns.started).onChange(async (value) => {
+                    this.plugin.settings.bookNote.patterns.started = value
 
                     await this.plugin.saveSettings()
                 })
 
-                textArea.inputEl.style.width = '100%'
-                textArea.inputEl.rows = 4
+                field.inputEl.style.width = '100%'
             })
 
         new Setting(containerEl)
-            .setName('Abandoned Patterns')
+            .setName('Abandoned Book')
             .setDesc('{date}, {*}')
-            .addTextArea((textArea) => {
-                textArea
-                    .setValue(this.plugin.settings.bookNote.patterns.abandoned.join('\n'))
-                    .onChange(async (value) => {
-                        this.plugin.settings.bookNote.patterns.abandoned = value.split('\n').filter((x) => x)
+            .addText((field) => {
+                field.setValue(this.plugin.settings.bookNote.patterns.abandoned).onChange(async (value) => {
+                    this.plugin.settings.bookNote.patterns.abandoned = value
 
-                        await this.plugin.saveSettings()
-                    })
+                    await this.plugin.saveSettings()
+                })
 
-                textArea.inputEl.style.width = '100%'
-                textArea.inputEl.rows = 4
+                field.inputEl.style.width = '100%'
             })
 
         new Setting(containerEl)
-            .setName('Finished Patterns')
+            .setName('Finished Book')
             .setDesc('{date}, {*}')
-            .addTextArea((textArea) => {
-                textArea
-                    .setValue(this.plugin.settings.bookNote.patterns.finished.join('\n'))
-                    .onChange(async (value) => {
-                        this.plugin.settings.bookNote.patterns.finished = value.split('\n').filter((x) => x)
+            .addText((field) => {
+                field.setValue(this.plugin.settings.bookNote.patterns.finished).onChange(async (value) => {
+                    this.plugin.settings.bookNote.patterns.finished = value
 
-                        await this.plugin.saveSettings()
-                    })
+                    await this.plugin.saveSettings()
+                })
 
-                textArea.inputEl.style.width = '100%'
-                textArea.inputEl.rows = 4
+                field.inputEl.style.width = '100%'
             })
 
         new Setting(containerEl)
-            .setName('Absolute Progress Patterns')
+            .setName('Reading Progress (absolute)')
             .setDesc('{date}, {startPage}, {endPage}, {*}')
-            .addTextArea((textArea) => {
-                textArea
-                    .setValue(this.plugin.settings.bookNote.patterns.absoluteProgress.join('\n'))
-                    .onChange(async (value) => {
-                        this.plugin.settings.bookNote.patterns.absoluteProgress = value.split('\n').filter((x) => x)
+            .addText((field) => {
+                field.setValue(this.plugin.settings.bookNote.patterns.absoluteProgress).onChange(async (value) => {
+                    this.plugin.settings.bookNote.patterns.absoluteProgress = value
 
-                        await this.plugin.saveSettings()
-                    })
+                    await this.plugin.saveSettings()
+                })
 
-                textArea.inputEl.style.width = '100%'
-                textArea.inputEl.rows = 4
+                field.inputEl.style.width = '100%'
             })
 
         new Setting(containerEl)
-            .setName('Relative Progress Patterns')
+            .setName('Reading Progress (relative)')
             .setDesc('{date}, {endPage}, {*}')
-            .addTextArea((textArea) => {
-                textArea
-                    .setValue(this.plugin.settings.bookNote.patterns.relativeProgress.join('\n'))
-                    .onChange(async (value) => {
-                        this.plugin.settings.bookNote.patterns.relativeProgress = value.split('\n').filter((x) => x)
+            .addText((field) => {
+                field.setValue(this.plugin.settings.bookNote.patterns.relativeProgress).onChange(async (value) => {
+                    this.plugin.settings.bookNote.patterns.relativeProgress = value
 
-                        await this.plugin.saveSettings()
-                    })
+                    await this.plugin.saveSettings()
+                })
 
-                textArea.inputEl.style.width = '100%'
-                textArea.inputEl.rows = 4
+                field.inputEl.style.width = '100%'
             })
     }
 
@@ -174,83 +161,68 @@ export class BookshelfSettingsTab extends PluginSettingTab {
         new Setting(containerEl).setName('Daily Note Patterns').setHeading()
 
         new Setting(containerEl)
-            .setName('Started Patterns')
+            .setName('Started Book')
             .setDesc('{book}, {*}')
-            .addTextArea((textArea) => {
-                textArea
-                    .setValue(this.plugin.settings.dailyNote.patterns.started.join('\n'))
-                    .onChange(async (value) => {
-                        this.plugin.settings.dailyNote.patterns.started = value.split('\n').filter((x) => x)
+            .addText((field) => {
+                field.setValue(this.plugin.settings.dailyNote.patterns.started).onChange(async (value) => {
+                    this.plugin.settings.dailyNote.patterns.started = value
 
-                        await this.plugin.saveSettings()
-                    })
+                    await this.plugin.saveSettings()
+                })
 
-                textArea.inputEl.style.width = '100%'
-                textArea.inputEl.rows = 4
+                field.inputEl.style.width = '100%'
             })
 
         new Setting(containerEl)
-            .setName('Abandoned Patterns')
+            .setName('Abandoned Book')
             .setDesc('{book}, {*}')
-            .addTextArea((textArea) => {
-                textArea
-                    .setValue(this.plugin.settings.dailyNote.patterns.abandoned.join('\n'))
-                    .onChange(async (value) => {
-                        this.plugin.settings.dailyNote.patterns.abandoned = value.split('\n').filter((x) => x)
+            .addText((field) => {
+                field.setValue(this.plugin.settings.dailyNote.patterns.abandoned).onChange(async (value) => {
+                    this.plugin.settings.dailyNote.patterns.abandoned = value
 
-                        await this.plugin.saveSettings()
-                    })
+                    await this.plugin.saveSettings()
+                })
 
-                textArea.inputEl.style.width = '100%'
-                textArea.inputEl.rows = 4
+                field.inputEl.style.width = '100%'
             })
 
         new Setting(containerEl)
-            .setName('Finished Patterns')
+            .setName('Finished Book')
             .setDesc('{book}, {*}')
-            .addTextArea((textArea) => {
-                textArea
-                    .setValue(this.plugin.settings.dailyNote.patterns.finished.join('\n'))
-                    .onChange(async (value) => {
-                        this.plugin.settings.dailyNote.patterns.finished = value.split('\n').filter((x) => x)
+            .addText((field) => {
+                field.setValue(this.plugin.settings.dailyNote.patterns.finished).onChange(async (value) => {
+                    this.plugin.settings.dailyNote.patterns.finished = value
 
-                        await this.plugin.saveSettings()
-                    })
+                    await this.plugin.saveSettings()
+                })
 
-                textArea.inputEl.style.width = '100%'
-                textArea.inputEl.rows = 4
+                field.inputEl.style.width = '100%'
             })
 
         new Setting(containerEl)
-            .setName('Absolute Progress Patterns')
+            .setName('Reading Progress (absolute)')
             .setDesc('{book}, {startPage}, {endPage}, {*}')
-            .addTextArea((textArea) => {
-                textArea
-                    .setValue(this.plugin.settings.dailyNote.patterns.absoluteProgress.join('\n'))
-                    .onChange(async (value) => {
-                        this.plugin.settings.dailyNote.patterns.absoluteProgress = value.split('\n').filter((x) => x)
+            .addText((field) => {
+                field.setValue(this.plugin.settings.dailyNote.patterns.absoluteProgress).onChange(async (value) => {
+                    this.plugin.settings.dailyNote.patterns.absoluteProgress = value
 
-                        await this.plugin.saveSettings()
-                    })
+                    await this.plugin.saveSettings()
+                })
 
-                textArea.inputEl.style.width = '100%'
-                textArea.inputEl.rows = 4
+                field.inputEl.style.width = '100%'
             })
 
         new Setting(containerEl)
-            .setName('Relative Progress Patterns')
+            .setName('Reading Progress (relative)')
             .setDesc('{book}, {endPage}, {*}')
-            .addTextArea((textArea) => {
-                textArea
-                    .setValue(this.plugin.settings.dailyNote.patterns.relativeProgress.join('\n'))
-                    .onChange(async (value) => {
-                        this.plugin.settings.dailyNote.patterns.relativeProgress = value.split('\n').filter((x) => x)
+            .addText((field) => {
+                field.setValue(this.plugin.settings.dailyNote.patterns.relativeProgress).onChange(async (value) => {
+                    this.plugin.settings.dailyNote.patterns.relativeProgress = value
 
-                        await this.plugin.saveSettings()
-                    })
+                    await this.plugin.saveSettings()
+                })
 
-                textArea.inputEl.style.width = '100%'
-                textArea.inputEl.rows = 4
+                field.inputEl.style.width = '100%'
             })
     }
 }
