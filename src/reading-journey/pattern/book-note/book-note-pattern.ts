@@ -22,38 +22,44 @@ interface Patterns {
     abandoned: string
 }
 
-export function bookNotePatterns(patterns: Patterns, dateFormat: string): PatternCollection<BookNotePatternMatches> {
+interface Result {
+    patterns: PatternCollection<BookNotePatternMatches>
+    hasErrors: boolean
+}
+
+export function bookNotePatterns(patterns: Patterns, dateFormat: string): Result {
     const result = []
+    let hasErrors = false
 
     try {
         result.push(new BookNoteActionPattern(patterns.started, 'started', dateFormat))
-    } catch (error) {
-        console.error(`Error processing pattern "${patterns.started}: ${error}`)
+    } catch {
+        hasErrors = true
     }
 
     try {
         result.push(new BookNoteActionPattern(patterns.finished, 'finished', dateFormat))
-    } catch (error) {
-        console.error(`Error processing pattern "${patterns.finished}: ${error}`)
+    } catch {
+        hasErrors = true
     }
 
     try {
         result.push(new BookNoteActionPattern(patterns.abandoned, 'abandoned', dateFormat))
-    } catch (error) {
-        console.error(`Error processing pattern "${patterns.abandoned}: ${error}`)
+    } catch {
+        hasErrors = true
     }
 
     try {
         result.push(new BookNoteAbsoluteProgressPattern(patterns.absoluteProgress, dateFormat))
-    } catch (error) {
-        console.error(`Error processing pattern "${patterns.absoluteProgress}: ${error}`)
+    } catch {
+        hasErrors = true
     }
 
     try {
         result.push(new BookNoteRelativeProgressPattern(patterns.relativeProgress, dateFormat))
-    } catch (error) {
-        console.error(`Error processing pattern "${patterns.relativeProgress}: ${error}`)
+    } catch {
+        hasErrors = true
     }
 
-    return new PatternCollection(result)
+    return { patterns: new PatternCollection(result), hasErrors }
 }

@@ -24,12 +24,15 @@ export default class BookshelfPlugin extends Plugin {
     async onload() {
         await this.loadSettings()
 
+        const bnResult = bookNotePatterns(this.settings.bookNote.patterns, this.settings.bookNote.dateFormat)
+        const dnResult = dailyNotePatterns(this.settings.dailyNote.patterns)
+
         this.bookshelf = new Bookshelf(
             this.settings.booksFolder,
             this.dailyNotesSettings(),
             new BookMetadataFactory(this.settings.bookProperties, this.linkToUri.bind(this)),
-            bookNotePatterns(this.settings.bookNote.patterns, this.settings.bookNote.dateFormat),
-            dailyNotePatterns(this.settings.dailyNote.patterns),
+            bnResult.patterns,
+            dnResult.patterns,
             this.bookIdentifier.bind(this),
         )
 
