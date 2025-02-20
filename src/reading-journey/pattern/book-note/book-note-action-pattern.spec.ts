@@ -39,6 +39,12 @@ it.each([
     {
         pattern: '{date}: my-keyword',
         action: 'started',
+        input: '1234-56-78: bar',
+        expected: null,
+    },
+    {
+        pattern: '{date}: my-keyword',
+        action: 'started',
         input: '2025-02-13: my-keyword with extra text',
         expected: null,
     },
