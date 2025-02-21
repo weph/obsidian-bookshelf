@@ -5,8 +5,8 @@ import { Statistics } from './statistics'
 import { ReadingJourney } from './reading-journey/reading-journey'
 import { Note } from './note'
 import { BookMetadataFactory } from './book-metadata-factory'
-import { BookNotePatternMatches } from './reading-journey/pattern/book-note/book-note-pattern'
-import { DailyNotePatternMatches } from './reading-journey/pattern/daily-note/daily-note-pattern'
+import { BookNoteMatch } from './reading-journey/pattern/book-note/book-note-pattern'
+import { DailyNoteMatch } from './reading-journey/pattern/daily-note/daily-note-pattern'
 import { PatternCollection } from './reading-journey/pattern/pattern-collection'
 import { DailyNotesSettings } from './obsidian/bookshelf-plugin'
 
@@ -30,8 +30,8 @@ export class Bookshelf {
         private readonly booksFolder: string,
         private readonly dailyNoteSettings: DailyNotesSettings,
         private readonly bookMetadataFactory: BookMetadataFactory,
-        private readonly bookNotePatterns: PatternCollection<BookNotePatternMatches>,
-        private readonly dailyNotePatterns: PatternCollection<DailyNotePatternMatches>,
+        private readonly bookNotePatterns: PatternCollection<BookNoteMatch>,
+        private readonly dailyNotePatterns: PatternCollection<DailyNoteMatch>,
         private readonly bookIdentifier: (input: string) => string,
     ) {}
 
@@ -80,7 +80,7 @@ export class Bookshelf {
         return note.path.startsWith(this.booksFolder)
     }
 
-    private async processReadingJourney<T extends BookNotePatternMatches | DailyNotePatternMatches>(
+    private async processReadingJourney<T extends BookNoteMatch | DailyNoteMatch>(
         note: Note,
         patterns: PatternCollection<T>,
         identifierValue: (matches: T) => string,

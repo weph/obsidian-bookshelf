@@ -1,18 +1,26 @@
 import { PatternCollection } from '../pattern-collection'
-import {
-    BookNoteRelativeProgressPattern,
-    BookNoteRelativeProgressPatternMatches,
-} from './book-note-relative-progress-pattern'
-import { BookNoteActionPattern, BookNoteActionPatternMatches } from './book-note-action-pattern'
-import {
-    BookNoteAbsoluteProgressPattern,
-    BookNoteAbsoluteProgressPatternMatches,
-} from './book-note-absolute-progress-pattern'
+import { patternMatcher, transformer } from '../pattern'
+import { DateTime } from 'luxon'
 
-export type BookNotePatternMatches =
-    | BookNoteRelativeProgressPatternMatches
-    | BookNoteAbsoluteProgressPatternMatches
-    | BookNoteActionPatternMatches
+interface ActionMatch {
+    action: 'started' | 'finished' | 'abandoned'
+    date: Date
+}
+
+interface AbsoluteProgressMatch {
+    action: 'absolute-progress'
+    date: Date
+    startPage: number
+    endPage: number
+}
+
+interface RelativeProgressMatch {
+    action: 'relative-progress'
+    date: Date
+    endPage: number
+}
+
+export type BookNoteMatch = RelativeProgressMatch | AbsoluteProgressMatch | ActionMatch
 
 interface Patterns {
     absoluteProgress: string
@@ -23,8 +31,69 @@ interface Patterns {
 }
 
 interface Result {
-    patterns: PatternCollection<BookNotePatternMatches>
+    patterns: PatternCollection<BookNoteMatch>
     hasErrors: boolean
+}
+
+function actionMatcher(pattern: string, action: ActionMatch['action'], dateFormat: string) {
+    return transformer(patternMatcher({ date: '.+' }, pattern), (matches): BookNoteMatch | null => {
+        const dateObject = DateTime.fromFormat(matches.date, dateFormat)
+        if (!dateObject.isValid) {
+            return null
+        }
+
+        return { ...matches, date: dateObject.toJSDate(), action }
+    })
+}
+
+function absoluteProgressMatcher(pattern: string, dateFormat: string) {
+    return transformer(
+        patternMatcher(
+            {
+                date: '.+',
+                startPage: '\\d+',
+                endPage: '\\d+',
+            },
+            pattern,
+        ),
+        (matches): BookNoteMatch | null => {
+            const dateObject = DateTime.fromFormat(matches.date, dateFormat)
+            if (!dateObject.isValid) {
+                return null
+            }
+
+            return {
+                action: 'absolute-progress',
+                date: dateObject.toJSDate(),
+                startPage: parseInt(matches.startPage),
+                endPage: parseInt(matches.endPage),
+            }
+        },
+    )
+}
+
+function relativeProgressMatcher(pattern: string, dateFormat: string) {
+    return transformer(
+        patternMatcher(
+            {
+                date: '.+',
+                endPage: '\\d+',
+            },
+            pattern,
+        ),
+        (matches): BookNoteMatch | null => {
+            const dateObject = DateTime.fromFormat(matches.date, dateFormat)
+            if (!dateObject.isValid) {
+                return null
+            }
+
+            return {
+                action: 'relative-progress',
+                date: dateObject.toJSDate(),
+                endPage: parseInt(matches.endPage),
+            }
+        },
+    )
 }
 
 export function bookNotePatterns(patterns: Patterns, dateFormat: string): Result {
@@ -32,31 +101,31 @@ export function bookNotePatterns(patterns: Patterns, dateFormat: string): Result
     let hasErrors = false
 
     try {
-        result.push(new BookNoteActionPattern(patterns.started, 'started', dateFormat))
+        result.push(actionMatcher(patterns.started, 'started', dateFormat))
     } catch {
         hasErrors = true
     }
 
     try {
-        result.push(new BookNoteActionPattern(patterns.finished, 'finished', dateFormat))
+        result.push(actionMatcher(patterns.finished, 'finished', dateFormat))
     } catch {
         hasErrors = true
     }
 
     try {
-        result.push(new BookNoteActionPattern(patterns.abandoned, 'abandoned', dateFormat))
+        result.push(actionMatcher(patterns.abandoned, 'abandoned', dateFormat))
     } catch {
         hasErrors = true
     }
 
     try {
-        result.push(new BookNoteAbsoluteProgressPattern(patterns.absoluteProgress, dateFormat))
+        result.push(absoluteProgressMatcher(patterns.absoluteProgress, dateFormat))
     } catch {
         hasErrors = true
     }
 
     try {
-        result.push(new BookNoteRelativeProgressPattern(patterns.relativeProgress, dateFormat))
+        result.push(relativeProgressMatcher(patterns.relativeProgress, dateFormat))
     } catch {
         hasErrors = true
     }

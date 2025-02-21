@@ -1,18 +1,25 @@
-import {
-    DailyNoteAbsoluteProgressPattern,
-    DailyNoteAbsoluteProgressPatternMatches,
-} from './daily-note-absolute-progress-pattern'
-import { DailyNoteActionPattern, DailyNoteActionPatternMatches } from './daily-note-action-pattern'
 import { PatternCollection } from '../pattern-collection'
-import {
-    DailyNoteRelativeProgressPattern,
-    DailyNoteRelativeProgressPatternMatches,
-} from './daily-note-relative-progress-pattern'
+import { patternMatcher, transformer } from '../pattern'
 
-export type DailyNotePatternMatches =
-    | DailyNoteRelativeProgressPatternMatches
-    | DailyNoteAbsoluteProgressPatternMatches
-    | DailyNoteActionPatternMatches
+interface ActionMatch {
+    action: 'started' | 'finished' | 'abandoned'
+    book: string
+}
+
+interface AbsoluteProgressMatch {
+    action: 'absolute-progress'
+    book: string
+    startPage: number
+    endPage: number
+}
+
+interface RelativeProgressMatch {
+    action: 'relative-progress'
+    book: string
+    endPage: number
+}
+
+export type DailyNoteMatch = RelativeProgressMatch | AbsoluteProgressMatch | ActionMatch
 
 interface Patterns {
     absoluteProgress: string
@@ -23,8 +30,48 @@ interface Patterns {
 }
 
 interface Result {
-    patterns: PatternCollection<DailyNotePatternMatches>
+    patterns: PatternCollection<DailyNoteMatch>
     hasErrors: boolean
+}
+
+function actionMatcher(pattern: string, action: ActionMatch['action']) {
+    return transformer(patternMatcher({ book: '.+' }, pattern), (matches): ActionMatch => ({ ...matches, action }))
+}
+
+function absoluteProgressMatcher(pattern: string) {
+    return transformer(
+        patternMatcher(
+            {
+                book: '.+',
+                startPage: '\\d+',
+                endPage: '\\d+',
+            },
+            pattern,
+        ),
+        (matches): DailyNoteMatch => ({
+            action: 'absolute-progress',
+            book: matches.book,
+            startPage: parseInt(matches.startPage),
+            endPage: parseInt(matches.endPage),
+        }),
+    )
+}
+
+function relativeProgressMatcher(pattern: string) {
+    return transformer(
+        patternMatcher(
+            {
+                book: '.+',
+                endPage: '\\d+',
+            },
+            pattern,
+        ),
+        (matches): DailyNoteMatch => ({
+            action: 'relative-progress',
+            book: matches.book,
+            endPage: parseInt(matches.endPage),
+        }),
+    )
 }
 
 export function dailyNotePatterns(patterns: Patterns): Result {
@@ -32,31 +79,31 @@ export function dailyNotePatterns(patterns: Patterns): Result {
     let hasErrors = false
 
     try {
-        result.push(new DailyNoteActionPattern(patterns.started, 'started'))
+        result.push(actionMatcher(patterns.started, 'started'))
     } catch {
         hasErrors = true
     }
 
     try {
-        result.push(new DailyNoteActionPattern(patterns.finished, 'finished'))
+        result.push(actionMatcher(patterns.finished, 'finished'))
     } catch {
         hasErrors = true
     }
 
     try {
-        result.push(new DailyNoteActionPattern(patterns.abandoned, 'abandoned'))
+        result.push(actionMatcher(patterns.abandoned, 'abandoned'))
     } catch {
         hasErrors = true
     }
 
     try {
-        result.push(new DailyNoteAbsoluteProgressPattern(patterns.absoluteProgress))
+        result.push(absoluteProgressMatcher(patterns.absoluteProgress))
     } catch {
         hasErrors = true
     }
 
     try {
-        result.push(new DailyNoteRelativeProgressPattern(patterns.relativeProgress))
+        result.push(relativeProgressMatcher(patterns.relativeProgress))
     } catch {
         hasErrors = true
     }
