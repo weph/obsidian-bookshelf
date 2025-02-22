@@ -12,6 +12,7 @@ import { DailyNotesSettings } from './obsidian/bookshelf-plugin'
 
 class BookshelfBook implements Book {
     constructor(
+        public readonly note: Note | null,
         public metadata: BookMetadata,
         private readonly bookshelf: Bookshelf,
     ) {}
@@ -51,7 +52,7 @@ export class Bookshelf {
         if (this.has(identifier)) {
             this.update(identifier, bookMetadata)
         } else {
-            this.add(identifier, bookMetadata)
+            this.add(identifier, note, bookMetadata)
         }
 
         await this.processReadingJourney(
@@ -99,7 +100,7 @@ export class Bookshelf {
             const date = dateValue(matches)
 
             if (!this.has(identifier)) {
-                this.add(identifier, { title: identifier })
+                this.add(identifier, null, { title: identifier })
             }
 
             const book = this.book(identifier)
@@ -122,8 +123,8 @@ export class Bookshelf {
         return this.books.has(identifier)
     }
 
-    private add(identifier: string, metadata: BookMetadata): void {
-        this.books.set(identifier, new BookshelfBook(metadata, this))
+    private add(identifier: string, note: Note | null, metadata: BookMetadata): void {
+        this.books.set(identifier, new BookshelfBook(note, metadata, this))
     }
 
     private update(identifier: string, metadata: BookMetadata): void {

@@ -10,6 +10,7 @@
         "!src/default-book-sort-options.ts",
         "!src/bookshelf-error.ts",
         "!src/component/book-details/*",
+        "!src/component/button/*",
         "!src/component/gallery/*",
         "!src/component/reading-progress-bar-chart/*",
         "!src/component/statistics/**/*",

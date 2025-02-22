@@ -1,4 +1,5 @@
 import { ReadingJourney } from './reading-journey/reading-journey'
+import { Note } from './note'
 
 export interface BookMetadata {
     readonly title: string
@@ -9,6 +10,7 @@ export interface BookMetadata {
 }
 
 export interface Book {
+    note: Note | null
     metadata: BookMetadata
     readingJourney: ReadingJourney
 }

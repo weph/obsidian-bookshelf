@@ -1,9 +1,11 @@
 import { Book } from '../../book'
 import '../reading-progress-bar-chart/reading-progress-bar-chart'
+import '../button/button'
 import { ReadingProgressBarChart } from '../reading-progress-bar-chart/reading-progress-bar-chart'
 
 export interface BookDetailsProps {
     book: Book
+    openNote: (book: Book) => void
 }
 
 export class BookDetails extends HTMLElement implements BookDetailsProps {
@@ -12,6 +14,8 @@ export class BookDetails extends HTMLElement implements BookDetailsProps {
     private _book: Book
 
     private readingProgressChart: ReadingProgressBarChart
+
+    public openNote: (book: Book) => void = () => {}
 
     constructor() {
         super()
@@ -32,11 +36,16 @@ export class BookDetails extends HTMLElement implements BookDetailsProps {
                     <div id="cover">
                         ${cover ? `<img src="${cover}" alt="${title}" />` : ''}
                     </div>
-                    <ul id="details">
-                        ${authors?.length ? `<li><strong>Author:</strong> ${authors.join(', ')}</li>` : ''}
-                        ${published ? `<li><strong>Published:</strong> ${published.getFullYear()}</li>` : ''}
-                        ${tags?.length ? `<li><strong>Tags:</strong> ${tags.join(', ')}</li>` : ''}
-                    </ul>
+                    <div id="details">
+                        <ul id="metadata">
+                            ${authors?.length ? `<li><strong>Author:</strong> ${authors.join(', ')}</li>` : ''}
+                            ${published ? `<li><strong>Published:</strong> ${published.getFullYear()}</li>` : ''}
+                            ${tags?.length ? `<li><strong>Tags:</strong> ${tags.join(', ')}</li>` : ''}
+                        </ul>
+                        <div id="actions">
+                            <bookshelf-ui-button id="open-note" text="Open Note"></bookshelf-ui-button>
+                        </div>
+                    </div>
                 </div>
                 <bookshelf-reading-progress-bar-chart></bookshelf-reading-progress-bar-chart>
             </main>
@@ -57,21 +66,33 @@ export class BookDetails extends HTMLElement implements BookDetailsProps {
                 }
                 
                 #details {
+                    display: flex;
+                    flex-direction: column;
+                    flex-grow: 1;
+                }
+                
+                #metadata {
+                    flex-grow: 1;
                     list-style: none;
                     padding: 0;
                     margin: 0;
                 }
                 
-                #details li {
+                #metadata li {
                     padding: 2px;
+                }
+                
+                #actions {
+                    display: flex;
+                    justify-content: flex-end;
                 }
             </style>
         `
 
-        this.readingProgressChart = this.root.querySelector(
-            'bookshelf-reading-progress-bar-chart',
-        ) as ReadingProgressBarChart
+        this.readingProgressChart = this.root.querySelector('bookshelf-reading-progress-bar-chart')!
         this.readingProgressChart.readingJourney = this.book.readingJourney.items()
+
+        this.root.querySelector('#open-note')!.addEventListener('click', () => this.openNote(this._book))
     }
 
     get book() {

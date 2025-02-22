@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/html'
 import './book-details'
 import { BookDetailsProps } from './book-details'
 import { BookBuilder } from '../../support/book-builder'
+import { fn } from '@storybook/test'
 
 const meta = {
     title: 'Book Details',
@@ -11,6 +12,9 @@ const meta = {
         Object.assign(element, args)
 
         return element
+    },
+    args: {
+        openNote: fn(),
     },
 } satisfies Meta<BookDetailsProps>
 

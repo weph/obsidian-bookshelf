@@ -5,6 +5,16 @@ body {
     --bookshelf--ui--input--font-weight: var(--input-font-weight);
     --bookshelf--ui--input--padding: var(--size-4-1) var(--size-4-2);
 
+    --bookshelf--ui--button--height: var(--input-height);
+    --bookshelf--ui--button--border-radius: var(--button-radius);
+    --bookshelf--ui--button--border-width: 0;
+    --bookshelf--ui--button--box-shadow: var(--input-shadow);
+    --bookshelf--ui--button--font-weight: inherit;
+    --bookshelf--ui--button--background: var(--interactive-normal);
+    --bookshelf--ui--button--padding: var(--size-4-1) var(--size-4-3);
+    --bookshelf--ui--button--hover--background: var(--interactive-hover);
+    --bookshelf--ui--button--hover--box-shadow: var(--input-shadow-hover);
+
     --bookshelf--ui--dropdown--height: var(--input-height);
     --bookshelf--ui--dropdown--border-color: var(--background-modifier-border);
     --bookshelf--ui--dropdown--border-radius: var(--input-radius);
