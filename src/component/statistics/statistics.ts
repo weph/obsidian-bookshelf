@@ -5,9 +5,11 @@ import { Dropdown } from '../dropdown/dropdown'
 import { Bookshelf } from '../../bookshelf'
 import { Gallery } from '../gallery/gallery'
 import { TagUsageChart } from './tag-usage-chart/tag-usage-chart'
+import { Book } from '../../book'
 
 export interface StatisticsProps {
     bookshelf: Bookshelf
+    onBookClick: ((book: Book) => void) | null
 }
 
 export class Statistics extends HTMLElement implements StatisticsProps {
@@ -24,6 +26,8 @@ export class Statistics extends HTMLElement implements StatisticsProps {
     private _bookshelf: Bookshelf
 
     private _year: number | null = null
+
+    public onBookClick: ((book: Book) => void) | null
 
     constructor() {
         super()
@@ -82,6 +86,7 @@ export class Statistics extends HTMLElement implements StatisticsProps {
         this.pagesReadChart = this.root.querySelector('bookshelf-statistics-pages-read-chart')!
         this.tagUsageChart = this.root.querySelector('bookshelf-statistics-tag-usage-chart')!
         this.gallery = this.root.querySelector('bookshelf-gallery')!
+        this.gallery.onBookClick = (book) => this.onBookClick && this.onBookClick(book)
 
         this.yearsDropdown.onChange = (value) => (this.year = value)
     }
