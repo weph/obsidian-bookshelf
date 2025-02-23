@@ -26,6 +26,7 @@ beforeEach(() => {
                 author: 'author',
                 published: 'published',
                 tags: 'tags',
+                rating: 'rating',
             },
             (link) => link,
         ),

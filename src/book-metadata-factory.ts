@@ -9,6 +9,7 @@ interface PropertyNames {
     author: string
     published: string
     tags: string
+    rating: string
 }
 
 export class BookMetadataFactory {
@@ -24,6 +25,7 @@ export class BookMetadataFactory {
             authors: this.authors(metadata),
             published: this.published(metadata),
             tags: this.tags(metadata),
+            rating: this.rating(metadata),
         }
     }
 
@@ -92,6 +94,23 @@ export class BookMetadataFactory {
 
         if (typeof value === 'string') {
             return [value]
+        }
+
+        return undefined
+    }
+
+    private rating(metadata: Metadata): number | undefined {
+        const value = metadata.value(this.propertyNames.rating)
+
+        if (typeof value === 'number') {
+            return value
+        }
+
+        if (typeof value === 'string') {
+            const parsedValue = parseFloat(value)
+            if (!isNaN(parsedValue)) {
+                return parsedValue
+            }
         }
 
         return undefined

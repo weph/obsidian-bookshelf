@@ -8,6 +8,7 @@ const factory = new BookMetadataFactory(
         author: 'author',
         published: 'published',
         tags: 'tags',
+        rating: 'rating',
     },
     (link) => `uri://${link}`,
 )
@@ -155,5 +156,43 @@ describe('Tags', () => {
         const result = factory.create('Title', new StaticMetadata({ tags: 'foo' }))
 
         expect(result.tags).toEqual(['foo'])
+    })
+})
+
+describe('Rating', () => {
+    it('should be undefined if property is not set', () => {
+        const result = factory.create('Title', new StaticMetadata({}))
+
+        expect(result.rating).toBeUndefined()
+    })
+
+    it('should be used as is if property value is an integer', () => {
+        const result = factory.create('Title', new StaticMetadata({ rating: 3 }))
+
+        expect(result.rating).toEqual(3)
+    })
+
+    it('should be used as is if property value is a float', () => {
+        const result = factory.create('Title', new StaticMetadata({ rating: 3.5 }))
+
+        expect(result.rating).toEqual(3.5)
+    })
+
+    it('should be converted if it is a numeric string', () => {
+        const result = factory.create('Title', new StaticMetadata({ rating: '3.5' }))
+
+        expect(result.rating).toEqual(3.5)
+    })
+
+    it('should be undefined if property value is a string', () => {
+        const result = factory.create('Title', new StaticMetadata({ rating: 'foo' }))
+
+        expect(result.rating).toBeUndefined()
+    })
+
+    it('should be undefined if property value is an array', () => {
+        const result = factory.create('Title', new StaticMetadata({ rating: [3] }))
+
+        expect(result.rating).toBeUndefined()
     })
 })

@@ -7,6 +7,7 @@ export interface BookMetadata {
     readonly authors?: Array<string>
     readonly published?: Date
     readonly tags?: Array<string>
+    readonly rating?: number
 }
 
 export interface Book {

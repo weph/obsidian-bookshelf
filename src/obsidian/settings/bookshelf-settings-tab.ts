@@ -71,6 +71,17 @@ export class BookshelfSettingsTab extends PluginSettingTab {
                     await this.plugin.saveSettings()
                 }),
             )
+
+        new Setting(containerEl)
+            .setName('Rating')
+            .setDesc("Name of the property that holds the book's rating")
+            .addText((text) =>
+                text.setValue(this.plugin.settings.bookProperties.rating).onChange(async (value) => {
+                    this.plugin.settings.bookProperties.rating = value
+
+                    await this.plugin.saveSettings()
+                }),
+            )
     }
 
     private addBookNoteSettings(): void {

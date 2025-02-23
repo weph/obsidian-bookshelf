@@ -25,6 +25,7 @@ export class Table extends HTMLElement implements TableProps {
                         <th>Title</th>
                         <th>Author</th>
                         <th>Published</th>
+                        <th>Rating</th>
                         <th>Tags</th>
                     </tr>
                 </thead>
@@ -64,6 +65,7 @@ export class Table extends HTMLElement implements TableProps {
                 <td>${book.metadata.title}</td>
                 <td>${book.metadata.authors?.join('<br />') || ''}</td>
                 <td>${book.metadata.published?.getFullYear() || ''}</td>
+                <td>${book.metadata.rating || ''}</td>
                 <td>${book.metadata.tags?.join(', ') || ''}</td>
             </tr>
         `,

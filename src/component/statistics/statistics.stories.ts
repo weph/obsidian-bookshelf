@@ -35,6 +35,7 @@ const bookshelf = new Bookshelf(
             author: 'author',
             published: 'published',
             tags: 'tags',
+            rating: 'rating',
         },
         (link) => link,
     ),

@@ -28,6 +28,7 @@ export class BookDetails extends HTMLElement implements BookDetailsProps {
         const title = this.book.metadata.title
         const authors = this.book.metadata.authors
         const published = this.book.metadata.published
+        const rating = this.book.metadata.rating
         const tags = this.book.metadata.tags
 
         this.root.innerHTML = `
@@ -40,6 +41,7 @@ export class BookDetails extends HTMLElement implements BookDetailsProps {
                         <ul id="metadata">
                             ${authors?.length ? `<li><strong>Author:</strong> ${authors.join(', ')}</li>` : ''}
                             ${published ? `<li><strong>Published:</strong> ${published.getFullYear()}</li>` : ''}
+                            ${rating ? `<li><strong>Rating:</strong> ${rating}</li>` : ''}
                             ${tags?.length ? `<li><strong>Tags:</strong> ${tags.join(', ')}</li>` : ''}
                         </ul>
                         <div id="actions">
