@@ -28,6 +28,7 @@ export const Primary: Story = {
             .with('cover', '/covers/test-driven-development-by-example.jpg')
             .with('authors', ['Kent Beck'])
             .with('published', new Date(2002, 0, 1))
+            .with('rating', 3.5)
             .withReadingProgress(new Date(2025, 0, 1), 1, 10)
             .withReadingProgress(new Date(2025, 0, 2), 11, 50)
             .withReadingProgress(new Date(2025, 0, 3), 51, 100)

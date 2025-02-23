@@ -13,6 +13,7 @@
         "!src/component/button/*",
         "!src/component/gallery/*",
         "!src/component/reading-progress-bar-chart/*",
+        "!src/component/star-rating/*",
         "!src/component/statistics/**/*",
         "!src/component/table/*",
         "!src/support/*"

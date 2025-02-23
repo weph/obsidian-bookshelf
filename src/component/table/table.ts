@@ -65,7 +65,7 @@ export class Table extends HTMLElement implements TableProps {
                 <td>${book.metadata.title}</td>
                 <td>${book.metadata.authors?.join('<br />') || ''}</td>
                 <td>${book.metadata.published?.getFullYear() || ''}</td>
-                <td>${book.metadata.rating || ''}</td>
+                <td><bookshelf-ui-star-rating value="${book.metadata.rating}"></bookshelf-ui-star-rating></td>
                 <td>${book.metadata.tags?.join(', ') || ''}</td>
             </tr>
         `,

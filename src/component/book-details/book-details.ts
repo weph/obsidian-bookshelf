@@ -1,6 +1,7 @@
 import { Book } from '../../book'
 import '../reading-progress-bar-chart/reading-progress-bar-chart'
 import '../button/button'
+import '../star-rating/star-rating'
 import { ReadingProgressBarChart } from '../reading-progress-bar-chart/reading-progress-bar-chart'
 
 export interface BookDetailsProps {
@@ -41,7 +42,7 @@ export class BookDetails extends HTMLElement implements BookDetailsProps {
                         <ul id="metadata">
                             ${authors?.length ? `<li><strong>Author:</strong> ${authors.join(', ')}</li>` : ''}
                             ${published ? `<li><strong>Published:</strong> ${published.getFullYear()}</li>` : ''}
-                            ${rating ? `<li><strong>Rating:</strong> ${rating}</li>` : ''}
+                            ${rating ? `<li><strong>Rating:</strong> <bookshelf-ui-star-rating id="rating" value="${rating}"></bookshelf-ui-star-rating></li>` : ''}
                             ${tags?.length ? `<li><strong>Tags:</strong> ${tags.join(', ')}</li>` : ''}
                         </ul>
                         <div id="actions">
@@ -87,6 +88,10 @@ export class BookDetails extends HTMLElement implements BookDetailsProps {
                 #actions {
                     display: flex;
                     justify-content: flex-end;
+                }
+                
+                #rating {
+                    display: inline-block;
                 }
             </style>
         `
