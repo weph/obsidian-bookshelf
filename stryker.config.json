@@ -14,6 +14,7 @@
         "!src/component/gallery/*",
         "!src/component/reading-progress-bar-chart/*",
         "!src/component/statistics/**/*",
+        "!src/component/table/*",
         "!src/support/*"
     ],
     "ignorePatterns": [".*/**/*", "reports/**/*", "src/**/*.stories.ts", "src/obsidian/**/*"],

@@ -1,5 +1,6 @@
 import { Book } from '../../book'
 import '../gallery/gallery'
+import '../table/table'
 import '../input/input'
 import '../dropdown/dropdown'
 import { Input } from '../input/input'
@@ -12,12 +13,16 @@ export interface LibraryProps {
     sortOptions: BookSortOptions
 }
 
+type ViewType = 'gallery' | 'table'
+
 export class Library extends HTMLElement implements LibraryProps {
     private root: ShadowRoot
 
     private searchInput: Input
 
-    private dropdown: Dropdown<string>
+    private sortOptionsDropdown: Dropdown<string>
+
+    private _view: ViewType
 
     private galleryContainer: HTMLElement
 
@@ -33,8 +38,13 @@ export class Library extends HTMLElement implements LibraryProps {
         this.root = this.attachShadow({ mode: 'open' })
         this.root.innerHTML = `
             <header>
-                <bookshelf-ui-input></bookshelf-ui-input>
-                <bookshelf-ui-dropdown></bookshelf-ui-dropdown>
+                <div id="header-left">
+                    <bookshelf-ui-input></bookshelf-ui-input>
+                    <bookshelf-ui-dropdown id="sort-options"></bookshelf-ui-dropdown>
+                </div>
+                <div id="header-right">
+                    <bookshelf-ui-dropdown id="view"></bookshelf-ui-dropdown>
+                </div>
             </header>
             <main>
             </main>
@@ -50,8 +60,15 @@ export class Library extends HTMLElement implements LibraryProps {
                     
                     display: flex;
                     flex-direction: row;
+                    justify-content: space-between;
                     gap: var(--size-4-3);
                     padding: var(--bookshelf--library--header-padding);
+                }
+                
+                #header-left {
+                    display: flex;
+                    flex-direction: row;
+                    gap: var(--size-4-3);
                 }
                 
                 main {
@@ -76,9 +93,17 @@ export class Library extends HTMLElement implements LibraryProps {
         this.searchInput.placeholder = 'Search...'
         this.searchInput.onUpdate = () => this.update()
 
-        this.dropdown = this.root.querySelector('bookshelf-ui-dropdown') as Dropdown
-        this.dropdown.onChange = () => this.update()
-        this.dropdown.label = 'Sort'
+        this.sortOptionsDropdown = this.root.querySelector('#sort-options')!
+        this.sortOptionsDropdown.onChange = () => this.update()
+        this.sortOptionsDropdown.label = 'Sort'
+
+        const viewDropdown: Dropdown<ViewType> = this.root.querySelector('#view')!
+        viewDropdown.label = 'View'
+        viewDropdown.options = [
+            { value: 'gallery', label: 'Gallery' },
+            { value: 'table', label: 'Table' },
+        ]
+        viewDropdown.onChange = (value) => (this.view = value)
 
         this.galleryContainer = this.root.querySelector('main') as HTMLElement
 
@@ -106,19 +131,31 @@ export class Library extends HTMLElement implements LibraryProps {
             return this.emptyState('No books found', 'Try a different search term or check your spelling.')
         }
 
+        if (this._view === 'table') {
+            return this.bookList(books)
+        }
+
         return this.bookGallery(books)
     }
 
     private sortFunction(): (a: Book, b: Book) => number {
-        if (!this.dropdown.value) {
+        if (!this.sortOptionsDropdown.value) {
             return () => 0
         }
 
-        return this._sortOptions.compareFunction(this.dropdown.value)
+        return this._sortOptions.compareFunction(this.sortOptionsDropdown.value)
     }
 
     private bookGallery(books: Array<Book>): HTMLElement {
         const gallery = document.createElement('bookshelf-gallery')
+        gallery.books = books
+        gallery.onBookClick = this._onBookClick
+
+        return gallery
+    }
+
+    private bookList(books: Array<Book>): HTMLElement {
+        const gallery = document.createElement('bookshelf-table')
         gallery.books = books
         gallery.onBookClick = this._onBookClick
 
@@ -148,7 +185,12 @@ export class Library extends HTMLElement implements LibraryProps {
 
     set sortOptions(value: BookSortOptions) {
         this._sortOptions = value
-        this.dropdown.options = this._sortOptions.titles().map((title) => ({ value: title, label: title }))
+        this.sortOptionsDropdown.options = this._sortOptions.titles().map((title) => ({ value: title, label: title }))
+        this.update()
+    }
+
+    set view(value: ViewType) {
+        this._view = value
         this.update()
     }
 }
