@@ -1,0 +1,10 @@
+{
+    "id": "bookshelf",
+    "name": "Bookshelf",
+    "version": "0.1.0",
+    "minAppVersion": "1.0.0",
+    "description": "Manage your books and reading progress in Obsidian",
+    "author": "Philip Weinke <its@weph.dev>",
+    "authorUrl": "https://weph.dev/",
+    "isDesktopOnly": false
+}

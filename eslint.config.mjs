@@ -14,7 +14,7 @@ const gitignorePath = path.resolve(__dirname, '.gitignore')
 export default [
     includeIgnoreFile(gitignorePath),
     {
-        ignores: ['version-bump.mjs'],
+        ignores: ['version-bump.mjs', 'resources/**/*'],
     },
     {
         files: ['**/*.{js,mjs,cjs,ts}'],

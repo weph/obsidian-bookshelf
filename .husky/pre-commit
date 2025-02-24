@@ -3,3 +3,6 @@ npm run style:format
 git add -u
 npm run test
 npm run test:mutation
+npm run build
+cp main.js styles.css manifest.json resources/demo-vault/.obsidian/plugins/bookshelf/
+git add resources/demo-vault/.obsidian/plugins/bookshelf/
