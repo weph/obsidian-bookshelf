@@ -1,7 +1,7 @@
-import { Book, BookMetadata } from '../book'
-import { ReadingJourneyItem } from '../reading-journey/reading-journey-log'
-import { ReadingJourney } from '../reading-journey/reading-journey'
-import { Note } from '../note'
+import { Book, BookMetadata } from '../bookshelf/book'
+import { ReadingJourneyItem } from '../bookshelf/reading-journey/reading-journey-log'
+import { ReadingJourney } from '../bookshelf/reading-journey/reading-journey'
+import { Note } from '../bookshelf/note'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type OmitUnion<T, K extends keyof any> = T extends any ? Omit<T, K> : never

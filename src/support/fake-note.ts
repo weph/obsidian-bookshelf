@@ -1,5 +1,5 @@
-import { Note } from '../note'
-import { Metadata } from '../metadata/metadata'
+import { Note } from '../bookshelf/note'
+import { Metadata } from '../bookshelf/metadata/metadata'
 
 export class FakeNote implements Note {
     constructor(

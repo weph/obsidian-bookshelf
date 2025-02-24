@@ -4,9 +4,9 @@ import userEvent, { UserEvent } from '@testing-library/user-event'
 import './library'
 import { Library } from './library'
 import { fireEvent } from '@testing-library/dom'
-import { Book } from '../../book'
+import { Book } from '../../bookshelf/book'
 import { BookBuilder } from '../../support/book-builder'
-import { BookSortOptions } from '../../book-sort-options'
+import { BookSortOptions } from '../../bookshelf/sort/book-sort-options'
 
 const onBookClick = jest.fn()
 let user: UserEvent

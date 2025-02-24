@@ -1,13 +1,13 @@
 import { Plugin, TFile } from 'obsidian'
-import { Bookshelf } from '../bookshelf'
+import { Bookshelf } from '../bookshelf/bookshelf'
 import { LibraryView, VIEW_TYPE_LIBRARY } from './view/library-view'
 import { assign, debounce } from 'radashi'
 import { BookshelfPluginSettings, DEFAULT_SETTINGS } from './settings/bookshelf-plugin-settings'
 import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
-import { BookMetadataFactory } from '../book-metadata-factory'
+import { BookMetadataFactory } from '../bookshelf/metadata/book-metadata-factory'
 import { StatisticsView, VIEW_TYPE_STATISTICS } from './view/statistics-view'
-import { dailyNotePatterns } from '../reading-journey/pattern/daily-note/daily-note-pattern'
-import { bookNotePatterns } from '../reading-journey/pattern/book-note/book-note-pattern'
+import { dailyNotePatterns } from '../bookshelf/reading-journey/pattern/daily-note/daily-note-pattern'
+import { bookNotePatterns } from '../bookshelf/reading-journey/pattern/book-note/book-note-pattern'
 import { ObsidianNote } from './obsidian-note'
 
 export interface DailyNotesSettings {

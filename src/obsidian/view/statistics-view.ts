@@ -1,8 +1,8 @@
 import { ItemView, WorkspaceLeaf } from 'obsidian'
 import '../../component/statistics/statistics'
-import { Bookshelf } from '../../bookshelf'
+import { Bookshelf } from '../../bookshelf/bookshelf'
 import { Statistics } from '../../component/statistics/statistics'
-import { Book } from '../../book'
+import { Book } from '../../bookshelf/book'
 import { BookModal } from '../modal/book-modal'
 
 export const VIEW_TYPE_STATISTICS = 'statistics'

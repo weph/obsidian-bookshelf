@@ -7,8 +7,8 @@
     "mutate": [
         "src/**/*.ts",
         "!src/**/*.spec.ts",
-        "!src/default-book-sort-options.ts",
-        "!src/bookshelf-error.ts",
+        "!src/bookshelf/bookshelf-error.ts",
+        "!src/bookshelf/sort/default-book-sort-options.ts",
         "!src/component/book-details/*",
         "!src/component/chart/**/*",
         "!src/component/button/*",

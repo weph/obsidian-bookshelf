@@ -1,10 +1,10 @@
 import { ItemView, WorkspaceLeaf } from 'obsidian'
 import '../../component/library/library'
-import { Bookshelf } from '../../bookshelf'
+import { Bookshelf } from '../../bookshelf/bookshelf'
 import { Library } from '../../component/library/library'
-import { Book } from '../../book'
+import { Book } from '../../bookshelf/book'
 import { BookModal } from '../modal/book-modal'
-import { defaultBookSortOptions } from '../../default-book-sort-options'
+import { defaultBookSortOptions } from '../../bookshelf/sort/default-book-sort-options'
 
 export const VIEW_TYPE_LIBRARY = 'library'
 

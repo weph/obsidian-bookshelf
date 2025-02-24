@@ -1,6 +1,6 @@
 import { describe, expect, it, test } from '@jest/globals'
 import { BookMetadataFactory } from './book-metadata-factory'
-import { StaticMetadata } from './metadata/metadata'
+import { StaticMetadata } from './metadata'
 
 const factory = new BookMetadataFactory(
     {

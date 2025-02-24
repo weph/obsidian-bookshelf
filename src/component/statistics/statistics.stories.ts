@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/html'
 import './statistics'
 import { StatisticsProps } from './statistics'
-import { Bookshelf } from '../../bookshelf'
-import { BookMetadataFactory } from '../../book-metadata-factory'
+import { Bookshelf } from '../../bookshelf/bookshelf'
+import { BookMetadataFactory } from '../../bookshelf/metadata/book-metadata-factory'
 import { FakeNote } from '../../support/fake-note'
-import { StaticMetadata } from '../../metadata/metadata'
-import { bookNotePatterns } from '../../reading-journey/pattern/book-note/book-note-pattern'
-import { dailyNotePatterns } from '../../reading-journey/pattern/daily-note/daily-note-pattern'
+import { StaticMetadata } from '../../bookshelf/metadata/metadata'
+import { bookNotePatterns } from '../../bookshelf/reading-journey/pattern/book-note/book-note-pattern'
+import { dailyNotePatterns } from '../../bookshelf/reading-journey/pattern/daily-note/daily-note-pattern'
 
 const meta = {
     title: 'Statistics',

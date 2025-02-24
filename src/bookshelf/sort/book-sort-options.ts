@@ -1,4 +1,4 @@
-import { Book } from './book'
+import { Book } from '../book'
 
 type BookCompareFunction = (a: Book, b: Book) => number
 

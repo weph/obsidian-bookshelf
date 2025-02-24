@@ -1,11 +1,11 @@
-import { Book } from '../../book'
+import { Book } from '../../bookshelf/book'
 import '../gallery/gallery'
 import '../table/table'
 import '../input/input'
 import '../dropdown/dropdown'
 import { Input } from '../input/input'
 import { Dropdown } from '../dropdown/dropdown'
-import { BookSortOptions } from '../../book-sort-options'
+import { BookSortOptions } from '../../bookshelf/sort/book-sort-options'
 
 export interface LibraryProps {
     books: Array<Book>

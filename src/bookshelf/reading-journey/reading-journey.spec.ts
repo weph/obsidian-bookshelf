@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals'
 import { ReadingJourney } from './reading-journey'
-import { BookBuilder } from '../support/book-builder'
+import { BookBuilder } from '../../support/book-builder'
 
 test('map', () => {
     const book = new BookBuilder().build()

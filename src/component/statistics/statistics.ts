@@ -2,10 +2,10 @@ import { PagesReadChart } from './pages-read-chart/pages-read-chart'
 import './pages-read-chart/pages-read-chart'
 import './tag-usage-chart/tag-usage-chart'
 import { Dropdown } from '../dropdown/dropdown'
-import { Bookshelf } from '../../bookshelf'
+import { Bookshelf } from '../../bookshelf/bookshelf'
 import { Gallery } from '../gallery/gallery'
 import { TagUsageChart } from './tag-usage-chart/tag-usage-chart'
-import { Book } from '../../book'
+import { Book } from '../../bookshelf/book'
 
 export interface StatisticsProps {
     bookshelf: Bookshelf

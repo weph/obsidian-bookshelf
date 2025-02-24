@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/html'
 import type { TableProps } from './table'
 import './table'
 import { fn } from '@storybook/test'
-import { Book } from '../../book'
+import { Book } from '../../bookshelf/book'
 import { BookBuilder } from '../../support/book-builder'
 
 const meta = {

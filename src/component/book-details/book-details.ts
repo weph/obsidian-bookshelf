@@ -1,9 +1,9 @@
-import { Book } from '../../book'
+import { Book } from '../../bookshelf/book'
 import '../chart/pages-read-bar-chart/pages-read-bar-chart'
 import '../button/button'
 import '../star-rating/star-rating'
 import { PagesReadBarChart } from '../chart/pages-read-bar-chart/pages-read-bar-chart'
-import { Interval } from '../../reading-journey/statistics/statistics'
+import { Interval } from '../../bookshelf/reading-journey/statistics/statistics'
 
 export interface BookDetailsProps {
     book: Book

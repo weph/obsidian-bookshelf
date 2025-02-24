@@ -4,11 +4,11 @@ import { ReadingJourneyLog } from './reading-journey/reading-journey-log'
 import { Statistics } from './reading-journey/statistics/statistics'
 import { ReadingJourney } from './reading-journey/reading-journey'
 import { Note } from './note'
-import { BookMetadataFactory } from './book-metadata-factory'
+import { BookMetadataFactory } from './metadata/book-metadata-factory'
 import { BookNoteMatch } from './reading-journey/pattern/book-note/book-note-pattern'
 import { DailyNoteMatch } from './reading-journey/pattern/daily-note/daily-note-pattern'
 import { PatternCollection } from './reading-journey/pattern/pattern-collection'
-import { DailyNotesSettings } from './obsidian/bookshelf-plugin'
+import { DailyNotesSettings } from '../obsidian/bookshelf-plugin'
 
 class BookshelfBook implements Book {
     constructor(

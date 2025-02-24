@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test } from '@jest/globals'
 import { ReadingJourneyItem, ReadingJourneyLog, ReadingProgress } from './reading-journey-log'
-import { BookBuilder } from '../support/book-builder'
+import { BookBuilder } from '../../support/book-builder'
 
 const book = new BookBuilder().build()
 

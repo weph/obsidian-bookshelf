@@ -1,5 +1,5 @@
 import { App, Modal } from 'obsidian'
-import { Book } from '../../book'
+import { Book } from '../../bookshelf/book'
 import '../../component/book-details/book-details'
 
 export class BookModal extends Modal {

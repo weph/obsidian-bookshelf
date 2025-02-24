@@ -1,7 +1,7 @@
 import { TimeUnit } from 'chart.js/auto'
 import 'chartjs-adapter-luxon'
 import '../../chart/pages-read-bar-chart/pages-read-bar-chart'
-import { Interval, Statistics } from '../../../reading-journey/statistics/statistics'
+import { Interval, Statistics } from '../../../bookshelf/reading-journey/statistics/statistics'
 import { Dropdown } from '../../dropdown/dropdown'
 import { PagesReadBarChart } from '../../chart/pages-read-bar-chart/pages-read-bar-chart'
 

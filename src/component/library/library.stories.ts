@@ -2,9 +2,9 @@ import type { Meta, StoryObj } from '@storybook/html'
 import type { LibraryProps } from './library'
 import './library'
 import { fn } from '@storybook/test'
-import { Book } from '../../book'
+import { Book } from '../../bookshelf/book'
 import { BookBuilder } from '../../support/book-builder'
-import { defaultBookSortOptions } from '../../default-book-sort-options'
+import { defaultBookSortOptions } from '../../bookshelf/sort/default-book-sort-options'
 
 const meta = {
     title: 'Library',

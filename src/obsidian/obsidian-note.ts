@@ -1,6 +1,6 @@
 import { App, CachedMetadata, TFile } from 'obsidian'
-import { Metadata, ObsidianMetadata } from 'src/metadata/metadata'
-import { Note } from '../note'
+import { Metadata, ObsidianMetadata } from 'src/bookshelf/metadata/metadata'
+import { Note } from '../bookshelf/note'
 
 export class ObsidianNote implements Note {
     private readonly meta: CachedMetadata

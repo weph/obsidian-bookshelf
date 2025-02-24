@@ -1,4 +1,4 @@
-import { Book } from '../../book'
+import { Book } from '../../bookshelf/book'
 
 export interface TableProps {
     books: Array<Book>

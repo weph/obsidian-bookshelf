@@ -1,4 +1,4 @@
-import { Book } from '../../book'
+import { Book } from '../../bookshelf/book'
 import './gallery-card'
 import { GalleryCard } from './gallery-card'
 
