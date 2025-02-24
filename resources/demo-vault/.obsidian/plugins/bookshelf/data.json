@@ -1,0 +1,29 @@
+{
+    "booksFolder": "Books",
+    "bookProperties": {
+        "cover": "cover",
+        "author": "author",
+        "published": "published",
+        "tags": "tags",
+        "rating": "rating"
+    },
+    "bookNote": {
+        "dateFormat": "MM/dd/yyyy",
+        "patterns": {
+            "started": "{date}: Started",
+            "finished": "{date}: Finished",
+            "abandoned": "{date}: Abandoned",
+            "absoluteProgress": "{date}: {startPage}-{endPage}",
+            "relativeProgress": "{date}: {endPage}"
+        }
+    },
+    "dailyNote": {
+        "patterns": {
+            "started": "Started {book}",
+            "finished": "Finished {book}",
+            "abandoned": "Abandoned {book}",
+            "absoluteProgress": "Read {book}: {startPage}-{endPage}",
+            "relativeProgress": "Read {book}: {endPage}"
+        }
+    }
+}
