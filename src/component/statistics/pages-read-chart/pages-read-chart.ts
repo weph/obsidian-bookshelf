@@ -1,7 +1,9 @@
-import Chart, { TimeUnit } from 'chart.js/auto'
+import { TimeUnit } from 'chart.js/auto'
 import 'chartjs-adapter-luxon'
+import '../../chart/pages-read-bar-chart/pages-read-bar-chart'
 import { Interval, Statistics } from '../../../reading-journey/statistics/statistics'
 import { Dropdown } from '../../dropdown/dropdown'
+import { PagesReadBarChart } from '../../chart/pages-read-bar-chart/pages-read-bar-chart'
 
 export interface ReadingProgressBarChartProps {
     statistics: Statistics
@@ -36,9 +38,7 @@ export class PagesReadChart extends HTMLElement implements ReadingProgressBarCha
 
     private intervalDropdown: Dropdown<IntervalValue>
 
-    private canvas: HTMLCanvasElement
-
-    private chart: Chart
+    private chart: PagesReadBarChart
 
     private _statistics: Statistics | null = null
 
@@ -46,7 +46,22 @@ export class PagesReadChart extends HTMLElement implements ReadingProgressBarCha
         super()
 
         this.root = this.attachShadow({ mode: 'open' })
-        this.intervalDropdown = document.createElement('bookshelf-ui-dropdown')
+        this.root.innerHTML = `
+            <bookshelf-ui-dropdown></bookshelf-ui-dropdown>
+            <div id="chart-container">
+                <bookshelf-pages-read-bar-chart></bookshelf-pages-read-bar-chart>
+            </div>
+            <style>
+                #chart-container {
+                    width: 100%;
+                    aspect-ratio: 2/1;
+                }
+            </style>
+        `
+
+        this.intervalDropdown = this.root.querySelector('bookshelf-ui-dropdown')!
+        this.intervalDropdown.value = this.intervals.month
+        this.intervalDropdown.onChange = () => this.update()
         this.intervalDropdown.options = [
             {
                 value: this.intervals.year,
@@ -65,83 +80,17 @@ export class PagesReadChart extends HTMLElement implements ReadingProgressBarCha
                 label: 'Day',
             },
         ]
-        this.intervalDropdown.value = this.intervals.month
-        this.intervalDropdown.onChange = () => this.update()
-        const chartContainer = document.createElement('div')
-        chartContainer.style.width = '100%'
-        chartContainer.style.aspectRatio = '2/1'
-        this.canvas = document.createElement('canvas')
-        this.canvas.style.position = 'relative'
-        chartContainer.appendChild(this.canvas)
-        this.root.appendChild(this.intervalDropdown)
-        this.root.appendChild(chartContainer)
-    }
 
-    public connectedCallback() {
-        if (this.chart) {
-            this.chart.destroy()
-        }
-
-        this.chart = new Chart(this.canvas, {
-            type: 'bar',
-            data: {
-                datasets: [
-                    {
-                        label: '# of pages',
-                        data: this.pages(),
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: false,
-                    },
-                },
-                scales: {
-                    x: {
-                        type: 'timeseries',
-                        time: {
-                            unit: 'day',
-                        },
-                    },
-                    y: {
-                        beginAtZero: true,
-                    },
-                },
-            },
-        })
+        this.chart = this.root.querySelector('bookshelf-pages-read-bar-chart')!
     }
 
     private update(): void {
-        if (!this.chart) {
+        if (this._statistics === null) {
             return
         }
 
-        this.chart.options!.scales!.x = {
-            type: 'timeseries',
-            time: {
-                unit: this.intervalDropdown.value.chart,
-            },
-        }
-        this.chart.data.datasets[0].data = this.pages()
-        this.chart.update()
-    }
-
-    private pages(): Array<{ x: number; y: number }> {
-        const result: Array<{ x: number; y: number }> = []
-
-        if (this._statistics === null) {
-            return result
-        }
-
-        for (const [date, count] of this._statistics.pagesRead(this.intervalDropdown.value.statistics).entries()) {
-            result.push({ x: date.getTime(), y: count })
-        }
-
-        return result
+        this.chart.xAxisUnit = this.intervalDropdown.value.chart
+        this.chart.data = this._statistics.pagesRead(this.intervalDropdown.value.statistics)
     }
 
     set statistics(value: Statistics) {

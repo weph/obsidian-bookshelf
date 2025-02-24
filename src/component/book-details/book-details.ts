@@ -1,8 +1,9 @@
 import { Book } from '../../book'
-import '../reading-progress-bar-chart/reading-progress-bar-chart'
+import '../chart/pages-read-bar-chart/pages-read-bar-chart'
 import '../button/button'
 import '../star-rating/star-rating'
-import { ReadingProgressBarChart } from '../reading-progress-bar-chart/reading-progress-bar-chart'
+import { PagesReadBarChart } from '../chart/pages-read-bar-chart/pages-read-bar-chart'
+import { Interval } from '../../reading-journey/statistics/statistics'
 
 export interface BookDetailsProps {
     book: Book
@@ -14,7 +15,7 @@ export class BookDetails extends HTMLElement implements BookDetailsProps {
 
     private _book: Book
 
-    private readingProgressChart: ReadingProgressBarChart
+    private readingProgressChart: PagesReadBarChart
 
     public openNote: (book: Book) => void = () => {}
 
@@ -50,7 +51,7 @@ export class BookDetails extends HTMLElement implements BookDetailsProps {
                         </div>
                     </div>
                 </div>
-                <bookshelf-reading-progress-bar-chart></bookshelf-reading-progress-bar-chart>
+                <bookshelf-pages-read-bar-chart></bookshelf-pages-read-bar-chart>
             </main>
             <style>
                 #top {
@@ -96,8 +97,9 @@ export class BookDetails extends HTMLElement implements BookDetailsProps {
             </style>
         `
 
-        this.readingProgressChart = this.root.querySelector('bookshelf-reading-progress-bar-chart')!
-        this.readingProgressChart.readingJourney = this.book.readingJourney.items()
+        this.readingProgressChart = this.root.querySelector('bookshelf-pages-read-bar-chart')!
+        this.readingProgressChart.data = this.book.readingJourney.statistics().pagesRead(Interval.Day)
+        this.readingProgressChart.xAxisUnit = 'day'
 
         this.root.querySelector('#open-note')!.addEventListener('click', () => this.openNote(this._book))
     }
