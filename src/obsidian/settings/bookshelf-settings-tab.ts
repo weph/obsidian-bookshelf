@@ -13,8 +13,11 @@ export class BookshelfSettingsTab extends PluginSettingTab {
     display(): void {
         this.containerEl.empty()
 
+        this.addSectionHeadline(this.containerEl, 'Book Settings')
         this.addBooksSettings()
         this.addBookProperties()
+
+        this.addSectionHeadline(this.containerEl, 'Reading Progress')
         this.addBookNoteSettings()
         this.addDailyNoteSettings()
     }
@@ -32,6 +35,13 @@ export class BookshelfSettingsTab extends PluginSettingTab {
                     await this.plugin.saveSettings()
                 }),
             )
+    }
+
+    private addSectionHeadline(container: HTMLElement, headline: string): void {
+        const element = document.createElement('h3')
+        element.innerText = headline
+
+        container.append(element)
     }
 
     private addBookProperties(): void {
