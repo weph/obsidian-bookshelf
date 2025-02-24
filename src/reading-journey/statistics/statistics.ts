@@ -1,6 +1,6 @@
 import { AggregatedTimeSeries } from './aggregated-time-series'
-import { Book } from './book'
-import { ReadingJourney } from './reading-journey/reading-journey'
+import { Book } from '../../book'
+import { ReadingJourney } from '../reading-journey'
 
 export enum Interval {
     Day,

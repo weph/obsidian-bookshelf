@@ -1,5 +1,6 @@
 import { ReadingJourneyItem } from './reading-journey-log'
 import { Book } from '../book'
+import { Statistics } from './statistics/statistics'
 
 export class ReadingJourney {
     constructor(private _items: Array<ReadingJourneyItem>) {}
@@ -36,5 +37,9 @@ export class ReadingJourney {
         }
 
         return result
+    }
+
+    public statistics(): Statistics {
+        return new Statistics(this)
     }
 }

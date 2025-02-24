@@ -1,6 +1,6 @@
 import Chart, { TimeUnit } from 'chart.js/auto'
 import 'chartjs-adapter-luxon'
-import { Interval, Statistics } from '../../../statistics'
+import { Interval, Statistics } from '../../../reading-journey/statistics/statistics'
 import { Dropdown } from '../../dropdown/dropdown'
 
 export interface ReadingProgressBarChartProps {

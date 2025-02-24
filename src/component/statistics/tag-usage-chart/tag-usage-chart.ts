@@ -1,6 +1,6 @@
 import Chart from 'chart.js/auto'
 import 'chartjs-adapter-luxon'
-import { Statistics } from '../../../statistics'
+import { Statistics } from '../../../reading-journey/statistics/statistics'
 
 export interface TagUsageChartProps {
     statistics: Statistics

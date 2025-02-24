@@ -1,7 +1,7 @@
 import { Book, BookMetadata } from './book'
 import { BookshelfError } from './bookshelf-error'
 import { ReadingJourneyLog } from './reading-journey/reading-journey-log'
-import { Statistics } from './statistics'
+import { Statistics } from './reading-journey/statistics/statistics'
 import { ReadingJourney } from './reading-journey/reading-journey'
 import { Note } from './note'
 import { BookMetadataFactory } from './book-metadata-factory'
@@ -150,9 +150,10 @@ export class Bookshelf {
     }
 
     public statistics(year: number | null = null): Statistics {
-        const journey =
-            year === null ? this.readingJourney() : this.readingJourney().filter((i) => i.date.getFullYear() === year)
-
-        return new Statistics(journey)
+        return year === null
+            ? this.readingJourney().statistics()
+            : this.readingJourney()
+                  .filter((i) => i.date.getFullYear() === year)
+                  .statistics()
     }
 }
