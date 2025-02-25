@@ -46,6 +46,7 @@ export default class BookshelfPlugin extends Plugin {
 
         this.app.metadataCache.on('resolve', async (file) => await this.handleFile(file))
         this.app.metadataCache.on('changed', async (file) => await this.handleFile(file))
+        this.app.vault.on('rename', (file: TFile, oldPath: string) => this.handleRename(file, oldPath))
     }
 
     private dailyNotesSettings(): DailyNotesSettings {
@@ -63,6 +64,11 @@ export default class BookshelfPlugin extends Plugin {
 
         await this.bookshelf.process(note)
         this.updateView()
+    }
+
+    private async handleRename(file: TFile, oldPath: string): Promise<void> {
+        this.bookshelf.rename(oldPath, file.path)
+        await this.handleFile(file)
     }
 
     private bookIdentifier(input: string): string {

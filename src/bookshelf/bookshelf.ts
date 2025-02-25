@@ -41,6 +41,11 @@ export class Bookshelf {
         await this.handleDailyNote(note)
     }
 
+    public rename(oldIdentifier: string, newIdentifier: string): void {
+        this.books.set(newIdentifier, this.book(oldIdentifier))
+        this.books.delete(oldIdentifier)
+    }
+
     private async handleBookNote(note: Note): Promise<void> {
         if (!this.isBookNote(note)) {
             return
