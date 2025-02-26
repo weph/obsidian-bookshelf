@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/html'
 import './pages-read-bar-chart'
-import { PagesReadBarChartProps } from './pages-read-bar-chart'
+import { PagesReadBarChart } from './pages-read-bar-chart'
 
 const meta = {
     title: 'Chart/Pages Read Bar Chart',
@@ -11,20 +11,20 @@ const meta = {
 
         return element
     },
-} satisfies Meta<PagesReadBarChartProps>
+} satisfies Meta<PagesReadBarChart>
 
 export default meta
-type Story = StoryObj<PagesReadBarChartProps>
+type Story = StoryObj<PagesReadBarChart>
 
 export const Primary: Story = {
     args: {
-        data: new Map([
-            [new Date(2025, 0, 1), 100],
-            [new Date(2025, 0, 2), 300],
-            [new Date(2025, 0, 3), 50],
-            [new Date(2025, 0, 4), 90],
-            [new Date(2025, 0, 5), 190],
-        ]),
+        data: [
+            { x: new Date(2025, 0, 1).getTime(), y: 100 },
+            { x: new Date(2025, 0, 2).getTime(), y: 300 },
+            { x: new Date(2025, 0, 3).getTime(), y: 50 },
+            { x: new Date(2025, 0, 4).getTime(), y: 90 },
+            { x: new Date(2025, 0, 5).getTime(), y: 190 },
+        ],
         xAxisUnit: 'day',
     },
 }

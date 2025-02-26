@@ -1,43 +1,41 @@
 import Chart, { TimeUnit } from 'chart.js/auto'
 import 'chartjs-adapter-luxon'
+import { css, html, LitElement } from 'lit'
+import { customElement, property, query } from 'lit/decorators.js'
 
-export interface PagesReadBarChartProps {
-    data: Map<Date, number>
-    xAxisUnit: TimeUnit
-}
+const TAG_NAME = 'bookshelf-pages-read-bar-chart'
 
-export class PagesReadBarChart extends HTMLElement implements PagesReadBarChartProps {
-    private root: ShadowRoot
+@customElement(TAG_NAME)
+export class PagesReadBarChart extends LitElement {
+    static styles = css`
+        canvas {
+            position: relative;
+        }
+    `
 
-    private readonly canvas: HTMLCanvasElement
+    @query('canvas')
+    private canvas: HTMLCanvasElement
 
-    private chart: Chart
+    private chart: Chart | null = null
 
-    private _data: Array<{ x: number; y: number }> = []
+    @property()
+    public data: Array<{ x: number; y: number }> = []
 
-    private _xAxisUnit: TimeUnit = 'day'
+    @property()
+    public xAxisUnit: TimeUnit = 'day'
 
-    constructor() {
-        super()
-
-        this.root = this.attachShadow({ mode: 'open' })
-        this.canvas = document.createElement('canvas')
-        this.canvas.style.position = 'relative'
-        this.root.appendChild(this.canvas)
+    protected render() {
+        return html` <canvas></canvas>`
     }
 
-    public connectedCallback() {
-        if (this.chart) {
-            this.chart.destroy()
-        }
-
+    protected firstUpdated() {
         this.chart = new Chart(this.canvas, {
             type: 'bar',
             data: {
                 datasets: [
                     {
                         label: '# of pages',
-                        data: this._data,
+                        data: this.data,
                     },
                 ],
             },
@@ -53,7 +51,7 @@ export class PagesReadBarChart extends HTMLElement implements PagesReadBarChartP
                     x: {
                         type: 'timeseries',
                         time: {
-                            unit: this._xAxisUnit,
+                            unit: this.xAxisUnit,
                         },
                     },
                     y: {
@@ -64,9 +62,7 @@ export class PagesReadBarChart extends HTMLElement implements PagesReadBarChartP
         })
     }
 
-    set xAxisUnit(value: TimeUnit) {
-        this._xAxisUnit = value
-
+    protected updated() {
         if (!this.chart) {
             return
         }
@@ -74,33 +70,14 @@ export class PagesReadBarChart extends HTMLElement implements PagesReadBarChartP
         this.chart.options!.scales!.x = {
             type: 'timeseries',
             time: {
-                unit: this._xAxisUnit,
+                unit: this.xAxisUnit,
             },
         }
-
-        this.chart.update()
-    }
-
-    set data(value: Map<Date, number>) {
-        this._data = []
-
-        for (const [date, count] of value.entries()) {
-            this._data.push({ x: date.getTime(), y: count })
-        }
-
-        if (!this.chart) {
-            return
-        }
-
-        this.chart.data.datasets[0].data = this._data
+        this.chart.data.datasets[0].data = this.data
 
         this.chart.update()
     }
 }
-
-const TAG_NAME = 'bookshelf-pages-read-bar-chart'
-
-customElements.define(TAG_NAME, PagesReadBarChart)
 
 declare global {
     interface HTMLElementTagNameMap {

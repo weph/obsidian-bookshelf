@@ -89,8 +89,12 @@ export class PagesReadChart extends HTMLElement implements ReadingProgressBarCha
             return
         }
 
+        const data = Array.from(this._statistics.pagesRead(this.intervalDropdown.value.statistics).entries()).map(
+            (entry) => ({ x: entry[0].getTime(), y: entry[1] }),
+        )
+
         this.chart.xAxisUnit = this.intervalDropdown.value.chart
-        this.chart.data = this._statistics.pagesRead(this.intervalDropdown.value.statistics)
+        this.chart.data = data
     }
 
     set statistics(value: Statistics) {

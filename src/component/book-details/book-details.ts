@@ -97,8 +97,12 @@ export class BookDetails extends HTMLElement implements BookDetailsProps {
             </style>
         `
 
+        const data = Array.from(this.book.readingJourney.statistics().pagesRead(Interval.Day).entries()).map(
+            (entry) => ({ x: entry[0].getTime(), y: entry[1] }),
+        )
+
         this.readingProgressChart = this.root.querySelector('bookshelf-pages-read-bar-chart')!
-        this.readingProgressChart.data = this.book.readingJourney.statistics().pagesRead(Interval.Day)
+        this.readingProgressChart.data = data
         this.readingProgressChart.xAxisUnit = 'day'
 
         this.root.querySelector('#open-note')!.addEventListener('click', () => this.openNote(this._book))
