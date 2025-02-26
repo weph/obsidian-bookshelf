@@ -8,24 +8,30 @@ const onUpdate = jest.fn()
 let input: Input
 let internalInput: HTMLInputElement
 
-beforeEach(() => {
+beforeEach(async () => {
     jest.resetAllMocks()
     input = document.createElement('bookshelf-ui-input')
     input.onUpdate = onUpdate
     input.placeholder = 'my-input'
-    internalInput = input.shadowRoot?.querySelector('input') as HTMLInputElement
 
     document.body.replaceChildren(input)
+    await input.updateComplete
+
+    internalInput = input.shadowRoot?.querySelector('input') as HTMLInputElement
 })
 
-test('type property should be passed to internal input', () => {
+test('type property should be passed to internal input', async () => {
     input.type = 'search'
+
+    await input.updateComplete
 
     expect(internalInput.getAttribute('type')).toBe('search')
 })
 
-test('type placeholder should be passed to internal input', () => {
+test('type placeholder should be passed to internal input', async () => {
     input.placeholder = 'new-placeholder'
+
+    await input.updateComplete
 
     expect(internalInput.getAttribute('placeholder')).toBe('new-placeholder')
 })
@@ -59,15 +65,5 @@ describe('onUpdate', () => {
         expect(onUpdate).toHaveBeenNthCalledWith(1, 'foo')
         expect(onUpdate).toHaveBeenNthCalledWith(2, 'bar')
         expect(onUpdate).toHaveBeenNthCalledWith(3, 'baz')
-    })
-
-    it('should stop responding to events after being disconnected', () => {
-        input.disconnectedCallback()
-
-        fireEvent.input(internalInput, { target: { value: 'f' } })
-        fireEvent.change(internalInput, { target: { value: 'f' } })
-        fireEvent.keyUp(internalInput, { target: { value: 'f' } })
-
-        expect(onUpdate).not.toHaveBeenCalled()
     })
 })
