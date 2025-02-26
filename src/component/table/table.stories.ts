@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/html'
-import type { TableProps } from './table'
+import { Table } from './table'
 import './table'
 import { fn } from '@storybook/test'
 import { Book } from '../../bookshelf/book'
@@ -17,7 +17,7 @@ const meta = {
 
         return element
     },
-} satisfies Meta<TableProps>
+} satisfies Meta<Table>
 
 const books: Array<Book> = [
     book('Algorithms', '/covers/algorithms.jpg'),
@@ -40,7 +40,7 @@ const books: Array<Book> = [
 ]
 
 export default meta
-type Story = StoryObj<TableProps>
+type Story = StoryObj<Table>
 
 export const Primary: Story = {
     args: {

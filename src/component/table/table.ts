@@ -1,24 +1,37 @@
 import { Book } from '../../bookshelf/book'
+import { css, html, LitElement } from 'lit'
+import { customElement, property } from 'lit/decorators.js'
 
-export interface TableProps {
-    books: Array<Book>
-    onBookClick: ((book: Book) => void) | null
-}
+const TAG_NAME = 'bookshelf-table'
 
-export class Table extends HTMLElement implements TableProps {
-    private root: ShadowRoot
+@customElement(TAG_NAME)
+export class Table extends LitElement {
+    static styles = css`
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-    private _books: Array<Book> = []
+        td,
+        th {
+            vertical-align: top;
+            padding: 0.25rem 0.5rem;
+            text-align: left;
+        }
 
-    private tableBody: HTMLTableSectionElement
+        td {
+            border-top: 1px solid var(--divider-color);
+        }
+    `
 
+    @property()
+    public books: Array<Book> = []
+
+    @property()
     public onBookClick: ((book: Book) => void) | null = null
 
-    constructor() {
-        super()
-
-        this.root = this.attachShadow({ mode: 'open' })
-        this.root.innerHTML = `
+    protected render() {
+        return html`
             <table>
                 <thead>
                     <tr>
@@ -30,58 +43,26 @@ export class Table extends HTMLElement implements TableProps {
                     </tr>
                 </thead>
                 <tbody>
+                    ${this.books.map(
+                        (book) => html`
+                            <tr>
+                                <td>${book.metadata.title}</td>
+                                <td>${book.metadata.authors?.join('<br />') || ''}</td>
+                                <td>${book.metadata.published?.getFullYear() || ''}</td>
+                                <td>
+                                    <bookshelf-ui-star-rating
+                                        value="${book.metadata.rating}"
+                                    ></bookshelf-ui-star-rating>
+                                </td>
+                                <td>${book.metadata.tags?.join(', ') || ''}</td>
+                            </tr>
+                        `,
+                    )}
                 </tbody>
             </table>
-            <style>
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
-                
-                td, th {
-                    vertical-align: top;
-                    padding: 0.25rem 0.5rem;
-                    text-align: left;
-                }
-                
-                td {
-                    border-top: 1px solid var(--divider-color);
-                }
-                
-                img {
-                    width: 100%;
-                }
-            </style>
         `
-
-        this.tableBody = this.root.querySelector('tbody')!
-    }
-
-    private update() {
-        this.tableBody.innerHTML = this._books
-            .map(
-                (book) => `
-            <tr>
-                <td>${book.metadata.title}</td>
-                <td>${book.metadata.authors?.join('<br />') || ''}</td>
-                <td>${book.metadata.published?.getFullYear() || ''}</td>
-                <td><bookshelf-ui-star-rating value="${book.metadata.rating}"></bookshelf-ui-star-rating></td>
-                <td>${book.metadata.tags?.join(', ') || ''}</td>
-            </tr>
-        `,
-            )
-            .join('')
-    }
-
-    set books(value: Array<Book>) {
-        this._books = value
-        this.update()
     }
 }
-
-const TAG_NAME = 'bookshelf-table'
-
-customElements.define(TAG_NAME, Table)
 
 declare global {
     interface HTMLElementTagNameMap {

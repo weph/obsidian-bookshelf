@@ -23,6 +23,9 @@
     "author": "Philip Weinke <its@weph.dev>",
     "license": "MIT",
     "devDependencies": {
+        "@babel/core": "^7.26.9",
+        "@babel/plugin-transform-runtime": "^7.26.9",
+        "@babel/preset-env": "^7.26.9",
         "@chromatic-com/storybook": "^3.2.4",
         "@eslint/compat": "^1.2.6",
         "@eslint/js": "^9.19.0",
@@ -38,6 +41,7 @@
         "@testing-library/user-event": "^14.6.1",
         "@types/luxon": "^3.4.2",
         "@types/node": "^22",
+        "babel-jest": "^29.7.0",
         "builtin-modules": "^4.0.0",
         "esbuild": "^0.24.2",
         "esbuild-copy-files-plugin": "^1.2.1",
