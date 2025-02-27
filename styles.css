@@ -36,3 +36,7 @@ body {
     --bookshelf--gallery-card--background-color: var(--background-primary-alt);
     --bookshelf--gallery-card--shadow: var(--shadow-s);
 }
+
+.bookshelf--settings--full-width {
+    width: 100%;
+}
