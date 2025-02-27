@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/html'
 import './dropdown'
-import { DropdownProps } from './dropdown'
+import { Dropdown } from './dropdown'
 import { fn } from '@storybook/test'
 
 const meta = {
@@ -15,10 +15,10 @@ const meta = {
 
         return element
     },
-} satisfies Meta<DropdownProps<string>>
+} satisfies Meta<Dropdown<string>>
 
 export default meta
-type Story = StoryObj<DropdownProps<string>>
+type Story = StoryObj<Dropdown<string>>
 
 export const Primary: Story = {
     args: {

@@ -105,7 +105,7 @@ describe('Sorting', () => {
         })
 
         test('Books should be ordered by selected sort option', async () => {
-            await userEvent.selectOptions(screen.getByShadowLabelText('Sort'), 'desc')
+            await userEvent.selectOptions(screen.getByShadowLabelText('Sort'), screen.getByShadowText('desc'))
 
             expect(cardTitles()).toEqual(['Pet Sematary', 'Of Mice and Men', 'Animal Farm'])
         })

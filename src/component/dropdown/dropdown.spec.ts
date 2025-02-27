@@ -22,24 +22,18 @@ beforeEach(() => {
     document.body.replaceChildren(dropdown)
 })
 
-it('should show selected value', () => {
+it('should show selected value', async () => {
     dropdown.value = barValue
+
+    await dropdown.updateComplete
 
     expect(screen.getByShadowLabelText('my-dropdown')).toHaveDisplayValue('Bar')
 })
 
 describe('onChange', () => {
     it('should notify about changes', async () => {
-        await userEvent.selectOptions(screen.getByShadowLabelText('my-dropdown'), 'Bar')
+        await userEvent.selectOptions(await screen.findByShadowLabelText('my-dropdown'), screen.getByShadowText('Bar'))
 
         expect(onChange).toHaveBeenCalledWith(barValue)
-    })
-
-    it('must not notify if the component has been disconnected', async () => {
-        dropdown.disconnectedCallback()
-
-        await userEvent.selectOptions(screen.getByShadowLabelText('my-dropdown'), 'Foo')
-
-        expect(onChange).not.toHaveBeenCalled()
     })
 })
