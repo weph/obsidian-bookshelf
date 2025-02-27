@@ -30,7 +30,7 @@ export class Dropdown<T = never> extends LitElement {
     `
 
     @state()
-    private _value: T | null = null
+    private _value: T | undefined = undefined
 
     @query('select')
     private select: HTMLSelectElement | null
@@ -54,7 +54,7 @@ export class Dropdown<T = never> extends LitElement {
     }
 
     private handleChange() {
-        if (this.value) {
+        if (this.value !== undefined) {
             this.onChange(this.value)
         }
     }
@@ -64,9 +64,9 @@ export class Dropdown<T = never> extends LitElement {
         this._value = value
     }
 
-    get value(): T | null {
+    get value(): T | undefined {
         if (this.select === null) {
-            return this.options[0]?.value || null
+            return this.options[0]?.value
         }
 
         return this.options[parseInt(this.select.value || '0')]?.value
