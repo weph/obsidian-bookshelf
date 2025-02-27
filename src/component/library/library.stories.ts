@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/html'
-import type { LibraryProps } from './library'
+import { Library } from './library'
 import './library'
 import { fn } from '@storybook/test'
 import { Book } from '../../bookshelf/book'
@@ -19,7 +19,7 @@ const meta = {
 
         return element
     },
-} satisfies Meta<LibraryProps>
+} satisfies Meta<Library>
 
 const books: Array<Book> = [
     book('Algorithms', '/covers/algorithms.jpg'),
@@ -42,7 +42,7 @@ const books: Array<Book> = [
 ]
 
 export default meta
-type Story = StoryObj<LibraryProps>
+type Story = StoryObj<Library>
 
 export const Primary: Story = {
     args: {
