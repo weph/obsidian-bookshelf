@@ -3,118 +3,106 @@ import '../gallery/gallery'
 import '../table/table'
 import '../input/input'
 import '../dropdown/dropdown'
-import { Input } from '../input/input'
-import { Dropdown } from '../dropdown/dropdown'
 import { BookSortOptions } from '../../bookshelf/sort/book-sort-options'
+import { css, html, LitElement, TemplateResult } from 'lit'
+import { customElement, property, state } from 'lit/decorators.js'
 
-export interface LibraryProps {
-    books: Array<Book>
-    onBookClick: ((book: Book) => void) | null
-    sortOptions: BookSortOptions
-}
+const TAG_NAME = 'bookshelf-library'
 
 type ViewType = 'gallery' | 'table'
 
-export class Library extends HTMLElement implements LibraryProps {
-    private root: ShadowRoot
+@customElement(TAG_NAME)
+export class Library extends LitElement {
+    static styles = css`
+        header {
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--bookshelf--library--header-background);
+            z-index: 9999;
+            box-sizing: border-box;
 
-    private searchInput: Input
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: var(--size-4-3);
+            padding: var(--bookshelf--library--header-padding);
+        }
 
-    private sortOptionsDropdown: Dropdown<string>
+        #header-left {
+            display: flex;
+            flex-direction: row;
+            gap: var(--size-4-3);
+        }
 
-    private _view: ViewType
+        main {
+            padding: 20px 10px;
+        }
 
-    private galleryContainer: HTMLElement
+        #message-container {
+            text-align: center;
+            margin-top: 20px;
+        }
 
-    private _books: Array<Book> = []
+        #message-container p {
+            font-style: italic;
+            color: var(--bookshelf--text--color-dimmed);
+        }
+    `
 
-    public _onBookClick: ((book: Book) => void) | null = null
+    @state()
+    private searchTerm: string = ''
 
-    private _sortOptions: BookSortOptions = new BookSortOptions()
+    @state()
+    private sortOption: string | null = null
 
-    constructor() {
-        super()
+    @property()
+    public view: ViewType
 
-        this.root = this.attachShadow({ mode: 'open' })
-        this.root.innerHTML = `
+    @property()
+    public books: Array<Book> = []
+
+    @property()
+    public onBookClick: ((book: Book) => void) | null = null
+
+    @property()
+    public sortOptions: BookSortOptions = new BookSortOptions()
+
+    protected render() {
+        return html`
             <header>
                 <div id="header-left">
-                    <bookshelf-ui-input></bookshelf-ui-input>
-                    <bookshelf-ui-dropdown id="sort-options"></bookshelf-ui-dropdown>
+                    <bookshelf-ui-input
+                        .type=${'search'}
+                        .placeholder=${'Search...'}
+                        .value="${this.searchTerm}"
+                        .onUpdate=${(term: string) => (this.searchTerm = term)}
+                    ></bookshelf-ui-input>
+                    <bookshelf-ui-dropdown
+                        label="Sort"
+                        .value=${this.sortOption}
+                        .onChange=${(value: string) => (this.sortOption = value)}
+                        .options=${this.sortOptions.titles().map((title) => ({ value: title, label: title }))}
+                    ></bookshelf-ui-dropdown>
                 </div>
                 <div id="header-right">
-                    <bookshelf-ui-dropdown id="view"></bookshelf-ui-dropdown>
+                    <bookshelf-ui-dropdown
+                        label="View"
+                        value=${this.view}
+                        .options=${[
+                            { value: 'gallery', label: 'Gallery' },
+                            { value: 'table', label: 'Table' },
+                        ]}
+                        .onChange=${(view: ViewType) => (this.view = view)}
+                    ></bookshelf-ui-dropdown>
                 </div>
             </header>
-            <main>
-            </main>
-            <style>
-                header {
-                    position: sticky;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    background-color: var(--bookshelf--library--header-background);
-                    z-index: 9999;
-                    box-sizing: border-box;
-                    
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
-                    gap: var(--size-4-3);
-                    padding: var(--bookshelf--library--header-padding);
-                }
-                
-                #header-left {
-                    display: flex;
-                    flex-direction: row;
-                    gap: var(--size-4-3);
-                }
-                
-                main {
-                    padding: 20px 10px;
-                }
-                
-                #message-container {
-                    text-align: center;
-                    margin-top: 20px;
-                }
-                                
-                #message-container p {
-                    font-style: italic;
-                    color: var(--bookshelf--text--color-dimmed);
-                }
-            </style>
+            <main>${this.content()}</main>
         `
-
-        this.searchInput = this.root.querySelector('bookshelf-ui-input') as Input
-        // Stryker disable next-line all
-        this.searchInput.type = 'search'
-        this.searchInput.placeholder = 'Search...'
-        this.searchInput.onUpdate = () => this.update()
-
-        this.sortOptionsDropdown = this.root.querySelector('#sort-options')!
-        this.sortOptionsDropdown.onChange = () => this.update()
-        this.sortOptionsDropdown.label = 'Sort'
-
-        const viewDropdown: Dropdown<ViewType> = this.root.querySelector('#view')!
-        viewDropdown.label = 'View'
-        viewDropdown.options = [
-            { value: 'gallery', label: 'Gallery' },
-            { value: 'table', label: 'Table' },
-        ]
-        viewDropdown.onChange = (value) => (this.view = value)
-
-        this.galleryContainer = this.root.querySelector('main') as HTMLElement
-
-        this.update()
     }
 
-    private update() {
-        this.galleryContainer.replaceChildren(this.content())
-    }
-
-    private content(): HTMLElement {
+    private content(): TemplateResult {
         if (this.books.length === 0) {
             return this.emptyState(
                 'No books found',
@@ -122,7 +110,7 @@ export class Library extends HTMLElement implements LibraryProps {
             )
         }
 
-        const search = this.searchInput.value
+        const search = this.searchTerm
         const books = this.books
             .filter((b) => b.metadata.title.toLowerCase().includes(search.toLowerCase()))
             .sort(this.sortFunction())
@@ -131,73 +119,36 @@ export class Library extends HTMLElement implements LibraryProps {
             return this.emptyState('No books found', 'Try a different search term or check your spelling.')
         }
 
-        if (this._view === 'table') {
-            return this.bookList(books)
+        if (this.view === 'table') {
+            return html` <bookshelf-table .books=${books} .onBookClick=${this.onBookClick}></bookshelf-table> `
         }
 
-        return this.bookGallery(books)
+        return html` <bookshelf-gallery .books=${books} .onBookClick=${this.onBookClick}></bookshelf-gallery> `
     }
 
     private sortFunction(): (a: Book, b: Book) => number {
-        if (!this.sortOptionsDropdown.value) {
-            return () => 0
+        if (this.sortOption !== null) {
+            return this.sortOptions.compareFunction(this.sortOption)
         }
 
-        return this._sortOptions.compareFunction(this.sortOptionsDropdown.value)
+        if (this.sortOptions.titles().length > 0) {
+            return this.sortOptions.compareFunction(this.sortOptions.titles()[0])
+        }
+
+        return () => 0
     }
 
-    private bookGallery(books: Array<Book>): HTMLElement {
-        const gallery = document.createElement('bookshelf-gallery')
-        gallery.books = books
-        gallery.onBookClick = this._onBookClick
-
-        return gallery
-    }
-
-    private bookList(books: Array<Book>): HTMLElement {
-        const gallery = document.createElement('bookshelf-table')
-        gallery.books = books
-        gallery.onBookClick = this._onBookClick
-
-        return gallery
-    }
-
-    private emptyState(headline: string, message: string): HTMLElement {
-        const element = document.createElement('div')
-        element.innerHTML = `<div id="message-container"><h1>${headline}</h1><p>${message}</p></div>`
-
-        return element
-    }
-
-    get books(): Array<Book> {
-        return this._books
-    }
-
-    set books(value: Array<Book>) {
-        this._books = value
-        this.update()
-    }
-
-    set onBookClick(callback: ((book: Book) => void) | null) {
-        this._onBookClick = callback
-        this.update()
-    }
-
-    set sortOptions(value: BookSortOptions) {
-        this._sortOptions = value
-        this.sortOptionsDropdown.options = this._sortOptions.titles().map((title) => ({ value: title, label: title }))
-        this.update()
-    }
-
-    set view(value: ViewType) {
-        this._view = value
-        this.update()
+    private emptyState(headline: string, message: string): TemplateResult {
+        return html`
+            <div>
+                <div id="message-container">
+                    <h1>${headline}</h1>
+                    <p>${message}</p>
+                </div>
+            </div>
+        `
     }
 }
-
-const TAG_NAME = 'bookshelf-library'
-
-customElements.define(TAG_NAME, Library)
 
 declare global {
     interface HTMLElementTagNameMap {

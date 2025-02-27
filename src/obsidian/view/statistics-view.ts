@@ -29,14 +29,13 @@ export class StatisticsView extends ItemView {
         const container = this.containerEl.children[1]
 
         this.component = this.containerEl.createEl('bookshelf-statistics')
+        this.component.bookshelf = this.bookshelf
         this.component.onBookClick = (book: Book) => new BookModal(this.app, book).open()
 
         container.replaceChildren(this.component)
-
-        this.update()
     }
 
     public update(): void {
-        this.component.bookshelf = this.bookshelf
+        this.component.requestUpdate()
     }
 }

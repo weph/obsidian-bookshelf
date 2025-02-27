@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/html'
-import { GalleryCardProps } from './gallery-card'
+import { GalleryCard } from './gallery-card'
 import './gallery-card'
 
 const meta = {
@@ -14,10 +14,10 @@ const meta = {
 
         return element
     },
-} satisfies Meta<GalleryCardProps>
+} satisfies Meta<GalleryCard>
 
 export default meta
-type Story = StoryObj<GalleryCardProps>
+type Story = StoryObj<GalleryCard>
 
 export const Primary: Story = {
     args: {

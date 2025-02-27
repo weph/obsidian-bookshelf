@@ -3,7 +3,7 @@ import { screen } from 'shadow-dom-testing-library'
 import userEvent, { UserEvent } from '@testing-library/user-event'
 import './library'
 import { Library } from './library'
-import { fireEvent } from '@testing-library/dom'
+import { fireEvent, waitFor } from '@testing-library/dom'
 import { Book } from '../../bookshelf/book'
 import { BookBuilder } from '../../support/book-builder'
 import { BookSortOptions } from '../../bookshelf/sort/book-sort-options'
@@ -37,7 +37,7 @@ describe('Library', () => {
     test('should show all books', async () => {
         library.books = [book('Algorithms'), book('Refactoring')]
 
-        expect(cardTitles()).toEqual(['Algorithms', 'Refactoring'])
+        await waitFor(() => expect(cardTitles()).toEqual(['Algorithms', 'Refactoring']))
     })
 })
 
@@ -72,6 +72,8 @@ describe('Search', () => {
         await user.type(screen.getByShadowPlaceholderText('Search...'), 'foobar')
         resetSearch(screen.getByShadowPlaceholderText('Search...'))
 
+        await library.updateComplete
+
         expect(cardTitles()).toEqual([
             'BDD in Action',
             'Into Thin Air',
@@ -100,12 +102,12 @@ describe('Sorting', () => {
             library.sortOptions = sortOptions
         })
 
-        test('Books should be ordered by first sort option by default', () => {
-            expect(cardTitles()).toEqual(['Animal Farm', 'Of Mice and Men', 'Pet Sematary'])
+        test('Books should be ordered by first sort option by default', async () => {
+            await waitFor(() => expect(cardTitles()).toEqual(['Animal Farm', 'Of Mice and Men', 'Pet Sematary']))
         })
 
         test('Books should be ordered by selected sort option', async () => {
-            await userEvent.selectOptions(screen.getByShadowLabelText('Sort'), 'desc')
+            await userEvent.selectOptions(screen.getByShadowLabelText('Sort'), screen.getByShadowText('desc'))
 
             expect(cardTitles()).toEqual(['Pet Sematary', 'Of Mice and Men', 'Animal Farm'])
         })
@@ -118,7 +120,7 @@ describe('Clicking on a book cover', () => {
         library.books = [intoThinAir]
         library.onBookClick = onBookClick
 
-        await user.click(screen.getByShadowText('Into Thin Air'))
+        await user.click(await screen.findByShadowText('Into Thin Air'))
 
         expect(onBookClick).toHaveBeenCalledWith(intoThinAir)
     })

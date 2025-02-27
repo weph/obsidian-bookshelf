@@ -2,121 +2,97 @@ import { Book } from '../../bookshelf/book'
 import '../chart/pages-read-bar-chart/pages-read-bar-chart'
 import '../button/button'
 import '../star-rating/star-rating'
-import { PagesReadBarChart } from '../chart/pages-read-bar-chart/pages-read-bar-chart'
 import { Interval } from '../../bookshelf/reading-journey/statistics/statistics'
-
-export interface BookDetailsProps {
-    book: Book
-    openNote: (book: Book) => void
-}
-
-export class BookDetails extends HTMLElement implements BookDetailsProps {
-    private root: ShadowRoot
-
-    private _book: Book
-
-    private readingProgressChart: PagesReadBarChart
-
-    public openNote: (book: Book) => void = () => {}
-
-    constructor() {
-        super()
-
-        this.root = this.attachShadow({ mode: 'open' })
-    }
-
-    private update(): void {
-        const cover = this.book.metadata.cover
-        const title = this.book.metadata.title
-        const authors = this.book.metadata.authors
-        const published = this.book.metadata.published
-        const rating = this.book.metadata.rating
-        const tags = this.book.metadata.tags
-
-        this.root.innerHTML = `
-            <main>
-                <div id="top">
-                    <div id="cover">
-                        ${cover ? `<img src="${cover}" alt="${title}" />` : ''}
-                    </div>
-                    <div id="details">
-                        <ul id="metadata">
-                            ${authors?.length ? `<li><strong>Author:</strong> ${authors.join(', ')}</li>` : ''}
-                            ${published ? `<li><strong>Published:</strong> ${published.getFullYear()}</li>` : ''}
-                            ${rating ? `<li><strong>Rating:</strong> <bookshelf-ui-star-rating id="rating" value="${rating}"></bookshelf-ui-star-rating></li>` : ''}
-                            ${tags?.length ? `<li><strong>Tags:</strong> ${tags.join(', ')}</li>` : ''}
-                        </ul>
-                        <div id="actions">
-                            <bookshelf-ui-button id="open-note" text="Open Note"></bookshelf-ui-button>
-                        </div>
-                    </div>
-                </div>
-                <bookshelf-pages-read-bar-chart></bookshelf-pages-read-bar-chart>
-            </main>
-            <style>
-                #top {
-                    display: flex;
-                    flex-direction: row;
-                    gap: 15px;
-                }
-                
-                #cover {
-                    width: 25%;
-                    aspect-ratio: 1/1.25;
-                }
-                
-                #cover img {
-                    width: 100%;
-                }
-                
-                #details {
-                    display: flex;
-                    flex-direction: column;
-                    flex-grow: 1;
-                }
-                
-                #metadata {
-                    flex-grow: 1;
-                    list-style: none;
-                    padding: 0;
-                    margin: 0;
-                }
-                
-                #metadata li {
-                    padding: 2px;
-                }
-                
-                #actions {
-                    display: flex;
-                    justify-content: flex-end;
-                }
-                
-                #rating {
-                    display: inline-block;
-                }
-            </style>
-        `
-
-        this.readingProgressChart = this.root.querySelector('bookshelf-pages-read-bar-chart')!
-        this.readingProgressChart.data = this.book.readingJourney.statistics().pagesRead(Interval.Day)
-        this.readingProgressChart.xAxisUnit = 'day'
-
-        this.root.querySelector('#open-note')!.addEventListener('click', () => this.openNote(this._book))
-    }
-
-    get book() {
-        return this._book
-    }
-
-    set book(book: Book) {
-        this._book = book
-        this.update()
-    }
-}
+import { css, html, LitElement } from 'lit'
+import { customElement, property } from 'lit/decorators.js'
 
 const TAG_NAME = 'bookshelf-book-details'
 
-customElements.define(TAG_NAME, BookDetails)
+@customElement(TAG_NAME)
+export class BookDetails extends LitElement {
+    static styles = css`
+        #top {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+        }
+
+        #cover {
+            width: 25%;
+            aspect-ratio: 1/1.25;
+        }
+
+        #cover img {
+            width: 100%;
+        }
+
+        #details {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        #metadata {
+            flex-grow: 1;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #metadata li {
+            padding: 2px;
+        }
+
+        #actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        #rating {
+            display: inline-block;
+        }
+    `
+
+    @property()
+    public book: Book
+
+    @property()
+    public openNote: (book: Book) => void
+
+    protected render() {
+        const { cover, title, authors, published, rating, tags } = this.book.metadata
+
+        const data = Array.from(this.book.readingJourney.statistics().pagesRead(Interval.Day).entries()).map(
+            (entry) => ({ x: entry[0].getTime(), y: entry[1] }),
+        )
+
+        return html`
+            <div id="top">
+                <div id="cover">${cover ? html`<img src="${cover}" alt="${title}" />` : ''}</div>
+                <div id="details">
+                    <ul id="metadata">
+                        ${authors?.length ? html` <li><strong>Author:</strong> ${authors.join(', ')}</li>` : ''}
+                        ${published ? html` <li><strong>Published:</strong> ${published.getFullYear()}</li>` : ''}
+                        ${rating
+                            ? html` <li>
+                                  <strong>Rating:</strong>
+                                  <bookshelf-ui-star-rating id="rating" value="${rating}"></bookshelf-ui-star-rating>
+                              </li>`
+                            : ''}
+                        ${tags?.length ? html` <li><strong>Tags:</strong> ${tags.join(', ')}</li>` : ''}
+                    </ul>
+                    <div id="actions">
+                        <bookshelf-ui-button
+                            text="Open Note"
+                            @click=${() => this.openNote(this.book)}
+                        ></bookshelf-ui-button>
+                    </div>
+                </div>
+            </div>
+            <bookshelf-pages-read-bar-chart .data=${data} x-axis-unit="day"></bookshelf-pages-read-bar-chart>
+        `
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {

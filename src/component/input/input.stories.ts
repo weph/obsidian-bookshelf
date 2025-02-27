@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/html'
 import './input'
 import { fn } from '@storybook/test'
-import { InputProps } from './input'
+import { Input } from './input'
 
 const meta = {
     title: 'UI/Input',
@@ -17,10 +17,10 @@ const meta = {
 
         return element
     },
-} satisfies Meta<InputProps>
+} satisfies Meta<Input>
 
 export default meta
-type Story = StoryObj<InputProps>
+type Story = StoryObj<Input>
 
 export const Primary: Story = {}
 

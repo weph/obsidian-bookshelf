@@ -2,20 +2,24 @@ import { TimeUnit } from 'chart.js/auto'
 import 'chartjs-adapter-luxon'
 import '../../chart/pages-read-bar-chart/pages-read-bar-chart'
 import { Interval, Statistics } from '../../../bookshelf/reading-journey/statistics/statistics'
-import { Dropdown } from '../../dropdown/dropdown'
-import { PagesReadBarChart } from '../../chart/pages-read-bar-chart/pages-read-bar-chart'
+import { css, html, LitElement } from 'lit'
+import { customElement, property, state } from 'lit/decorators.js'
 
-export interface ReadingProgressBarChartProps {
-    statistics: Statistics
-}
+const TAG_NAME = 'bookshelf-statistics-pages-read-chart'
 
 interface IntervalValue {
     chart: TimeUnit
     statistics: Interval
 }
 
-export class PagesReadChart extends HTMLElement implements ReadingProgressBarChartProps {
-    private root: ShadowRoot
+@customElement(TAG_NAME)
+export class PagesReadChart extends LitElement {
+    static styles = css`
+        #chart-container {
+            width: 100%;
+            aspect-ratio: 2/1;
+        }
+    `
 
     private intervals: { [key: string]: IntervalValue } = {
         year: {
@@ -36,33 +40,14 @@ export class PagesReadChart extends HTMLElement implements ReadingProgressBarCha
         },
     }
 
-    private intervalDropdown: Dropdown<IntervalValue>
+    @state()
+    private interval = this.intervals.year
 
-    private chart: PagesReadBarChart
+    @property()
+    public statistics: Statistics | null = null
 
-    private _statistics: Statistics | null = null
-
-    constructor() {
-        super()
-
-        this.root = this.attachShadow({ mode: 'open' })
-        this.root.innerHTML = `
-            <bookshelf-ui-dropdown></bookshelf-ui-dropdown>
-            <div id="chart-container">
-                <bookshelf-pages-read-bar-chart></bookshelf-pages-read-bar-chart>
-            </div>
-            <style>
-                #chart-container {
-                    width: 100%;
-                    aspect-ratio: 2/1;
-                }
-            </style>
-        `
-
-        this.intervalDropdown = this.root.querySelector('bookshelf-ui-dropdown')!
-        this.intervalDropdown.value = this.intervals.month
-        this.intervalDropdown.onChange = () => this.update()
-        this.intervalDropdown.options = [
+    protected render() {
+        const intervalOptions = [
             {
                 value: this.intervals.year,
                 label: 'Year',
@@ -81,27 +66,32 @@ export class PagesReadChart extends HTMLElement implements ReadingProgressBarCha
             },
         ]
 
-        this.chart = this.root.querySelector('bookshelf-pages-read-bar-chart')!
+        return html`
+            <bookshelf-ui-dropdown
+                .value=${this.interval}
+                .options=${intervalOptions}
+                .onChange=${(value: (typeof this.intervals)[0]) => (this.interval = value)}
+            ></bookshelf-ui-dropdown>
+            <div id="chart-container">
+                <bookshelf-pages-read-bar-chart
+                    x-axis-unit="${this.interval.chart}"
+                    .data=${this.data()}
+                ></bookshelf-pages-read-bar-chart>
+            </div>
+        `
     }
 
-    private update(): void {
-        if (this._statistics === null) {
-            return
+    private data() {
+        if (this.statistics === null) {
+            return []
         }
 
-        this.chart.xAxisUnit = this.intervalDropdown.value.chart
-        this.chart.data = this._statistics.pagesRead(this.intervalDropdown.value.statistics)
-    }
-
-    set statistics(value: Statistics) {
-        this._statistics = value
-        this.update()
+        return Array.from(this.statistics.pagesRead(this.interval.statistics).entries()).map((entry) => ({
+            x: entry[0].getTime(),
+            y: entry[1],
+        }))
     }
 }
-
-const TAG_NAME = 'bookshelf-statistics-pages-read-chart'
-
-customElements.define(TAG_NAME, PagesReadChart)
 
 declare global {
     interface HTMLElementTagNameMap {

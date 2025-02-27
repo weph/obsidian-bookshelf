@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/html'
 import './button'
-import { ButtonProps } from './button'
+import { Button } from './button'
 
 const meta = {
     title: 'UI/Button',
@@ -14,9 +14,9 @@ const meta = {
 
         return element
     },
-} satisfies Meta<ButtonProps>
+} satisfies Meta<Button>
 
 export default meta
-type Story = StoryObj<ButtonProps>
+type Story = StoryObj<Button>
 
 export const Primary: Story = {}

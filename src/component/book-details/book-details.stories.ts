@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/html'
 import './book-details'
-import { BookDetailsProps } from './book-details'
+import { BookDetails } from './book-details'
 import { BookBuilder } from '../../support/book-builder'
 import { fn } from '@storybook/test'
 
@@ -16,10 +16,10 @@ const meta = {
     args: {
         openNote: fn(),
     },
-} satisfies Meta<BookDetailsProps>
+} satisfies Meta<BookDetails>
 
 export default meta
-type Story = StoryObj<BookDetailsProps>
+type Story = StoryObj<BookDetails>
 
 export const Primary: Story = {
     args: {

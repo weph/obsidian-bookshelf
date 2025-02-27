@@ -1,68 +1,62 @@
-export interface InputProps {
-    type: string
-    placeholder: string
-    onUpdate: (value: string) => void
-}
+import { css, html, LitElement } from 'lit'
+import { customElement, property, query } from 'lit/decorators.js'
 
-export class Input extends HTMLElement implements InputProps {
-    private events = ['keyup', 'change', 'input', 'search']
+const TAG_NAME = 'bookshelf-ui-input'
 
-    private root: ShadowRoot
+@customElement(TAG_NAME)
+export class Input extends LitElement {
+    static styles = css`
+        input {
+            height: var(--bookshelf--ui--input--height);
+            border-style: solid;
+            border-radius: var(--bookshelf--ui--input--border-radius);
+            border-width: var(--bookshelf--ui--input--border-width);
+            border-color: var(--bookshelf--ui--dropdown--border-color);
+            font-weight: var(--bookshelf--ui--input--font-weight);
+            padding: var(--bookshelf--ui--input--padding);
+        }
+    `
+    @query('input')
+    private input: HTMLInputElement | null
 
-    private readonly realInput: HTMLInputElement
+    private _value: string
 
     private lastValue: string
 
-    private readonly onUpdateListener: () => void
+    @property()
+    public type: string
 
+    @property()
+    public placeholder: string
+
+    @property()
     public onUpdate: (value: string) => void
 
-    constructor() {
-        super()
-
-        this.root = this.attachShadow({ mode: 'open' })
-        this.realInput = document.createElement('input')
-        this.root.appendChild(this.realInput)
-
-        // Stryker disable all
-        this.realInput.style.height = 'var(--bookshelf--ui--input--height)'
-        this.realInput.style.borderStyle = 'solid'
-        this.realInput.style.borderRadius = 'var(--bookshelf--ui--input--border-radius)'
-        this.realInput.style.borderWidth = 'var(--bookshelf--ui--input--border-width)'
-        this.realInput.style.borderColor = 'var(--bookshelf--ui--dropdown--border-color)'
-        this.realInput.style.fontWeight = 'var(--bookshelf--ui--input--font-weight)'
-        this.realInput.style.padding = 'var(--bookshelf--ui--input--padding)'
-        // Stryker restore all
-
-        this.onUpdateListener = this.update.bind(this)
+    @property()
+    set value(value: string) {
+        this._value = value
     }
 
-    public connectedCallback(): void {
-        for (const event of this.events) {
-            this.realInput.addEventListener(event, this.onUpdateListener)
-        }
+    get value() {
+        return this.input?.value || ''
     }
 
-    public disconnectedCallback(): void {
-        for (const event of this.events) {
-            this.realInput.removeEventListener(event, this.onUpdateListener)
-        }
+    protected render() {
+        return html`
+            <input
+                type="${this.type}"
+                placeholder="${this.placeholder}"
+                value="${this._value}"
+                @keyup="${() => this.handleUpdate()}"
+                @change="${() => this.handleUpdate()}"
+                @input="${() => this.handleUpdate()}"
+                @search="${() => this.handleUpdate()}"
+            />
+        `
     }
 
-    get value(): string {
-        return this.realInput.value
-    }
-
-    set type(value: string) {
-        this.realInput.setAttribute('type', value)
-    }
-
-    set placeholder(value: string) {
-        this.realInput.setAttribute('placeholder', value)
-    }
-
-    private update(): void {
-        const currentValue = this.realInput.value
+    private handleUpdate(): void {
+        const currentValue = this.value
         if (!this.onUpdate || this.lastValue === currentValue) {
             return
         }
@@ -72,10 +66,6 @@ export class Input extends HTMLElement implements InputProps {
         this.onUpdate(currentValue)
     }
 }
-
-const TAG_NAME = 'bookshelf-ui-input'
-
-customElements.define(TAG_NAME, Input)
 
 declare global {
     interface HTMLElementTagNameMap {

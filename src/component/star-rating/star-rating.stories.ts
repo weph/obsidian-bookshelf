@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/html'
 import './star-rating'
-import { StarRatingProps } from './star-rating'
+import { StarRating } from './star-rating'
 
 const meta = {
     title: 'UI/Star Rating',
@@ -11,10 +11,10 @@ const meta = {
 
         return element
     },
-} satisfies Meta<StarRatingProps>
+} satisfies Meta<StarRating>
 
 export default meta
-type Story = StoryObj<StarRatingProps>
+type Story = StoryObj<StarRating>
 
 export const Primary: Story = {
     args: {

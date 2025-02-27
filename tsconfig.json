@@ -13,7 +13,8 @@
         "strictNullChecks": true,
         "lib": ["DOM", "ES5", "ES6", "ES7"],
         "skipLibCheck": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "experimentalDecorators": true
     },
     "include": ["src/**/*.ts"]
 }
