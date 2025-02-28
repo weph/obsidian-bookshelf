@@ -24,7 +24,7 @@ export class Input extends LitElement {
     private lastValue: string
 
     @property()
-    public type: string
+    public type: 'text' | 'search'
 
     @property()
     public placeholder: string

@@ -1,6 +1,7 @@
 import { Book } from '../../bookshelf/book'
 import { css, html, LitElement } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
+import '../star-rating/star-rating'
 
 const TAG_NAME = 'bookshelf-table'
 
@@ -24,7 +25,7 @@ export class Table extends LitElement {
         }
     `
 
-    @property()
+    @property({ attribute: false })
     public books: Array<Book> = []
 
     @property()
@@ -51,7 +52,7 @@ export class Table extends LitElement {
                                 <td>${book.metadata.published?.getFullYear() || ''}</td>
                                 <td>
                                     <bookshelf-ui-star-rating
-                                        value="${book.metadata.rating}"
+                                        value="${book.metadata.rating || 0}"
                                     ></bookshelf-ui-star-rating>
                                 </td>
                                 <td>${book.metadata.tags?.join(', ') || ''}</td>

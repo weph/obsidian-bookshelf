@@ -43,11 +43,11 @@ export class Statistics extends LitElement {
         }
     `
 
-    @property()
+    @property({ attribute: false })
     public bookshelf: Bookshelf | null = null
 
     @property()
-    public year: number | null = null
+    public year: string = ''
 
     @property()
     public onBookClick: ((book: Book) => void) | null
@@ -57,25 +57,26 @@ export class Statistics extends LitElement {
             return html`...`
         }
 
-        const statistics = this.bookshelf.statistics(this.year)
+        const statistics = this.bookshelf.statistics(this.year === '' ? null : parseInt(this.year))
         const actions = statistics.actions()
 
         const yearOptions = [
-            { value: null, label: 'All' },
+            { value: '', label: 'All' },
             ...this.bookshelf
                 .statistics()
                 .years()
                 .reverse()
-                .map((y) => ({ value: y, label: y.toString() })),
+                .map((y) => ({ value: y.toString(), label: y.toString() })),
         ]
 
         return html`
             <bookshelf-ui-dropdown
                 .options=${yearOptions}
-                .onChange=${(value: null | number) => (this.year = value)}
+                .value=${this.year === null ? '' : this.year.toString()}
+                .onChange=${(value: string) => (this.year = value)}
             ></bookshelf-ui-dropdown>
             <div class="container">
-                <h2>Books</h2>
+                <h2>Books ${this.year}</h2>
                 <div id="book-counts" class="counts">
                     <div>
                         <div class="number">${actions.started}</div>

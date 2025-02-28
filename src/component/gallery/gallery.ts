@@ -1,3 +1,4 @@
+import { ifDefined } from 'lit/directives/if-defined.js'
 import { Book } from '../../bookshelf/book'
 import './gallery-card'
 import { css, html, LitElement } from 'lit'
@@ -16,7 +17,7 @@ export class Gallery extends LitElement {
         }
     `
 
-    @property()
+    @property({ attribute: false })
     public books: Array<Book>
 
     @property()
@@ -24,12 +25,11 @@ export class Gallery extends LitElement {
 
     protected render() {
         return html` ${this.books.map(
-            (book, index) =>
+            (book) =>
                 html` <div role="list">
                     <bookshelf-gallery-card
-                        index="${index}"
                         title="${book.metadata.title}"
-                        cover="${book.metadata.cover}"
+                        cover="${ifDefined(book.metadata.cover)}"
                         role="listitem"
                         @click="${() => this.onBookClick && this.onBookClick(book)}"
                     >

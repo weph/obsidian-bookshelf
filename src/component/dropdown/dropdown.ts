@@ -3,13 +3,13 @@ import { customElement, property, query, state } from 'lit/decorators.js'
 
 const TAG_NAME = 'bookshelf-ui-dropdown'
 
-interface Option<T> {
-    value: T
+interface Option {
+    value: string
     label: string
 }
 
 @customElement(TAG_NAME)
-export class Dropdown<T = never> extends LitElement {
+export class Dropdown extends LitElement {
     static styles = css`
         select {
             display: block;
@@ -30,16 +30,16 @@ export class Dropdown<T = never> extends LitElement {
     `
 
     @state()
-    private _value: T | undefined = undefined
+    private _value: string | undefined = undefined
 
     @query('select')
     private select: HTMLSelectElement | null
 
-    @property()
-    public options: Array<Option<T>> = []
+    @property({ attribute: false })
+    public options: Array<Option> = []
 
     @property()
-    public onChange: (value: T) => void = () => {}
+    public onChange: (value: string) => void = () => {}
 
     @property()
     public label: string
@@ -59,12 +59,12 @@ export class Dropdown<T = never> extends LitElement {
         }
     }
 
-    @property()
-    set value(value: T) {
+    @property({ attribute: false })
+    set value(value: string) {
         this._value = value
     }
 
-    get value(): T | undefined {
+    get value(): string | undefined {
         if (this.select === null) {
             return this.options[0]?.value
         }

@@ -53,7 +53,7 @@ export class BookDetails extends LitElement {
         }
     `
 
-    @property()
+    @property({ attribute: false })
     public book: Book
 
     @property()
@@ -89,7 +89,7 @@ export class BookDetails extends LitElement {
                     </div>
                 </div>
             </div>
-            <bookshelf-pages-read-bar-chart .data=${data} x-axis-unit="day"></bookshelf-pages-read-bar-chart>
+            <bookshelf-pages-read-bar-chart .data=${data} xAxisUnit="day"></bookshelf-pages-read-bar-chart>
         `
     }
 }

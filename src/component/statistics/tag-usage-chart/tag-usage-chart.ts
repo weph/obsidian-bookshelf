@@ -30,7 +30,7 @@ export class TagUsageChart extends LitElement {
 
     private chart: Chart | null = null
 
-    @property()
+    @property({ attribute: false })
     public statistics: Statistics | null = null
 
     protected render() {

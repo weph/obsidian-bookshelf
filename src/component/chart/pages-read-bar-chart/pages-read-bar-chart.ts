@@ -18,7 +18,7 @@ export class PagesReadBarChart extends LitElement {
 
     private chart: Chart | null = null
 
-    @property()
+    @property({ type: Array })
     public data: Array<{ x: number; y: number }> = []
 
     @property()

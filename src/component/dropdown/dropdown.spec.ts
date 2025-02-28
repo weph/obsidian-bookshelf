@@ -4,10 +4,10 @@ import { Dropdown } from './dropdown'
 import { screen } from 'shadow-dom-testing-library'
 import userEvent from '@testing-library/user-event'
 
-const fooValue = { name: 'foo' }
-const barValue = { name: 'bar' }
+const fooValue = 'foo-value'
+const barValue = 'bar-value'
 const onChange = jest.fn()
-let dropdown: Dropdown<{ name: string }>
+let dropdown: Dropdown
 
 beforeEach(() => {
     jest.resetAllMocks()

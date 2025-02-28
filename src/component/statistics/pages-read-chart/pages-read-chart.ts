@@ -4,6 +4,7 @@ import '../../chart/pages-read-bar-chart/pages-read-bar-chart'
 import { Interval, Statistics } from '../../../bookshelf/reading-journey/statistics/statistics'
 import { css, html, LitElement } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
+import '../../dropdown/dropdown'
 
 const TAG_NAME = 'bookshelf-statistics-pages-read-chart'
 
@@ -41,27 +42,27 @@ export class PagesReadChart extends LitElement {
     }
 
     @state()
-    private interval = this.intervals.year
+    private interval = 'year'
 
-    @property()
+    @property({ attribute: false })
     public statistics: Statistics | null = null
 
     protected render() {
         const intervalOptions = [
             {
-                value: this.intervals.year,
+                value: 'year',
                 label: 'Year',
             },
             {
-                value: this.intervals.month,
+                value: 'month',
                 label: 'Month',
             },
             {
-                value: this.intervals.week,
+                value: 'week',
                 label: 'Week',
             },
             {
-                value: this.intervals.day,
+                value: 'day',
                 label: 'Day',
             },
         ]
@@ -70,11 +71,11 @@ export class PagesReadChart extends LitElement {
             <bookshelf-ui-dropdown
                 .value=${this.interval}
                 .options=${intervalOptions}
-                .onChange=${(value: (typeof this.intervals)[0]) => (this.interval = value)}
+                .onChange=${(value: string) => (this.interval = value)}
             ></bookshelf-ui-dropdown>
             <div id="chart-container">
                 <bookshelf-pages-read-bar-chart
-                    x-axis-unit="${this.interval.chart}"
+                    xAxisUnit="${this.chartInterval}"
                     .data=${this.data()}
                 ></bookshelf-pages-read-bar-chart>
             </div>
@@ -86,10 +87,18 @@ export class PagesReadChart extends LitElement {
             return []
         }
 
-        return Array.from(this.statistics.pagesRead(this.interval.statistics).entries()).map((entry) => ({
+        return Array.from(this.statistics.pagesRead(this.statisticsInterval).entries()).map((entry) => ({
             x: entry[0].getTime(),
             y: entry[1],
         }))
+    }
+
+    private get chartInterval(): TimeUnit {
+        return this.intervals[this.interval].chart
+    }
+
+    private get statisticsInterval(): Interval {
+        return this.intervals[this.interval].statistics
     }
 }
 

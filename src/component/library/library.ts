@@ -55,18 +55,18 @@ export class Library extends LitElement {
     private searchTerm: string = ''
 
     @state()
-    private sortOption: string | null = null
+    private sortOption: string = ''
 
     @property()
     public view: ViewType
 
-    @property()
+    @property({ attribute: false })
     public books: Array<Book> = []
 
     @property()
     public onBookClick: ((book: Book) => void) | null = null
 
-    @property()
+    @property({ attribute: false })
     public sortOptions: BookSortOptions = new BookSortOptions()
 
     protected render() {
@@ -89,12 +89,12 @@ export class Library extends LitElement {
                 <div id="header-right">
                     <bookshelf-ui-dropdown
                         label="View"
-                        value=${this.view}
+                        .value=${this.view}
                         .options=${[
                             { value: 'gallery', label: 'Gallery' },
                             { value: 'table', label: 'Table' },
                         ]}
-                        .onChange=${(view: ViewType) => (this.view = view)}
+                        .onChange=${(view: string) => (this.view = view as ViewType)}
                     ></bookshelf-ui-dropdown>
                 </div>
             </header>
@@ -127,7 +127,7 @@ export class Library extends LitElement {
     }
 
     private sortFunction(): (a: Book, b: Book) => number {
-        if (this.sortOption !== null) {
+        if (this.sortOption !== '') {
             return this.sortOptions.compareFunction(this.sortOption)
         }
 
