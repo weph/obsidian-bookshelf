@@ -44,9 +44,9 @@ export default class BookshelfPlugin extends Plugin {
         this.addRibbonIcon('library-big', 'Bookshelf: Library', () => this.activateView(VIEW_TYPE_LIBRARY))
         this.addRibbonIcon('chart-spline', 'Bookshelf: Statistics', () => this.activateView(VIEW_TYPE_STATISTICS))
 
-        this.app.metadataCache.on('resolve', async (file) => await this.handleFile(file))
-        this.app.metadataCache.on('changed', async (file) => await this.handleFile(file))
-        this.app.vault.on('rename', (file: TFile, oldPath: string) => this.handleRename(file, oldPath))
+        this.registerEvent(this.app.metadataCache.on('resolve', async (file) => await this.handleFile(file)))
+        this.registerEvent(this.app.metadataCache.on('changed', async (file) => await this.handleFile(file)))
+        this.registerEvent(this.app.vault.on('rename', (file: TFile, oldPath) => this.handleRename(file, oldPath)))
     }
 
     private dailyNotesSettings(): DailyNotesSettings {
