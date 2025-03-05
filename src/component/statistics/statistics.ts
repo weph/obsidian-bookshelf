@@ -110,7 +110,7 @@ export class Statistics extends LitElement {
             </div>
             <div class="container">
                 <h2>Books</h2>
-                <bookshelf-gallery .books=${statistics.books()}></bookshelf-gallery>
+                <bookshelf-gallery .books=${statistics.books()} .onBookClick=${this.onBookClick}></bookshelf-gallery>
             </div>
         `
     }
