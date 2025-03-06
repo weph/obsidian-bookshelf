@@ -106,8 +106,6 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
                 await this.plugin.saveSettings()
             })
-
-            textArea.inputEl.className = 'bookshelf--settings--full-width'
         })
 
         new Setting(containerEl)
@@ -119,8 +117,6 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
                     await this.plugin.saveSettings()
                 })
-
-                field.inputEl.className = 'bookshelf--settings--full-width'
             })
 
         new Setting(containerEl)
@@ -132,8 +128,6 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
                     await this.plugin.saveSettings()
                 })
-
-                field.inputEl.className = 'bookshelf--settings--full-width'
             })
 
         new Setting(containerEl)
@@ -145,8 +139,6 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
                     await this.plugin.saveSettings()
                 })
-
-                field.inputEl.className = 'bookshelf--settings--full-width'
             })
 
         new Setting(containerEl)
@@ -158,8 +150,6 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
                     await this.plugin.saveSettings()
                 })
-
-                field.inputEl.className = 'bookshelf--settings--full-width'
             })
 
         new Setting(containerEl)
@@ -171,8 +161,6 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
                     await this.plugin.saveSettings()
                 })
-
-                field.inputEl.className = 'bookshelf--settings--full-width'
             })
     }
 
@@ -190,8 +178,6 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
                     await this.plugin.saveSettings()
                 })
-
-                field.inputEl.className = 'bookshelf--settings--full-width'
             })
 
         new Setting(containerEl)
@@ -203,8 +189,6 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
                     await this.plugin.saveSettings()
                 })
-
-                field.inputEl.className = 'bookshelf--settings--full-width'
             })
 
         new Setting(containerEl)
@@ -216,8 +200,6 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
                     await this.plugin.saveSettings()
                 })
-
-                field.inputEl.className = 'bookshelf--settings--full-width'
             })
 
         new Setting(containerEl)
@@ -229,8 +211,6 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
                     await this.plugin.saveSettings()
                 })
-
-                field.inputEl.className = 'bookshelf--settings--full-width'
             })
 
         new Setting(containerEl)
@@ -242,8 +222,6 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
                     await this.plugin.saveSettings()
                 })
-
-                field.inputEl.className = 'bookshelf--settings--full-width'
             })
     }
 }
