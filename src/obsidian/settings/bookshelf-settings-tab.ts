@@ -1,5 +1,6 @@
 import { App, PluginSettingTab, Setting } from 'obsidian'
 import BookshelfPlugin from '../bookshelf-plugin'
+import '../../component/date-format-description/date-format-description'
 
 export class BookshelfSettingsTab extends PluginSettingTab {
     plugin: BookshelfPlugin
@@ -99,14 +100,20 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl).setName('Book note patterns').setHeading()
 
-        const dateFormat = new Setting(containerEl).setName('Date format')
-        dateFormat.addText((textArea) => {
-            textArea.setValue(this.plugin.settings.bookNote.dateFormat).onChange(async (value) => {
-                this.plugin.settings.bookNote.dateFormat = value
+        const dateFormatDescription = document.createElement('bookshelf-date-format-description')
+        dateFormatDescription.format = this.plugin.settings.bookNote.dateFormat
 
-                await this.plugin.saveSettings()
+        new Setting(containerEl)
+            .setName('Date format')
+            .setDesc(this.fragment(dateFormatDescription))
+            .addText((textArea) => {
+                textArea.setValue(this.plugin.settings.bookNote.dateFormat).onChange(async (value) => {
+                    this.plugin.settings.bookNote.dateFormat = value
+                    dateFormatDescription.format = value
+
+                    await this.plugin.saveSettings()
+                })
             })
-        })
 
         new Setting(containerEl)
             .setName('Started book')
@@ -223,5 +230,12 @@ export class BookshelfSettingsTab extends PluginSettingTab {
                     await this.plugin.saveSettings()
                 })
             })
+    }
+
+    private fragment(child: HTMLElement): DocumentFragment {
+        const fragment = document.createDocumentFragment()
+        fragment.replaceChildren(child)
+
+        return fragment
     }
 }
