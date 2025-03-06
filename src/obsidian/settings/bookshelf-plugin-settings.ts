@@ -49,9 +49,9 @@ export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
     },
     dailyNote: {
         patterns: {
-            started: 'Started: {book}',
-            finished: 'Finished: {book}',
-            abandoned: 'Abandoned: {book}',
+            started: 'Started {book}',
+            finished: 'Finished {book}',
+            abandoned: 'Abandoned {book}',
             absoluteProgress: 'Read {book}: {startPage}-{endPage}',
             relativeProgress: 'Read {book}: {endPage}',
         },
