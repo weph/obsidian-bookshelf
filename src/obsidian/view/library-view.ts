@@ -23,7 +23,7 @@ export class LibraryView extends ItemView {
     }
 
     getDisplayText(): string {
-        return 'Library'
+        return 'Bookshelf library'
     }
 
     protected async onOpen(): Promise<void> {

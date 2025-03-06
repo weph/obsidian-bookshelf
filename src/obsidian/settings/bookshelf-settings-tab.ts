@@ -13,11 +13,11 @@ export class BookshelfSettingsTab extends PluginSettingTab {
     display(): void {
         this.containerEl.empty()
 
-        this.addSectionHeadline(this.containerEl, 'Book Settings')
+        this.addSectionHeadline(this.containerEl, 'Book')
         this.addBooksSettings()
         this.addBookProperties()
 
-        this.addSectionHeadline(this.containerEl, 'Reading Progress')
+        this.addSectionHeadline(this.containerEl, 'Reading progress')
         this.addBookNoteSettings()
         this.addDailyNoteSettings()
     }
@@ -26,7 +26,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
         const { containerEl } = this
 
         new Setting(containerEl)
-            .setName('Books Folder')
+            .setName('Books folder')
             .setDesc('Folder where your books are stored')
             .addText((text) =>
                 text.setValue(this.plugin.settings.booksFolder).onChange(async (value) => {
@@ -47,7 +47,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
     private addBookProperties(): void {
         const { containerEl } = this
 
-        new Setting(containerEl).setName('Book Note Properties').setHeading()
+        new Setting(containerEl).setName('Book note properties').setHeading()
 
         new Setting(containerEl)
             .setName('Cover')
@@ -97,9 +97,9 @@ export class BookshelfSettingsTab extends PluginSettingTab {
     private addBookNoteSettings(): void {
         const { containerEl } = this
 
-        new Setting(containerEl).setName('Book Note Patterns').setHeading()
+        new Setting(containerEl).setName('Book note patterns').setHeading()
 
-        const dateFormat = new Setting(containerEl).setName('Date Format')
+        const dateFormat = new Setting(containerEl).setName('Date format')
         dateFormat.addText((textArea) => {
             textArea.setValue(this.plugin.settings.bookNote.dateFormat).onChange(async (value) => {
                 this.plugin.settings.bookNote.dateFormat = value
@@ -111,7 +111,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
         })
 
         new Setting(containerEl)
-            .setName('Started Book')
+            .setName('Started book')
             .setDesc('{date}, {*}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.started).onChange(async (value) => {
@@ -124,7 +124,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             })
 
         new Setting(containerEl)
-            .setName('Abandoned Book')
+            .setName('Abandoned book')
             .setDesc('{date}, {*}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.abandoned).onChange(async (value) => {
@@ -137,7 +137,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             })
 
         new Setting(containerEl)
-            .setName('Finished Book')
+            .setName('Finished book')
             .setDesc('{date}, {*}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.finished).onChange(async (value) => {
@@ -150,7 +150,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             })
 
         new Setting(containerEl)
-            .setName('Reading Progress (absolute)')
+            .setName('Reading progress (absolute)')
             .setDesc('{date}, {startPage}, {endPage}, {*}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.absoluteProgress).onChange(async (value) => {
@@ -163,7 +163,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             })
 
         new Setting(containerEl)
-            .setName('Reading Progress (relative)')
+            .setName('Reading progress (relative)')
             .setDesc('{date}, {endPage}, {*}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.relativeProgress).onChange(async (value) => {
@@ -179,10 +179,10 @@ export class BookshelfSettingsTab extends PluginSettingTab {
     private addDailyNoteSettings(): void {
         const { containerEl } = this
 
-        new Setting(containerEl).setName('Daily Note Patterns').setHeading()
+        new Setting(containerEl).setName('Daily note patterns').setHeading()
 
         new Setting(containerEl)
-            .setName('Started Book')
+            .setName('Started book')
             .setDesc('{book}, {*}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.started).onChange(async (value) => {
@@ -195,7 +195,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             })
 
         new Setting(containerEl)
-            .setName('Abandoned Book')
+            .setName('Abandoned book')
             .setDesc('{book}, {*}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.abandoned).onChange(async (value) => {
@@ -208,7 +208,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             })
 
         new Setting(containerEl)
-            .setName('Finished Book')
+            .setName('Finished book')
             .setDesc('{book}, {*}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.finished).onChange(async (value) => {
@@ -221,7 +221,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             })
 
         new Setting(containerEl)
-            .setName('Reading Progress (absolute)')
+            .setName('Reading progress (absolute)')
             .setDesc('{book}, {startPage}, {endPage}, {*}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.absoluteProgress).onChange(async (value) => {
@@ -234,7 +234,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             })
 
         new Setting(containerEl)
-            .setName('Reading Progress (relative)')
+            .setName('Reading progress (relative)')
             .setDesc('{book}, {endPage}, {*}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.relativeProgress).onChange(async (value) => {

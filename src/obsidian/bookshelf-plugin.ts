@@ -41,8 +41,8 @@ export default class BookshelfPlugin extends Plugin {
         this.registerView(VIEW_TYPE_LIBRARY, (leaf) => new LibraryView(leaf, this.bookshelf))
         this.registerView(VIEW_TYPE_STATISTICS, (leaf) => new StatisticsView(leaf, this.bookshelf))
 
-        this.addRibbonIcon('library-big', 'Bookshelf: Library', () => this.activateView(VIEW_TYPE_LIBRARY))
-        this.addRibbonIcon('chart-spline', 'Bookshelf: Statistics', () => this.activateView(VIEW_TYPE_STATISTICS))
+        this.addRibbonIcon('library-big', 'Open Bookshelf library', () => this.activateView(VIEW_TYPE_LIBRARY))
+        this.addRibbonIcon('chart-spline', 'Open Bookshelf statistics', () => this.activateView(VIEW_TYPE_STATISTICS))
 
         this.registerEvent(this.app.metadataCache.on('resolve', async (file) => await this.handleFile(file)))
         this.registerEvent(this.app.metadataCache.on('changed', async (file) => await this.handleFile(file)))

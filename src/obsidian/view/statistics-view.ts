@@ -22,7 +22,7 @@ export class StatisticsView extends ItemView {
     }
 
     getDisplayText(): string {
-        return 'Statistics'
+        return 'Bookshelf statistics'
     }
 
     protected async onOpen(): Promise<void> {
