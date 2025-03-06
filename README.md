@@ -16,7 +16,7 @@ insights into your reading habits with beautiful charts.
 
 ### Book Notes
 
-Bookshelf gathers book notes from the folder specified in **Books Folder**.
+Bookshelf collects book notes from the folder specified in the **Books folder** setting.
 It currently processes the following metadata:
 
 - Cover (property: `cover`)
@@ -29,34 +29,66 @@ If your book notes use different property names, you can customize them in the p
 ### Reading Progress
 
 Bookshelf tracks your reading progress based on entries in your **book notes** and/or **daily notes**.
-A reading progress entry includes a date, a book, and an action.
-
-- For a book note, the book is implied.
-- For a daily note, the date is implied.
+A reading progress entry consists of a date, a book, and a recorded action (such as starting, reading, or finishing a book).
 
 You can specify the number of pages read by providing a start and end page, or just an end page.
 
 - If only an end page is given, Bookshelf assumes the reading continued from the last recorded page.
 - If no prior entry exists for the book, Bookshelf assumes reading started from page 1.
 
-For example, If the first entry logs reading from pages 10 to 180, and the next entry specifies only page 290, Bookshelf
+For example, if the first entry logs reading from pages 10 to 180, and the next entry specifies only page 290, Bookshelf
 assumes you read from page 181 to 290.
 
-You can customize the format of your reading progress entries in Bookshelf's settings to match your preferred style.
-
-#### Book Note Example
+Here's what entries in a book note look like using the default settings:
 
 ```markdown
-- 05/12/2024: Started
-- 05/12/2024: 10-180
-- 05/13/2024: 290
-- 05/13/2024: Finished
+- 2024-12-05: Started
+- 2024-12-05: 10-180
+- 2024-12-05: 290
+- 2024-12-05: Finished
 ```
 
-#### Daily Note Example
+You don't have to specify the book in this case, because it's implied from the note.
+
+Here's what entries in a daily note look like using the default settings:
 
 ```markdown
 - Finished [[Frankenstein]]
 - Started [[Dracula]]
 - Read [[Dracula]]: 1-130
+- Read [[Dracula]]: 210
+- Abandoned [[Dracula]]
 ```
+
+You don't have to specify the date, because it's implied from the note.
+
+### Customizing Reading Progress
+
+You can customize the format of your reading progress entries in Bookshelf's settings to match your preferred style.
+To do this, you have to build patterns using tokens that match the entries in your book notes and/or daily notes.
+
+You may use the following tokens in your patterns. Each pattern setting denotes which tokens are supported.
+
+- `{book}` WikiLink to the book
+- `{date}` Date of the entry formatted according to **Date format** setting
+- `{startPage}` The page you started reading on
+- `{endPage}` The last page you read
+- `{*}` Can match any text between tokens
+
+Let's say reading progress entries in your daily notes look like this:
+
+```markdown
+- Read [[The Shining]] from page 12 to page 133
+```
+
+In this case, you should use the following pattern: `Read {book} from page {startPage} to page {endPage}`.
+
+If you prefer a more flexible format, your entries might look like this:
+
+```markdown
+- Read [[The Shining]] from page 12 to page 133
+- Read [[The Shining]] from 133 to 151
+- Read [[The Shining]] pages 134 to 190
+```
+
+In this case, the wildcard token allows you to match the dynamic text: `Read {book} {*} {startPage} {*} {endPage}`.
