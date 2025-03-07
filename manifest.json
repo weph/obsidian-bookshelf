@@ -3,8 +3,8 @@
     "name": "Bookshelf",
     "version": "0.1.0",
     "minAppVersion": "1.0.0",
-    "description": "Manage your books and reading progress in Obsidian",
-    "author": "Philip Weinke <its@weph.dev>",
+    "description": "Organize your book notes, track your reading progress, and gain insights into your reading habits with detailed charts and statistics.",
+    "author": "Philip Weinke",
     "authorUrl": "https://weph.dev/",
     "isDesktopOnly": false
 }
