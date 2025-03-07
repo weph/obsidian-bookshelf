@@ -83,7 +83,7 @@ export class BookDetails extends LitElement {
                     </ul>
                     <div id="actions">
                         <bookshelf-ui-button
-                            text="Open Note"
+                            text="Open note"
                             @click=${() => this.openNote(this.book)}
                         ></bookshelf-ui-button>
                     </div>
