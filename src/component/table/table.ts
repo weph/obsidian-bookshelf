@@ -2,6 +2,7 @@ import { Book } from '../../bookshelf/book'
 import { css, html, LitElement } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import '../star-rating/star-rating'
+import { join } from 'lit/directives/join.js'
 
 const TAG_NAME = 'bookshelf-table'
 
@@ -48,7 +49,7 @@ export class Table extends LitElement {
                         (book) => html`
                             <tr>
                                 <td>${book.metadata.title}</td>
-                                <td>${book.metadata.authors?.join('<br />') || ''}</td>
+                                <td>${join(book.metadata.authors || [], html`<br />`)}</td>
                                 <td>${book.metadata.published?.getFullYear() || ''}</td>
                                 <td>
                                     <bookshelf-ui-star-rating
