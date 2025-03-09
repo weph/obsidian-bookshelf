@@ -3,65 +3,35 @@ import { Library } from './library'
 import './library'
 import { fn } from '@storybook/test'
 import { Book } from '../../bookshelf/book'
-import { BookBuilder } from '../../support/book-builder'
 import { defaultBookSortOptions } from '../../bookshelf/sort/default-book-sort-options'
+import { algorithms, books } from '../../support/book-fixtures'
 
 const meta = {
     title: 'Library',
-    args: {
-        onBookClick: fn(),
-        sortOptions: defaultBookSortOptions(),
-    },
-    render: (args) => {
-        const element = document.createElement('bookshelf-library')
-
-        Object.assign(element, args)
-
-        return element
-    },
 } satisfies Meta<Library>
-
-const books: Array<Book> = [
-    book('Algorithms', '/covers/algorithms.jpg'),
-    book(
-        'Continuous Delivery: Reliable Software Releases through Build, Test, and Deployment Automation',
-        '/covers/continuous-delivery.jpg',
-    ),
-    book('Code That Fits in Your Head: Heuristics for Software Engineering', '/covers/code-that-fits-in-your-head.jpg'),
-    book('Design Patterns: Elements of Reusable Object-Oriented Software', '/covers/design-patterns.jpg'),
-    book('Domain-Driven Design: Tackling Complexity in the Heart of Software', '/covers/domain-driven-design.jpg'),
-    book('Extreme Programming Explained', '/covers/extreme-programming-explained.jpg'),
-    book('Growing Object-Oriented Software, Guided by Tests', '/covers/growing-object-oriented-software.jpg'),
-    book('Implementing Domain-driven Design', '/covers/implementing-domain-driven-design.jpg'),
-    book("Michael Abrash's Graphics Programming Black Book", '/covers/graphics-programming-black-book.jpg'),
-    book('Refactoring', '/covers/refactoring.jpg'),
-    book('Test-Driven Development by Example', '/covers/test-driven-development-by-example.jpg'),
-    book('The Mythical Man-Month', '/covers/the-mythical-man-month.jpg'),
-    book('The Pragmatic Programmer', '/covers/the-pragmatic-programmer.jpg'),
-    book('Working Effectively with Legacy Code', '/covers/working-effectively-with-legacy-code.jpg'),
-]
 
 export default meta
 type Story = StoryObj<Library>
 
+function renderFunction(books: Array<Book>) {
+    return () => {
+        const element = document.createElement('bookshelf-library')
+        element.onBookClick = fn()
+        element.sortOptions = defaultBookSortOptions()
+        element.books = books
+
+        return element
+    }
+}
+
 export const Primary: Story = {
-    args: {
-        books,
-    },
+    render: renderFunction(Object.values(books)),
 }
 
 export const Empty: Story = {
-    args: {
-        books: [],
-    },
+    render: renderFunction([]),
 }
 
 export const SingleBook: Story = {
-    args: {
-        books: [books[0]],
-    },
-}
-
-function book(title: string, cover: string): Book {
-    return new BookBuilder().with('title', title).with('cover', cover).build()
+    render: renderFunction([algorithms]),
 }

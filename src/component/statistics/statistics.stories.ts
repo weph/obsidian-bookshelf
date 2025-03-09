@@ -10,13 +10,6 @@ import { dailyNotePatterns } from '../../bookshelf/reading-journey/pattern/daily
 
 const meta = {
     title: 'Statistics',
-    render: (args) => {
-        const element = document.createElement('bookshelf-statistics')
-
-        Object.assign(element, args)
-
-        return element
-    },
 } satisfies Meta<StatisticsProps>
 
 export default meta
@@ -60,19 +53,20 @@ const bookshelf = new Bookshelf(
 )
 
 bookshelf.process(
-    new FakeNote('Books/Book.md', new StaticMetadata({}), [
-        '2025-01-01: 1-50',
-        '2025-01-02: 51-110',
-        '2025-02-01: 111-130',
-        '2025-03-05: 131-200',
-        '2025-03-06: 201-240',
-    ]),
+    new FakeNote(
+        'Books/Book.md',
+        new StaticMetadata({
+            tags: ['fiction', 'fantasy'],
+        }),
+        ['2025-01-01: 1-50', '2025-01-02: 51-110', '2025-02-01: 111-130', '2025-03-05: 131-200', '2025-03-06: 201-240'],
+    ),
 )
 
 export const Primary: Story = {
-    args: {
-        bookshelf,
+    render: () => {
+        const element = document.createElement('bookshelf-statistics')
+        element.bookshelf = bookshelf
+
+        return element
     },
 }
-
-export const Empty: Story = {}
