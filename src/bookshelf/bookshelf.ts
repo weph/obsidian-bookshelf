@@ -8,7 +8,15 @@ import { BookMetadataFactory } from './metadata/book-metadata-factory'
 import { BookNoteMatch } from './reading-journey/pattern/book-note/book-note-pattern'
 import { DailyNoteMatch } from './reading-journey/pattern/daily-note/daily-note-pattern'
 import { PatternCollection } from './reading-journey/pattern/pattern-collection'
-import { DailyNotesSettings } from '../obsidian/bookshelf-plugin'
+
+interface DailyNoteSettings {
+    heading: string
+    format: string
+}
+
+interface BookNoteSettings {
+    heading: string
+}
 
 class BookshelfBook implements Book {
     constructor(
@@ -29,7 +37,8 @@ export class Bookshelf {
 
     constructor(
         private readonly booksFolder: string,
-        private readonly dailyNoteSettings: DailyNotesSettings,
+        private readonly dailyNoteSettings: DailyNoteSettings,
+        private readonly bookNoteSettings: BookNoteSettings,
         private readonly bookMetadataFactory: BookMetadataFactory,
         private readonly bookNotePatterns: PatternCollection<BookNoteMatch>,
         private readonly dailyNotePatterns: PatternCollection<DailyNoteMatch>,
@@ -62,6 +71,7 @@ export class Bookshelf {
 
         await this.processReadingJourney(
             note,
+            this.bookNoteSettings.heading,
             this.bookNotePatterns,
             () => identifier,
             (matches) => matches.date,
@@ -76,6 +86,7 @@ export class Bookshelf {
 
         await this.processReadingJourney(
             note,
+            this.dailyNoteSettings.heading,
             this.dailyNotePatterns,
             (matches) => this.bookIdentifier(matches.book),
             () => date.toDate(),
@@ -88,6 +99,7 @@ export class Bookshelf {
 
     private async processReadingJourney<T extends BookNoteMatch | DailyNoteMatch>(
         note: Note,
+        heading: string,
         patterns: PatternCollection<T>,
         identifierValue: (matches: T) => string,
         dateValue: (matches: T) => Date,
@@ -95,7 +107,7 @@ export class Bookshelf {
         const source = note.path
 
         this.readingJourneyLog.removeBySource(source)
-        for await (const listItem of note.listItems()) {
+        for await (const listItem of note.listItems(heading)) {
             const matches = patterns.matches(listItem)
             if (matches === null) {
                 continue

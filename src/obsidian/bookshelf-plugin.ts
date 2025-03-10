@@ -29,7 +29,8 @@ export default class BookshelfPlugin extends Plugin {
 
         this.bookshelf = new Bookshelf(
             this.settings.booksFolder,
-            this.dailyNotesSettings(),
+            { format: this.dailyNotesSettings().format, heading: this.settings.dailyNote.heading },
+            { heading: this.settings.bookNote.heading },
             new BookMetadataFactory(this.settings.bookProperties, this.linkToUri.bind(this)),
             bnResult.patterns,
             dnResult.patterns,

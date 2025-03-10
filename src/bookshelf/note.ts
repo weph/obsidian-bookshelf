@@ -5,5 +5,5 @@ export interface Note {
     readonly path: string
     readonly basename: string
     readonly metadata: Metadata
-    listItems: () => AsyncGenerator<string>
+    listItems: (sectionHeading: string) => AsyncGenerator<string>
 }

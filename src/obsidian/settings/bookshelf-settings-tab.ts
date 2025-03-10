@@ -95,6 +95,17 @@ export class BookshelfSettingsTab extends PluginSettingTab {
         dateFormatDescription.format = this.plugin.settings.bookNote.dateFormat
 
         new Setting(containerEl)
+            .setName('Heading')
+            .setDesc('The heading that marks the start of reading progress entries')
+            .addText((field) => {
+                field.setValue(this.plugin.settings.bookNote.heading).onChange(async (value) => {
+                    this.plugin.settings.bookNote.heading = value
+
+                    await this.plugin.saveSettings()
+                })
+            })
+
+        new Setting(containerEl)
             .setName('Date format')
             .setDesc(this.fragment(dateFormatDescription))
             .addText((textArea) => {
@@ -166,6 +177,17 @@ export class BookshelfSettingsTab extends PluginSettingTab {
         const { containerEl } = this
 
         new Setting(containerEl).setName('Daily note patterns').setHeading()
+
+        new Setting(containerEl)
+            .setName('Heading')
+            .setDesc('The heading that marks the start of reading progress entries')
+            .addText((field) => {
+                field.setValue(this.plugin.settings.dailyNote.heading).onChange(async (value) => {
+                    this.plugin.settings.dailyNote.heading = value
+
+                    await this.plugin.saveSettings()
+                })
+            })
 
         new Setting(containerEl)
             .setName('Started book')

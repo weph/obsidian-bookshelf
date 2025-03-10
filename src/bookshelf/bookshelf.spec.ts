@@ -16,9 +16,11 @@ beforeEach(() => {
     bookshelf = new Bookshelf(
         'Books',
         {
-            enabled: true,
+            heading: 'Reading Journey',
             format: 'YYYY-MM-DD',
-            folder: null,
+        },
+        {
+            heading: 'Reading',
         },
         new BookMetadataFactory(
             {

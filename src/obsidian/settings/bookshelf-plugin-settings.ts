@@ -8,6 +8,7 @@ export interface BookshelfPluginSettings {
         rating: string
     }
     bookNote: {
+        heading: string
         dateFormat: string
         patterns: {
             started: string
@@ -18,6 +19,7 @@ export interface BookshelfPluginSettings {
         }
     }
     dailyNote: {
+        heading: string
         patterns: {
             started: string
             finished: string
@@ -38,6 +40,7 @@ export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
         rating: 'rating',
     },
     bookNote: {
+        heading: 'Reading Journey',
         dateFormat: 'yyyy-MM-dd',
         patterns: {
             started: '{date}: Started',
@@ -48,6 +51,7 @@ export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
         },
     },
     dailyNote: {
+        heading: 'Reading',
         patterns: {
             started: 'Started {book}',
             finished: 'Finished {book}',

@@ -29,7 +29,12 @@ If your book notes use different property names, you can customize them in the p
 ### Reading Progress
 
 Bookshelf tracks your reading progress based on entries in your **book notes** and/or **daily notes**.
-A reading progress entry consists of a date, a book, and a recorded action (such as starting, reading, or finishing a book).
+A reading progress entry consists of a date, a book, and a recorded action (such as starting, reading, or finishing a
+book).
+
+By default, Bookshelf looks for reading progress entries under the "Reading Journey" heading in your book notes and
+the "Reading" heading in your daily notes. You can change these headings in the settings to match your preferred note
+structure.
 
 You can specify the number of pages read by providing a start and end page, or just an end page.
 
