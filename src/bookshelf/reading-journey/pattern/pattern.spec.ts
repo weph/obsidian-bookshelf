@@ -41,3 +41,16 @@ test("Result should be null if given string doesn't match", () => {
 
     expect(matcher('Madonna')).toBeNull()
 })
+
+test.each([
+    ['(name) {name}', '(name) Peter', { name: 'Peter' }],
+    ['name. {name}', 'name. Peter', { name: 'Peter' }],
+    ['name. {name}', 'nameo Peter', null],
+    ['^^ {name}', '^^ Peter', { name: 'Peter' }],
+])('Regex tokens should be treated as literals: pattern "%s" and input "%s" => %s', (pattern, input, expected) => {
+    const definition = { name: '.+' }
+
+    const matcher = patternMatcher(definition, pattern)
+
+    expect(matcher(input)).toEqual(expected)
+})

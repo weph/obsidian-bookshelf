@@ -28,8 +28,8 @@ export function patternMatcher<T extends PlaceholderPatterns>(definition: T, pat
         placeholders.set(match[0], (placeholders.get(match[0]) || 0) + 1)
     }
 
-    let regexString = pattern.replace(/\{\*}/g, '.*?')
-    for (const [name, pattern] of Object.entries(definition)) {
+    let regexString = pattern.replace(/\{\*}/g, '__PLACEHOLDER_WILDCARD__')
+    for (const name of Object.keys(definition)) {
         const placeholder = `{${name}}`
         if (!placeholders.has(placeholder)) {
             throw new Error(`Pattern must include ${placeholder} placeholder`)
@@ -39,7 +39,15 @@ export function patternMatcher<T extends PlaceholderPatterns>(definition: T, pat
             throw new Error(`Placeholder ${placeholder} must be used only once`)
         }
 
-        regexString = regexString.replace(`{${name}}`, `(?<${name}>${pattern})`)
+        regexString = regexString.replace(`{${name}}`, `__PLACEHOLDER__${name}__`)
+    }
+
+    regexString = regexString
+        .replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // @see https://stackoverflow.com/a/6969486
+        .replace(/__PLACEHOLDER_WILDCARD__/g, '.*?')
+
+    for (const [name, pattern] of Object.entries(definition)) {
+        regexString = regexString.replace(`__PLACEHOLDER__${name}__`, `(?<${name}>${pattern})`)
     }
 
     const regex = new RegExp(`^${regexString}$`)
