@@ -1,4 +1,4 @@
-import { Book, BookMetadata } from './book'
+import { Book, BookMetadata, ReadingStatus } from './book'
 import { BookshelfError } from './bookshelf-error'
 import { ReadingJourneyItemInput, ReadingJourneyLog } from './reading-journey/reading-journey-log'
 import { Statistics } from './reading-journey/statistics/statistics'
@@ -29,6 +29,27 @@ class BookshelfBook implements Book {
 
     get readingJourney(): ReadingJourney {
         return this.bookshelf.readingJourney().filter((rp) => rp.book === this)
+    }
+
+    get status(): ReadingStatus {
+        const items = this.bookshelf
+            .readingJourney()
+            .filter((rp) => rp.book === this)
+            .items()
+        if (items.length === 0) {
+            return 'unread'
+        }
+
+        switch (items[items.length - 1].action) {
+            case 'started':
+                return 'reading'
+            case 'finished':
+                return 'finished'
+            case 'abandoned':
+                return 'abandoned'
+            case 'progress':
+                return 'reading'
+        }
     }
 }
 

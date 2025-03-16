@@ -42,6 +42,7 @@ export class Table extends LitElement {
                         <th>Published</th>
                         <th>Rating</th>
                         <th>Tags</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,6 +58,7 @@ export class Table extends LitElement {
                                     ></bookshelf-ui-star-rating>
                                 </td>
                                 <td>${book.metadata.tags?.join(', ') || ''}</td>
+                                <td>${book.status}</td>
                             </tr>
                         `,
                     )}

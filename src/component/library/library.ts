@@ -1,4 +1,4 @@
-import { Book } from '../../bookshelf/book'
+import { Book, ReadingStatus } from '../../bookshelf/book'
 import '../gallery/gallery'
 import '../table/table'
 import '../input/input'
@@ -69,6 +69,17 @@ export class Library extends LitElement {
     @property({ attribute: false })
     public sortOptions: BookSortOptions = new BookSortOptions()
 
+    @state()
+    private statusFilter: string = ''
+
+    private statusFilterOptions = [
+        { value: '', label: 'All books' },
+        { value: 'unread', label: 'Unread' },
+        { value: 'reading', label: 'Reading' },
+        { value: 'abandoned', label: 'Abandoned' },
+        { value: 'finished', label: 'Finished' },
+    ]
+
     protected render() {
         return html`
             <header>
@@ -84,6 +95,12 @@ export class Library extends LitElement {
                         .value=${this.sortOption}
                         .onChange=${(value: string) => (this.sortOption = value)}
                         .options=${this.sortOptions.titles().map((title) => ({ value: title, label: title }))}
+                    ></bookshelf-ui-dropdown>
+                    <bookshelf-ui-dropdown
+                        label="Status"
+                        .value=${this.statusFilter}
+                        .onChange=${(value: string) => (this.statusFilter = value as ReadingStatus)}
+                        .options=${this.statusFilterOptions}
                     ></bookshelf-ui-dropdown>
                 </div>
                 <div id="header-right">
@@ -112,7 +129,13 @@ export class Library extends LitElement {
 
         const search = this.searchTerm
         const books = this.books
-            .filter((b) => b.metadata.title.toLowerCase().includes(search.toLowerCase()))
+            .filter((b) => {
+                if (this.statusFilter !== '' && b.status !== this.statusFilter) {
+                    return false
+                }
+
+                return b.metadata.title.toLowerCase().includes(search.toLowerCase())
+            })
             .sort(this.sortFunction())
 
         if (search && books.length === 0) {

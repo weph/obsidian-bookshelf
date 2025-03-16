@@ -1,6 +1,8 @@
 import { ReadingJourney } from './reading-journey/reading-journey'
 import { Note } from './note'
 
+export type ReadingStatus = 'unread' | 'reading' | 'abandoned' | 'finished'
+
 export interface BookMetadata {
     readonly title: string
     readonly cover?: string
@@ -14,4 +16,5 @@ export interface Book {
     note: Note | null
     metadata: BookMetadata
     readingJourney: ReadingJourney
+    status: ReadingStatus
 }

@@ -519,6 +519,71 @@ describe('Statistics', () => {
     })
 })
 
+describe('Reading status', () => {
+    test('book without reading journey should have status "unread"', async () => {
+        await bookshelf.process(new FakeNote('Books/Dracula.md', new StaticMetadata({}), []))
+
+        const book = bookshelf.book('Books/Dracula.md')
+
+        expect(book.status).toBe('unread')
+    })
+
+    test('book should have status "reading" if action is "start"', async () => {
+        await bookshelf.process(
+            new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: Started reading']),
+        )
+
+        const book = bookshelf.book('Books/Dracula.md')
+
+        expect(book.status).toBe('reading')
+    })
+
+    test('book should have status "reading" if action is "progress"', async () => {
+        await bookshelf.process(new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: 5-115']))
+
+        const book = bookshelf.book('Books/Dracula.md')
+
+        expect(book.status).toBe('reading')
+    })
+
+    test('book should have status "finished" if action is "finish"', async () => {
+        await bookshelf.process(
+            new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: Finished reading']),
+        )
+
+        const book = bookshelf.book('Books/Dracula.md')
+
+        expect(book.status).toBe('finished')
+    })
+
+    test('book should have status "abandoned" if action is "abandon"', async () => {
+        await bookshelf.process(
+            new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: Abandoned book']),
+        )
+
+        const book = bookshelf.book('Books/Dracula.md')
+
+        expect(book.status).toBe('abandoned')
+    })
+
+    test('last action counts', async () => {
+        await bookshelf.process(
+            new FakeNote('Books/Dracula.md', new StaticMetadata({}), [
+                '2025-01-02: Started reading',
+                '2025-01-02: 1-20',
+                '2025-01-03: Abandoned book',
+                '2025-01-05: Started reading',
+                '2025-01-05: 21-120',
+                '2025-01-06: Finished reading',
+            ]),
+        )
+
+        const book = bookshelf.book('Books/Dracula.md')
+
+        expect(book.status).toBe('finished')
+    })
+})
+
 function readingProgressAsString(value: ReadingJourneyItem): string {
     if (value.action !== 'progress') {
         return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.metadata.title}: ${value.action}`

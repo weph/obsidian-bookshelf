@@ -34,6 +34,7 @@ export class BookBuilder {
                 ...this.metadata,
             },
             readingJourney: new ReadingJourney([]),
+            status: 'unread',
         }
 
         book.readingJourney = new ReadingJourney(this.readingJourney.map((rp) => ({ ...rp, book })))
