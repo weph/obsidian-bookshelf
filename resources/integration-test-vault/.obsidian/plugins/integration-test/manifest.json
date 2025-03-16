@@ -1,0 +1,10 @@
+{
+    "id": "integration-test",
+    "name": "Integration Test",
+    "version": "0.1.0",
+    "minAppVersion": "1.0.0",
+    "description": "",
+    "author": "Philip Weinke",
+    "authorUrl": "https://weph.dev/",
+    "isDesktopOnly": false
+}

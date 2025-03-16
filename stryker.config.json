@@ -18,7 +18,13 @@
         "!src/component/table/*",
         "!src/support/*"
     ],
-    "ignorePatterns": [".*/**/*", "reports/**/*", "src/**/*.stories.ts", "src/obsidian/**/*"],
+    "ignorePatterns": [
+        ".*/**/*",
+        "reports/**/*",
+        "src/**/*.stories.ts",
+        "src/obsidian/**/*",
+        "src/support/integration-test/**/*"
+    ],
     "thresholds": {
         "high": 100,
         "low": 90,

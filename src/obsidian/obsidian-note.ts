@@ -67,7 +67,7 @@ export class ObsidianNote implements Note {
                 continue
             }
 
-            yield lines[line].replace(/^[-*]\s+/, '').trim()
+            yield lines[line].replace(/^[-+*]\s+/, '').trim()
         }
     }
 }
