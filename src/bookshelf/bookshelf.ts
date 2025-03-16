@@ -8,10 +8,12 @@ import { BookMetadataFactory } from './metadata/book-metadata-factory'
 import { BookNoteMatch } from './reading-journey/pattern/book-note/book-note-pattern'
 import { DailyNoteMatch } from './reading-journey/pattern/daily-note/daily-note-pattern'
 import { PatternCollection } from './reading-journey/pattern/pattern-collection'
+import { dailyNoteDate } from './daily-notes/daily-note-date'
 
 interface DailyNoteSettings {
     heading: string
     format: string
+    folder: string
 }
 
 interface BookNoteSettings {
@@ -79,8 +81,8 @@ export class Bookshelf {
     }
 
     private async handleDailyNote(note: Note): Promise<void> {
-        const date = window.moment(note.basename, this.dailyNoteSettings.format, true)
-        if (!date.isValid()) {
+        const date = dailyNoteDate(note.path, this.dailyNoteSettings.format, this.dailyNoteSettings.folder)
+        if (date === null) {
             return
         }
 
@@ -89,7 +91,7 @@ export class Bookshelf {
             this.dailyNoteSettings.heading,
             this.dailyNotePatterns,
             (matches) => this.bookIdentifier(matches.book),
-            () => date.toDate(),
+            () => date,
         )
     }
 

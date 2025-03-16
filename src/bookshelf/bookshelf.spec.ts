@@ -18,6 +18,7 @@ beforeEach(() => {
         {
             heading: 'Reading Journey',
             format: 'YYYY-MM-DD',
+            folder: '',
         },
         {
             heading: 'Reading',
