@@ -1,10 +1,10 @@
 import { Book } from '../../bookshelf/book'
-import '../chart/pages-read-bar-chart/pages-read-bar-chart'
 import '../button/button'
 import '../star-rating/star-rating'
-import { Interval } from '../../bookshelf/reading-journey/statistics/statistics'
 import { css, html, LitElement } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
+import { DateTime } from 'luxon'
+import { ReadingJourneyItem } from '../../bookshelf/reading-journey/reading-journey-log'
 
 const TAG_NAME = 'bookshelf-book-details'
 
@@ -51,6 +51,36 @@ export class BookDetails extends LitElement {
         #rating {
             display: inline-block;
         }
+
+        #reading-journey {
+            position: relative;
+            padding-left: 1rem;
+            list-style: none;
+        }
+
+        #reading-journey li {
+            position: relative;
+            padding-left: 1rem;
+            border-left: 2px solid var(--color-base-100);
+            font-size: var(--font-ui-small);
+            padding-bottom: 0.75rem;
+            line-height: 1;
+        }
+
+        #reading-journey li:last-child {
+            padding-bottom: 0;
+        }
+
+        #reading-journey li:before {
+            content: ' ';
+            position: absolute;
+            left: -8px;
+            width: 8px;
+            height: 8px;
+            border: 3px solid var(--color-base-100);
+            border-radius: 100%;
+            background-color: var(--color-base-00);
+        }
     `
 
     @property({ attribute: false })
@@ -61,10 +91,6 @@ export class BookDetails extends LitElement {
 
     protected render() {
         const { cover, title, authors, published, rating, tags } = this.book.metadata
-
-        const data = Array.from(this.book.readingJourney.statistics().pagesRead(Interval.Day).entries()).map(
-            (entry) => ({ x: entry[0].getTime(), y: entry[1] }),
-        )
 
         return html`
             <div id="top">
@@ -89,8 +115,28 @@ export class BookDetails extends LitElement {
                     </div>
                 </div>
             </div>
-            <bookshelf-pages-read-bar-chart .data=${data} xAxisUnit="day"></bookshelf-pages-read-bar-chart>
+            <div>
+                <ul id="reading-journey">
+                    ${this.book.readingJourney.map(
+                        (item) =>
+                            html` <li>
+                                ${DateTime.fromJSDate(item.date).toLocaleString()}: ${this.journeyItemText(item)}
+                            </li>`,
+                    )}
+                </ul>
+            </div>
         `
+    }
+
+    private journeyItemText(item: ReadingJourneyItem) {
+        switch (item.action) {
+            case 'started':
+            case 'finished':
+            case 'abandoned':
+                return item.action
+            case 'progress':
+                return `${item.startPage}-${item.endPage}`
+        }
     }
 }
 
