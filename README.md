@@ -55,6 +55,8 @@ assumes you read from page 181 to 290.
 Here's what entries in a book note look like using the default settings:
 
 ```markdown
+## Reading Journey
+
 - 2024-12-05: Started
 - 2024-12-05: 10-180
 - 2024-12-05: 290
@@ -66,6 +68,8 @@ You don't have to specify the book in this case, because it's implied from the n
 Here's what entries in a daily note look like using the default settings:
 
 ```markdown
+## Reading
+
 - Finished [[Frankenstein]]
 - Started [[Dracula]]
 - Read [[Dracula]]: 1-130
