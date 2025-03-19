@@ -14,6 +14,14 @@ insights into your reading habits with beautiful charts.
 
 ## How to use
 
+### Library and Statistics View
+
+To open either view, click on the corresponding icon in the ribbon. Depending on your setup, the icons may appear in
+different positions.
+
+![screenshots](resources/screenshots/library-view.png)
+![screenshots](resources/screenshots/statistics-view.png)
+
 ### Book Notes
 
 Bookshelf collects book notes from the folder specified in the **Books folder** setting.
