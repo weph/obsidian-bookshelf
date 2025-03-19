@@ -1,15 +1,15 @@
 import { ItemView, WorkspaceLeaf } from 'obsidian'
-import '../../component/library/library'
+import { StrictMode } from 'react'
+import { createRoot, Root } from 'react-dom/client'
 import { Bookshelf } from '../../bookshelf/bookshelf'
-import { Library } from '../../component/library/library'
-import { Book } from '../../bookshelf/book'
 import { BookModal } from '../modal/book-modal'
 import { defaultBookSortOptions } from '../../bookshelf/sort/default-book-sort-options'
+import { Library } from '../../component/library/library'
 
 export const VIEW_TYPE_LIBRARY = 'library'
 
 export class LibraryView extends ItemView {
-    private libraryComponent: Library
+    private root: Root | null = null
 
     constructor(
         leaf: WorkspaceLeaf,
@@ -27,18 +27,20 @@ export class LibraryView extends ItemView {
     }
 
     protected async onOpen(): Promise<void> {
-        const container = this.containerEl.children[1]
-
-        this.libraryComponent = this.containerEl.createEl('bookshelf-library')
-        this.libraryComponent.onBookClick = (book: Book) => new BookModal(this.app, book).open()
-        this.libraryComponent.sortOptions = defaultBookSortOptions()
-
-        container.replaceChildren(this.libraryComponent)
+        this.root = createRoot(this.containerEl.children[1])
 
         this.update()
     }
 
     public update(): void {
-        this.libraryComponent.books = Array.from(this.bookshelf.all())
+        this.root!.render(
+            <StrictMode>
+                <Library
+                    books={Array.from(this.bookshelf.all())}
+                    sortOptions={defaultBookSortOptions()}
+                    onBookClick={(book) => new BookModal(this.app, book).open()}
+                />
+            </StrictMode>,
+        )
     }
 }

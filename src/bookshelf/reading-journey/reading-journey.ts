@@ -13,7 +13,7 @@ export class ReadingJourney {
         return new ReadingJourney(this._items.filter(predicate))
     }
 
-    public map<T>(callback: (item: ReadingJourneyItem) => T): Array<T> {
+    public map<T>(callback: (item: ReadingJourneyItem, index: number) => T): Array<T> {
         return this._items.map(callback)
     }
 

@@ -1,6 +1,9 @@
 import { App, PluginSettingTab, Setting } from 'obsidian'
 import BookshelfPlugin from '../bookshelf-plugin'
-import '../../component/date-format-description/date-format-description'
+import { createRoot, Root } from 'react-dom/client'
+import { StrictMode } from 'react'
+import { DateFormatDescription } from '../../component/date-format-description/date-format-description'
+import { flushSync } from 'react-dom'
 
 export class BookshelfSettingsTab extends PluginSettingTab {
     plugin: BookshelfPlugin
@@ -91,8 +94,13 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl).setName('Book note patterns').setHeading()
 
-        const dateFormatDescription = document.createElement('bookshelf-date-format-description')
-        dateFormatDescription.format = this.plugin.settings.bookNote.dateFormat
+        const fragment = document.createDocumentFragment()
+
+        let root: Root
+        flushSync(() => {
+            root = createRoot(fragment)
+            this.renderDateFormatDescription(root)
+        })
 
         new Setting(containerEl)
             .setName('Heading')
@@ -107,11 +115,12 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Date format')
-            .setDesc(this.fragment(dateFormatDescription))
+            .setDesc(fragment)
             .addText((textArea) => {
                 textArea.setValue(this.plugin.settings.bookNote.dateFormat).onChange(async (value) => {
                     this.plugin.settings.bookNote.dateFormat = value
-                    dateFormatDescription.format = value
+
+                    this.renderDateFormatDescription(root)
 
                     await this.plugin.saveSettings()
                 })
@@ -245,10 +254,11 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             })
     }
 
-    private fragment(child: HTMLElement): DocumentFragment {
-        const fragment = document.createDocumentFragment()
-        fragment.replaceChildren(child)
-
-        return fragment
+    private renderDateFormatDescription(root: Root): void {
+        root.render(
+            <StrictMode>
+                <DateFormatDescription format={this.plugin.settings.bookNote.dateFormat} />
+            </StrictMode>,
+        )
     }
 }

@@ -1,19 +1,19 @@
-import type { Meta, StoryObj } from '@storybook/html'
-import './statistics'
-import { StatisticsProps } from './statistics'
+import type { Meta, StoryObj } from '@storybook/react'
 import { Bookshelf } from '../../bookshelf/bookshelf'
 import { BookMetadataFactory } from '../../bookshelf/metadata/book-metadata-factory'
 import { FakeNote } from '../../support/fake-note'
 import { StaticMetadata } from '../../bookshelf/metadata/metadata'
 import { bookNotePatterns } from '../../bookshelf/reading-journey/pattern/book-note/book-note-pattern'
 import { dailyNotePatterns } from '../../bookshelf/reading-journey/pattern/daily-note/daily-note-pattern'
+import { Statistics } from './statistics'
+import { fn } from '@storybook/test'
 
 const meta = {
     title: 'Statistics',
-} satisfies Meta<StatisticsProps>
+} satisfies Meta<typeof Statistics>
 
 export default meta
-type Story = StoryObj<StatisticsProps>
+type Story = StoryObj<typeof Statistics>
 
 const bookshelf = new Bookshelf(
     'Books',
@@ -66,10 +66,5 @@ bookshelf.process(
 )
 
 export const Primary: Story = {
-    render: () => {
-        const element = document.createElement('bookshelf-statistics')
-        element.bookshelf = bookshelf
-
-        return element
-    },
+    render: () => <Statistics bookshelf={bookshelf} onBookClick={fn()} />,
 }

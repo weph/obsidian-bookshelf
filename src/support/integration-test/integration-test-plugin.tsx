@@ -1,7 +1,7 @@
 import { ItemView, Plugin, TFile, WorkspaceLeaf } from 'obsidian'
 import '../../obsidian/obsidian-note.integration-test'
 import { TestContext, TestResult, TestSuite, testSuite } from './integration-test'
-import { html, render, TemplateResult } from 'lit'
+import { createRoot } from 'react-dom/client'
 
 const VIEW_TYPE_TEST_RUNNER = 'TestRunner'
 
@@ -23,28 +23,27 @@ class TestRunnerView extends ItemView {
     }
 
     protected async onOpen(): Promise<void> {
-        const container = this.containerEl.children[1]
-
         const results = await this.testSuite.run(this.context)
 
-        render(this.html(results), container.createEl('div'))
+        createRoot(this.containerEl.children[1]).render(this.html(results))
     }
 
-    private html(testResult: TestResult): TemplateResult {
-        return html`
-            <div class="test-output">${this.testResultHtml(testResult)}</div>
-            <style>
+    private html(testResult: TestResult) {
+        return (
+            <>
+                <div className="test-output">{this.testResultHtml(testResult)}</div>
+                <style>{`
                 .test-output {
                     font-family: monospace;
                     background-color: #282a36;
                     padding: 1.25rem;
                     line-height: 1.5rem;
                 }
-
+    
                 .test-result.passed > .test-name {
                     color: #50fa7b;
                 }
-
+    
                 .test-result.failed > .test-name,
                 .test-result.failed > .error {
                     color: #ff5555;
@@ -55,22 +54,27 @@ class TestRunnerView extends ItemView {
                     font-family: monospace;
                     white-space: pre;
                 }
-            </style>
-        `
+            `}</style>
+            </>
+        )
     }
 
-    private testResultHtml(testResult: TestResult): TemplateResult {
-        return html`
-            <div class="test-result ${testResult.result}">
-                <div class="test-name">${testResult.name} (${testResult.durationInMs}ms)</div>
-                <div class="error">${testResult.error}</div>
-                <div class="children">
+    private testResultHtml(testResult: TestResult) {
+        return (
+            <div className={'test-result ' + testResult.result}>
+                <div className="test-name">
+                    {testResult.name} ({testResult.durationInMs}ms)
+                </div>
+                <div className="error">{testResult.error}</div>
+                <div className="children">
                     <ul>
-                        ${(testResult.children || []).map((child) => html` <li>${this.testResultHtml(child)}</li>`)}
+                        {(testResult.children || []).map((child, i) => (
+                            <li key={i}>{this.testResultHtml(child)}</li>
+                        ))}
                     </ul>
                 </div>
             </div>
-        `
+        )
     }
 }
 

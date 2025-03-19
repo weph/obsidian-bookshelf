@@ -1,25 +1,18 @@
-import type { Meta, StoryObj } from '@storybook/html'
-import { Table } from './table'
-import './table'
-import { fn } from '@storybook/test'
+import type { Meta, StoryObj } from '@storybook/react'
+import { BookTable } from './table'
 import { Book } from '../../bookshelf/book'
 import { algorithms, books } from '../../support/book-fixtures'
+import { fn } from '@storybook/test'
 
 const meta = {
     title: 'Table',
-} satisfies Meta<Table>
+} satisfies Meta<typeof BookTable>
 
 export default meta
-type Story = StoryObj<Table>
+type Story = StoryObj<typeof BookTable>
 
 function renderFunction(books: Array<Book>) {
-    return () => {
-        const element = document.createElement('bookshelf-table')
-        element.onBookClick = fn()
-        element.books = books
-
-        return element
-    }
+    return () => <BookTable books={books} onBookClick={fn()} />
 }
 
 export const Primary: Story = {

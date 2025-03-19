@@ -1,26 +1,19 @@
-import type { Meta, StoryObj } from '@storybook/html'
-import './book-details'
-import { BookDetails } from './book-details'
+import type { Meta, StoryObj } from '@storybook/react'
 import { BookBuilder } from '../../support/book-builder'
 import { fn } from '@storybook/test'
 import { tddByExample } from '../../support/book-fixtures'
 import { Book } from '../../bookshelf/book'
+import { BookDetails } from './book-details'
 
 const meta = {
     title: 'Book Details',
-} satisfies Meta<BookDetails>
+} satisfies Meta<typeof BookDetails>
 
 export default meta
-type Story = StoryObj<BookDetails>
+type Story = StoryObj<typeof BookDetails>
 
 function renderFunction(book: Book) {
-    return () => {
-        const element = document.createElement('bookshelf-book-details')
-        element.openNote = fn()
-        element.book = book
-
-        return element
-    }
+    return () => <BookDetails book={book} openNote={fn()} />
 }
 
 export const Primary: Story = {

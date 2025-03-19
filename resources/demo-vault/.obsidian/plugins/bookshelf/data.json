@@ -9,7 +9,7 @@
   },
   "bookNote": {
     "heading": "Reading Journey",
-    "dateFormat": "MM/dd/yyyy",
+    "dateFormat": "yyyy/mm/dd",
     "patterns": {
       "started": "{date}: Started",
       "finished": "{date}: Finished",

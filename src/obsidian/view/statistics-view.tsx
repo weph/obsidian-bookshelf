@@ -1,14 +1,14 @@
 import { ItemView, WorkspaceLeaf } from 'obsidian'
-import '../../component/statistics/statistics'
 import { Bookshelf } from '../../bookshelf/bookshelf'
-import { Statistics } from '../../component/statistics/statistics'
-import { Book } from '../../bookshelf/book'
 import { BookModal } from '../modal/book-modal'
+import { createRoot, Root } from 'react-dom/client'
+import { StrictMode } from 'react'
+import { Statistics } from '../../component/statistics/statistics'
 
 export const VIEW_TYPE_STATISTICS = 'statistics'
 
 export class StatisticsView extends ItemView {
-    private component: Statistics
+    private root: Root | null = null
 
     constructor(
         leaf: WorkspaceLeaf,
@@ -26,16 +26,16 @@ export class StatisticsView extends ItemView {
     }
 
     protected async onOpen(): Promise<void> {
-        const container = this.containerEl.children[1]
+        this.root = createRoot(this.containerEl.children[1])
 
-        this.component = this.containerEl.createEl('bookshelf-statistics')
-        this.component.bookshelf = this.bookshelf
-        this.component.onBookClick = (book: Book) => new BookModal(this.app, book).open()
-
-        container.replaceChildren(this.component)
+        this.update()
     }
 
     public update(): void {
-        this.component.requestUpdate()
+        this.root!.render(
+            <StrictMode>
+                <Statistics bookshelf={this.bookshelf} onBookClick={(book) => new BookModal(this.app, book).open()} />
+            </StrictMode>,
+        )
     }
 }

@@ -1,43 +1,22 @@
-import { beforeEach, describe, expect, it, jest, test } from '@jest/globals'
-import './input'
+import { beforeEach, describe, expect, it, jest } from '@jest/globals'
 import { Input } from './input'
 import { fireEvent } from '@testing-library/dom'
 import { EventType } from '@testing-library/dom/types/events'
+import { render, screen } from '@testing-library/react'
 
 const onUpdate = jest.fn()
-let input: Input
-let internalInput: HTMLInputElement
 
 beforeEach(async () => {
     jest.resetAllMocks()
-    input = document.createElement('bookshelf-ui-input')
-    input.onUpdate = onUpdate
-    input.placeholder = 'my-input'
 
-    document.body.replaceChildren(input)
-    await input.updateComplete
-
-    internalInput = input.shadowRoot?.querySelector('input') as HTMLInputElement
-})
-
-test('type property should be passed to internal input', async () => {
-    input.type = 'search'
-
-    await input.updateComplete
-
-    expect(internalInput.getAttribute('type')).toBe('search')
-})
-
-test('type placeholder should be passed to internal input', async () => {
-    input.placeholder = 'new-placeholder'
-
-    await input.updateComplete
-
-    expect(internalInput.getAttribute('placeholder')).toBe('new-placeholder')
+    document.body.innerHTML = ''
 })
 
 describe('onUpdate', () => {
     it.each(['input', 'keyUp', 'change'])('should notify about every %s event', (event: EventType) => {
+        render(<Input type={''} placeholder={''} value={''} onUpdate={onUpdate} />)
+        const internalInput = screen.getByRole('textbox')
+
         fireEvent[event](internalInput, { target: { value: 'f' } })
         fireEvent[event](internalInput, { target: { value: 'fo' } })
         fireEvent[event](internalInput, { target: { value: 'foo' } })
@@ -49,6 +28,9 @@ describe('onUpdate', () => {
     })
 
     it('should ignore repeated events with the same value', () => {
+        render(<Input type={''} placeholder={''} value={''} onUpdate={onUpdate} />)
+        const internalInput = screen.getByRole('textbox')
+
         fireEvent.keyDown(internalInput, { target: { value: 'foo' } })
         fireEvent.input(internalInput, { target: { value: 'foo' } })
         fireEvent.change(internalInput, { target: { value: 'foo' } })

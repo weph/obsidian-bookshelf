@@ -1,20 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/html'
-import './star-rating'
+import type { Meta, StoryObj } from '@storybook/react'
 import { StarRating } from './star-rating'
 
 const meta = {
     title: 'UI/Star Rating',
-    render: (args) => {
-        const element = document.createElement('bookshelf-ui-star-rating')
-
-        Object.assign(element, args)
-
-        return element
-    },
-} satisfies Meta<StarRating>
+    component: StarRating,
+} satisfies Meta<typeof StarRating>
 
 export default meta
-type Story = StoryObj<StarRating>
+type Story = StoryObj<typeof StarRating>
 
 export const Primary: Story = {
     args: {

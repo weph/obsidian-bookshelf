@@ -1,24 +1,17 @@
-import type { Meta, StoryObj } from '@storybook/html'
-import './dropdown'
-import { Dropdown } from './dropdown'
+import type { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
+import { Dropdown } from './dropdown'
 
 const meta = {
     title: 'UI/Dropdown',
+    component: Dropdown,
     args: {
         onChange: fn(),
     },
-    render: (args) => {
-        const element = document.createElement('bookshelf-ui-dropdown')
-
-        Object.assign(element, args)
-
-        return element
-    },
-} satisfies Meta<Dropdown>
+} satisfies Meta<typeof Dropdown>
 
 export default meta
-type Story = StoryObj<Dropdown>
+type Story = StoryObj<typeof Dropdown>
 
 export const Primary: Story = {
     args: {

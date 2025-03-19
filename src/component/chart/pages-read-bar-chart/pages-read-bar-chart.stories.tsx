@@ -1,20 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/html'
-import './pages-read-bar-chart'
+import type { Meta, StoryObj } from '@storybook/react'
 import { PagesReadBarChart } from './pages-read-bar-chart'
 
 const meta = {
     title: 'Chart/Pages Read Bar Chart',
-    render: (args) => {
-        const element = document.createElement('bookshelf-pages-read-bar-chart')
-
-        Object.assign(element, args)
-
-        return element
-    },
-} satisfies Meta<PagesReadBarChart>
+    component: PagesReadBarChart,
+} satisfies Meta<typeof PagesReadBarChart>
 
 export default meta
-type Story = StoryObj<PagesReadBarChart>
+type Story = StoryObj<typeof PagesReadBarChart>
 
 export const Primary: Story = {
     args: {

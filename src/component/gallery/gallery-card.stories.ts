@@ -1,23 +1,17 @@
-import type { Meta, StoryObj } from '@storybook/html'
+import type { Meta, StoryObj } from '@storybook/react'
 import { GalleryCard } from './gallery-card'
-import './gallery-card'
+import { fn } from '@storybook/test'
 
 const meta = {
     title: 'Gallery Card',
-    tags: ['autodocs'],
-    render: (args) => {
-        const element = document.createElement('bookshelf-gallery-card')
-
-        for (const [attr, value] of Object.entries(args)) {
-            element.setAttribute(attr, value)
-        }
-
-        return element
+    component: GalleryCard,
+    args: {
+        onClick: fn(),
     },
-} satisfies Meta<GalleryCard>
+} satisfies Meta<typeof GalleryCard>
 
 export default meta
-type Story = StoryObj<GalleryCard>
+type Story = StoryObj<typeof GalleryCard>
 
 export const Primary: Story = {
     args: {

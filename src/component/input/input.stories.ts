@@ -1,26 +1,19 @@
-import type { Meta, StoryObj } from '@storybook/html'
-import './input'
+import type { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
 import { Input } from './input'
 
 const meta = {
     title: 'UI/Input',
+    component: Input,
     args: {
         onUpdate: fn(),
         type: 'text',
         placeholder: '',
     },
-    render: (args) => {
-        const element = document.createElement('bookshelf-ui-input')
-
-        Object.assign(element, args)
-
-        return element
-    },
-} satisfies Meta<Input>
+} satisfies Meta<typeof Input>
 
 export default meta
-type Story = StoryObj<Input>
+type Story = StoryObj<typeof Input>
 
 export const Primary: Story = {}
 
