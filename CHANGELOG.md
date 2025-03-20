@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-For a full diff see [`0.3.0...main`][0.3.0...main].
+For a full diff see [`0.3.1...main`][0.3.1...main].
+
+## [`0.3.1`][0.3.1] - 2025-03-20
+
+For a full diff see [`0.3.0...0.3.1`][0.3.0...0.3.1].
+
+### Fixed
+
+- Colors in tag pie chart were gone after rerender
 
 ## [`0.3.0`][0.3.0] - 2025-03-20
 
@@ -24,5 +32,7 @@ For a full diff see [`0.2.2...0.3.0`][0.2.2...0.3.0].
 - Migrated from Web Components to React
 
 [0.3.0]: https://github.com/weph/obsidian-bookshelf/releases/tag/0.3.0
+[0.3.1]: https://github.com/weph/obsidian-bookshelf/releases/tag/0.3.1
 [0.2.2...0.3.0]: https://github.com/weph/obsidian-bookshelf/compare/0.2.2...0.3.0
-[0.3.0...main]: https://github.com/weph/obsidian-bookshelf/compare/0.3.0...main
+[0.3.0...0.3.1]: https://github.com/weph/obsidian-bookshelf/compare/0.3.0...0.3.1
+[0.3.1...main]: https://github.com/weph/obsidian-bookshelf/compare/0.3.1...main

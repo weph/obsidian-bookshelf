@@ -39,6 +39,9 @@ export function TagUsageChart({ statistics }: Props) {
                         responsive: true,
                         maintainAspectRatio: true,
                         plugins: {
+                            colors: {
+                                forceOverride: true,
+                            },
                             legend: {
                                 display: false,
                             },
