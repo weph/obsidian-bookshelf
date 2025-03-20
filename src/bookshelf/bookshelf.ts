@@ -65,7 +65,7 @@ export class Bookshelf {
         private readonly bookMetadataFactory: BookMetadataFactory,
         private readonly bookNotePatterns: PatternCollection<BookNoteMatch>,
         private readonly dailyNotePatterns: PatternCollection<DailyNoteMatch>,
-        private readonly bookIdentifier: (input: string) => string,
+        private readonly bookIdentifier: (input: string) => string | null,
     ) {}
 
     public async process(note: Note): Promise<void> {
@@ -124,7 +124,7 @@ export class Bookshelf {
         note: Note,
         heading: string,
         patterns: PatternCollection<T>,
-        identifierValue: (matches: T) => string,
+        identifierValue: (matches: T) => string | null,
         dateValue: (matches: T) => Date,
     ): Promise<void> {
         const source = note.path
@@ -137,6 +137,10 @@ export class Bookshelf {
             }
 
             const identifier = identifierValue(matches)
+            if (identifier === null) {
+                continue
+            }
+
             const date = dateValue(matches)
 
             if (!this.has(identifier)) {

@@ -12,6 +12,8 @@ import { dailyNotePatterns } from './reading-journey/pattern/daily-note/daily-no
 
 let bookshelf: Bookshelf
 
+const nonExistingNote = 'Non-existing Note'
+
 beforeEach(() => {
     bookshelf = new Bookshelf(
         'Books',
@@ -50,7 +52,11 @@ beforeEach(() => {
             absoluteProgress: 'Read {book}: {startPage}-{endPage}',
             relativeProgress: 'Read {book}: {endPage}',
         }).patterns,
-        (identifier) => identifier,
+        (input) => {
+            const identifier = input.replace('[[', '').replace(']]', '')
+
+            return identifier === nonExistingNote ? null : `Books/${identifier}.md`
+        },
     )
 })
 
@@ -181,32 +187,44 @@ describe('Note processing', () => {
     })
 
     test('It should create book note for book referenced in daily note if it does not exist yet', async () => {
-        await bookshelf.process(new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading The Shining']))
+        await bookshelf.process(
+            new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading [[The Shining]]']),
+        )
 
         const result = Array.from(bookshelf.all())
         expect(result).toHaveLength(1)
-        expect(result[0].metadata).toEqual({ title: 'The Shining' })
+        expect(result[0].metadata).toEqual({ title: 'Books/The Shining.md' })
     })
 
-    // todo: maybe it's better to allow only WikiLinks and not do all this "if
-    // it's just text, let's try to figure out what note this belongs or create
-    // a new book note if nothing can be found"
-    test.skip('It should link reading journey entry from daily note to existing book', async () => {
+    test('It should link reading journey entry from daily note to existing book', async () => {
         await bookshelf.process(new FakeNote('Books/The Shining.md', new StaticMetadata({}), []))
 
-        await bookshelf.process(new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading The Shining']))
+        await bookshelf.process(
+            new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading [[The Shining]]']),
+        )
 
         const result = Array.from(bookshelf.all())
         expect(result.map((b) => b.metadata.title)).toEqual(['The Shining'])
     })
 
+    test('It should ignore reading journey entry referencing non-existing notes', async () => {
+        await bookshelf.process(
+            new FakeNote('2025-01-01.md', new StaticMetadata({}), [`Started reading [[${nonExistingNote}]]`]),
+        )
+
+        const result = Array.from(bookshelf.all())
+        expect(result.map((b) => b.metadata.title)).toEqual([])
+    })
+
     test('It should create reading journey from daily note note', async () => {
+        await bookshelf.process(new FakeNote('Books/The Shining.md', new StaticMetadata({}), []))
+
         await bookshelf.process(
             new FakeNote('2025-01-01.md', new StaticMetadata({}), [
-                'Started reading The Shining',
-                'Read The Shining: 10-100',
-                'Read The Shining: 101-447',
-                'Finished reading The Shining',
+                'Started reading [[The Shining]]',
+                'Read [[The Shining]]: 10-100',
+                'Read [[The Shining]]: 101-447',
+                'Finished reading [[The Shining]]',
             ]),
         )
 
@@ -219,13 +237,17 @@ describe('Note processing', () => {
     })
 
     test('It should update reading journey from daily note note', async () => {
-        await bookshelf.process(new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading The Shining']))
+        await bookshelf.process(new FakeNote('Books/The Shining.md', new StaticMetadata({}), []))
+
+        await bookshelf.process(
+            new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading [[The Shining]]']),
+        )
 
         await bookshelf.process(
             new FakeNote('2025-01-01.md', new StaticMetadata({}), [
-                'Started reading The Shining',
-                'Read The Shining: 10-447',
-                'Finished reading The Shining',
+                'Started reading [[The Shining]]',
+                'Read [[The Shining]]: 10-447',
+                'Finished reading [[The Shining]]',
             ]),
         )
 

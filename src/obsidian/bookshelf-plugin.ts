@@ -93,11 +93,11 @@ export default class BookshelfPlugin extends Plugin {
         await this.handleFile(file)
     }
 
-    private bookIdentifier(input: string): string {
+    private bookIdentifier(input: string): string | null {
         const bookName = input.replace('[[', '').replace(']]', '')
         const bookFile = this.app.metadataCache.getFirstLinkpathDest(bookName, '')
 
-        return bookFile === null ? bookName : bookFile.path
+        return bookFile?.path || null
     }
 
     private linkToUri(link: string): string {
