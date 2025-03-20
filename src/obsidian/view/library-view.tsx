@@ -29,10 +29,12 @@ export class LibraryView extends ItemView {
     protected async onOpen(): Promise<void> {
         this.root = createRoot(this.containerEl.children[1])
 
-        this.update()
+        this.update(this.bookshelf)
     }
 
-    public update(): void {
+    public update(bookshelf: Bookshelf): void {
+        this.bookshelf = bookshelf
+
         this.root!.render(
             <StrictMode>
                 <Library

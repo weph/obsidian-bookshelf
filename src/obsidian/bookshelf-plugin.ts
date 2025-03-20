@@ -24,6 +24,22 @@ export default class BookshelfPlugin extends Plugin {
     async onload() {
         await this.loadSettings()
 
+        this.createBookshelf()
+
+        this.addSettingTab(new BookshelfSettingsTab(this.app, this))
+
+        this.registerView(VIEW_TYPE_LIBRARY, (leaf) => new LibraryView(leaf, this.bookshelf))
+        this.registerView(VIEW_TYPE_STATISTICS, (leaf) => new StatisticsView(leaf, this.bookshelf))
+
+        this.addRibbonIcon('library-big', 'Open Bookshelf library', () => this.activateView(VIEW_TYPE_LIBRARY))
+        this.addRibbonIcon('chart-spline', 'Open Bookshelf statistics', () => this.activateView(VIEW_TYPE_STATISTICS))
+
+        this.registerEvent(this.app.metadataCache.on('resolve', async (file) => await this.handleFile(file)))
+        this.registerEvent(this.app.metadataCache.on('changed', async (file) => await this.handleFile(file)))
+        this.registerEvent(this.app.vault.on('rename', (file: TFile, oldPath) => this.handleRename(file, oldPath)))
+    }
+
+    private createBookshelf(): void {
         const bnResult = bookNotePatterns(this.settings.bookNote.patterns, this.settings.bookNote.dateFormat)
         const dnResult = dailyNotePatterns(this.settings.dailyNote.patterns)
 
@@ -40,19 +56,20 @@ export default class BookshelfPlugin extends Plugin {
             dnResult.patterns,
             this.bookIdentifier.bind(this),
         )
-
-        this.addSettingTab(new BookshelfSettingsTab(this.app, this))
-
-        this.registerView(VIEW_TYPE_LIBRARY, (leaf) => new LibraryView(leaf, this.bookshelf))
-        this.registerView(VIEW_TYPE_STATISTICS, (leaf) => new StatisticsView(leaf, this.bookshelf))
-
-        this.addRibbonIcon('library-big', 'Open Bookshelf library', () => this.activateView(VIEW_TYPE_LIBRARY))
-        this.addRibbonIcon('chart-spline', 'Open Bookshelf statistics', () => this.activateView(VIEW_TYPE_STATISTICS))
-
-        this.registerEvent(this.app.metadataCache.on('resolve', async (file) => await this.handleFile(file)))
-        this.registerEvent(this.app.metadataCache.on('changed', async (file) => await this.handleFile(file)))
-        this.registerEvent(this.app.vault.on('rename', (file: TFile, oldPath) => this.handleRename(file, oldPath)))
     }
+
+    private recreateBookshelf = debounce({ delay: 500 }, async () => {
+        this.createBookshelf()
+        this.updateViews()
+
+        for (const file of this.app.vault.getFiles()) {
+            if (file.extension !== 'md') {
+                continue
+            }
+
+            await this.handleFile(file)
+        }
+    })
 
     private dailyNotesSettings(): DailyNotesSettings {
         // @ts-expect-error internalPlugins is not exposed
@@ -68,7 +85,7 @@ export default class BookshelfPlugin extends Plugin {
         const note = new ObsidianNote(file, this.app)
 
         await this.bookshelf.process(note)
-        this.updateView()
+        this.updateViews()
     }
 
     private async handleRename(file: TFile, oldPath: string): Promise<void> {
@@ -93,11 +110,11 @@ export default class BookshelfPlugin extends Plugin {
         return this.app.vault.getResourcePath(coverFile)
     }
 
-    private updateView = debounce({ delay: 100 }, () => {
+    private updateViews = debounce({ delay: 100 }, () => {
         for (const view of [VIEW_TYPE_LIBRARY, VIEW_TYPE_STATISTICS]) {
             for (const leaf of this.app.workspace.getLeavesOfType(view)) {
                 if ('update' in leaf.view && typeof leaf.view.update === 'function') {
-                    leaf.view.update()
+                    leaf.view.update(this.bookshelf)
                 }
             }
         }
@@ -123,5 +140,7 @@ export default class BookshelfPlugin extends Plugin {
 
     async saveSettings() {
         await this.saveData(this.settings)
+
+        this.recreateBookshelf()
     }
 }
