@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.3.1...main`][0.3.1...main].
 
+### Changed
+
+- Extracted creation of bookshelf instance to a factory
+
 ## [`0.3.1`][0.3.1] - 2025-03-20
 
 For a full diff see [`0.3.0...0.3.1`][0.3.0...0.3.1].

@@ -4,11 +4,9 @@ import { LibraryView, VIEW_TYPE_LIBRARY } from './view/library-view'
 import { assign, debounce } from 'radashi'
 import { BookshelfPluginSettings, DEFAULT_SETTINGS } from './settings/bookshelf-plugin-settings'
 import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
-import { BookMetadataFactory } from '../bookshelf/metadata/book-metadata-factory'
 import { StatisticsView, VIEW_TYPE_STATISTICS } from './view/statistics-view'
-import { dailyNotePatterns } from '../bookshelf/reading-journey/pattern/daily-note/daily-note-pattern'
-import { bookNotePatterns } from '../bookshelf/reading-journey/pattern/book-note/book-note-pattern'
 import { ObsidianNote } from './obsidian-note'
+import { BookshelfFactory } from '../bookshelf/bookshelf-factory'
 
 export interface DailyNotesSettings {
     enabled: boolean
@@ -40,22 +38,12 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     private createBookshelf(): void {
-        const bnResult = bookNotePatterns(this.settings.bookNote.patterns, this.settings.bookNote.dateFormat)
-        const dnResult = dailyNotePatterns(this.settings.dailyNote.patterns)
-
-        this.bookshelf = new Bookshelf(
-            this.settings.booksFolder,
-            {
-                format: this.dailyNotesSettings().format,
-                folder: this.dailyNotesSettings().folder || '',
-                heading: this.settings.dailyNote.heading,
-            },
-            { heading: this.settings.bookNote.heading },
-            new BookMetadataFactory(this.settings.bookProperties, this.linkToUri.bind(this)),
-            bnResult.patterns,
-            dnResult.patterns,
-            this.bookIdentifier.bind(this),
-        )
+        this.bookshelf = BookshelfFactory.fromConfiguration({
+            settings: this.settings,
+            dailyNotesSettings: this.dailyNotesSettings(),
+            bookIdentifier: this.bookIdentifier.bind(this),
+            linkToUri: this.linkToUri.bind(this),
+        })
     }
 
     private recreateBookshelf = debounce({ delay: 500 }, async () => {

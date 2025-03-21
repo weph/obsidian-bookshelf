@@ -6,58 +6,57 @@ import { Interval } from './reading-journey/statistics/statistics'
 import { DateTime } from 'luxon'
 import { FakeNote } from '../support/fake-note'
 import { StaticMetadata } from './metadata/metadata'
-import { BookMetadataFactory } from './metadata/book-metadata-factory'
-import { bookNotePatterns } from './reading-journey/pattern/book-note/book-note-pattern'
-import { dailyNotePatterns } from './reading-journey/pattern/daily-note/daily-note-pattern'
+import { BookshelfFactory } from './bookshelf-factory'
 
 let bookshelf: Bookshelf
 
 const nonExistingNote = 'Non-existing Note'
 
 beforeEach(() => {
-    bookshelf = new Bookshelf(
-        'Books',
-        {
-            heading: 'Reading Journey',
-            format: 'YYYY-MM-DD',
-            folder: '',
-        },
-        {
-            heading: 'Reading',
-        },
-        new BookMetadataFactory(
-            {
+    bookshelf = BookshelfFactory.fromConfiguration({
+        settings: {
+            booksFolder: 'Books',
+            bookProperties: {
                 cover: 'cover',
                 author: 'author',
                 published: 'published',
                 tags: 'tags',
                 rating: 'rating',
             },
-            (link) => link,
-        ),
-        bookNotePatterns(
-            {
-                started: '{date}: Started reading',
-                abandoned: '{date}: Abandoned book',
-                finished: '{date}: Finished reading',
-                absoluteProgress: '{date}: {startPage}-{endPage}',
-                relativeProgress: '{date}: {endPage}',
+            bookNote: {
+                heading: 'Reading Journey',
+                dateFormat: 'yyyy-MM-dd',
+                patterns: {
+                    started: '{date}: Started reading',
+                    abandoned: '{date}: Abandoned book',
+                    finished: '{date}: Finished reading',
+                    absoluteProgress: '{date}: {startPage}-{endPage}',
+                    relativeProgress: '{date}: {endPage}',
+                },
             },
-            'yyyy-MM-dd',
-        ).patterns,
-        dailyNotePatterns({
-            started: 'Started reading {book}',
-            abandoned: 'Abandoned {book}',
-            finished: 'Finished reading {book}',
-            absoluteProgress: 'Read {book}: {startPage}-{endPage}',
-            relativeProgress: 'Read {book}: {endPage}',
-        }).patterns,
-        (input) => {
+            dailyNote: {
+                heading: 'Reading',
+                patterns: {
+                    started: 'Started reading {book}',
+                    abandoned: 'Abandoned {book}',
+                    finished: 'Finished reading {book}',
+                    absoluteProgress: 'Read {book}: {startPage}-{endPage}',
+                    relativeProgress: 'Read {book}: {endPage}',
+                },
+            },
+        },
+        dailyNotesSettings: {
+            enabled: true,
+            format: 'YYYY-MM-DD',
+            folder: '',
+        },
+        bookIdentifier: (input) => {
             const identifier = input.replace('[[', '').replace(']]', '')
 
             return identifier === nonExistingNote ? null : `Books/${identifier}.md`
         },
-    )
+        linkToUri: (link) => link,
+    })
 })
 
 describe('Note processing', () => {
