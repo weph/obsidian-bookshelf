@@ -128,7 +128,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Started book')
-            .setDesc('Supported tokens: {date}, {*}')
+            .setDesc('Supported tokens: {date}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.started).onChange(async (value) => {
                     this.plugin.settings.bookNote.patterns.started = value
@@ -139,7 +139,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Abandoned book')
-            .setDesc('Supported tokens: {date}, {*}')
+            .setDesc('Supported tokens: {date}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.abandoned).onChange(async (value) => {
                     this.plugin.settings.bookNote.patterns.abandoned = value
@@ -150,7 +150,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Finished book')
-            .setDesc('Supported tokens: {date}, {*}')
+            .setDesc('Supported tokens: {date}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.finished).onChange(async (value) => {
                     this.plugin.settings.bookNote.patterns.finished = value
@@ -161,7 +161,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Reading progress (absolute)')
-            .setDesc('Supported tokens: {date}, {startPage}, {endPage}, {*}')
+            .setDesc('Supported tokens: {date}, {startPage}, {endPage}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.absoluteProgress).onChange(async (value) => {
                     this.plugin.settings.bookNote.patterns.absoluteProgress = value
@@ -172,7 +172,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Reading progress (relative)')
-            .setDesc('Supported tokens: {date}, {endPage}, {*}')
+            .setDesc('Supported tokens: {date}, {endPage}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.relativeProgress).onChange(async (value) => {
                     this.plugin.settings.bookNote.patterns.relativeProgress = value
@@ -200,7 +200,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Started book')
-            .setDesc('Supported tokens: {book}, {*}')
+            .setDesc('Supported tokens: {book}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.started).onChange(async (value) => {
                     this.plugin.settings.dailyNote.patterns.started = value
@@ -211,7 +211,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Abandoned book')
-            .setDesc('Supported tokens: {book}, {*}')
+            .setDesc('Supported tokens: {book}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.abandoned).onChange(async (value) => {
                     this.plugin.settings.dailyNote.patterns.abandoned = value
@@ -222,7 +222,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Finished book')
-            .setDesc('Supported tokens: {book}, {*}')
+            .setDesc('Supported tokens: {book}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.finished).onChange(async (value) => {
                     this.plugin.settings.dailyNote.patterns.finished = value
@@ -233,7 +233,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Reading progress (absolute)')
-            .setDesc('Supported tokens: {book}, {startPage}, {endPage}, {*}')
+            .setDesc('Supported tokens: {book}, {startPage}, {endPage}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.absoluteProgress).onChange(async (value) => {
                     this.plugin.settings.dailyNote.patterns.absoluteProgress = value
@@ -244,7 +244,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Reading progress (relative)')
-            .setDesc('Supported tokens: {book}, {endPage}, {*}')
+            .setDesc('Supported tokens: {book}, {endPage}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.relativeProgress).onChange(async (value) => {
                     this.plugin.settings.dailyNote.patterns.relativeProgress = value

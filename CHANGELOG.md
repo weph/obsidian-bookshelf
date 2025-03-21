@@ -13,6 +13,10 @@ For a full diff see [`0.3.1...main`][0.3.1...main].
 
 - Extracted creation of bookshelf instance to a factory
 
+### Removed
+
+- Removed support for wildcard placeholders (`{*}`) in patterns
+
 ## [`0.3.1`][0.3.1] - 2025-03-20
 
 For a full diff see [`0.3.0...0.3.1`][0.3.0...0.3.1].

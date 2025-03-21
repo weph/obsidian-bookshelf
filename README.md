@@ -90,7 +90,6 @@ You may use the following tokens in your patterns. Each pattern setting denotes 
 - `{date}` Date of the entry formatted according to **Date format** setting
 - `{startPage}` The page you started reading on
 - `{endPage}` The last page you read
-- `{*}` Can match any text between tokens
 
 Let's say reading progress entries in your daily notes look like this:
 
@@ -99,13 +98,3 @@ Let's say reading progress entries in your daily notes look like this:
 ```
 
 In this case, you should use the following pattern: `Read {book} from page {startPage} to page {endPage}`.
-
-If you prefer a more flexible format, your entries might look like this:
-
-```markdown
-- Read [[The Shining]] from page 12 to page 133
-- Read [[The Shining]] from 133 to 151
-- Read [[The Shining]] pages 134 to 190
-```
-
-In this case, the wildcard token allows you to match the dynamic text: `Read {book} {*} {startPage} {*} {endPage}`.
