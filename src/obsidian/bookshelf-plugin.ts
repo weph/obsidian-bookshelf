@@ -35,6 +35,8 @@ export default class BookshelfPlugin extends Plugin {
         this.registerEvent(this.app.metadataCache.on('resolve', async (file) => await this.handleFile(file)))
         this.registerEvent(this.app.metadataCache.on('changed', async (file) => await this.handleFile(file)))
         this.registerEvent(this.app.vault.on('rename', (file: TFile, oldPath) => this.handleRename(file, oldPath)))
+
+        this.processAllNotesOnceWorkspaceIsReady()
     }
 
     private createBookshelf(): void {
@@ -46,18 +48,23 @@ export default class BookshelfPlugin extends Plugin {
         })
     }
 
+    private processAllNotesOnceWorkspaceIsReady(): void {
+        if (this.app.workspace.layoutReady) {
+            this.processAllNotes()
+        } else {
+            this.app.workspace.onLayoutReady(() => this.processAllNotes())
+        }
+    }
+
     private recreateBookshelf = debounce({ delay: 500 }, async () => {
         this.createBookshelf()
         this.updateViews()
-
-        for (const file of this.app.vault.getFiles()) {
-            if (file.extension !== 'md') {
-                continue
-            }
-
-            await this.handleFile(file)
-        }
+        this.processAllNotes()
     })
+
+    private processAllNotes(): void {
+        this.app.vault.getMarkdownFiles().forEach((file) => this.handleFile(file))
+    }
 
     private dailyNotesSettings(): DailyNotesSettings {
         // @ts-expect-error internalPlugins is not exposed
