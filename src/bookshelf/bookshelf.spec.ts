@@ -215,7 +215,7 @@ describe('Note processing', () => {
         expect(result.map((b) => b.metadata.title)).toEqual([])
     })
 
-    test('It should create reading journey from daily note note', async () => {
+    test('It should create reading journey from daily note', async () => {
         await bookshelf.process(new FakeNote('Books/The Shining.md', new StaticMetadata({}), []))
 
         await bookshelf.process(
@@ -235,7 +235,7 @@ describe('Note processing', () => {
         ])
     })
 
-    test('It should update reading journey from daily note note', async () => {
+    test('It should update reading journey from daily note', async () => {
         await bookshelf.process(new FakeNote('Books/The Shining.md', new StaticMetadata({}), []))
 
         await bookshelf.process(
