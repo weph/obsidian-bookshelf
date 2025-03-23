@@ -49,7 +49,7 @@ const bookshelf = BookshelfFactory.fromConfiguration({
         format: 'YYYY-MM-DD',
         folder: '',
     },
-    bookIdentifier: (input) => input,
+    noteForLink: () => null,
     linkToUri: (link) => link,
 })
 

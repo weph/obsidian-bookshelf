@@ -1,18 +1,19 @@
-import { App, CachedMetadata, TFile } from 'obsidian'
+import { App, TFile } from 'obsidian'
 import { Metadata, ObsidianMetadata } from 'src/bookshelf/metadata/metadata'
 import { Note } from '../bookshelf/note'
 
 export class ObsidianNote implements Note {
-    private readonly meta: CachedMetadata
-
-    public readonly metadata: Metadata
-
     constructor(
         private file: TFile,
         private app: App,
-    ) {
-        this.meta = this.app.metadataCache.getFileCache(file) || {}
-        this.metadata = new ObsidianMetadata(this.meta)
+    ) {}
+
+    get metadata(): Metadata {
+        return new ObsidianMetadata(this.obsidianMetadata)
+    }
+
+    private get obsidianMetadata() {
+        return this.app.metadataCache.getFileCache(this.file) || {}
     }
 
     get identifier(): string {
@@ -34,7 +35,7 @@ export class ObsidianNote implements Note {
         let sectionStart: number | null = null
         let sectionEnd: number | null = null
 
-        for (const section of this.meta?.sections || []) {
+        for (const section of this.obsidianMetadata.sections || []) {
             if (sectionStart === null) {
                 if (section.type !== 'heading') {
                     continue
@@ -60,7 +61,7 @@ export class ObsidianNote implements Note {
             sectionEnd = lines.length
         }
 
-        for (const listItem of this.meta?.listItems || []) {
+        for (const listItem of this.obsidianMetadata.listItems || []) {
             const line = listItem.position.start.line
 
             if (line < sectionStart || line > sectionEnd) {

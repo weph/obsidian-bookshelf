@@ -1,18 +1,20 @@
 import { beforeEach, describe, expect, test } from '@jest/globals'
 import { Bookshelf } from './bookshelf'
-import { BookshelfError } from './bookshelf-error'
 import { ReadingJourneyItem } from './reading-journey/reading-journey-log'
 import { Interval } from './reading-journey/statistics/statistics'
 import { DateTime } from 'luxon'
 import { FakeNote } from '../support/fake-note'
 import { StaticMetadata } from './metadata/metadata'
 import { BookshelfFactory } from './bookshelf-factory'
+import { Note } from './note'
 
 let bookshelf: Bookshelf
 
 const nonExistingNote = 'Non-existing Note'
+const notes = new Map<string, Note>()
 
 beforeEach(() => {
+    notes.clear()
     bookshelf = BookshelfFactory.fromConfiguration({
         settings: {
             booksFolder: 'Books',
@@ -50,11 +52,7 @@ beforeEach(() => {
             format: 'YYYY-MM-DD',
             folder: '',
         },
-        bookIdentifier: (input) => {
-            const identifier = input.replace('[[', '').replace(']]', '')
-
-            return identifier === nonExistingNote ? null : `Books/${identifier}.md`
-        },
+        noteForLink: (input) => notes.get(input) || null,
         linkToUri: (link) => link,
     })
 })
@@ -92,31 +90,25 @@ describe('Note processing', () => {
     })
 
     test('It should update book from book note', async () => {
-        await bookshelf.process(
-            new FakeNote(
-                'Books/The Shining.md',
-                new StaticMetadata({
-                    cover: 'no-cover.jpg',
-                    author: ['Steve Kong'],
-                    published: '1999-12-25',
-                    tags: ['comedy'],
-                }),
-                [],
-            ),
+        const note = new FakeNote(
+            'Books/The Shining.md',
+            new StaticMetadata({
+                cover: 'no-cover.jpg',
+                author: ['Steve Kong'],
+                published: '1999-12-25',
+                tags: ['comedy'],
+            }),
+            [],
         )
+        await bookshelf.process(note)
 
-        await bookshelf.process(
-            new FakeNote(
-                'Books/The Shining.md',
-                new StaticMetadata({
-                    cover: 'the-shining.jpg',
-                    author: ['Stephen King'],
-                    published: '1977-01-28',
-                    tags: ['novel', 'horror'],
-                }),
-                [],
-            ),
-        )
+        note.metadata = new StaticMetadata({
+            cover: 'the-shining.jpg',
+            author: ['Stephen King'],
+            published: '1977-01-28',
+            tags: ['novel', 'horror'],
+        })
+        await bookshelf.process(note)
 
         const result = Array.from(bookshelf.all())
         expect(result).toHaveLength(1)
@@ -132,13 +124,13 @@ describe('Note processing', () => {
     test("Updating a book must not change it's identity", async () => {
         const note = new FakeNote('Books/The Shining.md', new StaticMetadata({ author: ['Steve Kong'] }), [])
         await bookshelf.process(note)
-        const book = bookshelf.book(note.identifier)
+        const book = bookshelf.book(note)
 
         await bookshelf.process(
             new FakeNote('Books/The Shining.md', new StaticMetadata({ author: ['Stephen King'] }), []),
         )
 
-        expect(bookshelf.book(note.identifier)).toBe(book)
+        expect(bookshelf.book(note)).toBe(book)
     })
 
     test('It should create reading journey from book note', async () => {
@@ -162,19 +154,17 @@ describe('Note processing', () => {
     })
 
     test('It should update reading journey from book note', async () => {
-        await bookshelf.process(
-            new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-01-01: Started reading']),
-        )
+        const note = new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-01-01: Started reading'])
+        await bookshelf.process(note)
 
-        await bookshelf.process(
-            new FakeNote('Books/The Shining.md', new StaticMetadata({}), [
-                '2025-01-01: Started reading',
-                '2025-01-01: 10-150',
-                '2025-01-02: 250',
-                '2025-01-03: 447',
-                '2025-01-03: Finished reading',
-            ]),
-        )
+        note.list = [
+            '2025-01-01: Started reading',
+            '2025-01-01: 10-150',
+            '2025-01-02: 250',
+            '2025-01-03: 447',
+            '2025-01-03: Finished reading',
+        ]
+        await bookshelf.process(note)
 
         expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
             '2025-01-01: The Shining: started',
@@ -186,17 +176,20 @@ describe('Note processing', () => {
     })
 
     test('It should create book note for book referenced in daily note if it does not exist yet', async () => {
+        notes.set('[[The Shining]]', new FakeNote('The Shining', new StaticMetadata({}), []))
         await bookshelf.process(
             new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading [[The Shining]]']),
         )
 
         const result = Array.from(bookshelf.all())
         expect(result).toHaveLength(1)
-        expect(result[0].metadata).toEqual({ title: 'Books/The Shining.md' })
+        expect(result[0].metadata).toEqual({ title: 'The Shining' })
     })
 
     test('It should link reading journey entry from daily note to existing book', async () => {
-        await bookshelf.process(new FakeNote('Books/The Shining.md', new StaticMetadata({}), []))
+        const note = new FakeNote('Books/The Shining.md', new StaticMetadata({}), [])
+        notes.set('The Shining', note)
+        await bookshelf.process(note)
 
         await bookshelf.process(
             new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading [[The Shining]]']),
@@ -216,7 +209,7 @@ describe('Note processing', () => {
     })
 
     test('It should create reading journey from daily note', async () => {
-        await bookshelf.process(new FakeNote('Books/The Shining.md', new StaticMetadata({}), []))
+        notes.set('[[The Shining]]', new FakeNote('The Shining', new StaticMetadata({}), []))
 
         await bookshelf.process(
             new FakeNote('2025-01-01.md', new StaticMetadata({}), [
@@ -236,19 +229,15 @@ describe('Note processing', () => {
     })
 
     test('It should update reading journey from daily note', async () => {
-        await bookshelf.process(new FakeNote('Books/The Shining.md', new StaticMetadata({}), []))
-
-        await bookshelf.process(
-            new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading [[The Shining]]']),
-        )
-
-        await bookshelf.process(
-            new FakeNote('2025-01-01.md', new StaticMetadata({}), [
-                'Started reading [[The Shining]]',
-                'Read [[The Shining]]: 10-447',
-                'Finished reading [[The Shining]]',
-            ]),
-        )
+        notes.set('[[The Shining]]', new FakeNote('The Shining', new StaticMetadata({}), []))
+        const note = new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading [[The Shining]]'])
+        await bookshelf.process(note)
+        note.list = [
+            'Started reading [[The Shining]]',
+            'Read [[The Shining]]: 10-447',
+            'Finished reading [[The Shining]]',
+        ]
+        await bookshelf.process(note)
 
         expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
             '2025-01-01: The Shining: started',
@@ -279,23 +268,26 @@ test('It should return all books added to the bookshelf', async () => {
 
 describe('Non-existing book', () => {
     test('cannot be retrieved', () => {
-        expect(() => bookshelf.book('the-shining')).toThrow(BookshelfError.identifierDoesntExist('the-shining'))
+        expect(() => bookshelf.book(new FakeNote('the-shining', new StaticMetadata({}), []))).toThrow(
+            'There is no book for note "the-shining"',
+        )
     })
 })
 
 test('reading journey should by reflected in book', async () => {
-    await bookshelf.process(
-        new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-02-03: 1-10', '2025-02-05: 20']),
-    )
-    await bookshelf.process(
-        new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-02-01: 10-20', '2025-02-04: 50']),
-    )
+    const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-02-03: 1-10', '2025-02-05: 20'])
+    const shining = new FakeNote('Books/The Shining.md', new StaticMetadata({}), [
+        '2025-02-01: 10-20',
+        '2025-02-04: 50',
+    ])
+    await bookshelf.process(dracula)
+    await bookshelf.process(shining)
 
-    expect(bookshelf.book('Books/Dracula.md').readingJourney.map(readingProgressAsString)).toEqual([
+    expect(bookshelf.book(dracula).readingJourney.map(readingProgressAsString)).toEqual([
         '2025-02-03: Dracula: 1-10',
         '2025-02-05: Dracula: 11-20',
     ])
-    expect(bookshelf.book('Books/The Shining.md').readingJourney.map(readingProgressAsString)).toEqual([
+    expect(bookshelf.book(shining).readingJourney.map(readingProgressAsString)).toEqual([
         '2025-02-01: The Shining: 10-20',
         '2025-02-04: The Shining: 21-50',
     ])
@@ -542,64 +534,62 @@ describe('Statistics', () => {
 
 describe('Reading status', () => {
     test('book without reading journey should have status "unread"', async () => {
-        await bookshelf.process(new FakeNote('Books/Dracula.md', new StaticMetadata({}), []))
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), [])
+        await bookshelf.process(dracula)
 
-        const book = bookshelf.book('Books/Dracula.md')
+        const book = bookshelf.book(dracula)
 
         expect(book.status).toBe('unread')
     })
 
     test('book should have status "reading" if action is "start"', async () => {
-        await bookshelf.process(
-            new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: Started reading']),
-        )
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: Started reading'])
+        await bookshelf.process(dracula)
 
-        const book = bookshelf.book('Books/Dracula.md')
+        const book = bookshelf.book(dracula)
 
         expect(book.status).toBe('reading')
     })
 
     test('book should have status "reading" if action is "progress"', async () => {
-        await bookshelf.process(new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: 5-115']))
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: 5-115'])
+        await bookshelf.process(dracula)
 
-        const book = bookshelf.book('Books/Dracula.md')
+        const book = bookshelf.book(dracula)
 
         expect(book.status).toBe('reading')
     })
 
     test('book should have status "finished" if action is "finish"', async () => {
-        await bookshelf.process(
-            new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: Finished reading']),
-        )
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: Finished reading'])
+        await bookshelf.process(dracula)
 
-        const book = bookshelf.book('Books/Dracula.md')
+        const book = bookshelf.book(dracula)
 
         expect(book.status).toBe('finished')
     })
 
     test('book should have status "abandoned" if action is "abandon"', async () => {
-        await bookshelf.process(
-            new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: Abandoned book']),
-        )
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: Abandoned book'])
+        await bookshelf.process(dracula)
 
-        const book = bookshelf.book('Books/Dracula.md')
+        const book = bookshelf.book(dracula)
 
         expect(book.status).toBe('abandoned')
     })
 
     test('last action counts', async () => {
-        await bookshelf.process(
-            new FakeNote('Books/Dracula.md', new StaticMetadata({}), [
-                '2025-01-02: Started reading',
-                '2025-01-02: 1-20',
-                '2025-01-03: Abandoned book',
-                '2025-01-05: Started reading',
-                '2025-01-05: 21-120',
-                '2025-01-06: Finished reading',
-            ]),
-        )
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), [
+            '2025-01-02: Started reading',
+            '2025-01-02: 1-20',
+            '2025-01-03: Abandoned book',
+            '2025-01-05: Started reading',
+            '2025-01-05: 21-120',
+            '2025-01-06: Finished reading',
+        ])
+        await bookshelf.process(dracula)
 
-        const book = bookshelf.book('Books/Dracula.md')
+        const book = bookshelf.book(dracula)
 
         expect(book.status).toBe('finished')
     })

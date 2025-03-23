@@ -4,12 +4,13 @@ import { bookNotePatterns } from './reading-journey/pattern/book-note/book-note-
 import { dailyNotePatterns } from './reading-journey/pattern/daily-note/daily-note-pattern'
 import { BookMetadataFactory } from './metadata/book-metadata-factory'
 import { DailyNotesSettings } from '../obsidian/bookshelf-plugin'
+import { Note } from './note'
 
 interface Configuration {
     settings: BookshelfPluginSettings
     dailyNotesSettings: DailyNotesSettings
 
-    bookIdentifier(input: string): string | null
+    noteForLink(input: string): Note | null
 
     linkToUri(link: string): string
 }
@@ -31,7 +32,7 @@ export class BookshelfFactory {
             new BookMetadataFactory(settings.bookProperties, config.linkToUri),
             bnResult.patterns,
             dnResult.patterns,
-            config.bookIdentifier,
+            config.noteForLink,
         )
     }
 }

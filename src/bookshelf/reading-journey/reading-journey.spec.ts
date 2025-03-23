@@ -1,8 +1,10 @@
 import { describe, expect, test } from '@jest/globals'
 import { ReadingJourney } from './reading-journey'
 import { BookBuilder } from '../../support/book-builder'
+import { FakeNote } from '../../support/fake-note'
+import { StaticMetadata } from '../metadata/metadata'
 
-const source = ''
+const source = new FakeNote('', new StaticMetadata({}), [])
 
 test('map', () => {
     const book = new BookBuilder().build()

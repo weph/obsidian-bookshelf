@@ -1,5 +1,4 @@
 import { Book, BookMetadata, ReadingStatus } from './book'
-import { BookshelfError } from './bookshelf-error'
 import { ReadingJourneyItemInput, ReadingJourneyLog } from './reading-journey/reading-journey-log'
 import { Statistics } from './reading-journey/statistics/statistics'
 import { ReadingJourney } from './reading-journey/reading-journey'
@@ -54,7 +53,8 @@ class BookshelfBook implements Book {
 }
 
 export class Bookshelf {
-    private books = new Map<string, Book>()
+    private bookNotes = new WeakMap<Note, Book>()
+    private books: Array<Book> = []
 
     private readingJourneyLog = new ReadingJourneyLog()
 
@@ -65,7 +65,7 @@ export class Bookshelf {
         private readonly bookMetadataFactory: BookMetadataFactory,
         private readonly bookNotePatterns: PatternCollection<BookNoteMatch>,
         private readonly dailyNotePatterns: PatternCollection<DailyNoteMatch>,
-        private readonly bookIdentifier: (input: string) => string | null,
+        private readonly noteForLink: (input: string) => Note | null,
     ) {}
 
     public async process(note: Note): Promise<void> {
@@ -73,30 +73,23 @@ export class Bookshelf {
         await this.handleDailyNote(note)
     }
 
-    public rename(oldIdentifier: string, newIdentifier: string): void {
-        this.books.set(newIdentifier, this.book(oldIdentifier))
-        this.books.delete(oldIdentifier)
-    }
-
     private async handleBookNote(note: Note): Promise<void> {
         if (!this.isBookNote(note)) {
             return
         }
 
-        const identifier = note.identifier
-
         const bookMetadata = this.bookMetadataFactory.create(note.basename, note.metadata)
-        if (this.has(identifier)) {
-            this.update(identifier, bookMetadata)
+        if (this.has(note)) {
+            this.update(note, bookMetadata)
         } else {
-            this.add(identifier, note, bookMetadata)
+            this.add(note, bookMetadata)
         }
 
         await this.processReadingJourney(
             note,
             this.bookNoteSettings.heading,
             this.bookNotePatterns,
-            () => identifier,
+            () => note,
             (matches) => matches.date,
         )
     }
@@ -111,7 +104,7 @@ export class Bookshelf {
             note,
             this.dailyNoteSettings.heading,
             this.dailyNotePatterns,
-            (matches) => this.bookIdentifier(matches.book),
+            (matches) => this.noteForLink(matches.book),
             () => date,
         )
     }
@@ -124,10 +117,10 @@ export class Bookshelf {
         note: Note,
         heading: string,
         patterns: PatternCollection<T>,
-        identifierValue: (matches: T) => string | null,
+        noteForLink: (matches: T) => Note | null,
         dateValue: (matches: T) => Date,
     ): Promise<void> {
-        const source = note.path
+        const source = note
 
         this.readingJourneyLog.removeBySource(source)
         for await (const listItem of note.listItems(heading)) {
@@ -136,18 +129,18 @@ export class Bookshelf {
                 continue
             }
 
-            const identifier = identifierValue(matches)
-            if (identifier === null) {
+            const bookNote = noteForLink(matches)
+            if (bookNote === null) {
                 continue
             }
 
             const date = dateValue(matches)
 
-            if (!this.has(identifier)) {
-                this.add(identifier, null, { title: identifier })
+            if (!this.has(bookNote)) {
+                this.add(bookNote, { title: bookNote.basename })
             }
 
-            const book = this.book(identifier)
+            const book = this.book(bookNote)
 
             let item: ReadingJourneyItemInput
 
@@ -163,23 +156,30 @@ export class Bookshelf {
         }
     }
 
-    private has(identifier: string): boolean {
-        return this.books.has(identifier)
+    private has(note: Note): boolean {
+        return this.bookNotes.has(note)
     }
 
-    private add(identifier: string, note: Note | null, metadata: BookMetadata): void {
-        this.books.set(identifier, new BookshelfBook(note, metadata, this))
+    private add(note: Note, metadata: BookMetadata): void {
+        if (this.has(note)) {
+            return
+        }
+
+        const book = new BookshelfBook(note, metadata, this)
+
+        this.bookNotes.set(note, book)
+        this.books.push(book)
     }
 
-    private update(identifier: string, metadata: BookMetadata): void {
-        this.book(identifier).metadata = metadata
+    private update(note: Note, metadata: BookMetadata): void {
+        this.book(note).metadata = metadata
     }
 
-    public book(identifier: string): Book {
-        const result = this.books.get(identifier)
+    public book(note: Note): Book {
+        const result = this.bookNotes.get(note)
 
         if (result === undefined) {
-            throw BookshelfError.identifierDoesntExist(identifier)
+            throw new Error(`There is no book for note "${note.path}"`)
         }
 
         return result

@@ -7,6 +7,7 @@ import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
 import { StatisticsView, VIEW_TYPE_STATISTICS } from './view/statistics-view'
 import { ObsidianNote } from './obsidian-note'
 import { BookshelfFactory } from '../bookshelf/bookshelf-factory'
+import { Note } from '../bookshelf/note'
 
 export interface DailyNotesSettings {
     enabled: boolean
@@ -18,6 +19,8 @@ export default class BookshelfPlugin extends Plugin {
     public settings: BookshelfPluginSettings
 
     private bookshelf: Bookshelf
+
+    private notes = new WeakMap<TFile, Note>()
 
     async onload() {
         await this.loadSettings()
@@ -32,10 +35,6 @@ export default class BookshelfPlugin extends Plugin {
         this.addRibbonIcon('library-big', 'Open Bookshelf library', () => this.activateView(VIEW_TYPE_LIBRARY))
         this.addRibbonIcon('chart-spline', 'Open Bookshelf statistics', () => this.activateView(VIEW_TYPE_STATISTICS))
 
-        this.registerEvent(this.app.metadataCache.on('resolve', async (file) => await this.handleFile(file)))
-        this.registerEvent(this.app.metadataCache.on('changed', async (file) => await this.handleFile(file)))
-        this.registerEvent(this.app.vault.on('rename', (file: TFile, oldPath) => this.handleRename(file, oldPath)))
-
         this.processAllNotesOnceWorkspaceIsReady()
     }
 
@@ -43,27 +42,35 @@ export default class BookshelfPlugin extends Plugin {
         this.bookshelf = BookshelfFactory.fromConfiguration({
             settings: this.settings,
             dailyNotesSettings: this.dailyNotesSettings(),
-            bookIdentifier: this.bookIdentifier.bind(this),
+            noteForLink: this.noteForLink.bind(this),
             linkToUri: this.linkToUri.bind(this),
         })
     }
 
     private processAllNotesOnceWorkspaceIsReady(): void {
         if (this.app.workspace.layoutReady) {
-            this.processAllNotes()
+            this.initialNoteProcessing()
         } else {
-            this.app.workspace.onLayoutReady(() => this.processAllNotes())
+            this.app.workspace.onLayoutReady(() => this.initialNoteProcessing())
         }
+    }
+
+    private async initialNoteProcessing(): Promise<void> {
+        await this.processAllNotes()
+
+        this.registerEvent(this.app.metadataCache.on('resolve', async (file) => await this.handleFile(file)))
+        this.registerEvent(this.app.metadataCache.on('changed', async (file) => await this.handleFile(file)))
+        this.registerEvent(this.app.vault.on('rename', (file: TFile) => this.handleFile(file)))
     }
 
     private recreateBookshelf = debounce({ delay: 500 }, async () => {
         this.createBookshelf()
         this.updateViews()
-        this.processAllNotes()
+        await this.processAllNotes()
     })
 
-    private processAllNotes(): void {
-        this.app.vault.getMarkdownFiles().forEach((file) => this.handleFile(file))
+    private async processAllNotes(): Promise<void> {
+        await Promise.all(this.app.vault.getMarkdownFiles().map((file) => this.handleFile(file)))
     }
 
     private dailyNotesSettings(): DailyNotesSettings {
@@ -77,22 +84,27 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     private async handleFile(file: TFile): Promise<void> {
-        const note = new ObsidianNote(file, this.app)
-
-        await this.bookshelf.process(note)
+        await this.bookshelf.process(this.noteFor(file))
         this.updateViews()
     }
 
-    private async handleRename(file: TFile, oldPath: string): Promise<void> {
-        this.bookshelf.rename(oldPath, file.path)
-        await this.handleFile(file)
+    private noteFor(file: TFile): Note {
+        if (!this.notes.has(file)) {
+            this.notes.set(file, new ObsidianNote(file, this.app))
+        }
+
+        return this.notes.get(file)!
     }
 
-    private bookIdentifier(input: string): string | null {
+    private noteForLink(input: string): Note | null {
         const bookName = input.replace('[[', '').replace(']]', '')
         const bookFile = this.app.metadataCache.getFirstLinkpathDest(bookName, '')
 
-        return bookFile?.path || null
+        if (bookFile === null) {
+            return null
+        }
+
+        return this.noteFor(bookFile)
     }
 
     private linkToUri(link: string): string {

@@ -1,10 +1,11 @@
 import { Book } from '../book'
 import { ReadingJourney } from './reading-journey'
+import { Note } from '../note'
 
 interface ReadingJournalItemBase {
     date: Date
     book: Book
-    source: string
+    source: Note
 }
 
 export interface ReadingJourneyItemAction extends ReadingJournalItemBase {
@@ -39,7 +40,7 @@ export class ReadingProgress implements ReadingJourneyProgressItem {
         public previous: ReadingJourneyProgressItem | null,
         private readonly _startPage: number | null,
         public readonly endPage: number,
-        public readonly source: string,
+        public readonly source: Note,
     ) {}
 
     get startPage(): number {
@@ -66,12 +67,12 @@ export class ReadingJourneyLog {
         date: Date,
         book: Book,
         action: 'started' | 'finished' | 'abandoned',
-        source: string,
+        source: Note,
     ): void {
         this.add({ action, date, book, source })
     }
 
-    public addReadingProgress(date: Date, book: Book, startPage: number | null, endPage: number, source: string): void {
+    public addReadingProgress(date: Date, book: Book, startPage: number | null, endPage: number, source: Note): void {
         this.add({ action: 'progress', date, book, source, startPage, endPage })
     }
 
@@ -107,7 +108,7 @@ export class ReadingJourneyLog {
         }
     }
 
-    public removeBySource(source: string): void {
+    public removeBySource(source: Note): void {
         this.items = this.items.filter((item) => item.source !== source)
     }
 

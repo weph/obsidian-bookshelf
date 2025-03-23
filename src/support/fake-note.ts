@@ -3,9 +3,9 @@ import { Metadata } from '../bookshelf/metadata/metadata'
 
 export class FakeNote implements Note {
     constructor(
-        public readonly path: string,
-        public readonly metadata: Metadata,
-        public readonly list: Array<string>,
+        public path: string,
+        public metadata: Metadata,
+        public list: Array<string>,
     ) {}
 
     get identifier(): string {

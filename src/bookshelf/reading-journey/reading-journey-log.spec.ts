@@ -1,9 +1,11 @@
 import { beforeEach, describe, expect, test } from '@jest/globals'
 import { ReadingJourneyItem, ReadingJourneyLog, ReadingProgress } from './reading-journey-log'
 import { BookBuilder } from '../../support/book-builder'
+import { FakeNote } from '../../support/fake-note'
+import { StaticMetadata } from '../metadata/metadata'
 
 const book = new BookBuilder().build()
-const source = ''
+const source = new FakeNote('', new StaticMetadata({}), [])
 
 describe('Reading Progress', () => {
     describe('Start page', () => {
@@ -121,19 +123,25 @@ describe('Reading journey', () => {
     })
 
     test('can be removed by source', () => {
-        log.addActionToJourney(date(2025, 2, 3), dracula, 'started', '2025-02-03.md')
-        log.addReadingProgress(date(2025, 2, 3), dracula, 1, 10, '2025-02-03.md')
-        log.addActionToJourney(date(2025, 2, 4), dracula, 'abandoned', '2025-02-04.md')
-        log.addActionToJourney(date(2025, 2, 5), dracula, 'started', '2025-02-05.md')
-        log.addReadingProgress(date(2025, 2, 4), shining, null, 50, 'the-shining.md')
-        log.addActionToJourney(date(2025, 2, 4), shining, 'abandoned', 'the-shining.md')
-        log.addReadingProgress(date(2025, 2, 5), dracula, null, 20, '2025-02-06.md')
-        log.addReadingProgress(date(2025, 2, 10), dracula, null, 100, '2025-02-10.md')
-        log.addActionToJourney(date(2025, 2, 10), dracula, 'finished', '2025-02-10.md')
-        log.addActionToJourney(date(2025, 2, 1), shining, 'started', 'the-shining.md')
-        log.addReadingProgress(date(2025, 2, 1), shining, 10, 20, 'the-shining.md')
+        const dailyNote1 = new FakeNote('2025-02-03.md', new StaticMetadata({}), [])
+        const dailyNote2 = new FakeNote('2025-02-04.md', new StaticMetadata({}), [])
+        const dailyNote3 = new FakeNote('2025-02-05.md', new StaticMetadata({}), [])
+        const shiningNote = new FakeNote('the-shining.md', new StaticMetadata({}), [])
+        const dailyNote4 = new FakeNote('2025-02-06.md', new StaticMetadata({}), [])
+        const dailyNote5 = new FakeNote('2025-02-10.md', new StaticMetadata({}), [])
+        log.addActionToJourney(date(2025, 2, 3), dracula, 'started', dailyNote1)
+        log.addReadingProgress(date(2025, 2, 3), dracula, 1, 10, dailyNote1)
+        log.addActionToJourney(date(2025, 2, 4), dracula, 'abandoned', dailyNote2)
+        log.addActionToJourney(date(2025, 2, 5), dracula, 'started', dailyNote3)
+        log.addReadingProgress(date(2025, 2, 4), shining, null, 50, shiningNote)
+        log.addActionToJourney(date(2025, 2, 4), shining, 'abandoned', shiningNote)
+        log.addReadingProgress(date(2025, 2, 5), dracula, null, 20, dailyNote4)
+        log.addReadingProgress(date(2025, 2, 10), dracula, null, 100, dailyNote5)
+        log.addActionToJourney(date(2025, 2, 10), dracula, 'finished', dailyNote5)
+        log.addActionToJourney(date(2025, 2, 1), shining, 'started', shiningNote)
+        log.addReadingProgress(date(2025, 2, 1), shining, 10, 20, shiningNote)
 
-        log.removeBySource('the-shining.md')
+        log.removeBySource(shiningNote)
 
         expect(log.readingJourney().map(readingProgressAsString)).toEqual([
             '2025-02-03: Dracula: started',
