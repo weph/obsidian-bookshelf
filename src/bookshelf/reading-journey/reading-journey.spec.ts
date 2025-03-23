@@ -2,10 +2,11 @@ import { describe, expect, test } from '@jest/globals'
 import { ReadingJourney } from './reading-journey'
 import { BookBuilder } from '../../support/book-builder'
 
+const source = ''
+
 test('map', () => {
     const book = new BookBuilder().build()
     const date = new Date(2025, 1, 1)
-    const source = ''
     const journey = new ReadingJourney([
         { action: 'started', date, book, source },
         { action: 'finished', date, book, source },
@@ -18,7 +19,6 @@ test('map', () => {
 
 test('filter', () => {
     const date = new Date(2025, 1, 1)
-    const source = ''
     const journey = new ReadingJourney([
         { action: 'started', date, book: new BookBuilder().with('title', 'Dracula').build(), source },
         { action: 'finished', date, book: new BookBuilder().with('title', 'The Shining').build(), source },
@@ -37,7 +37,6 @@ test('filter', () => {
 describe('Tag Usage', () => {
     test('should be empty if no tags have been used', () => {
         const date = new Date(2025, 1, 1)
-        const source = ''
         const thriller = new BookBuilder().with('tags', undefined).build()
         const horror = new BookBuilder().with('tags', undefined).build()
         const nonFiction = new BookBuilder().with('tags', undefined).build()
@@ -56,7 +55,6 @@ describe('Tag Usage', () => {
 
     test('tags should be counted only per book', () => {
         const date = new Date(2025, 1, 1)
-        const source = ''
         const thriller = new BookBuilder().with('tags', ['fiction', 'thriller']).build()
         const journey = new ReadingJourney([
             { action: 'started', date, book: thriller, source },
@@ -73,7 +71,6 @@ describe('Tag Usage', () => {
 
     test('tags should be counted across different books', () => {
         const date = new Date(2025, 1, 1)
-        const source = ''
         const thriller = new BookBuilder().with('tags', ['fiction', 'thriller']).build()
         const horror = new BookBuilder().with('tags', ['fiction', 'horror']).build()
         const nonFiction = new BookBuilder().with('tags', ['nonfiction']).build()

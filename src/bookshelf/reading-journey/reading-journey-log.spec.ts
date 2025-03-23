@@ -3,11 +3,12 @@ import { ReadingJourneyItem, ReadingJourneyLog, ReadingProgress } from './readin
 import { BookBuilder } from '../../support/book-builder'
 
 const book = new BookBuilder().build()
+const source = ''
 
 describe('Reading Progress', () => {
     describe('Start page', () => {
         test('given value should be used', () => {
-            const subject = new ReadingProgress(new Date(), book, null, 5, 10, '')
+            const subject = new ReadingProgress(new Date(), book, null, 5, 10, source)
 
             expect(subject.startPage).toBe(5)
         })
@@ -15,14 +16,14 @@ describe('Reading Progress', () => {
 
     describe('No start page', () => {
         test('start page should be 1 if there is no previous reading progress', () => {
-            const subject = new ReadingProgress(new Date(), book, null, null, 10, '')
+            const subject = new ReadingProgress(new Date(), book, null, null, 10, source)
 
             expect(subject.startPage).toBe(1)
         })
 
         test('start page should be end page of the previous reading progress + 1', () => {
-            const previous = new ReadingProgress(new Date(), book, null, 1, 10, '')
-            const subject = new ReadingProgress(new Date(), book, previous, null, 10, '')
+            const previous = new ReadingProgress(new Date(), book, null, 1, 10, source)
+            const subject = new ReadingProgress(new Date(), book, previous, null, 10, source)
 
             expect(subject.startPage).toBe(11)
         })
@@ -30,20 +31,20 @@ describe('Reading Progress', () => {
 
     describe('Pages (difference between end and start page + 1)', () => {
         test('start page', () => {
-            const subject = new ReadingProgress(new Date(), book, null, 5, 12, '')
+            const subject = new ReadingProgress(new Date(), book, null, 5, 12, source)
 
             expect(subject.pages).toBe(8)
         })
 
         test('no start page, no previous reading progress', () => {
-            const subject = new ReadingProgress(new Date(), book, null, null, 10, '')
+            const subject = new ReadingProgress(new Date(), book, null, null, 10, source)
 
             expect(subject.pages).toBe(10)
         })
 
         test('no start page, but previous reading progress', () => {
-            const previous = new ReadingProgress(new Date(), book, null, 1, 10, '')
-            const subject = new ReadingProgress(new Date(), book, previous, null, 25, '')
+            const previous = new ReadingProgress(new Date(), book, null, 1, 10, source)
+            const subject = new ReadingProgress(new Date(), book, previous, null, 25, source)
 
             expect(subject.pages).toBe(15)
         })
@@ -60,17 +61,17 @@ describe('Reading journey', () => {
     })
 
     test('should be ordered by date', () => {
-        log.addActionToJourney(date(2025, 2, 3), dracula, 'started', '')
-        log.addReadingProgress(date(2025, 2, 3), dracula, 1, 10, '')
-        log.addActionToJourney(date(2025, 2, 4), dracula, 'abandoned', '')
-        log.addActionToJourney(date(2025, 2, 5), dracula, 'started', '')
-        log.addReadingProgress(date(2025, 2, 4), shining, null, 50, '')
-        log.addActionToJourney(date(2025, 2, 4), shining, 'abandoned', '')
-        log.addReadingProgress(date(2025, 2, 5), dracula, null, 20, '')
-        log.addReadingProgress(date(2025, 2, 10), dracula, null, 100, '')
-        log.addActionToJourney(date(2025, 2, 10), dracula, 'finished', '')
-        log.addActionToJourney(date(2025, 2, 1), shining, 'started', '')
-        log.addReadingProgress(date(2025, 2, 1), shining, 10, 20, '')
+        log.addActionToJourney(date(2025, 2, 3), dracula, 'started', source)
+        log.addReadingProgress(date(2025, 2, 3), dracula, 1, 10, source)
+        log.addActionToJourney(date(2025, 2, 4), dracula, 'abandoned', source)
+        log.addActionToJourney(date(2025, 2, 5), dracula, 'started', source)
+        log.addReadingProgress(date(2025, 2, 4), shining, null, 50, source)
+        log.addActionToJourney(date(2025, 2, 4), shining, 'abandoned', source)
+        log.addReadingProgress(date(2025, 2, 5), dracula, null, 20, source)
+        log.addReadingProgress(date(2025, 2, 10), dracula, null, 100, source)
+        log.addActionToJourney(date(2025, 2, 10), dracula, 'finished', source)
+        log.addActionToJourney(date(2025, 2, 1), shining, 'started', source)
+        log.addReadingProgress(date(2025, 2, 1), shining, 10, 20, source)
 
         const journey = log.readingJourney()
 
@@ -90,10 +91,10 @@ describe('Reading journey', () => {
     })
 
     test('items on the same date should be returned in the order of addition', () => {
-        log.addReadingProgress(date(2025, 1, 1), dracula, null, 1, '')
-        log.addReadingProgress(date(2025, 1, 1), shining, null, 2, '')
-        log.addReadingProgress(date(2025, 1, 2), shining, null, 3, '')
-        log.addReadingProgress(date(2025, 1, 2), dracula, null, 4, '')
+        log.addReadingProgress(date(2025, 1, 1), dracula, null, 1, source)
+        log.addReadingProgress(date(2025, 1, 1), shining, null, 2, source)
+        log.addReadingProgress(date(2025, 1, 2), shining, null, 3, source)
+        log.addReadingProgress(date(2025, 1, 2), dracula, null, 4, source)
 
         const journey = log.readingJourney()
 
@@ -106,9 +107,9 @@ describe('Reading journey', () => {
     })
 
     test('items should be connected properly even if added in arbitrary order', () => {
-        log.addReadingProgress(date(2025, 1, 1), dracula, null, 10, '')
-        log.addReadingProgress(date(2025, 1, 3), dracula, null, 30, '')
-        log.addReadingProgress(date(2025, 1, 2), dracula, null, 20, '')
+        log.addReadingProgress(date(2025, 1, 1), dracula, null, 10, source)
+        log.addReadingProgress(date(2025, 1, 3), dracula, null, 30, source)
+        log.addReadingProgress(date(2025, 1, 2), dracula, null, 20, source)
 
         const journey = log.readingJourney()
 
