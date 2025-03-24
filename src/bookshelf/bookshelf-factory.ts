@@ -5,6 +5,9 @@ import { dailyNotePatterns } from './reading-journey/pattern/daily-note/daily-no
 import { BookMetadataFactory } from './metadata/book-metadata-factory'
 import { DailyNotesSettings } from '../obsidian/bookshelf-plugin'
 import { Note } from './note'
+import { BookNoteProcessor } from './note-processing/book-note-processor'
+import { DailyNoteProcessor } from './note-processing/daily-note-processor'
+import { NoteProcessorCollection } from './note-processing/note-processor-collection'
 
 interface Configuration {
     settings: BookshelfPluginSettings
@@ -22,17 +25,17 @@ export class BookshelfFactory {
         const dnResult = dailyNotePatterns(settings.dailyNote.patterns)
 
         return new Bookshelf(
-            settings.booksFolder,
-            {
-                format: config.dailyNotesSettings.format,
-                folder: config.dailyNotesSettings.folder || '',
-                heading: settings.dailyNote.heading,
-            },
-            { heading: settings.bookNote.heading },
             new BookMetadataFactory(settings.bookProperties, config.linkToUri),
-            bnResult.patterns,
-            dnResult.patterns,
-            config.noteForLink,
+            new NoteProcessorCollection([
+                new BookNoteProcessor(settings.booksFolder, settings.bookNote.heading, bnResult.patterns),
+                new DailyNoteProcessor(
+                    settings.dailyNote.heading,
+                    config.dailyNotesSettings.format,
+                    config.dailyNotesSettings.folder || '',
+                    dnResult.patterns,
+                    config.noteForLink,
+                ),
+            ]),
         )
     }
 }

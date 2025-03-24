@@ -183,7 +183,7 @@ describe('Note processing', () => {
 
         const result = Array.from(bookshelf.all())
         expect(result).toHaveLength(1)
-        expect(result[0].metadata).toEqual({ title: 'The Shining' })
+        expect(result[0].metadata.title).toEqual('The Shining')
     })
 
     test('It should link reading journey entry from daily note to existing book', async () => {

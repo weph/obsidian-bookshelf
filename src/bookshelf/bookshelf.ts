@@ -4,20 +4,7 @@ import { Statistics } from './reading-journey/statistics/statistics'
 import { ReadingJourney } from './reading-journey/reading-journey'
 import { Note } from './note'
 import { BookMetadataFactory } from './metadata/book-metadata-factory'
-import { BookNoteMatch } from './reading-journey/pattern/book-note/book-note-pattern'
-import { DailyNoteMatch } from './reading-journey/pattern/daily-note/daily-note-pattern'
-import { PatternCollection } from './reading-journey/pattern/pattern-collection'
-import { dailyNoteDate } from './daily-notes/daily-note-date'
-
-interface DailyNoteSettings {
-    heading: string
-    format: string
-    folder: string
-}
-
-interface BookNoteSettings {
-    heading: string
-}
+import { NoteProcessor } from './note-processing/note-processor'
 
 class BookshelfBook implements Book {
     constructor(
@@ -59,90 +46,25 @@ export class Bookshelf {
     private readingJourneyLog = new ReadingJourneyLog()
 
     constructor(
-        private readonly booksFolder: string,
-        private readonly dailyNoteSettings: DailyNoteSettings,
-        private readonly bookNoteSettings: BookNoteSettings,
         private readonly bookMetadataFactory: BookMetadataFactory,
-        private readonly bookNotePatterns: PatternCollection<BookNoteMatch>,
-        private readonly dailyNotePatterns: PatternCollection<DailyNoteMatch>,
-        private readonly noteForLink: (input: string) => Note | null,
+        private readonly noteProcessor: NoteProcessor,
     ) {}
 
     public async process(note: Note): Promise<void> {
-        await this.handleBookNote(note)
-        await this.handleDailyNote(note)
-    }
+        const result = await this.noteProcessor.data(note)
 
-    private async handleBookNote(note: Note): Promise<void> {
-        if (!this.isBookNote(note)) {
-            return
+        for (const bookNote of result.referencedBookNotes) {
+            const bookMetadata = this.bookMetadataFactory.create(bookNote.basename, bookNote.metadata)
+            if (this.has(bookNote)) {
+                this.update(bookNote, bookMetadata)
+            } else {
+                this.add(bookNote, bookMetadata)
+            }
         }
 
-        const bookMetadata = this.bookMetadataFactory.create(note.basename, note.metadata)
-        if (this.has(note)) {
-            this.update(note, bookMetadata)
-        } else {
-            this.add(note, bookMetadata)
-        }
-
-        await this.processReadingJourney(
-            note,
-            this.bookNoteSettings.heading,
-            this.bookNotePatterns,
-            () => note,
-            (matches) => matches.date,
-        )
-    }
-
-    private async handleDailyNote(note: Note): Promise<void> {
-        const date = dailyNoteDate(note.path, this.dailyNoteSettings.format, this.dailyNoteSettings.folder)
-        if (date === null) {
-            return
-        }
-
-        await this.processReadingJourney(
-            note,
-            this.dailyNoteSettings.heading,
-            this.dailyNotePatterns,
-            (matches) => this.noteForLink(matches.book),
-            () => date,
-        )
-    }
-
-    private isBookNote(note: Note): boolean {
-        return note.path.startsWith(this.booksFolder)
-    }
-
-    private async processReadingJourney<T extends BookNoteMatch | DailyNoteMatch>(
-        note: Note,
-        heading: string,
-        patterns: PatternCollection<T>,
-        noteForLink: (matches: T) => Note | null,
-        dateValue: (matches: T) => Date,
-    ): Promise<void> {
-        const source = note
-
-        this.readingJourneyLog.removeBySource(source)
-        for await (const listItem of note.listItems(heading)) {
-            const matches = patterns.matches(listItem)
-            if (matches === null) {
-                continue
-            }
-
-            const bookNote = noteForLink(matches)
-            if (bookNote === null) {
-                continue
-            }
-
-            const date = dateValue(matches)
-
-            if (!this.has(bookNote)) {
-                this.add(bookNote, { title: bookNote.basename })
-            }
-
-            const book = this.book(bookNote)
-
-            this.readingJourneyLog.add({ ...matches, date, book, source })
+        this.readingJourneyLog.removeBySource(note)
+        for (const item of result.readingJourney) {
+            this.readingJourneyLog.add({ ...item, book: this.book(item.bookNote), source: note })
         }
     }
 
