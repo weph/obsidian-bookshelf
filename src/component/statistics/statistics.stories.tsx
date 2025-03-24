@@ -34,6 +34,7 @@ const bookshelf = BookshelfFactory.fromConfiguration({
             },
         },
         dailyNote: {
+            enabled: true,
             heading: 'Reading',
             patterns: {
                 started: 'Started reading {book}',

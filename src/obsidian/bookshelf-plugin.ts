@@ -73,7 +73,7 @@ export default class BookshelfPlugin extends Plugin {
         await Promise.all(this.app.vault.getMarkdownFiles().map((file) => this.handleFile(file)))
     }
 
-    private dailyNotesSettings(): DailyNotesSettings {
+    public dailyNotesSettings(): DailyNotesSettings {
         // @ts-expect-error internalPlugins is not exposed
         const plugin = this.app.internalPlugins.getEnabledPluginById('daily-notes')
         if (plugin === null) {

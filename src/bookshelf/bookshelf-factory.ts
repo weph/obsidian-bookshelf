@@ -29,7 +29,7 @@ export class BookshelfFactory {
             new BookNoteProcessor(settings.booksFolder, settings.bookNote.heading, bnResult.patterns),
         ]
 
-        if (config.dailyNotesSettings.enabled) {
+        if (config.dailyNotesSettings.enabled && settings.dailyNote.enabled) {
             processors.push(
                 new DailyNoteProcessor(
                     settings.dailyNote.heading,

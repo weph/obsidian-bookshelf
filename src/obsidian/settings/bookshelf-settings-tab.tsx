@@ -21,7 +21,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
         this.addBookProperties()
 
         this.addBookNoteSettings()
-        this.addDailyNoteSettings()
+        this.addDailyNotesSection()
     }
 
     private addBooksSettings(): void {
@@ -182,11 +182,42 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             })
     }
 
-    private addDailyNoteSettings(): void {
+    private addDailyNotesSection(): void {
         const { containerEl } = this
 
-        new Setting(containerEl).setName('Daily note patterns').setHeading()
+        const dailyNotesEnabled = this.plugin.dailyNotesSettings().enabled
+        const showSettings = dailyNotesEnabled && this.plugin.settings.dailyNote.enabled
 
+        const heading = new Setting(containerEl).setName('Daily note patterns').setHeading()
+
+        const settingsContainer = containerEl.createEl('div')
+
+        heading.addToggle((toggle) => {
+            if (!dailyNotesEnabled) {
+                toggle.setDisabled(true)
+                toggle.setTooltip('Daily notes plugin is disabled')
+            }
+
+            toggle.setValue(showSettings)
+            toggle.onChange(async (value) => {
+                this.plugin.settings.dailyNote.enabled = value
+
+                if (value) {
+                    this.addDailyNotesSettings(settingsContainer)
+                } else {
+                    settingsContainer.empty()
+                }
+
+                await this.plugin.saveSettings()
+            })
+        })
+
+        if (showSettings) {
+            this.addDailyNotesSettings(settingsContainer)
+        }
+    }
+
+    private addDailyNotesSettings(containerEl: HTMLElement): void {
         new Setting(containerEl)
             .setName('Heading')
             .setDesc('The heading that marks the start of reading progress entries')

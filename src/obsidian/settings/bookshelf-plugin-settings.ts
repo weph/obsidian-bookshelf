@@ -19,6 +19,7 @@ export interface BookshelfPluginSettings {
         }
     }
     dailyNote: {
+        enabled: boolean
         heading: string
         patterns: {
             started: string
@@ -51,6 +52,7 @@ export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
         },
     },
     dailyNote: {
+        enabled: true,
         heading: 'Reading',
         patterns: {
             started: 'Started {book}',

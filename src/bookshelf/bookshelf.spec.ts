@@ -35,6 +35,7 @@ const defaultConfiguration: Configuration = {
             },
         },
         dailyNote: {
+            enabled: true,
             heading: 'Reading',
             patterns: {
                 started: 'Started reading {book}',
@@ -255,6 +256,28 @@ describe('Note processing', () => {
             dailyNotesSettings: {
                 ...defaultConfiguration.dailyNotesSettings,
                 enabled: false,
+            },
+        })
+        notes.set('[[The Shining]]', new FakeNote('The Shining', new StaticMetadata({}), []))
+
+        await bookshelf.process(
+            new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading [[The Shining]]']),
+        )
+
+        const books = Array.from(bookshelf.all())
+        expect(books).toHaveLength(0)
+        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([])
+    })
+
+    test('It should ignore daily notes if daily note patterns are disabled', async () => {
+        bookshelf = BookshelfFactory.fromConfiguration({
+            ...defaultConfiguration,
+            settings: {
+                ...defaultConfiguration.settings,
+                dailyNote: {
+                    ...defaultConfiguration.settings.dailyNote,
+                    enabled: false,
+                },
             },
         })
         notes.set('[[The Shining]]', new FakeNote('The Shining', new StaticMetadata({}), []))

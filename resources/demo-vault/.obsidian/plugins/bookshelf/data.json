@@ -19,6 +19,7 @@
     }
   },
   "dailyNote": {
+    "enabled": true,
     "heading": "Reading",
     "patterns": {
       "started": "Started {book}",

@@ -12,6 +12,7 @@ For a full diff see [`0.4.0...main`][0.4.0...main].
 ### Changed
 
 - Skip daily note processing if daily notes plugin is disabled
+- Allow user to disable daily note processing in plugin settings
 
 ### Fixed
 
