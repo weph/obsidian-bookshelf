@@ -5,7 +5,7 @@ import { Interval } from './reading-journey/statistics/statistics'
 import { DateTime } from 'luxon'
 import { FakeNote } from '../support/fake-note'
 import { StaticMetadata } from './metadata/metadata'
-import { BookshelfFactory } from './bookshelf-factory'
+import { BookshelfFactory, Configuration } from './bookshelf-factory'
 import { Note } from './note'
 
 let bookshelf: Bookshelf
@@ -13,48 +13,51 @@ let bookshelf: Bookshelf
 const nonExistingNote = 'Non-existing Note'
 const notes = new Map<string, Note>()
 
+const defaultConfiguration: Configuration = {
+    settings: {
+        booksFolder: 'Books',
+        bookProperties: {
+            cover: 'cover',
+            author: 'author',
+            published: 'published',
+            tags: 'tags',
+            rating: 'rating',
+        },
+        bookNote: {
+            heading: 'Reading Journey',
+            dateFormat: 'yyyy-MM-dd',
+            patterns: {
+                started: '{date}: Started reading',
+                abandoned: '{date}: Abandoned book',
+                finished: '{date}: Finished reading',
+                absoluteProgress: '{date}: {startPage}-{endPage}',
+                relativeProgress: '{date}: {endPage}',
+            },
+        },
+        dailyNote: {
+            heading: 'Reading',
+            patterns: {
+                started: 'Started reading {book}',
+                abandoned: 'Abandoned {book}',
+                finished: 'Finished reading {book}',
+                absoluteProgress: 'Read {book}: {startPage}-{endPage}',
+                relativeProgress: 'Read {book}: {endPage}',
+            },
+        },
+    },
+    dailyNotesSettings: {
+        enabled: true,
+        format: 'YYYY-MM-DD',
+        folder: '',
+    },
+    noteForLink: (input) => notes.get(input) || null,
+    linkToUri: (link) => link,
+}
+
 beforeEach(() => {
     notes.clear()
-    bookshelf = BookshelfFactory.fromConfiguration({
-        settings: {
-            booksFolder: 'Books',
-            bookProperties: {
-                cover: 'cover',
-                author: 'author',
-                published: 'published',
-                tags: 'tags',
-                rating: 'rating',
-            },
-            bookNote: {
-                heading: 'Reading Journey',
-                dateFormat: 'yyyy-MM-dd',
-                patterns: {
-                    started: '{date}: Started reading',
-                    abandoned: '{date}: Abandoned book',
-                    finished: '{date}: Finished reading',
-                    absoluteProgress: '{date}: {startPage}-{endPage}',
-                    relativeProgress: '{date}: {endPage}',
-                },
-            },
-            dailyNote: {
-                heading: 'Reading',
-                patterns: {
-                    started: 'Started reading {book}',
-                    abandoned: 'Abandoned {book}',
-                    finished: 'Finished reading {book}',
-                    absoluteProgress: 'Read {book}: {startPage}-{endPage}',
-                    relativeProgress: 'Read {book}: {endPage}',
-                },
-            },
-        },
-        dailyNotesSettings: {
-            enabled: true,
-            format: 'YYYY-MM-DD',
-            folder: '',
-        },
-        noteForLink: (input) => notes.get(input) || null,
-        linkToUri: (link) => link,
-    })
+
+    bookshelf = BookshelfFactory.fromConfiguration(defaultConfiguration)
 })
 
 describe('Note processing', () => {
@@ -244,6 +247,25 @@ describe('Note processing', () => {
             '2025-01-01: The Shining: 10-447',
             '2025-01-01: The Shining: finished',
         ])
+    })
+
+    test('It should ignore daily notes if daily note plugin is disabled', async () => {
+        bookshelf = BookshelfFactory.fromConfiguration({
+            ...defaultConfiguration,
+            dailyNotesSettings: {
+                ...defaultConfiguration.dailyNotesSettings,
+                enabled: false,
+            },
+        })
+        notes.set('[[The Shining]]', new FakeNote('The Shining', new StaticMetadata({}), []))
+
+        await bookshelf.process(
+            new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading [[The Shining]]']),
+        )
+
+        const books = Array.from(bookshelf.all())
+        expect(books).toHaveLength(0)
+        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([])
     })
 
     test.each([['2000-50-99.md'], ['aaaa-bb-cc.md'], ['01/01/2025.md'], ['01.01.2025.md']])(

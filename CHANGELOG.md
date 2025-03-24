@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.4.0...main`][0.4.0...main].
 
+### Changed
+
+- Skip daily note processing if daily notes plugin is disabled
+
 ### Fixed
 
 - Books/stats were gone after updating or temporarily disabling the plugin

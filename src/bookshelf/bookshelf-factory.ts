@@ -8,8 +8,9 @@ import { Note } from './note'
 import { BookNoteProcessor } from './note-processing/book-note-processor'
 import { DailyNoteProcessor } from './note-processing/daily-note-processor'
 import { NoteProcessorCollection } from './note-processing/note-processor-collection'
+import { NoteProcessor } from './note-processing/note-processor'
 
-interface Configuration {
+export interface Configuration {
     settings: BookshelfPluginSettings
     dailyNotesSettings: DailyNotesSettings
 
@@ -24,10 +25,12 @@ export class BookshelfFactory {
         const bnResult = bookNotePatterns(settings.bookNote.patterns, settings.bookNote.dateFormat)
         const dnResult = dailyNotePatterns(settings.dailyNote.patterns)
 
-        return new Bookshelf(
-            new BookMetadataFactory(settings.bookProperties, config.linkToUri),
-            new NoteProcessorCollection([
-                new BookNoteProcessor(settings.booksFolder, settings.bookNote.heading, bnResult.patterns),
+        const processors: Array<NoteProcessor> = [
+            new BookNoteProcessor(settings.booksFolder, settings.bookNote.heading, bnResult.patterns),
+        ]
+
+        if (config.dailyNotesSettings.enabled) {
+            processors.push(
                 new DailyNoteProcessor(
                     settings.dailyNote.heading,
                     config.dailyNotesSettings.format,
@@ -35,7 +38,12 @@ export class BookshelfFactory {
                     dnResult.patterns,
                     config.noteForLink,
                 ),
-            ]),
+            )
+        }
+
+        return new Bookshelf(
+            new BookMetadataFactory(settings.bookProperties, config.linkToUri),
+            new NoteProcessorCollection(processors),
         )
     }
 }
