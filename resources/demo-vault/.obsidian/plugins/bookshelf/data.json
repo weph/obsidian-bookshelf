@@ -8,6 +8,7 @@
     "rating": "rating"
   },
   "bookNote": {
+    "enabled": true,
     "heading": "Reading Journey",
     "dateFormat": "yyyy/mm/dd",
     "patterns": {

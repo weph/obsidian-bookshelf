@@ -26,7 +26,11 @@ export class BookshelfFactory {
         const dnResult = dailyNotePatterns(settings.dailyNote.patterns)
 
         const processors: Array<NoteProcessor> = [
-            new BookNoteProcessor(settings.booksFolder, settings.bookNote.heading, bnResult.patterns),
+            new BookNoteProcessor(
+                settings.booksFolder,
+                settings.bookNote.heading,
+                settings.bookNote.enabled ? bnResult.patterns : null,
+            ),
         ]
 
         if (config.dailyNotesSettings.enabled && settings.dailyNote.enabled) {

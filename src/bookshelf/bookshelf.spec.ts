@@ -24,6 +24,7 @@ const defaultConfiguration: Configuration = {
             rating: 'rating',
         },
         bookNote: {
+            enabled: true,
             heading: 'Reading Journey',
             dateFormat: 'yyyy-MM-dd',
             patterns: {
@@ -177,6 +178,27 @@ describe('Note processing', () => {
             '2025-01-03: The Shining: 251-447',
             '2025-01-03: The Shining: finished',
         ])
+    })
+
+    test('It should ignore reading journey in book notes if book note patterns are disabled', async () => {
+        bookshelf = BookshelfFactory.fromConfiguration({
+            ...defaultConfiguration,
+            settings: {
+                ...defaultConfiguration.settings,
+                bookNote: {
+                    ...defaultConfiguration.settings.bookNote,
+                    enabled: false,
+                },
+            },
+        })
+
+        await bookshelf.process(
+            new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-01-01: Started reading']),
+        )
+
+        const books = Array.from(bookshelf.all())
+        expect(books).toHaveLength(1)
+        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([])
     })
 
     test('It should create book note for book referenced in daily note if it does not exist yet', async () => {

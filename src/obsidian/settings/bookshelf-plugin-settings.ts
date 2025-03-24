@@ -8,6 +8,7 @@ export interface BookshelfPluginSettings {
         rating: string
     }
     bookNote: {
+        enabled: boolean
         heading: string
         dateFormat: string
         patterns: {
@@ -41,6 +42,7 @@ export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
         rating: 'rating',
     },
     bookNote: {
+        enabled: true,
         heading: 'Reading Journey',
         dateFormat: 'yyyy-MM-dd',
         patterns: {

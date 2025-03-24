@@ -20,7 +20,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
         this.addBooksSettings()
         this.addBookProperties()
 
-        this.addBookNoteSettings()
+        this.addBookNoteSection()
         this.addDailyNotesSection()
     }
 
@@ -89,11 +89,36 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             )
     }
 
-    private addBookNoteSettings(): void {
+    private addBookNoteSection(): void {
         const { containerEl } = this
 
-        new Setting(containerEl).setName('Book note patterns').setHeading()
+        const showSettings = this.plugin.settings.bookNote.enabled
 
+        const heading = new Setting(containerEl).setName('Book note patterns').setHeading()
+
+        const settingsContainer = containerEl.createEl('div')
+
+        heading.addToggle((toggle) => {
+            toggle.setValue(showSettings)
+            toggle.onChange(async (value) => {
+                this.plugin.settings.bookNote.enabled = value
+
+                if (value) {
+                    this.addBookNoteSettings(settingsContainer)
+                } else {
+                    settingsContainer.empty()
+                }
+
+                await this.plugin.saveSettings()
+            })
+        })
+
+        if (showSettings) {
+            this.addBookNoteSettings(settingsContainer)
+        }
+    }
+
+    private addBookNoteSettings(containerEl: HTMLElement): void {
         const fragment = document.createDocumentFragment()
 
         let root: Root

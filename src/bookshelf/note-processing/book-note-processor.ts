@@ -7,7 +7,7 @@ export class BookNoteProcessor implements NoteProcessor {
     constructor(
         private readonly booksFolder: string,
         private readonly heading: string,
-        private readonly patterns: PatternCollection<BookNoteMatch>,
+        private readonly patterns: PatternCollection<BookNoteMatch> | null,
     ) {}
 
     async data(note: Note): Promise<NoteData> {
@@ -19,13 +19,15 @@ export class BookNoteProcessor implements NoteProcessor {
 
         result.referencedBookNotes.add(note)
 
-        for await (const listItem of note.listItems(this.heading)) {
-            const matches = this.patterns.matches(listItem)
-            if (matches === null) {
-                continue
-            }
+        if (this.patterns !== null) {
+            for await (const listItem of note.listItems(this.heading)) {
+                const matches = this.patterns.matches(listItem)
+                if (matches === null) {
+                    continue
+                }
 
-            result.readingJourney.push({ ...matches, bookNote: note })
+                result.readingJourney.push({ ...matches, bookNote: note })
+            }
         }
 
         return result

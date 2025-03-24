@@ -23,6 +23,7 @@ const bookshelf = BookshelfFactory.fromConfiguration({
             rating: 'rating',
         },
         bookNote: {
+            enabled: true,
             heading: 'Reading Journey',
             dateFormat: 'yyyy-MM-dd',
             patterns: {
