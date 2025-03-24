@@ -7,20 +7,14 @@ interface ActionMatch {
     date: Date
 }
 
-interface AbsoluteProgressMatch {
-    action: 'absolute-progress'
+interface ProgressMatch {
+    action: 'progress'
     date: Date
-    startPage: number
+    startPage: number | null
     endPage: number
 }
 
-interface RelativeProgressMatch {
-    action: 'relative-progress'
-    date: Date
-    endPage: number
-}
-
-export type BookNoteMatch = RelativeProgressMatch | AbsoluteProgressMatch | ActionMatch
+export type BookNoteMatch = ProgressMatch | ActionMatch
 
 interface Patterns {
     absoluteProgress: string
@@ -63,7 +57,7 @@ function absoluteProgressMatcher(pattern: string, dateFormat: string) {
             }
 
             return {
-                action: 'absolute-progress',
+                action: 'progress',
                 date: dateObject.toJSDate(),
                 startPage: parseInt(matches.startPage),
                 endPage: parseInt(matches.endPage),
@@ -88,8 +82,9 @@ function relativeProgressMatcher(pattern: string, dateFormat: string) {
             }
 
             return {
-                action: 'relative-progress',
+                action: 'progress',
                 date: dateObject.toJSDate(),
+                startPage: null,
                 endPage: parseInt(matches.endPage),
             }
         },

@@ -23,8 +23,8 @@ test.each([
     ['2025-02-20: Started', { action: 'started', date: new Date(2025, 1, 20) }],
     ['2025-02-20: Abandoned', { action: 'abandoned', date: new Date(2025, 1, 20) }],
     ['2025-02-20: Finished', { action: 'finished', date: new Date(2025, 1, 20) }],
-    ['2025-02-20: 5-25', { action: 'absolute-progress', date: new Date(2025, 1, 20), startPage: 5, endPage: 25 }],
-    ['2025-02-20: 50', { action: 'relative-progress', date: new Date(2025, 1, 20), endPage: 50 }],
+    ['2025-02-20: 5-25', { action: 'progress', date: new Date(2025, 1, 20), startPage: 5, endPage: 25 }],
+    ['2025-02-20: 50', { action: 'progress', date: new Date(2025, 1, 20), startPage: null, endPage: 50 }],
 ])('Input "%s" should return matches: %s', (input, expected) => {
     const result = bookNotePatterns(validPatterns, 'yyyy-MM-dd')
 

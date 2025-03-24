@@ -6,20 +6,14 @@ interface ActionMatch {
     book: string
 }
 
-interface AbsoluteProgressMatch {
-    action: 'absolute-progress'
+interface ProgressMatch {
+    action: 'progress'
     book: string
-    startPage: number
+    startPage: number | null
     endPage: number
 }
 
-interface RelativeProgressMatch {
-    action: 'relative-progress'
-    book: string
-    endPage: number
-}
-
-export type DailyNoteMatch = RelativeProgressMatch | AbsoluteProgressMatch | ActionMatch
+export type DailyNoteMatch = ProgressMatch | ActionMatch
 
 interface Patterns {
     absoluteProgress: string
@@ -49,7 +43,7 @@ function absoluteProgressMatcher(pattern: string) {
             pattern,
         ),
         (matches): DailyNoteMatch => ({
-            action: 'absolute-progress',
+            action: 'progress',
             book: matches.book,
             startPage: parseInt(matches.startPage),
             endPage: parseInt(matches.endPage),
@@ -67,8 +61,9 @@ function relativeProgressMatcher(pattern: string) {
             pattern,
         ),
         (matches): DailyNoteMatch => ({
-            action: 'relative-progress',
+            action: 'progress',
             book: matches.book,
+            startPage: null,
             endPage: parseInt(matches.endPage),
         }),
     )

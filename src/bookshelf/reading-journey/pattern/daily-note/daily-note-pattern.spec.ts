@@ -15,8 +15,8 @@ test.each([
     ['[[Dracula]]: Started', { action: 'started', book: '[[Dracula]]' }],
     ['[[Dracula]]: Abandoned', { action: 'abandoned', book: '[[Dracula]]' }],
     ['[[Dracula]]: Finished', { action: 'finished', book: '[[Dracula]]' }],
-    ['[[Dracula]]: 5-25', { action: 'absolute-progress', book: '[[Dracula]]', startPage: 5, endPage: 25 }],
-    ['[[Dracula]]: 50', { action: 'relative-progress', book: '[[Dracula]]', endPage: 50 }],
+    ['[[Dracula]]: 5-25', { action: 'progress', book: '[[Dracula]]', startPage: 5, endPage: 25 }],
+    ['[[Dracula]]: 50', { action: 'progress', book: '[[Dracula]]', startPage: null, endPage: 50 }],
 ])('Input "%s" should return matches: %s', (input, expected) => {
     const result = dailyNotePatterns(validPatterns)
 

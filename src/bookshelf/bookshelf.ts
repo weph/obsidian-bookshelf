@@ -1,5 +1,5 @@
 import { Book, BookMetadata, ReadingStatus } from './book'
-import { ReadingJourneyItemInput, ReadingJourneyLog } from './reading-journey/reading-journey-log'
+import { ReadingJourneyLog } from './reading-journey/reading-journey-log'
 import { Statistics } from './reading-journey/statistics/statistics'
 import { ReadingJourney } from './reading-journey/reading-journey'
 import { Note } from './note'
@@ -142,17 +142,7 @@ export class Bookshelf {
 
             const book = this.book(bookNote)
 
-            let item: ReadingJourneyItemInput
-
-            if (matches.action === 'relative-progress') {
-                item = { ...matches, action: 'progress', date, book, source, startPage: null }
-            } else if (matches.action === 'absolute-progress') {
-                item = { ...matches, action: 'progress', date, book, source }
-            } else {
-                item = { ...matches, date, book, source }
-            }
-
-            this.readingJourneyLog.add(item)
+            this.readingJourneyLog.add({ ...matches, date, book, source })
         }
     }
 
