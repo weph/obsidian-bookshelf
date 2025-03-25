@@ -61,6 +61,7 @@ export default class BookshelfPlugin extends Plugin {
         this.registerEvent(this.app.metadataCache.on('resolve', async (file) => await this.handleFile(file)))
         this.registerEvent(this.app.metadataCache.on('changed', async (file) => await this.handleFile(file)))
         this.registerEvent(this.app.vault.on('rename', (file: TFile) => this.handleFile(file)))
+        this.registerEvent(this.app.vault.on('delete', (file: TFile) => this.handleDelete(file)))
     }
 
     private recreateBookshelf = debounce({ delay: 500 }, async () => {
@@ -85,6 +86,11 @@ export default class BookshelfPlugin extends Plugin {
 
     private async handleFile(file: TFile): Promise<void> {
         await this.bookshelf.process(this.noteFor(file))
+        this.updateViews()
+    }
+
+    private async handleDelete(file: TFile): Promise<void> {
+        this.bookshelf.remove(this.noteFor(file))
         this.updateViews()
     }
 

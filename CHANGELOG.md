@@ -14,6 +14,7 @@ For a full diff see [`0.4.0...main`][0.4.0...main].
 - Skip daily note processing if daily notes plugin is disabled
 - Allow user to disable daily note processing in plugin settings
 - Allow user to disable book note reading journey processing in plugin settings
+- Remove book and reading journey items when note is deleted
 
 ### Fixed
 

@@ -112,6 +112,10 @@ export class ReadingJourneyLog {
         this.items = this.items.filter((item) => item.source !== source)
     }
 
+    public removeByBook(book: Book): void {
+        this.items = this.items.filter((item) => item.book !== book)
+    }
+
     private positionForDate(date: Date): number {
         let pos = 0
 

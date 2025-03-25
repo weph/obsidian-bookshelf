@@ -68,6 +68,16 @@ export class Bookshelf {
         }
     }
 
+    public remove(note: Note): void {
+        const book = this.bookNotes.get(note)
+        if (book === undefined) {
+            return
+        }
+
+        this.books.splice(this.books.indexOf(book), 1)
+        this.readingJourneyLog.removeByBook(book)
+    }
+
     private has(note: Note): boolean {
         return this.bookNotes.has(note)
     }

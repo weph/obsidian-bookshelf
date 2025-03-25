@@ -321,6 +321,45 @@ describe('Note processing', () => {
             expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([])
         },
     )
+
+    test('Removing a note should remove the corresponding book', async () => {
+        const shining = new FakeNote('Books/The Shining.md', new StaticMetadata({}), [])
+        const animalFarm = new FakeNote('Books/Animal Farm.md', new StaticMetadata({}), [])
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), [])
+        await bookshelf.process(shining)
+        await bookshelf.process(animalFarm)
+        await bookshelf.process(dracula)
+
+        bookshelf.remove(animalFarm)
+
+        expect(Array.from(bookshelf.all()).map((b) => b.metadata.title)).toEqual(['The Shining', 'Dracula'])
+    })
+
+    test('Removing a note should remove corresponding reading journey items', async () => {
+        const shining = new FakeNote('Books/The Shining.md', new StaticMetadata({}), [])
+        const animalFarm = new FakeNote('Books/Animal Farm.md', new StaticMetadata({}), [])
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), [])
+        notes.set('[[The Shining]]', shining)
+        notes.set('[[Animal Farm]]', animalFarm)
+        notes.set('[[Dracula]]', dracula)
+        await bookshelf.process(shining)
+        await bookshelf.process(animalFarm)
+        await bookshelf.process(dracula)
+        await bookshelf.process(
+            new FakeNote('2025-01-01.md', new StaticMetadata({}), [
+                'Started reading [[The Shining]]',
+                'Started reading [[Animal Farm]]',
+                'Started reading [[Dracula]]',
+            ]),
+        )
+
+        bookshelf.remove(animalFarm)
+
+        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+            '2025-01-01: The Shining: started',
+            '2025-01-01: Dracula: started',
+        ])
+    })
 })
 
 test('It should return all books added to the bookshelf', async () => {
