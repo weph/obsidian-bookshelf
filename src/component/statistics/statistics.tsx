@@ -55,7 +55,7 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
                 <PagesReadChart statistics={statistics} />
             </div>
             <div className="container">
-                <h2>Most Frequently Used Tags</h2>
+                <h2>Tags</h2>
                 <TagUsageChart statistics={statistics} />
             </div>
             <div className="container">
