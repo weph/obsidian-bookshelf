@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test } from '@jest/globals'
+import { beforeEach, describe, expect, test } from 'vitest'
 import { Bookshelf } from './bookshelf'
 import { ReadingJourneyItem } from './reading-journey/reading-journey-log'
 import { Interval } from './reading-journey/statistics/statistics'

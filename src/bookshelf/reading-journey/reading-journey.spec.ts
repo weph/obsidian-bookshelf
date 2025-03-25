@@ -1,4 +1,4 @@
-import { describe, expect, test } from '@jest/globals'
+import { describe, expect, test } from 'vitest'
 import { ReadingJourney } from './reading-journey'
 import { BookBuilder } from '../../support/book-builder'
 import { FakeNote } from '../../support/fake-note'

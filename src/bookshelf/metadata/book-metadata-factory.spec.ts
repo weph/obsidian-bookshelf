@@ -1,4 +1,4 @@
-import { describe, expect, it, test } from '@jest/globals'
+import { describe, expect, it, test } from 'vitest'
 import { BookMetadataFactory } from './book-metadata-factory'
 import { StaticMetadata } from './metadata'
 

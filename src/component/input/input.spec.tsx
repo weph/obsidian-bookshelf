@@ -1,13 +1,13 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { Input } from './input'
 import { fireEvent } from '@testing-library/dom'
 import { EventType } from '@testing-library/dom/types/events'
 import { render, screen } from '@testing-library/react'
 
-const onUpdate = jest.fn()
+const onUpdate = vi.fn()
 
 beforeEach(async () => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
 
     document.body.innerHTML = ''
 })

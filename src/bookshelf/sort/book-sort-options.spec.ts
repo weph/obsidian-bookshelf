@@ -1,4 +1,4 @@
-import { beforeEach, expect, it } from '@jest/globals'
+import { beforeEach, expect, it } from 'vitest'
 import { BookSortOptions } from './book-sort-options'
 
 let bookSortOptions: BookSortOptions

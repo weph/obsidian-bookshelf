@@ -1,4 +1,4 @@
-import { expect, test } from '@jest/globals'
+import { expect, test } from 'vitest'
 import { dailyNotePatterns } from './daily-note-pattern'
 
 const validPatterns = {

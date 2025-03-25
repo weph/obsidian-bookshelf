@@ -1,11 +1,11 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Dropdown } from './dropdown'
 
 const fooValue = 'foo-value'
 const barValue = 'bar-value'
-const onChange = jest.fn()
+const onChange = vi.fn()
 
 beforeEach(() => {
     document.body.innerHTML = ''

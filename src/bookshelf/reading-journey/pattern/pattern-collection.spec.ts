@@ -1,5 +1,5 @@
 import { Pattern, PatternCollection } from './pattern-collection'
-import { expect, it } from '@jest/globals'
+import { expect, it } from 'vitest'
 
 class FakePattern implements Pattern<string> {
     constructor(private readonly value: string) {}

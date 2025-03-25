@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, jest, test } from '@jest/globals'
+import { beforeEach, describe, expect, vi, test } from 'vitest'
 import userEvent, { UserEvent } from '@testing-library/user-event'
 import { waitFor } from '@testing-library/dom'
 import { Book } from '../../bookshelf/book'
@@ -7,7 +7,7 @@ import { BookSortOptions } from '../../bookshelf/sort/book-sort-options'
 import { Library, Props } from './library'
 import { render, screen } from '@testing-library/react'
 
-const onBookClick = jest.fn()
+const onBookClick = vi.fn()
 let user: UserEvent
 
 const sortByOrderOfAdditionOnly = new BookSortOptions()
@@ -24,7 +24,7 @@ function renderLibrary(props: Partial<Props>): void {
 }
 
 beforeEach(() => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
 
     document.body.innerHTML = ''
 

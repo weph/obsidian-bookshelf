@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test } from '@jest/globals'
+import { beforeEach, describe, expect, test } from 'vitest'
 import { ReadingJourneyItem, ReadingJourneyLog, ReadingProgress } from './reading-journey-log'
 import { BookBuilder } from '../../support/book-builder'
 import { FakeNote } from '../../support/fake-note'

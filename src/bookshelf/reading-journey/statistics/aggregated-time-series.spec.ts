@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals'
+import { describe, expect, it } from 'vitest'
 import { AggregatedTimeSeries } from './aggregated-time-series'
 import { Interval } from './statistics'
 import { DateTime } from 'luxon'
