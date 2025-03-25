@@ -17,5 +17,5 @@
         "experimentalDecorators": true,
         "jsx": "react-jsx"
     },
-    "include": ["src/**/*.ts"]
+    "include": ["src/**/*.ts", "src/**/*.tsx"]
 }
