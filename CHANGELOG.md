@@ -47,7 +47,7 @@ For a full diff see [`0.2.2...0.3.0`][0.2.2...0.3.0].
 
 ### Added
 
-- Reflect changed settings immediately. No need to restart/reload Obisdian anymore.
+- Reflect changed settings immediately. No need to restart/reload Obsidian anymore.
 - Updated documentation
 
 ### Changed
