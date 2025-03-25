@@ -9,7 +9,6 @@
         "!src/**/*.spec.ts",
         "!src/bookshelf/sort/default-book-sort-options.ts",
         "!src/component/book-details/*",
-        "!src/component/chart/**/*",
         "!src/component/button/*",
         "!src/component/gallery/*",
         "!src/component/star-rating/*",
