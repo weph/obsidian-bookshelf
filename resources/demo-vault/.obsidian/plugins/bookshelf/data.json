@@ -8,9 +8,8 @@
     "rating": "rating"
   },
   "bookNote": {
-    "enabled": true,
     "heading": "Reading Journey",
-    "dateFormat": "yyyy/mm/dd",
+    "dateFormat": "MM/dd/yyyy",
     "patterns": {
       "started": "{date}: Started",
       "finished": "{date}: Finished",
@@ -20,7 +19,6 @@
     }
   },
   "dailyNote": {
-    "enabled": true,
     "heading": "Reading",
     "patterns": {
       "started": "Started {book}",
