@@ -52,7 +52,7 @@ class SingleTest implements TestCollection {
             return {
                 name: this.name,
                 result: 'failed',
-                error: error,
+                error: error.message,
                 durationInMs: new Date().getMilliseconds() - start,
             }
         }
