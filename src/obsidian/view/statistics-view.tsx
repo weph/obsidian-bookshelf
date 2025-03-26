@@ -1,9 +1,9 @@
 import { ItemView, WorkspaceLeaf } from 'obsidian'
 import { Bookshelf } from '../../bookshelf/bookshelf'
-import { BookModal } from '../modal/book-modal'
 import { createRoot, Root } from 'react-dom/client'
 import { StrictMode } from 'react'
 import { Statistics } from '../../component/statistics/statistics'
+import BookshelfPlugin from '../bookshelf-plugin'
 
 export const VIEW_TYPE_STATISTICS = 'statistics'
 
@@ -12,6 +12,7 @@ export class StatisticsView extends ItemView {
 
     constructor(
         leaf: WorkspaceLeaf,
+        private bookshelfPlugin: BookshelfPlugin,
         private bookshelf: Bookshelf,
     ) {
         super(leaf)
@@ -36,7 +37,10 @@ export class StatisticsView extends ItemView {
 
         this.root!.render(
             <StrictMode>
-                <Statistics bookshelf={this.bookshelf} onBookClick={(book) => new BookModal(this.app, book).open()} />
+                <Statistics
+                    bookshelf={this.bookshelf}
+                    onBookClick={(book) => this.bookshelfPlugin.openBookModal(book)}
+                />
             </StrictMode>,
         )
     }

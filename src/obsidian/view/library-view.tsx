@@ -2,9 +2,9 @@ import { ItemView, WorkspaceLeaf } from 'obsidian'
 import { StrictMode } from 'react'
 import { createRoot, Root } from 'react-dom/client'
 import { Bookshelf } from '../../bookshelf/bookshelf'
-import { BookModal } from '../modal/book-modal'
 import { defaultBookSortOptions } from '../../bookshelf/sort/default-book-sort-options'
 import { Library } from '../../component/library/library'
+import BookshelfPlugin from '../bookshelf-plugin'
 
 export const VIEW_TYPE_LIBRARY = 'library'
 
@@ -13,6 +13,7 @@ export class LibraryView extends ItemView {
 
     constructor(
         leaf: WorkspaceLeaf,
+        private bookshelfPlugin: BookshelfPlugin,
         private bookshelf: Bookshelf,
     ) {
         super(leaf)
@@ -40,7 +41,7 @@ export class LibraryView extends ItemView {
                 <Library
                     books={Array.from(this.bookshelf.all())}
                     sortOptions={defaultBookSortOptions()}
-                    onBookClick={(book) => new BookModal(this.app, book).open()}
+                    onBookClick={(book) => this.bookshelfPlugin.openBookModal(book)}
                 />
             </StrictMode>,
         )

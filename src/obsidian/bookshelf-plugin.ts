@@ -8,6 +8,8 @@ import { StatisticsView, VIEW_TYPE_STATISTICS } from './view/statistics-view'
 import { ObsidianNote } from './obsidian-note'
 import { BookshelfFactory } from '../bookshelf/bookshelf-factory'
 import { Note } from '../bookshelf/note'
+import { Book } from '../bookshelf/book'
+import { BookModal } from './modal/book-modal'
 
 export interface DailyNotesSettings {
     enabled: boolean
@@ -22,6 +24,8 @@ export default class BookshelfPlugin extends Plugin {
 
     private notes = new WeakMap<TFile, Note>()
 
+    private bookModal: BookModal | null = null
+
     async onload() {
         await this.loadSettings()
 
@@ -29,13 +33,19 @@ export default class BookshelfPlugin extends Plugin {
 
         this.addSettingTab(new BookshelfSettingsTab(this.app, this))
 
-        this.registerView(VIEW_TYPE_LIBRARY, (leaf) => new LibraryView(leaf, this.bookshelf))
-        this.registerView(VIEW_TYPE_STATISTICS, (leaf) => new StatisticsView(leaf, this.bookshelf))
+        this.registerView(VIEW_TYPE_LIBRARY, (leaf) => new LibraryView(leaf, this, this.bookshelf))
+        this.registerView(VIEW_TYPE_STATISTICS, (leaf) => new StatisticsView(leaf, this, this.bookshelf))
 
         this.addRibbonIcon('library-big', 'Open Bookshelf library', () => this.activateView(VIEW_TYPE_LIBRARY))
         this.addRibbonIcon('chart-spline', 'Open Bookshelf statistics', () => this.activateView(VIEW_TYPE_STATISTICS))
 
         this.processAllNotesOnceWorkspaceIsReady()
+    }
+
+    public openBookModal(book: Book): void {
+        this.bookModal = new BookModal(this.app, book)
+        this.bookModal.onClose = () => (this.bookModal = null)
+        this.bookModal.open()
     }
 
     private createBookshelf(): void {
@@ -131,6 +141,8 @@ export default class BookshelfPlugin extends Plugin {
                 }
             }
         }
+
+        this.bookModal?.update()
     })
 
     private async activateView(viewType: string): Promise<void> {
