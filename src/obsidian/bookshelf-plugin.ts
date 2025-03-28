@@ -39,6 +39,18 @@ export default class BookshelfPlugin extends Plugin {
         this.addRibbonIcon('library-big', 'Open Bookshelf library', () => this.activateView(VIEW_TYPE_LIBRARY))
         this.addRibbonIcon('chart-spline', 'Open Bookshelf statistics', () => this.activateView(VIEW_TYPE_STATISTICS))
 
+        this.addCommand({
+            id: 'open-library',
+            name: 'Open library',
+            callback: () => this.activateView(VIEW_TYPE_LIBRARY),
+        })
+
+        this.addCommand({
+            id: 'open-statistics',
+            name: 'Open statistics',
+            callback: () => this.activateView(VIEW_TYPE_STATISTICS),
+        })
+
         this.processAllNotesOnceWorkspaceIsReady()
     }
 

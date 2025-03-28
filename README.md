@@ -16,11 +16,10 @@ insights into your reading habits with beautiful charts.
 
 ### Library and Statistics View
 
-To open either view, click on the corresponding icon in the ribbon. Depending on your setup, the icons may appear in
-different positions.
+You can open the library or statistics view in two ways:
 
-![screenshots](resources/screenshots/library-view.png)
-![screenshots](resources/screenshots/statistics-view.png)
+- Click on the corresponding icon in the ribbon. Depending on your setup, the icons may appear in different positions.
+- Use Obsidian’s command palette (Cmd/Ctrl + P) and select "Open library" or "Open statistics".
 
 ### Book Notes
 

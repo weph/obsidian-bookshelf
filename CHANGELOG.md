@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.5.0...main`][0.5.0...main].
 
+### Added
+
+- Added commands to open the library and statistics views.
+
 ### Changed
 
 - Update book modal on external file changes
