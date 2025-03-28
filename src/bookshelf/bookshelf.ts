@@ -18,15 +18,13 @@ class BookshelfBook implements Book {
     }
 
     get status(): ReadingStatus {
-        const items = this.bookshelf
-            .readingJourney()
-            .filter((rp) => rp.book === this)
-            .items()
-        if (items.length === 0) {
+        const journey = this.readingJourney
+
+        if (journey.empty()) {
             return 'unread'
         }
 
-        switch (items[items.length - 1].action) {
+        switch (journey.lastItem().action) {
             case 'started':
                 return 'reading'
             case 'finished':

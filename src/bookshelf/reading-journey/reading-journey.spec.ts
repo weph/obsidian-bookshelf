@@ -3,6 +3,7 @@ import { ReadingJourney } from './reading-journey'
 import { BookBuilder } from '../../support/book-builder'
 import { FakeNote } from '../../support/fake-note'
 import { StaticMetadata } from '../metadata/metadata'
+import { ReadingJourneyItem } from './reading-journey-log'
 
 const source = new FakeNote('', new StaticMetadata({}), [])
 
@@ -34,6 +35,37 @@ test('filter', () => {
         'started: Dracula',
         'started: Frankenstein',
     ])
+})
+
+describe('empty', () => {
+    test('empty journey => true', () => {
+        expect(new ReadingJourney([]).empty()).toBeTruthy()
+    })
+
+    test('non-empty journey => false', () => {
+        const date = new Date(2025, 1, 1)
+        const book = new BookBuilder().with('title', 'Dracula').build()
+        const journey = new ReadingJourney([{ action: 'started', date, book, source }])
+
+        expect(journey.empty()).toBeFalsy()
+    })
+})
+
+describe('lastItem', () => {
+    test('should throw error if journey is empty', () => {
+        expect(() => new ReadingJourney([]).lastItem()).toThrowError('Reading journey is empty')
+    })
+
+    test('should return last item', () => {
+        const date = new Date(2025, 1, 1)
+        const book = new BookBuilder().with('title', 'Dracula').build()
+        const item1: ReadingJourneyItem = { action: 'started', date, book, source }
+        const item2: ReadingJourneyItem = { action: 'finished', date, book, source }
+        const item3: ReadingJourneyItem = { action: 'started', date, book, source }
+        const journey = new ReadingJourney([item1, item2, item3])
+
+        expect(journey.lastItem()).toBe(item3)
+    })
 })
 
 describe('Tag Usage', () => {
