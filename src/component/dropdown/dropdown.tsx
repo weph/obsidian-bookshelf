@@ -21,7 +21,7 @@ export function Dropdown<T>({ label, value, options, onChange, id, className }: 
             className={`${styles.dropdown} ${className || ''}`}
             onChange={(e) => onChange(options[parseInt(e.target.value)].value)}
             aria-label={label}
-            defaultValue={options.findIndex((v) => v.value === value)}
+            value={options.findIndex((v) => v.value === value)}
         >
             {options.map((o, i) => (
                 <option key={i} value={i.toString()}>
