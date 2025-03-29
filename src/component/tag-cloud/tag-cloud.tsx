@@ -8,8 +8,6 @@ export function TagCloud({ tags }: Props) {
     const maxValue = Math.max(...Object.values(tags))
     const multiplier = maxValue / 9
 
-    console.log(maxValue, multiplier)
-
     return (
         <ul className={styles.tagCloud}>
             {Object.entries(tags).map(([tag, count]) => (
