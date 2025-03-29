@@ -701,10 +701,74 @@ describe('Reading status', () => {
     })
 })
 
+describe('Adding items to reading journey', () => {
+    test('Items should show up in note and reading journey', async () => {
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: Started reading'])
+        await bookshelf.process(dracula)
+
+        await bookshelf.addToReadingJourney({
+            action: 'progress',
+            bookNote: dracula,
+            date: new Date(2025, 0, 3),
+            startPage: 1,
+            endPage: 50,
+        })
+        await bookshelf.addToReadingJourney({
+            action: 'abandoned',
+            bookNote: dracula,
+            date: new Date(2025, 0, 4),
+        })
+        await bookshelf.addToReadingJourney({
+            action: 'started',
+            bookNote: dracula,
+            date: new Date(2025, 0, 5),
+        })
+        await bookshelf.addToReadingJourney({
+            action: 'progress',
+            bookNote: dracula,
+            date: new Date(2025, 0, 5),
+            startPage: null,
+            endPage: 350,
+        })
+        await bookshelf.addToReadingJourney({
+            action: 'finished',
+            bookNote: dracula,
+            date: new Date(2025, 0, 5),
+        })
+
+        expect(await generatorAsArray(dracula.listItems())).toEqual([
+            '2025-01-02: Started reading',
+            '2025-01-03: 1-50',
+            '2025-01-04: Abandoned book',
+            '2025-01-05: Started reading',
+            '2025-01-05: 350',
+            '2025-01-05: Finished reading',
+        ])
+        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+            '2025-01-02: Dracula: started',
+            '2025-01-03: Dracula: 1-50',
+            '2025-01-04: Dracula: abandoned',
+            '2025-01-05: Dracula: started',
+            '2025-01-05: Dracula: 51-350',
+            '2025-01-05: Dracula: finished',
+        ])
+    })
+})
+
 function readingProgressAsString(value: ReadingJourneyItem): string {
     if (value.action !== 'progress') {
         return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.metadata.title}: ${value.action}`
     }
 
     return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.metadata.title}: ${value.startPage}-${value.endPage}`
+}
+
+async function generatorAsArray<T>(gen: AsyncIterable<T>): Promise<T[]> {
+    const result: Array<T> = []
+
+    for await (const x of gen) {
+        result.push(x)
+    }
+
+    return result
 }

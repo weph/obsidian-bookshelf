@@ -4,7 +4,8 @@ import { Statistics } from './reading-journey/statistics/statistics'
 import { ReadingJourney } from './reading-journey/reading-journey'
 import { Note } from './note'
 import { BookMetadataFactory } from './metadata/book-metadata-factory'
-import { NoteProcessor } from './note-processing/note-processor'
+import { NoteProcessor, ReadingJourneyMatch } from './note-processing/note-processor'
+import { ReadingJourneyWriter } from './note-processing/reading-journey-writer'
 
 class BookshelfBook implements Book {
     constructor(
@@ -46,6 +47,7 @@ export class Bookshelf {
     constructor(
         private readonly bookMetadataFactory: BookMetadataFactory,
         private readonly noteProcessor: NoteProcessor,
+        private readonly readingJourneyWriter: ReadingJourneyWriter,
     ) {}
 
     public async process(note: Note): Promise<void> {
@@ -119,5 +121,10 @@ export class Bookshelf {
             : this.readingJourney()
                   .filter((i) => i.date.getFullYear() === year)
                   .statistics()
+    }
+
+    public async addToReadingJourney(item: ReadingJourneyMatch): Promise<void> {
+        await this.readingJourneyWriter.add(item)
+        await this.process(item.bookNote)
     }
 }
