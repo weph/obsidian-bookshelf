@@ -6,4 +6,5 @@ export interface Note {
     readonly metadata: Metadata
     content: () => Promise<string>
     listItems: (sectionHeading: string) => AsyncGenerator<string>
+    appendToList: (sectionHeading: string, item: string) => Promise<void>
 }

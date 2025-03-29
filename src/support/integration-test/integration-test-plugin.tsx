@@ -94,11 +94,13 @@ export default class IntegrationTestPlugin extends Plugin {
                     createFile: this.createFile.bind(this),
                     updateFile: this.updateFile.bind(this),
                     deleteFile: this.deleteFile.bind(this),
+                    waitForUpdate: this.waitForUpdate.bind(this),
                 }),
         )
 
         this.app.workspace.onLayoutReady(() => this.activateView(VIEW_TYPE_TEST_RUNNER))
         this.registerEvent(this.app.metadataCache.on('changed', (file) => this.updatedFiles.add(file.path)))
+        this.registerEvent(this.app.vault.on('modify', (file) => this.updatedFiles.add(file.path)))
 
         this.registerEvent(
             // @ts-expect-error raw event is not exposed
@@ -134,7 +136,7 @@ export default class IntegrationTestPlugin extends Plugin {
 
         const file = await this.app.vault.create(name, content)
 
-        await this.waitForMetadataUpdate(name)
+        await this.waitForFileUpdate(name)
 
         return file
     }
@@ -142,7 +144,7 @@ export default class IntegrationTestPlugin extends Plugin {
     private async updateFile(name: string, content: string): Promise<void> {
         this.updatedFiles.delete(name)
         await this.app.vault.modify(this.file(name), content)
-        await this.waitForMetadataUpdate(name)
+        await this.waitForFileUpdate(name)
     }
 
     private async deleteFile(name: string): Promise<void> {
@@ -154,9 +156,22 @@ export default class IntegrationTestPlugin extends Plugin {
         await this.app.vault.delete(file)
     }
 
-    private async waitForMetadataUpdate(name: string): Promise<void> {
+    private async waitForUpdate(name: string, fn: () => Promise<void>): Promise<void> {
+        this.updatedFiles.delete(name)
+        await this.waitForFileUpdate(name)
+        await fn()
+    }
+
+    private async waitForFileUpdate(name: string): Promise<void> {
+        const timeout = 10
+
+        let iterations = 0
         while (!this.updatedFiles.has(name)) {
-            await new Promise((fn) => setTimeout(fn, 10))
+            if (++iterations >= 100) {
+                throw new Error(`File has not been updated in ${iterations * timeout}ms`)
+            }
+
+            await new Promise((fn) => setTimeout(fn, timeout))
         }
     }
 

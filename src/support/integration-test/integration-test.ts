@@ -10,6 +10,8 @@ export interface TestContext {
     updateFile(name: string, content: string): Promise<void>
 
     deleteFile(name: string): Promise<void>
+
+    waitForUpdate(name: string, fn: () => Promise<void>): Promise<void>
 }
 
 type TestFunction = (context: TestContext) => void | Promise<void>

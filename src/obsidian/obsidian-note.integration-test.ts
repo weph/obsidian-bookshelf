@@ -179,6 +179,148 @@ list:
             expect(await generatorAsArray(result)).toEqual(['A', 'B', 'C'])
         })
     })
+
+    describe('appendToList', () => {
+        beforeAll(async (context) => {
+            await context.createFile('appendToList.md', '')
+        })
+
+        afterAll(async (context) => {
+            await context.deleteFile('appendToList.md')
+        })
+
+        test('append new heading and list to empty note', async (context) => {
+            await context.updateFile('appendToList.md', ``)
+            const note = new ObsidianNote(context.file('appendToList.md'), context.app)
+
+            await context.waitForUpdate('appendToList.md', async () => {
+                await note.appendToList('Relevant Heading', 'Item 1')
+            })
+
+            expect(await note.content()).toEqual(`## Relevant Heading
+
+- Item 1`)
+        })
+
+        test('append new heading and list after frontmatter', async (context) => {
+            await context.updateFile(
+                'appendToList.md',
+                `---
+foo: bar
+---`,
+            )
+            const note = new ObsidianNote(context.file('appendToList.md'), context.app)
+
+            await context.waitForUpdate('appendToList.md', async () => {
+                await note.appendToList('Relevant Heading', 'Item 1')
+            })
+
+            expect(await note.content()).toEqual(`---
+foo: bar
+---
+
+## Relevant Heading
+
+- Item 1`)
+        })
+
+        test('append new heading and list at the end of the note if heading does not exist yet', async (context) => {
+            await context.updateFile(
+                'appendToList.md',
+                `# Note Title
+
+## Some heading
+
+Some text`,
+            )
+            const note = new ObsidianNote(context.file('appendToList.md'), context.app)
+
+            await context.waitForUpdate('appendToList.md', async () => {
+                await note.appendToList('Relevant Heading', 'Item 1')
+            })
+
+            expect(await note.content()).toEqual(`# Note Title
+
+## Some heading
+
+Some text
+
+## Relevant Heading
+
+- Item 1`)
+        })
+
+        test('append new list to existing heading (no content)', async (context) => {
+            await context.updateFile('appendToList.md', `# Relevant Heading`)
+            const note = new ObsidianNote(context.file('appendToList.md'), context.app)
+
+            await context.waitForUpdate('appendToList.md', async () => {
+                await note.appendToList('Relevant Heading', 'Item 1')
+            })
+
+            expect(await note.content()).toEqual(`# Relevant Heading
+
+- Item 1`)
+        })
+
+        test('append new list to existing heading after content', async (context) => {
+            await context.updateFile(
+                'appendToList.md',
+                `# Relevant Heading
+
+Lorem ipsum dolor sit amet`,
+            )
+            const note = new ObsidianNote(context.file('appendToList.md'), context.app)
+
+            await context.waitForUpdate('appendToList.md', async () => {
+                await note.appendToList('Relevant Heading', 'Item 1')
+            })
+
+            expect(await note.content()).toEqual(`# Relevant Heading
+
+Lorem ipsum dolor sit amet
+
+- Item 1`)
+        })
+
+        test('append item to existing list', async (context) => {
+            await context.updateFile(
+                'appendToList.md',
+                `# Relevant Heading
+
+- Item 1`,
+            )
+            const note = new ObsidianNote(context.file('appendToList.md'), context.app)
+
+            await context.waitForUpdate('appendToList.md', async () => {
+                await note.appendToList('Relevant Heading', 'Item 2')
+            })
+
+            expect(await note.content()).toEqual(`# Relevant Heading
+
+- Item 1
+- Item 2`)
+        })
+
+        test('reuse list symbol', async (context) => {
+            await context.updateFile(
+                'appendToList.md',
+                `# Relevant Heading
+
+* Item 1`,
+            )
+            const note = new ObsidianNote(context.file('appendToList.md'), context.app)
+
+            await context.waitForUpdate('appendToList.md', async () => {
+                await note.appendToList('Relevant Heading', 'Item 2')
+            })
+
+            expect(await note.content()).toEqual(`# Relevant Heading
+
+* Item 1
+* Item 2`)
+        })
+    })
 })
 
 async function generatorAsArray<T>(gen: AsyncIterable<T>): Promise<T[]> {
