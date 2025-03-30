@@ -6,11 +6,12 @@ interface Props {
     placeholder: string
     value: string
     onUpdate: (value: string) => void
+    autoFocus?: boolean
     id?: string
     className?: string
 }
 
-export function Input({ type, placeholder, value, onUpdate, id, className }: Props) {
+export function Input({ type, placeholder, value, onUpdate, autoFocus, id, className }: Props) {
     const ref = useRef<HTMLInputElement>(null)
     const [currentValue, setCurrentValue] = useState(value)
 
@@ -34,6 +35,7 @@ export function Input({ type, placeholder, value, onUpdate, id, className }: Pro
             value={value}
             onKeyUp={() => handleUpdate()}
             onChange={() => handleUpdate()}
+            autoFocus={autoFocus}
         />
     )
 }

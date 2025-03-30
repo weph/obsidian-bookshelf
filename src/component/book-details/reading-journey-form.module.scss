@@ -1,0 +1,36 @@
+.readingJourneyForm {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    gap: 0.5rem;
+
+    .date {
+        grid-column: 1 / span 2;
+    }
+
+    .action {
+        grid-column: 3 / span 2;
+    }
+
+    .startLabel {
+        grid-column: 1 / span 2;
+        white-space: nowrap;
+    }
+
+    .startInput {
+        grid-column: 3 / span 2;
+    }
+
+    .endLabel {
+        grid-column: 1 / span 2;
+        white-space: nowrap;
+    }
+
+    .endInput {
+        grid-column: 3 / span 2;
+    }
+
+    .add {
+        grid-column: 1;
+    }
+}

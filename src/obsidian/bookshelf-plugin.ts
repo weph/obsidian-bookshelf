@@ -57,7 +57,7 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     public openBookModal(book: Book): void {
-        this.bookModal = new BookModal(this.app, book)
+        this.bookModal = new BookModal(this.app, this.bookshelf, book)
         this.bookModal.onClose = () => (this.bookModal = null)
         this.bookModal.open()
     }

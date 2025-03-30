@@ -3,13 +3,15 @@ import { Book } from '../../bookshelf/book'
 import { createRoot, Root } from 'react-dom/client'
 import { StrictMode } from 'react'
 import { BookDetails } from '../../component/book-details/book-details'
+import { Bookshelf } from '../../bookshelf/bookshelf'
 
 export class BookModal extends Modal {
     private root: Root
 
     constructor(
         app: App,
-        private book: Book,
+        private readonly bookshelf: Bookshelf,
+        private readonly book: Book,
     ) {
         super(app)
 
@@ -32,6 +34,7 @@ export class BookModal extends Modal {
                             await this.app.workspace.openLinkText(this.book.note.basename, '')
                         }
                     }}
+                    addProgress={async (item) => await this.bookshelf.addToReadingJourney(item)}
                 />
             </StrictMode>,
         )

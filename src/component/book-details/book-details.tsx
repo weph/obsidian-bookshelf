@@ -3,14 +3,17 @@ import { StarRating } from '../star-rating/star-rating'
 import { Button } from '../button/button'
 import { DateTime } from 'luxon'
 import { ReadingJourneyItem } from '../../bookshelf/reading-journey/reading-journey-log'
+import { ReadingJourneyMatch } from '../../bookshelf/note-processing/note-processor'
+import { ReadingJourneyForm } from './reading-journey-form'
 import styles from './book-details.module.scss'
 
 interface Props {
     book: Book
     openNote: (book: Book) => void
+    addProgress: (item: ReadingJourneyMatch) => Promise<void>
 }
 
-export function BookDetails({ book, openNote }: Props) {
+export function BookDetails({ book, openNote, addProgress }: Props) {
     const { cover, title, authors, published, rating, tags } = book.metadata
 
     const journeyItemText = (item: ReadingJourneyItem) => {
@@ -72,6 +75,9 @@ export function BookDetails({ book, openNote }: Props) {
                             {DateTime.fromJSDate(item.date).toLocaleString()}: {journeyItemText(item)}
                         </li>
                     ))}
+                    <li>
+                        <ReadingJourneyForm book={book} add={addProgress} />
+                    </li>
                 </ul>
             </div>
         </div>
