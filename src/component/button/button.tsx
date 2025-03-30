@@ -1,3 +1,5 @@
+import styles from './button.module.scss'
+
 interface Props {
     text: string
     onClick: () => void
@@ -5,7 +7,7 @@ interface Props {
 
 export function Button({ text, onClick }: Props) {
     return (
-        <button className="bookshelf--ui--button" onClick={() => onClick()}>
+        <button className={styles.button} onClick={() => onClick()}>
             {text}
         </button>
     )

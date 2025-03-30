@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { PagesReadChart } from './pages-read-chart/pages-read-chart'
 import { Gallery } from '../gallery/gallery'
 import { TagUsageChart } from './tag-usage-chart/tag-usage-chart'
+import styles from './statistics.module.scss'
 
 export interface Props {
     bookshelf: Bookshelf
@@ -25,40 +26,40 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
     ]
 
     return (
-        <div className="bookshelf--statistics">
+        <div className={styles.statistics}>
             <Dropdown label="Years" value={year} options={yearOptions} onChange={setYear} />
-            <div className="container">
+            <div className={styles.container}>
                 <h2>Books {year}</h2>
-                <div className="counts">
+                <div className={styles.counts}>
                     <div>
-                        <div className="number">{actions.started}</div>
+                        <div className={styles.number}>{actions.started}</div>
                         started
                     </div>
                     <div>
-                        <div className="number">{actions.finished}</div>
+                        <div className={styles.number}>{actions.finished}</div>
                         finished
                     </div>
                     <div>
-                        <div className="number">{actions.abandoned}</div>
+                        <div className={styles.number}>{actions.abandoned}</div>
                         abandoned
                     </div>
                 </div>
             </div>
-            <div className="container">
+            <div className={styles.container}>
                 <h2>Pages</h2>
-                <div id="page-counts" className="counts">
+                <div className={styles.counts}>
                     <div>
-                        <div className="number">{statistics.totalNumberOfPages().toLocaleString()}</div>
+                        <div className={styles.number}>{statistics.totalNumberOfPages().toLocaleString()}</div>
                         total
                     </div>
                 </div>
                 <PagesReadChart statistics={statistics} />
             </div>
-            <div className="container">
+            <div className={styles.container}>
                 <h2>Tags</h2>
                 <TagUsageChart statistics={statistics} />
             </div>
-            <div className="container">
+            <div className={styles.container}>
                 <h2>Books</h2>
                 <Gallery books={statistics.books()} onBookClick={onBookClick} />
             </div>

@@ -1,5 +1,6 @@
 import { Book } from '../../bookshelf/book'
 import { StarRating } from '../star-rating/star-rating'
+import styles from './table.module.scss'
 
 interface Props {
     books: Array<Book>
@@ -8,7 +9,7 @@ interface Props {
 
 export function BookTable({ books, onBookClick }: Props) {
     return (
-        <table className="bookshelf--book-table">
+        <table className={styles.bookTable}>
             <thead>
                 <tr>
                     <th>Title</th>

@@ -10,6 +10,7 @@ import { BookshelfFactory } from '../bookshelf/bookshelf-factory'
 import { Note } from '../bookshelf/note'
 import { Book } from '../bookshelf/book'
 import { BookModal } from './modal/book-modal'
+import './bookshelf-plugin.css'
 
 export interface DailyNotesSettings {
     enabled: boolean

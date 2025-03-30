@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import styles from './input.module.scss'
 
 interface Props {
     type: string
@@ -24,7 +25,7 @@ export function Input({ type, placeholder, value, onUpdate }: Props) {
     return (
         <input
             ref={ref}
-            className="bookshelf--ui--input"
+            className={styles.input}
             type={type}
             placeholder={placeholder}
             value={value}

@@ -1,3 +1,5 @@
+import styles from './star-rating.module.scss'
+
 interface Props {
     value: number
 }
@@ -8,7 +10,7 @@ export function StarRating({ value }: Props) {
     const percentages = Array(full).fill(1).concat(fraction)
 
     return (
-        <div className="bookshelf--ui--star-rating">
+        <div className={styles.starRating}>
             {percentages.map((v, i) => (
                 <Star key={i} percentage={v} />
             ))}
@@ -20,10 +22,7 @@ function Star({ percentage }: { percentage: number }) {
     const iconSize = 15
 
     return (
-        <div
-            className="bookshelf--ui--star-rating--star"
-            style={{ width: iconSize * percentage + 'px', height: iconSize + 'px' }}
-        >
+        <div className={styles.star} style={{ width: iconSize * percentage + 'px', height: iconSize + 'px' }}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width={iconSize}

@@ -3,6 +3,7 @@ import { StarRating } from '../star-rating/star-rating'
 import { Button } from '../button/button'
 import { DateTime } from 'luxon'
 import { ReadingJourneyItem } from '../../bookshelf/reading-journey/reading-journey-log'
+import styles from './book-details.module.scss'
 
 interface Props {
     book: Book
@@ -24,11 +25,11 @@ export function BookDetails({ book, openNote }: Props) {
     }
 
     return (
-        <div className="bookshelf--book-details">
-            <div className="top">
-                <div className="cover">{cover ? <img src={cover} alt={title} /> : ''}</div>
-                <div className="details">
-                    <ul className="metadata">
+        <div className={styles.bookDetails}>
+            <div className={styles.top}>
+                <div className={styles.cover}>{cover ? <img src={cover} alt={title} /> : ''}</div>
+                <div className={styles.details}>
+                    <ul className={styles.metadata}>
                         {authors?.length ? (
                             <li>
                                 <strong>Author:</strong> {authors.join(', ')}
@@ -59,13 +60,13 @@ export function BookDetails({ book, openNote }: Props) {
                             ''
                         )}
                     </ul>
-                    <div className="actions">
+                    <div className={styles.actions}>
                         <Button text="Open note" onClick={() => openNote(book)} />
                     </div>
                 </div>
             </div>
             <div>
-                <ul className="reading-journey">
+                <ul className={styles.readingJourney}>
                     {book.readingJourney.map((item, i) => (
                         <li key={i}>
                             {DateTime.fromJSDate(item.date).toLocaleString()}: {journeyItemText(item)}

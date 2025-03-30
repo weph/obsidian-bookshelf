@@ -1,0 +1,37 @@
+.library {
+    .header {
+        position: sticky;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: var(--bookshelf--library--header-background);
+        z-index: 9999;
+        box-sizing: border-box;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: var(--size-4-3);
+        padding: var(--bookshelf--library--header-padding);
+
+        .left {
+            display: flex;
+            flex-direction: row;
+            gap: var(--size-4-3);
+        }
+    }
+
+    .content {
+        padding: 20px 10px;
+    }
+}
+
+.messageContainer {
+    text-align: center;
+    margin-top: 20px;
+
+    p {
+        font-style: italic;
+        color: var(--bookshelf--text--color-dimmed);
+    }
+}

@@ -1,3 +1,5 @@
+import styles from './gallery-card.module.scss'
+
 interface Props {
     cover?: string
     title: string
@@ -6,10 +8,10 @@ interface Props {
 
 export function GalleryCard({ cover, title, onClick }: Props) {
     return (
-        <div className="bookshelf--gallery--card" role="listitem" onClick={() => onClick()}>
+        <div className={styles.galleryCard} role="listitem" onClick={() => onClick()}>
             {cover ? <img src={cover} alt={title} /> : ''}
-            <div className={cover ? 'overlay' : 'fallback-cover'}>
-                <span className="title">{title}</span>
+            <div className={cover ? styles.overlay : styles.fallbackCover}>
+                <span className={styles.title}>{title}</span>
             </div>
         </div>
     )

@@ -133,13 +133,7 @@ describe('Clicking on a book cover', () => {
 })
 
 function mainContent(): Element {
-    const htmlElement = document.querySelector('.bookshelf--library--content')
-
-    if (!htmlElement) {
-        throw new Error('main content not found')
-    }
-
-    return htmlElement
+    return screen.getByRole('main')
 }
 
 function cardTitles(): Array<string> {

@@ -1,0 +1,72 @@
+.bookDetails {
+    .top {
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+    }
+
+    .cover {
+        width: 25%;
+        aspect-ratio: 1/1.25;
+
+        img {
+            width: 100%;
+        }
+    }
+
+    .details {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .metadata {
+        flex-grow: 1;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            padding: 2px;
+        }
+    }
+
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .rating {
+        display: inline-block;
+    }
+
+    .readingJourney {
+        position: relative;
+        padding-left: 1rem;
+        list-style: none;
+
+        li {
+            position: relative;
+            padding-left: 1rem;
+            border-left: 2px solid var(--color-base-100);
+            font-size: var(--font-ui-small);
+            padding-bottom: 0.75rem;
+            line-height: 1;
+
+            &:last-child {
+                padding-bottom: 0;
+            }
+
+            &:before {
+                content: ' ';
+                position: absolute;
+                left: -8px;
+                width: 8px;
+                height: 8px;
+                border: 3px solid var(--color-base-100);
+                border-radius: 100%;
+                background-color: var(--color-base-00);
+            }
+        }
+    }
+}

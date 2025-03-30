@@ -1,0 +1,28 @@
+.statistics {
+    .container {
+        max-width: 1080px;
+        margin: 0 auto 4rem auto;
+        padding: 0 2rem;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .counts {
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 5rem;
+
+        div {
+            text-align: center;
+        }
+
+        .number {
+            font-size: 3rem;
+        }
+    }
+}

@@ -1,0 +1,51 @@
+.galleryCard {
+    display: block;
+    position: relative;
+    width: 100%;
+    max-width: 200px;
+    aspect-ratio: 1/1.25;
+    background-color: var(--bookshelf--gallery-card--background-color);
+    padding: 10px;
+    box-shadow: var(--bookshelf--gallery-card--shadow);
+    box-sizing: border-box;
+
+    img {
+        display: block;
+        width: 100%;
+    }
+
+    .fallbackCover {
+        height: 100%;
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .title {
+        display: block;
+        font-weight: bold;
+        text-align: center;
+        overflow-wrap: break-word;
+        cursor: default;
+    }
+
+    .overlay {
+        display: none;
+        flex-flow: column;
+        justify-content: center;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        background-color: rgb(from var(--bookshelf--gallery-card--background-color) r g b / 0.8);
+        box-sizing: border-box;
+    }
+
+    &:hover .overlay {
+        display: flex;
+    }
+}

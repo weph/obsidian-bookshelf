@@ -1,0 +1,9 @@
+.input {
+    height: var(--bookshelf--ui--input--height);
+    border-style: solid;
+    border-radius: var(--bookshelf--ui--input--border-radius);
+    border-width: var(--bookshelf--ui--input--border-width);
+    border-color: var(--bookshelf--ui--dropdown--border-color);
+    font-weight: var(--bookshelf--ui--input--font-weight);
+    padding: var(--bookshelf--ui--input--padding);
+}

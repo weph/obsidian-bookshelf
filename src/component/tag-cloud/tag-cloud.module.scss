@@ -1,0 +1,67 @@
+.tagCloud {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: block;
+        padding: 0.125rem 0.5rem;
+        font-size: calc(var(--size) * 0.25rem + 0.5rem);
+        line-height: calc(var(--size) * 0.25rem + 0.5rem);
+
+        &[data-weight='0'] {
+            --size: 1;
+            color: var(--color-base-40);
+        }
+
+        &[data-weight='1'] {
+            --size: 2;
+            color: var(--color-base-40);
+        }
+
+        &[data-weight='2'] {
+            --size: 3;
+            color: var(--color-base-40);
+        }
+
+        &[data-weight='3'] {
+            --size: 4;
+            color: var(--color-base-50);
+        }
+
+        &[data-weight='4'] {
+            --size: 5;
+            color: var(--color-base-50);
+        }
+
+        &[data-weight='5'] {
+            --size: 6;
+            color: var(--color-base-50);
+        }
+
+        &[data-weight='6'] {
+            --size: 7;
+            color: var(--color-base-60);
+        }
+
+        &[data-weight='7'] {
+            --size: 8;
+            color: var(--color-base-70);
+        }
+
+        &[data-weight='8'] {
+            --size: 9;
+            color: var(--color-base-100);
+        }
+
+        &[data-weight='9'] {
+            --size: 9;
+            color: var(--color-base-100);
+            font-weight: bold;
+        }
+    }
+}

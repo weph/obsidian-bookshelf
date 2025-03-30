@@ -1,3 +1,5 @@
+import styles from './dropdown.module.scss'
+
 export interface DropdownOption<T> {
     value: T
     label: string
@@ -13,7 +15,7 @@ interface Props<T> {
 export function Dropdown<T>({ label, value, options, onChange }: Props<T>) {
     return (
         <select
-            className="bookshelf--ui--dropdown"
+            className={styles.dropdown}
             onChange={(e) => onChange(options[parseInt(e.target.value)].value)}
             aria-label={label}
             defaultValue={options.findIndex((v) => v.value === value)}

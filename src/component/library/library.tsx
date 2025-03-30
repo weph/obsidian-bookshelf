@@ -5,6 +5,7 @@ import { Gallery } from '../gallery/gallery'
 import { Dropdown, DropdownOption } from '../dropdown/dropdown'
 import { BookSortOptions } from '../../bookshelf/sort/book-sort-options'
 import { BookTable } from '../table/table'
+import styles from './library.module.scss'
 
 type ViewType = 'gallery' | 'table'
 
@@ -79,9 +80,9 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
     }
 
     return (
-        <div className="bookshelf--library">
-            <div className="bookshelf--library--header">
-                <div className="bookshelf--library--header--left">
+        <div className={styles.library}>
+            <div className={styles.header}>
+                <div className={styles.left}>
                     <Input type="search" placeholder="Search..." value={searchTerm} onUpdate={setSearchTerm} />
                     <Dropdown
                         label="Sort"
@@ -96,11 +97,13 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
                         onChange={setStatusFilter}
                     />
                 </div>
-                <div className="bookshelf--library--header--right">
+                <div>
                     <Dropdown label="View" value={view} options={viewOptions} onChange={setView} />
                 </div>
             </div>
-            <div className="bookshelf--library--content">{content()}</div>
+            <div className={styles.content} role="main">
+                {content()}
+            </div>
         </div>
     )
 }
@@ -108,7 +111,7 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
 function EmptyState({ headline, message }: { headline: string; message: string }) {
     return (
         <div>
-            <div className="bookshelf--library--message-container">
+            <div className={styles.messageContainer}>
                 <h1>{headline}</h1>
                 <p>{message}</p>
             </div>

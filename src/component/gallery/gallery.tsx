@@ -1,5 +1,6 @@
 import { Book } from '../../bookshelf/book'
 import { GalleryCard } from './gallery-card'
+import styles from './gallery.module.scss'
 
 interface Props {
     books: Array<Book>
@@ -8,7 +9,7 @@ interface Props {
 
 export function Gallery({ books, onBookClick }: Props) {
     return (
-        <div className="bookshelf--gallery" role="list">
+        <div className={styles.gallery} role="list">
             {books.map((book, index) => (
                 <GalleryCard
                     key={index}
