@@ -13,7 +13,7 @@ export class BookModal extends Modal {
     ) {
         super(app)
 
-        this.root = createRoot(this.containerEl.children[1])
+        this.root = createRoot(this.contentEl)
 
         this.update()
     }
