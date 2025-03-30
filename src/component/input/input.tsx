@@ -6,9 +6,11 @@ interface Props {
     placeholder: string
     value: string
     onUpdate: (value: string) => void
+    id?: string
+    className?: string
 }
 
-export function Input({ type, placeholder, value, onUpdate }: Props) {
+export function Input({ type, placeholder, value, onUpdate, id, className }: Props) {
     const ref = useRef<HTMLInputElement>(null)
     const [currentValue, setCurrentValue] = useState(value)
 
@@ -25,7 +27,8 @@ export function Input({ type, placeholder, value, onUpdate }: Props) {
     return (
         <input
             ref={ref}
-            className={styles.input}
+            id={id}
+            className={`${styles.input} ${className || ''}`}
             type={type}
             placeholder={placeholder}
             value={value}

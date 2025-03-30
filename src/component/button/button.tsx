@@ -3,11 +3,13 @@ import styles from './button.module.scss'
 interface Props {
     text: string
     onClick: () => void
+    id?: string
+    className?: string
 }
 
-export function Button({ text, onClick }: Props) {
+export function Button({ text, onClick, id, className }: Props) {
     return (
-        <button className={styles.button} onClick={() => onClick()}>
+        <button id={id} className={`${styles.button} ${className || ''}`} onClick={() => onClick()}>
             {text}
         </button>
     )

@@ -10,12 +10,15 @@ interface Props<T> {
     value: T
     options: Array<DropdownOption<T>>
     onChange: (value: T) => void
+    id?: string
+    className?: string
 }
 
-export function Dropdown<T>({ label, value, options, onChange }: Props<T>) {
+export function Dropdown<T>({ label, value, options, onChange, id, className }: Props<T>) {
     return (
         <select
-            className={styles.dropdown}
+            id={id}
+            className={`${styles.dropdown} ${className || ''}`}
             onChange={(e) => onChange(options[parseInt(e.target.value)].value)}
             aria-label={label}
             defaultValue={options.findIndex((v) => v.value === value)}
