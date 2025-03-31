@@ -5,12 +5,11 @@ import { assign, debounce } from 'radashi'
 import { BookshelfPluginSettings, DEFAULT_SETTINGS } from './settings/bookshelf-plugin-settings'
 import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
 import { StatisticsView, VIEW_TYPE_STATISTICS } from './view/statistics-view'
-import { ObsidianNote } from './obsidian-note'
 import { BookshelfFactory } from '../bookshelf/bookshelf-factory'
-import { Note } from '../bookshelf/note'
 import { Book } from '../bookshelf/book'
 import { BookModal } from './modal/book-modal'
 import './bookshelf-plugin.css'
+import { ObsidianNotes } from './obsidian-notes'
 
 export interface DailyNotesSettings {
     enabled: boolean
@@ -23,12 +22,14 @@ export default class BookshelfPlugin extends Plugin {
 
     private bookshelf: Bookshelf
 
-    private notes = new WeakMap<TFile, Note>()
+    private notes: ObsidianNotes
 
     private bookModal: BookModal | null = null
 
     async onload() {
         await this.loadSettings()
+
+        this.notes = new ObsidianNotes(this.app)
 
         this.createBookshelf()
 
@@ -65,7 +66,7 @@ export default class BookshelfPlugin extends Plugin {
         this.bookshelf = BookshelfFactory.fromConfiguration({
             settings: this.settings,
             dailyNotesSettings: this.dailyNotesSettings(),
-            noteForLink: this.noteForLink.bind(this),
+            notes: this.notes,
             linkToUri: this.linkToUri.bind(this),
         })
     }
@@ -108,32 +109,13 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     private async handleFile(file: TFile): Promise<void> {
-        await this.bookshelf.process(this.noteFor(file))
+        await this.bookshelf.process(this.notes.noteByFile(file))
         this.updateViews()
     }
 
     private async handleDelete(file: TFile): Promise<void> {
-        this.bookshelf.remove(this.noteFor(file))
+        this.bookshelf.remove(this.notes.noteByFile(file))
         this.updateViews()
-    }
-
-    private noteFor(file: TFile): Note {
-        if (!this.notes.has(file)) {
-            this.notes.set(file, new ObsidianNote(file, this.app))
-        }
-
-        return this.notes.get(file)!
-    }
-
-    private noteForLink(input: string): Note | null {
-        const bookName = input.replace('[[', '').replace(']]', '')
-        const bookFile = this.app.metadataCache.getFirstLinkpathDest(bookName, '')
-
-        if (bookFile === null) {
-            return null
-        }
-
-        return this.noteFor(bookFile)
     }
 
     private linkToUri(link: string): string {

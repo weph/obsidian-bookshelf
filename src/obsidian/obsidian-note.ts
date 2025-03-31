@@ -28,6 +28,10 @@ export class ObsidianNote implements Note {
         return this.file.basename
     }
 
+    public async content(): Promise<string> {
+        return await this.app.vault.cachedRead(this.file)
+    }
+
     public async *listItems(sectionHeading: string): AsyncGenerator<string> {
         const contents = await this.app.vault.cachedRead(this.file)
         const lines = contents.split('\n')

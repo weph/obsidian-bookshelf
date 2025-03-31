@@ -4,17 +4,16 @@ import { bookNotePatterns } from './reading-journey/pattern/book-note/book-note-
 import { dailyNotePatterns } from './reading-journey/pattern/daily-note/daily-note-pattern'
 import { BookMetadataFactory } from './metadata/book-metadata-factory'
 import { DailyNotesSettings } from '../obsidian/bookshelf-plugin'
-import { Note } from './note'
 import { BookNoteProcessor } from './note-processing/book-note-processor'
 import { DailyNoteProcessor } from './note-processing/daily-note-processor'
 import { NoteProcessorCollection } from './note-processing/note-processor-collection'
 import { NoteProcessor } from './note-processing/note-processor'
+import { Notes } from './notes'
 
 export interface Configuration {
     settings: BookshelfPluginSettings
     dailyNotesSettings: DailyNotesSettings
-
-    noteForLink(input: string): Note | null
+    notes: Notes
 
     linkToUri(link: string): string
 }
@@ -40,7 +39,7 @@ export class BookshelfFactory {
                     config.dailyNotesSettings.format,
                     config.dailyNotesSettings.folder || '',
                     dnResult.patterns,
-                    config.noteForLink,
+                    config.notes,
                 ),
             )
         }

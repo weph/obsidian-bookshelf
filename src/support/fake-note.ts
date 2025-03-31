@@ -16,6 +16,10 @@ export class FakeNote implements Note {
         return this.path.replace(/.*?\/?([^/]+)\.md/, '$1')
     }
 
+    public async content(): Promise<string> {
+        return ''
+    }
+
     public async *listItems(): AsyncGenerator<string> {
         for (const listItem of this.list) {
             yield listItem

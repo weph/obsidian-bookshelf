@@ -6,12 +6,12 @@ import { DateTime } from 'luxon'
 import { FakeNote } from '../support/fake-note'
 import { StaticMetadata } from './metadata/metadata'
 import { BookshelfFactory, Configuration } from './bookshelf-factory'
-import { Note } from './note'
+import { InMemoryNotes } from '../support/in-memory-notes'
 
 let bookshelf: Bookshelf
 
 const nonExistingNote = 'Non-existing Note'
-const notes = new Map<string, Note>()
+const notes: InMemoryNotes = new InMemoryNotes()
 
 const defaultConfiguration: Configuration = {
     settings: {
@@ -52,12 +52,12 @@ const defaultConfiguration: Configuration = {
         format: 'YYYY-MM-DD',
         folder: '',
     },
-    noteForLink: (input) => notes.get(input) || null,
+    notes,
     linkToUri: (link) => link,
 }
 
 beforeEach(() => {
-    notes.clear()
+    notes.reset()
 
     bookshelf = BookshelfFactory.fromConfiguration(defaultConfiguration)
 })
@@ -202,7 +202,7 @@ describe('Note processing', () => {
     })
 
     test('It should create book note for book referenced in daily note if it does not exist yet', async () => {
-        notes.set('[[The Shining]]', new FakeNote('The Shining', new StaticMetadata({}), []))
+        notes.add(new FakeNote('The Shining', new StaticMetadata({}), []))
         await bookshelf.process(
             new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading [[The Shining]]']),
         )
@@ -214,7 +214,7 @@ describe('Note processing', () => {
 
     test('It should link reading journey entry from daily note to existing book', async () => {
         const note = new FakeNote('Books/The Shining.md', new StaticMetadata({}), [])
-        notes.set('The Shining', note)
+        notes.add(note)
         await bookshelf.process(note)
 
         await bookshelf.process(
@@ -235,7 +235,7 @@ describe('Note processing', () => {
     })
 
     test('It should create reading journey from daily note', async () => {
-        notes.set('[[The Shining]]', new FakeNote('The Shining', new StaticMetadata({}), []))
+        notes.add(new FakeNote('The Shining', new StaticMetadata({}), []))
 
         await bookshelf.process(
             new FakeNote('2025-01-01.md', new StaticMetadata({}), [
@@ -255,7 +255,7 @@ describe('Note processing', () => {
     })
 
     test('It should update reading journey from daily note', async () => {
-        notes.set('[[The Shining]]', new FakeNote('The Shining', new StaticMetadata({}), []))
+        notes.add(new FakeNote('The Shining', new StaticMetadata({}), []))
         const note = new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading [[The Shining]]'])
         await bookshelf.process(note)
         note.list = [
@@ -280,7 +280,7 @@ describe('Note processing', () => {
                 enabled: false,
             },
         })
-        notes.set('[[The Shining]]', new FakeNote('The Shining', new StaticMetadata({}), []))
+        notes.add(new FakeNote('The Shining', new StaticMetadata({}), []))
 
         await bookshelf.process(
             new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading [[The Shining]]']),
@@ -302,7 +302,7 @@ describe('Note processing', () => {
                 },
             },
         })
-        notes.set('[[The Shining]]', new FakeNote('The Shining', new StaticMetadata({}), []))
+        notes.add(new FakeNote('The Shining', new StaticMetadata({}), []))
 
         await bookshelf.process(
             new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading [[The Shining]]']),
@@ -339,9 +339,9 @@ describe('Note processing', () => {
         const shining = new FakeNote('Books/The Shining.md', new StaticMetadata({}), [])
         const animalFarm = new FakeNote('Books/Animal Farm.md', new StaticMetadata({}), [])
         const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), [])
-        notes.set('[[The Shining]]', shining)
-        notes.set('[[Animal Farm]]', animalFarm)
-        notes.set('[[Dracula]]', dracula)
+        notes.add(shining)
+        notes.add(animalFarm)
+        notes.add(dracula)
         await bookshelf.process(shining)
         await bookshelf.process(animalFarm)
         await bookshelf.process(dracula)

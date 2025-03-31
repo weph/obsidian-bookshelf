@@ -1,5 +1,6 @@
 import { ItemView, Plugin, TFile, WorkspaceLeaf } from 'obsidian'
 import '../../obsidian/obsidian-note.integration-test'
+import '../../obsidian/obsidian-notes.integration-test'
 import { TestContext, TestResult, TestSuite, testSuite } from './integration-test'
 import { createRoot } from 'react-dom/client'
 

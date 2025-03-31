@@ -4,6 +4,7 @@ import { StaticMetadata } from '../../bookshelf/metadata/metadata'
 import { Statistics } from './statistics'
 import { fn } from '@storybook/test'
 import { BookshelfFactory } from '../../bookshelf/bookshelf-factory'
+import { InMemoryNotes } from '../../support/in-memory-notes'
 
 const meta = {
     title: 'Statistics',
@@ -51,7 +52,7 @@ const bookshelf = BookshelfFactory.fromConfiguration({
         format: 'YYYY-MM-DD',
         folder: '',
     },
-    noteForLink: () => null,
+    notes: new InMemoryNotes(),
     linkToUri: (link) => link,
 })
 

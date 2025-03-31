@@ -3,6 +3,7 @@ import { DailyNoteMatch } from '../reading-journey/pattern/daily-note/daily-note
 import { Note } from '../note'
 import { dailyNoteDate } from '../daily-notes/daily-note-date'
 import { emptyResult, NoteData, NoteProcessor } from './note-processor'
+import { Notes } from '../notes'
 
 export class DailyNoteProcessor implements NoteProcessor {
     constructor(
@@ -10,7 +11,7 @@ export class DailyNoteProcessor implements NoteProcessor {
         private readonly format: string,
         private readonly folder: string,
         private readonly patterns: PatternCollection<DailyNoteMatch>,
-        private readonly noteForLink: (link: string) => Note | null,
+        private readonly notes: Notes,
     ) {}
 
     async data(note: Note): Promise<NoteData> {
@@ -27,7 +28,7 @@ export class DailyNoteProcessor implements NoteProcessor {
                 continue
             }
 
-            const bookNote = this.noteForLink(matches.book)
+            const bookNote = this.notes.noteByLink(matches.book)
             if (bookNote === null) {
                 continue
             }
