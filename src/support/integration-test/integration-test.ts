@@ -66,6 +66,10 @@ export class TestSuite implements TestCollection {
 
     public afterAll: TestFunction = () => {}
 
+    public beforeEach: TestFunction = () => {}
+
+    public afterEach: TestFunction = () => {}
+
     constructor(public readonly name: string) {}
 
     add(item: TestCollection): void {
@@ -79,7 +83,11 @@ export class TestSuite implements TestCollection {
         await this.beforeAll(context)
 
         for (const test of this.tests) {
+            await this.beforeEach(context)
+
             children.push(await test.run(context))
+
+            await this.afterEach(context)
         }
 
         await this.afterAll(context)
@@ -116,4 +124,12 @@ function afterAll(fn: TestFunction) {
     current.afterAll = fn
 }
 
-export { testSuite, beforeAll, afterAll, describe, test }
+function beforeEach(fn: TestFunction) {
+    current.beforeEach = fn
+}
+
+function afterEach(fn: TestFunction) {
+    current.afterEach = fn
+}
+
+export { testSuite, beforeAll, afterAll, beforeEach, afterEach, describe, test }
