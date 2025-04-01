@@ -53,7 +53,10 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
                         total
                     </div>
                 </div>
-                <PagesReadChart statistics={statistics} />
+                <PagesReadChart
+                    statistics={statistics}
+                    availableIntervals={year === null ? ['year', 'month', 'week', 'day'] : ['month', 'week', 'day']}
+                />
             </div>
             <div className={styles.container}>
                 <h2>Tags</h2>
