@@ -19,13 +19,7 @@ class BookshelfBook implements Book {
     }
 
     get status(): ReadingStatus {
-        const journey = this.readingJourney
-
-        if (journey.empty()) {
-            return 'unread'
-        }
-
-        switch (journey.lastItem().action) {
+        switch (this.readingJourney.lastItem()?.action) {
             case 'started':
                 return 'reading'
             case 'finished':
@@ -34,6 +28,8 @@ class BookshelfBook implements Book {
                 return 'abandoned'
             case 'progress':
                 return 'reading'
+            default:
+                return 'unread'
         }
     }
 }

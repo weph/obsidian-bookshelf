@@ -13,12 +13,8 @@ export class ReadingJourney {
         return this._items.length === 0
     }
 
-    public lastItem(): ReadingJourneyItem {
-        if (this.empty()) {
-            throw new Error('Reading journey is empty')
-        }
-
-        return this._items[this._items.length - 1]
+    public lastItem(): ReadingJourneyItem | null {
+        return this._items[this._items.length - 1] || null
     }
 
     public filter(predicate: (value: ReadingJourneyItem) => boolean): ReadingJourney {

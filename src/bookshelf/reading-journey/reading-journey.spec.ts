@@ -52,8 +52,10 @@ describe('empty', () => {
 })
 
 describe('lastItem', () => {
-    test('should throw error if journey is empty', () => {
-        expect(() => new ReadingJourney([]).lastItem()).toThrowError('Reading journey is empty')
+    test('should return null if journey is empty', () => {
+        const journey = new ReadingJourney([])
+
+        expect(journey.lastItem()).toBeNull()
     })
 
     test('should return last item', () => {

@@ -11,16 +11,13 @@ import styles from './reading-journey-form.module.scss'
 type Action = 'started' | 'finished' | 'abandoned' | 'progress'
 
 function initialValues(bookJourney: ReadingJourney): { action: Action; page: number } {
-    if (!bookJourney.empty()) {
-        const lastItem = bookJourney.lastItem()
+    const lastItem = bookJourney.lastItem()
 
-        if (lastItem.action === 'started') {
+    switch (lastItem?.action) {
+        case 'started':
             return { action: 'progress', page: 1 }
-        }
-
-        if (lastItem.action === 'progress') {
+        case 'progress':
             return { action: 'progress', page: lastItem.endPage + 1 }
-        }
     }
 
     return { action: 'started', page: 1 }
