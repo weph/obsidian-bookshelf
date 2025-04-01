@@ -6,6 +6,12 @@ export function defaultBookSortOptions(): BookSortOptions {
     result.add('Title: Z-A', (a, b) => compare(b.metadata.title, a.metadata.title))
     result.add('Author: A-Z', (a, b) => compare(a.metadata.authors?.[0], b.metadata.authors?.[0]))
     result.add('Author: Z-A', (a, b) => compare(b.metadata.authors?.[0], a.metadata.authors?.[0]))
+    result.add('Reading progress: Newest-Oldest', (a, b) =>
+        compare(b.readingJourney.lastItem()?.date.toUTCString(), a.readingJourney.lastItem()?.date.toUTCString()),
+    )
+    result.add('Reading progress: Oldest-Newest', (a, b) =>
+        compare(a.readingJourney.lastItem()?.date.toUTCString(), b.readingJourney.lastItem()?.date.toUTCString()),
+    )
 
     return result
 }

@@ -12,6 +12,7 @@ For a full diff see [`0.6.1...main`][0.6.1...main].
 ### Added
 
 - Added form to enter reading progress directly in the book details modal
+- Added option to sort books by reading progress
 
 ## [`0.6.1`][0.6.1] - 2025-03-30
 
