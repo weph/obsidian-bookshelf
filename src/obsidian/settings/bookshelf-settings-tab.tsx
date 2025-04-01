@@ -4,6 +4,7 @@ import { createRoot, Root } from 'react-dom/client'
 import { StrictMode } from 'react'
 import { DateFormatDescription } from '../../component/date-format-description/date-format-description'
 import { flushSync } from 'react-dom'
+import { BOOK_NOTE, DAILY_NOTE, NoteType } from './bookshelf-plugin-settings'
 
 export class BookshelfSettingsTab extends PluginSettingTab {
     plugin: BookshelfPlugin
@@ -20,6 +21,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
         this.addBooksSettings()
         this.addBookProperties()
 
+        this.addResingProgressSection()
         this.addBookNoteSection()
         this.addDailyNotesSection()
     }
@@ -316,5 +318,24 @@ export class BookshelfSettingsTab extends PluginSettingTab {
                 <DateFormatDescription format={this.plugin.settings.bookNote.dateFormat} />
             </StrictMode>,
         )
+    }
+
+    private addResingProgressSection(): void {
+        new Setting(this.containerEl).setName('Reading progress').setHeading()
+
+        new Setting(this.containerEl)
+            .setName('Entry location')
+            .setDesc('Location for new reading progress entries')
+            .addDropdown((dropdown) =>
+                dropdown
+                    .addOption(BOOK_NOTE, 'Book note')
+                    .addOption(DAILY_NOTE, 'Daily note')
+                    .setValue(this.plugin.settings.readingProgress.newEntryLocation)
+                    .onChange(async (value) => {
+                        this.plugin.settings.readingProgress.newEntryLocation = value as NoteType
+
+                        await this.plugin.saveSettings()
+                    }),
+            )
     }
 }

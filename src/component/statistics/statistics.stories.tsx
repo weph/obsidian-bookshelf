@@ -46,6 +46,9 @@ const bookshelf = BookshelfFactory.fromConfiguration({
                 relativeProgress: 'Read {book}: {endPage}',
             },
         },
+        readingProgress: {
+            newEntryLocation: 'bookNote',
+        },
     },
     dailyNotesSettings: {
         enabled: true,

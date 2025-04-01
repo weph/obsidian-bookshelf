@@ -39,6 +39,9 @@ Bookshelf tracks your reading progress based on entries in your **book notes** a
 A reading progress entry consists of a date, a book, and a recorded action (such as starting, reading, or finishing a
 book).
 
+You can add reading progress entries manually by writing them in your notes, or use the form in the book details dialog
+to add them more easily. The location for these entries can be configured in the settings.
+
 By default, Bookshelf looks for reading progress entries under the "Reading Journey" heading in your book notes and
 the "Reading" heading in your daily notes. You can change these headings in the settings to match your preferred note
 structure.

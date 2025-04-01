@@ -1,5 +1,9 @@
 import { ReadingJourneyMatch } from './note-processor'
+import { Note } from '../note'
 
 export interface ReadingJourneyWriter {
-    add(item: ReadingJourneyMatch): Promise<void>
+    /**
+     * @returns Modified note
+     */
+    add(item: ReadingJourneyMatch): Promise<Note>
 }

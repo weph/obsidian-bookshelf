@@ -46,6 +46,9 @@ const defaultConfiguration: Configuration = {
                 relativeProgress: 'Read {book}: {endPage}',
             },
         },
+        readingProgress: {
+            newEntryLocation: 'bookNote',
+        },
     },
     dailyNotesSettings: {
         enabled: true,
@@ -702,8 +705,9 @@ describe('Reading status', () => {
 })
 
 describe('Adding items to reading journey', () => {
-    test('Items should show up in note and reading journey', async () => {
+    test('Items should show up in book note and reading journey', async () => {
         const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: Started reading'])
+        notes.add(dracula)
         await bookshelf.process(dracula)
 
         await bookshelf.addToReadingJourney({
@@ -743,6 +747,72 @@ describe('Adding items to reading journey', () => {
             '2025-01-05: Started reading',
             '2025-01-05: 350',
             '2025-01-05: Finished reading',
+        ])
+        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+            '2025-01-02: Dracula: started',
+            '2025-01-03: Dracula: 1-50',
+            '2025-01-04: Dracula: abandoned',
+            '2025-01-05: Dracula: started',
+            '2025-01-05: Dracula: 51-350',
+            '2025-01-05: Dracula: finished',
+        ])
+    })
+
+    test('Items should show up in daily notes and reading journey', async () => {
+        bookshelf = BookshelfFactory.fromConfiguration({
+            ...defaultConfiguration,
+            settings: {
+                ...defaultConfiguration.settings,
+                readingProgress: {
+                    ...defaultConfiguration.settings.readingProgress,
+                    newEntryLocation: 'dailyNote',
+                },
+            },
+        })
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: Started reading'])
+        notes.add(dracula)
+        await bookshelf.process(dracula)
+
+        await bookshelf.addToReadingJourney({
+            action: 'progress',
+            bookNote: dracula,
+            date: new Date(2025, 0, 3),
+            startPage: 1,
+            endPage: 50,
+        })
+        await bookshelf.addToReadingJourney({
+            action: 'abandoned',
+            bookNote: dracula,
+            date: new Date(2025, 0, 4),
+        })
+        await bookshelf.addToReadingJourney({
+            action: 'started',
+            bookNote: dracula,
+            date: new Date(2025, 0, 5),
+        })
+        await bookshelf.addToReadingJourney({
+            action: 'progress',
+            bookNote: dracula,
+            date: new Date(2025, 0, 5),
+            startPage: null,
+            endPage: 350,
+        })
+        await bookshelf.addToReadingJourney({
+            action: 'finished',
+            bookNote: dracula,
+            date: new Date(2025, 0, 5),
+        })
+
+        expect(await generatorAsArray((await notes.dailyNote(new Date(2025, 0, 3))).listItems('Reading'))).toEqual([
+            'Read [[Dracula]]: 1-50',
+        ])
+        expect(await generatorAsArray((await notes.dailyNote(new Date(2025, 0, 4))).listItems('Reading'))).toEqual([
+            'Abandoned [[Dracula]]',
+        ])
+        expect(await generatorAsArray((await notes.dailyNote(new Date(2025, 0, 5))).listItems('Reading'))).toEqual([
+            'Started reading [[Dracula]]',
+            'Read [[Dracula]]: 350',
+            'Finished reading [[Dracula]]',
         ])
         expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
             '2025-01-02: Dracula: started',

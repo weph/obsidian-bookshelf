@@ -2,6 +2,7 @@ import { Note } from 'src/bookshelf/note'
 import { Notes } from '../bookshelf/notes'
 import { App, TFile } from 'obsidian'
 import { ObsidianNote } from './obsidian-note'
+import { createDailyNote, getAllDailyNotes, getDailyNote } from 'obsidian-daily-notes-interface'
 
 export class ObsidianNotes implements Notes {
     private notes = new WeakMap<TFile, Note>()
@@ -25,5 +26,14 @@ export class ObsidianNotes implements Notes {
         }
 
         return this.notes.get(file)!
+    }
+
+    public async dailyNote(date: Date): Promise<Note> {
+        const file = getDailyNote(window.moment(date), getAllDailyNotes())
+        if (file !== null) {
+            return this.noteByFile(file)
+        }
+
+        return this.noteByFile(await createDailyNote(window.moment(date)))
     }
 }

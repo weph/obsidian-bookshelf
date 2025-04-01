@@ -124,7 +124,6 @@ export class Bookshelf {
     }
 
     public async addToReadingJourney(item: ReadingJourneyMatch): Promise<void> {
-        await this.readingJourneyWriter.add(item)
-        await this.process(item.bookNote)
+        await this.process(await this.readingJourneyWriter.add(item))
     }
 }

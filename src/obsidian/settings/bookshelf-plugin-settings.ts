@@ -1,3 +1,10 @@
+export const BOOK_NOTE = 'bookNote'
+export const DAILY_NOTE = 'dailyNote'
+
+export const ALL_NOTES = [BOOK_NOTE, DAILY_NOTE] as const
+
+export type NoteType = (typeof ALL_NOTES)[number]
+
 export interface BookshelfPluginSettings {
     booksFolder: string
     bookProperties: {
@@ -29,6 +36,9 @@ export interface BookshelfPluginSettings {
             absoluteProgress: string
             relativeProgress: string
         }
+    }
+    readingProgress: {
+        newEntryLocation: NoteType
     }
 }
 
@@ -63,5 +73,8 @@ export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
             absoluteProgress: 'Read {book}: {startPage}-{endPage}',
             relativeProgress: 'Read {book}: {endPage}',
         },
+    },
+    readingProgress: {
+        newEntryLocation: 'bookNote',
     },
 }

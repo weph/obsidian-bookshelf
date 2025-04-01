@@ -1,6 +1,6 @@
 import { ReadingJourneyMatch } from './note-processor'
 import { ReadingJourneyWriter } from './reading-journey-writer'
-import { DateTime } from 'luxon'
+import { Notes } from '../notes'
 import { Note } from '../note'
 
 interface Patterns {
@@ -11,36 +11,38 @@ interface Patterns {
     abandoned: string
 }
 
-export class BookNoteReadingJourneyWriter implements ReadingJourneyWriter {
+export class DailyNoteReadingJourneyWriter implements ReadingJourneyWriter {
     constructor(
-        private readonly dateFormat: string,
+        private readonly notes: Notes,
         private readonly heading: string,
         private readonly patterns: Patterns,
     ) {}
 
     public async add(item: ReadingJourneyMatch): Promise<Note> {
-        await item.bookNote.appendToList(this.heading, this.itemText(item))
+        const note = await this.notes.dailyNote(item.date)
 
-        return item.bookNote
+        await note.appendToList(this.heading, this.itemText(item))
+
+        return note
     }
 
     private itemText(item: ReadingJourneyMatch): string {
-        const formattedDate = DateTime.fromJSDate(item.date).toFormat(this.dateFormat)
+        const book = `[[${item.bookNote.basename}]]`
 
         switch (item.action) {
             case 'started':
             case 'finished':
             case 'abandoned':
-                return this.patterns[item.action].replace('{date}', formattedDate)
+                return this.patterns[item.action].replace('{book}', book)
             case 'progress':
                 if (item.startPage === null) {
                     return this.patterns.relativeProgress
-                        .replace('{date}', formattedDate)
+                        .replace('{book}', book)
                         .replace('{endPage}', item.endPage.toString())
                 }
 
                 return this.patterns.absoluteProgress
-                    .replace('{date}', formattedDate)
+                    .replace('{book}', book)
                     .replace('{startPage}', item.startPage.toString())
                     .replace('{endPage}', item.endPage.toString())
         }
