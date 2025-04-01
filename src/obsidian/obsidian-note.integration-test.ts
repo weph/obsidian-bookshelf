@@ -260,10 +260,11 @@ Some text
 
             expect(await note.content()).toEqual(`# Relevant Heading
 
-- Item 1`)
+- Item 1
+`)
         })
 
-        test('append new list to existing heading after content', async (context) => {
+        test('append new list to existing heading (heading with content)', async (context) => {
             await context.updateFile(
                 'appendToList.md',
                 `# Relevant Heading
@@ -280,7 +281,53 @@ Lorem ipsum dolor sit amet`,
 
 Lorem ipsum dolor sit amet
 
-- Item 1`)
+- Item 1
+`)
+        })
+
+        test('append new list to existing heading (empty heading between other headings)', async (context) => {
+            await context.updateFile(
+                'appendToList.md',
+                `# Heading 1
+
+# Relevant Heading
+
+# Heading 3`,
+            )
+            const note = new ObsidianNote(context.file('appendToList.md'), context.app)
+
+            await context.waitForUpdate('appendToList.md', async () => {
+                await note.appendToList('Relevant Heading', 'Item 1')
+            })
+
+            expect(await note.content()).toEqual(`# Heading 1
+
+# Relevant Heading
+
+- Item 1
+
+# Heading 3`)
+        })
+
+        test('append new list to existing heading (empty heading between other headings w/o gaps)', async (context) => {
+            await context.updateFile(
+                'appendToList.md',
+                `# Heading 1
+# Relevant Heading
+# Heading 3`,
+            )
+            const note = new ObsidianNote(context.file('appendToList.md'), context.app)
+
+            await context.waitForUpdate('appendToList.md', async () => {
+                await note.appendToList('Relevant Heading', 'Item 1')
+            })
+
+            expect(await note.content()).toEqual(`# Heading 1
+# Relevant Heading
+
+- Item 1
+
+# Heading 3`)
         })
 
         test('append item to existing list', async (context) => {

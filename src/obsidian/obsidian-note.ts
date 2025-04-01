@@ -72,7 +72,12 @@ export class ObsidianNote implements Note {
                 const symbol = lines[list.start][0]
                 lines.splice(list.end + 1, 0, `${symbol} ${item}`)
             } else {
-                lines.splice(section.end + 1, 0, '', `- ${item}`)
+                const nextLine = lines[section.end + 1]
+                if (nextLine !== undefined && nextLine.trim() === '') {
+                    lines.splice(section.end + 1, 0, '', `- ${item}`)
+                } else {
+                    lines.splice(section.end + 1, 0, '', `- ${item}`, '')
+                }
             }
         } else {
             const markdownHeading = `## ${sectionHeading}`
@@ -94,32 +99,27 @@ export class ObsidianNote implements Note {
 
         const result: Locations = { section: null, list: null }
 
-        let sectionStart: number | null = null
-        let sectionEnd: number | null = null
-
         for (const section of this.obsidianMetadata.sections || []) {
-            if (sectionStart === null) {
+            if (result.section === null) {
                 if (section.type !== 'heading') {
                     continue
                 }
 
                 const heading = lines[section.position.start.line].replace(/^#+/, '').trim()
                 if (heading === sectionHeading) {
-                    sectionStart = section.position.start.line
+                    result.section = { start: section.position.start.line, end: section.position.end.line }
                 }
             } else {
                 if (section.type === 'list') {
                     result.list = { start: section.position.start.line, end: section.position.end.line }
                 }
+
                 if (section.type === 'heading') {
-                    sectionEnd = section.position.start.line
                     break
                 }
-            }
-        }
 
-        if (sectionStart !== null) {
-            result.section = { start: sectionStart, end: sectionEnd || lines.length }
+                result.section.end = section.position.start.line
+            }
         }
 
         return result
