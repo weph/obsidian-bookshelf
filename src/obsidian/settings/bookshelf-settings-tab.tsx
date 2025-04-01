@@ -21,7 +21,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
         this.addBooksSettings()
         this.addBookProperties()
 
-        this.addResingProgressSection()
+        this.addReadingProgressSection()
         this.addBookNoteSection()
         this.addDailyNotesSection()
     }
@@ -320,16 +320,23 @@ export class BookshelfSettingsTab extends PluginSettingTab {
         )
     }
 
-    private addResingProgressSection(): void {
+    private addReadingProgressSection(): void {
         new Setting(this.containerEl).setName('Reading progress').setHeading()
+
+        const options: Record<string, string> = {
+            [BOOK_NOTE]: 'Book note',
+        }
+
+        if (this.plugin.dailyNotesSettings().enabled) {
+            options[DAILY_NOTE] = 'Daily note'
+        }
 
         new Setting(this.containerEl)
             .setName('Entry location')
             .setDesc('Location for new reading progress entries')
             .addDropdown((dropdown) =>
                 dropdown
-                    .addOption(BOOK_NOTE, 'Book note')
-                    .addOption(DAILY_NOTE, 'Daily note')
+                    .addOptions(options)
                     .setValue(this.plugin.settings.readingProgress.newEntryLocation)
                     .onChange(async (value) => {
                         this.plugin.settings.readingProgress.newEntryLocation = value as NoteType
