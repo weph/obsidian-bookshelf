@@ -21,7 +21,7 @@ export class BookModal extends Modal {
     }
 
     public update(): void {
-        this.setTitle(this.book.metadata.title)
+        this.setTitle('Book details')
 
         this.root.render(
             <StrictMode>

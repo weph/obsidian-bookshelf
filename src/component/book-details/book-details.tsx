@@ -1,11 +1,13 @@
 import { Book } from '../../bookshelf/book'
 import { StarRating } from '../star-rating/star-rating'
-import { Button } from '../button/button'
 import { DateTime } from 'luxon'
 import { ReadingJourneyItem } from '../../bookshelf/reading-journey/reading-journey-log'
 import { ReadingJourneyMatch } from '../../bookshelf/note-processing/note-processor'
 import { ReadingJourneyForm } from './reading-journey-form'
 import styles from './book-details.module.scss'
+import { Tag } from '../tag/tag'
+import { CoverPlaceholder } from '../cover-placeholder/cover-placeholder'
+import { ExternalLink } from 'lucide-react'
 
 interface Props {
     book: Book
@@ -30,49 +32,24 @@ export function BookDetails({ book, openNote, addProgress }: Props) {
     return (
         <div className={styles.bookDetails}>
             <div className={styles.top}>
-                <div className={styles.cover}>{cover ? <img src={cover} alt={title} /> : ''}</div>
+                <div className={styles.cover}>
+                    {cover ? <img src={cover} alt={title} /> : <CoverPlaceholder title={title} />}
+                </div>
                 <div className={styles.details}>
-                    <ul className={styles.metadata}>
-                        {authors?.length ? (
-                            <li>
-                                <strong>Author:</strong> {authors.join(', ')}
-                            </li>
-                        ) : (
-                            ''
-                        )}
-                        {published ? (
-                            <li>
-                                <strong>Published:</strong> {published.getFullYear()}
-                            </li>
-                        ) : (
-                            ''
-                        )}
-                        {pages ? (
-                            <li>
-                                <strong>Pages:</strong> {pages}
-                            </li>
-                        ) : (
-                            ''
-                        )}
-                        {rating ? (
-                            <li>
-                                <strong>Rating:</strong>
-                                <StarRating value={rating} />
-                            </li>
-                        ) : (
-                            ''
-                        )}
-                        {tags?.length ? (
-                            <li>
-                                <strong>Tags:</strong> {tags.join(', ')}
-                            </li>
-                        ) : (
-                            ''
-                        )}
-                    </ul>
-                    <div className={styles.actions}>
-                        <Button text="Open note" onClick={() => openNote(book)} />
+                    <div className={styles.title}>
+                        {title}
+                        <div className={styles.openNote}>
+                            <ExternalLink size={18} onClick={() => openNote(book)} />
+                        </div>
                     </div>
+                    {authors && authors.length > 0 && <div className={styles.authors}>by {authors.join(', ')}</div>}
+                    <div className={styles.pagesAndDate}>
+                        {pages && <div>{pages} pages</div>}
+                        {published && <div>{published.getFullYear()}</div>}
+                        {rating && <StarRating value={rating} />}
+                    </div>
+
+                    <ul className={styles.tags}>{tags?.map((t) => <Tag value={t} />)}</ul>
                 </div>
             </div>
             <div>

@@ -18,6 +18,7 @@ For a full diff see [`0.6.1...main`][0.6.1...main].
 ### Changed
 
 - Removed 'year' option from pages read bar chart when a year is selected
+- Streamlined book details modal
 
 ## [`0.6.1`][0.6.1] - 2025-03-30
 

@@ -20,24 +20,50 @@
         flex-grow: 1;
     }
 
-    .metadata {
-        flex-grow: 1;
-        list-style: none;
-        padding: 0;
-        margin: 0;
+    .title {
+        font-size: var(--font-ui-large);
+        font-weight: var(--font-bold);
+    }
 
-        li {
-            padding: 2px;
+    .openNote {
+        display: inline-block;
+        margin-left: 0.25rem;
+        vertical-align: middle;
+
+        svg {
+            color: var(--color-base-70);
+        }
+
+        &:hover svg {
+            color: var(--color-base-100);
         }
     }
 
-    .actions {
-        display: flex;
-        justify-content: flex-end;
+    .authors {
     }
 
-    .rating {
-        display: inline-block;
+    .pagesAndDate {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 0.25rem;
+        margin-top: 0.5rem;
+        font-size: var(--font-ui-small);
+
+        > * + *:before {
+            content: '·';
+            margin-right: 0.25rem;
+        }
+    }
+
+    .tags {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        list-style: none;
+        margin: 0.5rem 0 0 0;
+        padding: 0;
     }
 
     .readingJourney {

@@ -13,7 +13,11 @@ export default meta
 type Story = StoryObj<typeof BookDetails>
 
 function renderFunction(book: Book) {
-    return () => <BookDetails book={book} openNote={fn()} addProgress={async () => {}} />
+    return () => (
+        <div style={{ maxWidth: '550px' }}>
+            <BookDetails book={book} openNote={fn()} addProgress={async () => {}} />
+        </div>
+    )
 }
 
 export const Primary: Story = {
