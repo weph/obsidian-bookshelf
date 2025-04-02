@@ -1,9 +1,10 @@
 .galleryCard {
-    display: block;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
     position: relative;
     width: 100%;
     max-width: 200px;
-    aspect-ratio: 1/1.25;
     background-color: var(--bookshelf--gallery-card--background-color);
     padding: 10px;
     box-shadow: var(--bookshelf--gallery-card--shadow);
@@ -12,15 +13,6 @@
     img {
         display: block;
         width: 100%;
-    }
-
-    .fallbackCover {
-        height: 100%;
-        display: flex;
-        flex-flow: column;
-        justify-content: center;
-        font-weight: bold;
-        text-align: center;
     }
 
     .title {

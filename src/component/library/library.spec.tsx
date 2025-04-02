@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, vi, test } from 'vitest'
+import { beforeEach, describe, expect, test, vi } from 'vitest'
 import userEvent, { UserEvent } from '@testing-library/user-event'
 import { waitFor } from '@testing-library/dom'
 import { Book } from '../../bookshelf/book'
@@ -126,7 +126,7 @@ describe('Clicking on a book cover', () => {
         const intoThinAir = book('Into Thin Air')
         renderLibrary({ books: [intoThinAir] })
 
-        await user.click(await screen.findByText('Into Thin Air'))
+        await user.click(await screen.findByLabelText('Into Thin Air'))
 
         expect(onBookClick).toHaveBeenCalledWith(intoThinAir)
     })
@@ -139,7 +139,7 @@ function mainContent(): Element {
 function cardTitles(): Array<string> {
     const items = screen.queryAllByRole('listitem')
 
-    return items.map((i) => i.textContent || '')
+    return items.map((i) => document.getElementById(i.getAttribute('aria-labelledby') || '')?.textContent || '')
 }
 
 function book(title: string): Book {
