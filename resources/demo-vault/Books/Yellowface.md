@@ -1,9 +1,10 @@
 ---
-cover: '[[yellowface.jpg]]'
+cover: "[[yellowface.jpg]]"
 author:
-    - '[[R.F. Kuang]]'
+  - "[[R.F. Kuang]]"
 published: 2023-05-16
 rating: 3.5
+pages: 319
 ---
 
 ## Reading Journey

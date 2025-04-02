@@ -7,6 +7,7 @@ const factory = new BookMetadataFactory(
         cover: 'cover',
         author: 'author',
         published: 'published',
+        pages: 'pages',
         tags: 'tags',
         rating: 'rating',
     },
@@ -136,6 +137,21 @@ describe('Published', () => {
         const result = factory.create('Title', new StaticMetadata(value !== undefined ? { published: value } : {}))
 
         expect(result.published).toEqual(expected)
+    })
+})
+
+describe('Pages', () => {
+    test.each([
+        [undefined, undefined],
+        [true, undefined],
+        ['foo', undefined],
+        ['1x', undefined],
+        ['123', 123],
+        [123, 123],
+    ])('Metadata property "%s" should be %s', (value, expected) => {
+        const result = factory.create('Title', new StaticMetadata(value !== undefined ? { pages: value } : {}))
+
+        expect(result.pages).toEqual(expected)
     })
 })
 

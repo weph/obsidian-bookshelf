@@ -1,9 +1,10 @@
 ---
-cover: '[[pet-sematary.jpg]]'
+cover: "[[pet-sematary.jpg]]"
 author:
-    - '[[Stephen King]]'
+  - "[[Stephen King]]"
 published: 1983-11-14
 rating: 4
+pages: 580
 ---
 
 ## Reading Journey

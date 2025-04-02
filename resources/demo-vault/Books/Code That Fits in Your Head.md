@@ -1,9 +1,10 @@
 ---
-cover: '[[code-that-fits-in-your-head.jpg]]'
+cover: "[[code-that-fits-in-your-head.jpg]]"
 author:
-    - '[[Mark Seemann]]'
+  - "[[Mark Seemann]]"
 published: 2021-11-15
 tags:
-    - computer-science
-    - programming
+  - computer-science
+  - programming
+pages: 406
 ---

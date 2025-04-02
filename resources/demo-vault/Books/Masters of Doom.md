@@ -1,11 +1,12 @@
 ---
 published: 2003-01-01
 author:
-    - '[[David Kushner]]'
-cover: '[[masters-of-doom.jpg]]'
+  - "[[David Kushner]]"
+cover: "[[masters-of-doom.jpg]]"
 tags:
-    - video-games
+  - video-games
 rating: 4
+pages: 339
 ---
 
 ## Reading Journey

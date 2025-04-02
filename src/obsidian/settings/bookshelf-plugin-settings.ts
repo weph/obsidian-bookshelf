@@ -11,6 +11,7 @@ export interface BookshelfPluginSettings {
         cover: string
         author: string
         published: string
+        pages: string
         tags: string
         rating: string
     }
@@ -48,6 +49,7 @@ export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
         cover: 'cover',
         author: 'author',
         published: 'published',
+        pages: 'pages',
         tags: 'tags',
         rating: 'rating',
     },

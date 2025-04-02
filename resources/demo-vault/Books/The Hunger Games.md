@@ -1,12 +1,13 @@
 ---
-cover: '[[the-hunger-games.jpg]]'
+cover: "[[the-hunger-games.jpg]]"
 author:
-    - '[[Suzanne Collins]]'
+  - "[[Suzanne Collins]]"
 published: 2008-09-14
 rating: 4
 tags:
-    - young-adult
-    - dystopian
+  - young-adult
+  - dystopian
+pages: 374
 ---
 
 ## Reading Journey

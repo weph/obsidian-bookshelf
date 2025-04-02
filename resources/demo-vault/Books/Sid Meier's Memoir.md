@@ -1,11 +1,12 @@
 ---
-cover: '[[sid-meiers-memoir.jpg]]'
+cover: "[[sid-meiers-memoir.jpg]]"
 author:
-    - '[[Sid Meier]]'
+  - "[[Sid Meier]]"
 published: 2020-09-08
 tags:
-    - video-games
+  - video-games
 rating: 3
+pages: 286
 ---
 
 ## Reading Journey

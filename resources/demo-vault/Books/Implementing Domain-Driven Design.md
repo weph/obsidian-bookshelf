@@ -1,9 +1,10 @@
 ---
-cover: '[[implementing-domain-driven-design.jpg]]'
+cover: "[[implementing-domain-driven-design.jpg]]"
 author:
-    - '[[Vaughn Vernon]]'
+  - "[[Vaughn Vernon]]"
 published: 2013-01-01
 tags:
-    - computer-science
-    - ddd
+  - computer-science
+  - ddd
+pages: 656
 ---

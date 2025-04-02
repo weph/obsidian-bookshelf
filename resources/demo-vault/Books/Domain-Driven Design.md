@@ -1,8 +1,9 @@
 ---
-cover: '[[domain-driven-design.jpg]]'
+cover: "[[domain-driven-design.jpg]]"
 author:
-    - '[[Eric Evans]]'
+  - "[[Eric Evans]]"
 published: 2003-08-20
 tags:
-    - computer-science
+  - computer-science
+pages: 560
 ---

@@ -1,9 +1,10 @@
 {
-    "types": {
-        "aliases": "aliases",
-        "cssclasses": "multitext",
-        "tags": "tags",
-        "published": "date",
-        "rating": "number"
-    }
+  "types": {
+    "aliases": "aliases",
+    "cssclasses": "multitext",
+    "tags": "tags",
+    "published": "date",
+    "rating": "number",
+    "pages": "number"
+  }
 }

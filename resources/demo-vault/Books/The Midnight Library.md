@@ -1,9 +1,10 @@
 ---
-cover: '[[the-midnight-library.jpg]]'
+cover: "[[the-midnight-library.jpg]]"
 author:
-    - '[[Matt Haig]]'
+  - "[[Matt Haig]]"
 published: 2020-08-13
 rating: 4
 tags:
-    - fantasy
+  - fantasy
+pages: 288
 ---

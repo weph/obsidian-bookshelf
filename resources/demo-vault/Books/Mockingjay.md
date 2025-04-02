@@ -1,12 +1,13 @@
 ---
-cover: '[[mockingjay.jpg]]'
+cover: "[[mockingjay.jpg]]"
 author:
-    - '[[Suzanne Collins]]'
+  - "[[Suzanne Collins]]"
 published: 2010-08-24
 rating: 4
 tags:
-    - young-adult
-    - dystopian
+  - young-adult
+  - dystopian
+pages: 390
 ---
 
 ## Reading Journey

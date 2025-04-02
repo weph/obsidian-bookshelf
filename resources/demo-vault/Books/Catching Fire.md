@@ -1,12 +1,13 @@
 ---
-cover: '[[catching-fire.jpg]]'
+cover: "[[catching-fire.jpg]]"
 author:
-    - '[[Suzanne Collins]]'
+  - "[[Suzanne Collins]]"
 published: 2009-09-01
 rating: 4
 tags:
-    - young-adult
-    - dystopian
+  - young-adult
+  - dystopian
+pages: 391
 ---
 
 ## Reading Journey

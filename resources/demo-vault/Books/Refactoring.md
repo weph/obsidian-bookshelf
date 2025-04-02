@@ -1,9 +1,10 @@
 ---
-cover: '[[refactoring.jpg]]'
+cover: "[[refactoring.jpg]]"
 author:
-    - '[[Martin Fowler]]'
+  - "[[Martin Fowler]]"
 published: 1999-01-01
 tags:
-    - computer-science
-    - patterns
+  - computer-science
+  - patterns
+pages: 431
 ---

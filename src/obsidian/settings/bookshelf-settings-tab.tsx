@@ -80,6 +80,17 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             )
 
         new Setting(containerEl)
+            .setName('Pages')
+            .setDesc("Name of the property that holds the book's number of pages")
+            .addText((text) =>
+                text.setValue(this.plugin.settings.bookProperties.pages).onChange(async (value) => {
+                    this.plugin.settings.bookProperties.pages = value
+
+                    await this.plugin.saveSettings()
+                }),
+            )
+
+        new Setting(containerEl)
             .setName('Rating')
             .setDesc("Name of the property that holds the book's rating")
             .addText((text) =>

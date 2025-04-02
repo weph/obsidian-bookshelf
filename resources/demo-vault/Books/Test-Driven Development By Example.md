@@ -1,11 +1,12 @@
 ---
-cover: '[[test-driven-development-by-example.jpg]]'
+cover: "[[test-driven-development-by-example.jpg]]"
 author:
-    - '[[Kent Beck]]'
+  - "[[Kent Beck]]"
 published: 2002-01-01
 tags:
-    - computer-science
-    - programming
-    - tdd
+  - computer-science
+  - programming
+  - tdd
 rating: 5
+pages: 216
 ---

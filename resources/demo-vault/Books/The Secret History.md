@@ -1,11 +1,12 @@
 ---
-cover: '[[the-secret-history.jpg]]'
+cover: "[[the-secret-history.jpg]]"
 author:
-    - '[[Donna Tartt]]'
+  - "[[Donna Tartt]]"
 published: 1992-09-16
 tags:
-    - mystery
-    - thriller
+  - mystery
+  - thriller
+pages: 559
 ---
 
 ## Reading Journey

@@ -20,6 +20,7 @@ const defaultConfiguration: Configuration = {
             cover: 'cover',
             author: 'author',
             published: 'published',
+            pages: 'pages',
             tags: 'tags',
             rating: 'rating',
         },
@@ -80,6 +81,7 @@ describe('Note processing', () => {
                     cover: 'the-shining.jpg',
                     author: ['Stephen King'],
                     published: '1977-01-28',
+                    pages: 497,
                     tags: ['novel', 'horror'],
                 }),
                 [],
@@ -93,6 +95,7 @@ describe('Note processing', () => {
             cover: 'the-shining.jpg',
             authors: ['Stephen King'],
             published: new Date(1977, 0, 28),
+            pages: 497,
             tags: ['novel', 'horror'],
         })
     })
@@ -104,6 +107,7 @@ describe('Note processing', () => {
                 cover: 'no-cover.jpg',
                 author: ['Steve Kong'],
                 published: '1999-12-25',
+                pages: 2,
                 tags: ['comedy'],
             }),
             [],
@@ -114,6 +118,7 @@ describe('Note processing', () => {
             cover: 'the-shining.jpg',
             author: ['Stephen King'],
             published: '1977-01-28',
+            pages: 497,
             tags: ['novel', 'horror'],
         })
         await bookshelf.process(note)
@@ -125,6 +130,7 @@ describe('Note processing', () => {
             cover: 'the-shining.jpg',
             authors: ['Stephen King'],
             published: new Date(1977, 0, 28),
+            pages: 497,
             tags: ['novel', 'horror'],
         })
     })

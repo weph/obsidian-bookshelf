@@ -1,12 +1,13 @@
 ---
-cover: '[[tomorrow.jpg]]'
+cover: "[[tomorrow.jpg]]"
 author:
-    - '[[Gabrielle Zevin]]'
+  - "[[Gabrielle Zevin]]"
 published: 2022-07-05
 rating: 4
 tags:
-    - video-games
-    - coming-of-age
+  - video-games
+  - coming-of-age
+pages: 401
 ---
 
 ## Reading Journey

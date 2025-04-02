@@ -1,10 +1,11 @@
 ---
-cover: '[[tidy-first.jpg]]'
+cover: "[[tidy-first.jpg]]"
 author:
-    - '[[Kent Beck]]'
+  - "[[Kent Beck]]"
 published: 2023-11-28
 rating: 3
 tags:
-    - computer-science
-    - programming
+  - computer-science
+  - programming
+pages: 122
 ---

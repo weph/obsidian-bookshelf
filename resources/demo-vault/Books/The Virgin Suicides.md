@@ -1,12 +1,13 @@
 ---
-cover: '[[the-virgin-suicides.jpg]]'
+cover: "[[the-virgin-suicides.jpg]]"
 author:
-    - '[[Jeffrey Eugenides]]'
+  - "[[Jeffrey Eugenides]]"
 published: 1993-01-01
 tags:
-    - coming-of-age
-    - young-adult
+  - coming-of-age
+  - young-adult
 rating: 4
+pages: 250
 ---
 
 ## Reading Journey

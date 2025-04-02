@@ -1,10 +1,11 @@
 ---
-cover: '[[doom-guy.jpg]]'
+cover: "[[doom-guy.jpg]]"
 author:
-    - '[[John Romero]]'
+  - "[[John Romero]]"
 published: 2023-07-18
 tags:
-    - video-games
+  - video-games
+pages: 339
 ---
 
 ## Reading Journey

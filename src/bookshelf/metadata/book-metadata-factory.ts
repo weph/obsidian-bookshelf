@@ -8,6 +8,7 @@ interface PropertyNames {
     cover: string
     author: string
     published: string
+    pages: string
     tags: string
     rating: string
 }
@@ -24,6 +25,7 @@ export class BookMetadataFactory {
             cover: this.cover(metadata),
             authors: this.authors(metadata),
             published: this.published(metadata),
+            pages: this.pages(metadata),
             tags: this.tags(metadata),
             rating: this.rating(metadata),
         }
@@ -79,6 +81,23 @@ export class BookMetadataFactory {
                     matches[5] ? parseInt(matches[5]) : 0,
                     matches[6] ? parseInt(matches[6]) : 0,
                 )
+            }
+        }
+
+        return undefined
+    }
+
+    private pages(metadata: Metadata): number | undefined {
+        const value = this.firstValue(this.propertyNames.pages, metadata)
+
+        if (typeof value === 'number') {
+            return value
+        }
+
+        if (typeof value === 'string') {
+            const parsedValue = parseInt(value)
+            if (!Number.isNaN(parsedValue) && `${parsedValue}` === value) {
+                return parsedValue
             }
         }
 

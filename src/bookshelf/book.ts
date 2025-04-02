@@ -8,6 +8,7 @@ export interface BookMetadata {
     readonly cover?: string
     readonly authors?: Array<string>
     readonly published?: Date
+    readonly pages?: number
     readonly tags?: Array<string>
     readonly rating?: number
 }

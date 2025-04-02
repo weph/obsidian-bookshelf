@@ -14,7 +14,7 @@ interface Props {
 }
 
 export function BookDetails({ book, openNote, addProgress }: Props) {
-    const { cover, title, authors, published, rating, tags } = book.metadata
+    const { cover, title, authors, published, pages, rating, tags } = book.metadata
 
     const journeyItemText = (item: ReadingJourneyItem) => {
         switch (item.action) {
@@ -43,6 +43,13 @@ export function BookDetails({ book, openNote, addProgress }: Props) {
                         {published ? (
                             <li>
                                 <strong>Published:</strong> {published.getFullYear()}
+                            </li>
+                        ) : (
+                            ''
+                        )}
+                        {pages ? (
+                            <li>
+                                <strong>Pages:</strong> {pages}
                             </li>
                         ) : (
                             ''

@@ -1,7 +1,8 @@
 ---
-cover: '[[darkly-dreaming-dexter.jpg]]'
+cover: "[[darkly-dreaming-dexter.jpg]]"
 author:
-    - '[[Jeff Lindsay]]'
+  - "[[Jeff Lindsay]]"
 published: 2004-05-05
 rating: 3.5
+pages: 288
 ---

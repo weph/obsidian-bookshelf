@@ -15,6 +15,7 @@ export function BookTable({ books, onBookClick }: Props) {
                     <th>Title</th>
                     <th>Author</th>
                     <th>Published</th>
+                    <th>Pages</th>
                     <th>Rating</th>
                     <th>Tags</th>
                     <th>Status</th>
@@ -30,6 +31,7 @@ export function BookTable({ books, onBookClick }: Props) {
                             ))}
                         </td>
                         <td>{book.metadata.published?.getFullYear() || ''}</td>
+                        <td>{book.metadata.pages || ''}</td>
                         <td>
                             <StarRating value={book.metadata.rating || 0} />
                         </td>

@@ -20,6 +20,7 @@ const bookshelf = BookshelfFactory.fromConfiguration({
             cover: 'cover',
             author: 'author',
             published: 'published',
+            pages: 'pages',
             tags: 'tags',
             rating: 'rating',
         },

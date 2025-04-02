@@ -1,11 +1,12 @@
 ---
-cover: '[[the-bell-jar.jpg]]'
+cover: "[[the-bell-jar.jpg]]"
 author:
-    - '[[Sylvia Plath]]'
+  - "[[Sylvia Plath]]"
 published: 1963-01-01
 tags:
-    - mental-health
+  - mental-health
 rating: 3.5
+pages: 288
 ---
 
 ## Reading Journey
