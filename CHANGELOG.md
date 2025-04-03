@@ -16,6 +16,7 @@ For a full diff see [`0.7.0...main`][0.7.0...main].
 ### Changed
 
 - Change visual representation of tags in table view to match Obsidian's style
+- Automatically focus search field in library view
 
 ## [`0.7.0`][0.7.0] - 2025-04-02
 

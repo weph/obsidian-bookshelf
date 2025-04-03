@@ -83,7 +83,13 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
         <div className={styles.library}>
             <div className={styles.header}>
                 <div className={styles.left}>
-                    <Input type="search" placeholder="Search..." value={searchTerm} onUpdate={setSearchTerm} />
+                    <Input
+                        type="search"
+                        placeholder="Search..."
+                        value={searchTerm}
+                        onUpdate={setSearchTerm}
+                        autoFocus={true}
+                    />
                     <Dropdown
                         label="Sort"
                         value={sortOption}
