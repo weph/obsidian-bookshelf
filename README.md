@@ -48,6 +48,8 @@ It currently processes the following metadata:
 - Cover (property: `cover`)
 - Author(s) (property: `author`)
 - Publishing Date (property: `published`)
+- Total number of pages (property: `pages`)
+- Tags (property: `tags`)
 - Rating (property: `rating`)
 
 If your book notes use different property names, you can customize them in the plugin's settings.
