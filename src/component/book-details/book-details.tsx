@@ -5,9 +5,9 @@ import { ReadingJourneyItem } from '../../bookshelf/reading-journey/reading-jour
 import { ReadingJourneyMatch } from '../../bookshelf/note-processing/note-processor'
 import { ReadingJourneyForm } from './reading-journey-form'
 import styles from './book-details.module.scss'
-import { Tag } from '../tag/tag'
 import { CoverPlaceholder } from '../cover-placeholder/cover-placeholder'
 import { ExternalLink } from 'lucide-react'
+import { TagList } from '../tag-list/tag-list'
 
 interface Props {
     book: Book
@@ -49,7 +49,7 @@ export function BookDetails({ book, openNote, addProgress }: Props) {
                         {rating && <StarRating value={rating} />}
                     </div>
 
-                    <ul className={styles.tags}>{tags?.map((t) => <Tag value={t} />)}</ul>
+                    {tags && <TagList className={styles.tags} tags={tags} />}
                 </div>
             </div>
             <div>

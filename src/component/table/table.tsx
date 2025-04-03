@@ -1,6 +1,7 @@
 import { Book } from '../../bookshelf/book'
 import { StarRating } from '../star-rating/star-rating'
 import styles from './table.module.scss'
+import { TagList } from '../tag-list/tag-list'
 
 interface Props {
     books: Array<Book>
@@ -35,7 +36,7 @@ export function BookTable({ books, onBookClick }: Props) {
                         <td>
                             <StarRating value={book.metadata.rating || 0} />
                         </td>
-                        <td>{book.metadata.tags?.join(', ') || ''}</td>
+                        <td>{book.metadata.tags && <TagList tags={book.metadata.tags} />}</td>
                         <td>{book.status}</td>
                     </tr>
                 ))}

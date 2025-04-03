@@ -13,6 +13,10 @@ For a full diff see [`0.7.0...main`][0.7.0...main].
 
 - Command to open the book modal. This command appears in the command palette only when a book note is open.
 
+### Changed
+
+- Change visual representation of tags in table view to match Obsidian's style
+
 ## [`0.7.0`][0.7.0] - 2025-04-02
 
 For a full diff see [`0.6.1...0.7.0`][0.6.1...0.7.0].
