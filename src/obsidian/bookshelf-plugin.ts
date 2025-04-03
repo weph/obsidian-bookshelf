@@ -34,13 +34,24 @@ export default class BookshelfPlugin extends Plugin {
         this.createBookshelf()
 
         this.addSettingTab(new BookshelfSettingsTab(this.app, this))
+        this.setupViews()
+        this.setupRibbon()
+        this.setupCommands()
 
+        this.processAllNotesOnceWorkspaceIsReady()
+    }
+
+    private setupViews(): void {
         this.registerView(VIEW_TYPE_LIBRARY, (leaf) => new LibraryView(leaf, this, this.bookshelf))
         this.registerView(VIEW_TYPE_STATISTICS, (leaf) => new StatisticsView(leaf, this, this.bookshelf))
+    }
 
+    private setupRibbon(): void {
         this.addRibbonIcon('library-big', 'Open Bookshelf library', () => this.activateView(VIEW_TYPE_LIBRARY))
         this.addRibbonIcon('chart-spline', 'Open Bookshelf statistics', () => this.activateView(VIEW_TYPE_STATISTICS))
+    }
 
+    private setupCommands(): void {
         this.addCommand({
             id: 'open-library',
             name: 'Open library',
@@ -52,8 +63,6 @@ export default class BookshelfPlugin extends Plugin {
             name: 'Open statistics',
             callback: () => this.activateView(VIEW_TYPE_STATISTICS),
         })
-
-        this.processAllNotesOnceWorkspaceIsReady()
     }
 
     public openBookModal(book: Book): void {
