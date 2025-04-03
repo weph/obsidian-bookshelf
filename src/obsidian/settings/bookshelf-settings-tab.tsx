@@ -34,7 +34,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc('Folder where your books are stored')
             .addText((text) =>
                 text.setValue(this.plugin.settings.booksFolder).onChange(async (value) => {
-                    this.plugin.settings.booksFolder = value
+                    this.plugin.settings.booksFolder = value.trim()
 
                     await this.plugin.saveSettings()
                 }),
@@ -51,7 +51,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc("Name of the property that holds the book's cover link, filename or URL")
             .addText((text) =>
                 text.setValue(this.plugin.settings.bookProperties.cover).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.cover = value
+                    this.plugin.settings.bookProperties.cover = value.trim()
 
                     await this.plugin.saveSettings()
                 }),
@@ -62,7 +62,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc("Name of the property that holds the author's name(s)")
             .addText((text) =>
                 text.setValue(this.plugin.settings.bookProperties.author).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.author = value
+                    this.plugin.settings.bookProperties.author = value.trim()
 
                     await this.plugin.saveSettings()
                 }),
@@ -73,7 +73,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc("Name of the property that holds the book's publishing date")
             .addText((text) =>
                 text.setValue(this.plugin.settings.bookProperties.published).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.published = value
+                    this.plugin.settings.bookProperties.published = value.trim()
 
                     await this.plugin.saveSettings()
                 }),
@@ -84,7 +84,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc("Name of the property that holds the book's number of pages")
             .addText((text) =>
                 text.setValue(this.plugin.settings.bookProperties.pages).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.pages = value
+                    this.plugin.settings.bookProperties.pages = value.trim()
 
                     await this.plugin.saveSettings()
                 }),
@@ -95,7 +95,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc("Name of the property that holds the book's rating")
             .addText((text) =>
                 text.setValue(this.plugin.settings.bookProperties.rating).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.rating = value
+                    this.plugin.settings.bookProperties.rating = value.trim()
 
                     await this.plugin.saveSettings()
                 }),
@@ -145,7 +145,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc('The heading that marks the start of reading progress entries')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.heading).onChange(async (value) => {
-                    this.plugin.settings.bookNote.heading = value
+                    this.plugin.settings.bookNote.heading = value.trim()
 
                     await this.plugin.saveSettings()
                 })
@@ -156,7 +156,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc(fragment)
             .addText((textArea) => {
                 textArea.setValue(this.plugin.settings.bookNote.dateFormat).onChange(async (value) => {
-                    this.plugin.settings.bookNote.dateFormat = value
+                    this.plugin.settings.bookNote.dateFormat = value.trim()
 
                     this.renderDateFormatDescription(root)
 
@@ -169,7 +169,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc('Supported tokens: {date}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.started).onChange(async (value) => {
-                    this.plugin.settings.bookNote.patterns.started = value
+                    this.plugin.settings.bookNote.patterns.started = value.trim()
 
                     await this.plugin.saveSettings()
                 })
@@ -180,7 +180,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc('Supported tokens: {date}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.abandoned).onChange(async (value) => {
-                    this.plugin.settings.bookNote.patterns.abandoned = value
+                    this.plugin.settings.bookNote.patterns.abandoned = value.trim()
 
                     await this.plugin.saveSettings()
                 })
@@ -191,7 +191,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc('Supported tokens: {date}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.finished).onChange(async (value) => {
-                    this.plugin.settings.bookNote.patterns.finished = value
+                    this.plugin.settings.bookNote.patterns.finished = value.trim()
 
                     await this.plugin.saveSettings()
                 })
@@ -202,7 +202,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc('Supported tokens: {date}, {startPage}, {endPage}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.absoluteProgress).onChange(async (value) => {
-                    this.plugin.settings.bookNote.patterns.absoluteProgress = value
+                    this.plugin.settings.bookNote.patterns.absoluteProgress = value.trim()
 
                     await this.plugin.saveSettings()
                 })
@@ -213,7 +213,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc('Supported tokens: {date}, {endPage}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.relativeProgress).onChange(async (value) => {
-                    this.plugin.settings.bookNote.patterns.relativeProgress = value
+                    this.plugin.settings.bookNote.patterns.relativeProgress = value.trim()
 
                     await this.plugin.saveSettings()
                 })
@@ -261,7 +261,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc('The heading that marks the start of reading progress entries')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.heading).onChange(async (value) => {
-                    this.plugin.settings.dailyNote.heading = value
+                    this.plugin.settings.dailyNote.heading = value.trim()
 
                     await this.plugin.saveSettings()
                 })
@@ -272,7 +272,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc('Supported tokens: {book}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.started).onChange(async (value) => {
-                    this.plugin.settings.dailyNote.patterns.started = value
+                    this.plugin.settings.dailyNote.patterns.started = value.trim()
 
                     await this.plugin.saveSettings()
                 })
@@ -283,7 +283,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc('Supported tokens: {book}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.abandoned).onChange(async (value) => {
-                    this.plugin.settings.dailyNote.patterns.abandoned = value
+                    this.plugin.settings.dailyNote.patterns.abandoned = value.trim()
 
                     await this.plugin.saveSettings()
                 })
@@ -294,7 +294,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc('Supported tokens: {book}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.finished).onChange(async (value) => {
-                    this.plugin.settings.dailyNote.patterns.finished = value
+                    this.plugin.settings.dailyNote.patterns.finished = value.trim()
 
                     await this.plugin.saveSettings()
                 })
@@ -305,7 +305,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc('Supported tokens: {book}, {startPage}, {endPage}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.absoluteProgress).onChange(async (value) => {
-                    this.plugin.settings.dailyNote.patterns.absoluteProgress = value
+                    this.plugin.settings.dailyNote.patterns.absoluteProgress = value.trim()
 
                     await this.plugin.saveSettings()
                 })
@@ -316,7 +316,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             .setDesc('Supported tokens: {book}, {endPage}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.relativeProgress).onChange(async (value) => {
-                    this.plugin.settings.dailyNote.patterns.relativeProgress = value
+                    this.plugin.settings.dailyNote.patterns.relativeProgress = value.trim()
 
                     await this.plugin.saveSettings()
                 })
