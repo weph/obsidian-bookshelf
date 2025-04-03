@@ -63,6 +63,26 @@ export default class BookshelfPlugin extends Plugin {
             name: 'Open statistics',
             callback: () => this.activateView(VIEW_TYPE_STATISTICS),
         })
+
+        this.addCommand({
+            id: 'open-book-modal',
+            name: 'Open book modal',
+            checkCallback: (checking) => {
+                const file = this.app.workspace.getActiveFile()
+
+                if (!file) {
+                    return false
+                }
+
+                const note = this.notes.noteByFile(file)
+
+                if (checking) {
+                    return this.bookshelf.has(note)
+                }
+
+                this.openBookModal(this.bookshelf.book(note))
+            },
+        })
     }
 
     public openBookModal(book: Book): void {

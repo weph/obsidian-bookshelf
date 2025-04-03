@@ -74,7 +74,7 @@ export class Bookshelf {
         this.readingJourneyLog.removeByBook(book)
     }
 
-    private has(note: Note): boolean {
+    public has(note: Note): boolean {
         return this.bookNotes.has(note)
     }
 
