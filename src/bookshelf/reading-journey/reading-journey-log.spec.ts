@@ -1,8 +1,11 @@
 import { beforeEach, describe, expect, test } from 'vitest'
-import { ReadingJourneyItem, ReadingJourneyLog, ReadingProgress } from './reading-journey-log'
+import { ReadingJourneyItem, ReadingJourneyItemInput, ReadingJourneyLog, ReadingProgress } from './reading-journey-log'
 import { BookBuilder } from '../../support/book-builder'
 import { FakeNote } from '../../support/fake-note'
 import { StaticMetadata } from '../metadata/metadata'
+import { Book } from '../book'
+import { Note } from '../note'
+import { DateTime } from 'luxon'
 
 const book = new BookBuilder().build()
 const source = new FakeNote('', new StaticMetadata({}), [])
@@ -63,17 +66,17 @@ describe('Reading journey', () => {
     })
 
     test('should be ordered by date', () => {
-        log.addActionToJourney(date(2025, 2, 3), dracula, 'started', source)
-        log.addReadingProgress(date(2025, 2, 3), dracula, 1, 10, source)
-        log.addActionToJourney(date(2025, 2, 4), dracula, 'abandoned', source)
-        log.addActionToJourney(date(2025, 2, 5), dracula, 'started', source)
-        log.addReadingProgress(date(2025, 2, 4), shining, null, 50, source)
-        log.addActionToJourney(date(2025, 2, 4), shining, 'abandoned', source)
-        log.addReadingProgress(date(2025, 2, 5), dracula, null, 20, source)
-        log.addReadingProgress(date(2025, 2, 10), dracula, null, 100, source)
-        log.addActionToJourney(date(2025, 2, 10), dracula, 'finished', source)
-        log.addActionToJourney(date(2025, 2, 1), shining, 'started', source)
-        log.addReadingProgress(date(2025, 2, 1), shining, 10, 20, source)
+        log.add(started('2025-02-03', dracula, source))
+        log.add(progress('2025-02-03', dracula, 1, 10, source))
+        log.add(abandoned('2025-02-04', dracula, source))
+        log.add(started('2025-02-05', dracula, source))
+        log.add(progress('2025-02-04', shining, null, 50, source))
+        log.add(abandoned('2025-02-04', shining, source))
+        log.add(progress('2025-02-05', dracula, null, 20, source))
+        log.add(progress('2025-02-10', dracula, null, 100, source))
+        log.add(finished('2025-02-10', dracula, source))
+        log.add(started('2025-02-01', shining, source))
+        log.add(progress('2025-02-01', shining, 10, 20, source))
 
         const journey = log.readingJourney()
 
@@ -93,10 +96,10 @@ describe('Reading journey', () => {
     })
 
     test('items on the same date should be returned in the order of addition', () => {
-        log.addReadingProgress(date(2025, 1, 1), dracula, null, 1, source)
-        log.addReadingProgress(date(2025, 1, 1), shining, null, 2, source)
-        log.addReadingProgress(date(2025, 1, 2), shining, null, 3, source)
-        log.addReadingProgress(date(2025, 1, 2), dracula, null, 4, source)
+        log.add(progress('2025-01-01', dracula, null, 1, source))
+        log.add(progress('2025-01-01', shining, null, 2, source))
+        log.add(progress('2025-01-02', shining, null, 3, source))
+        log.add(progress('2025-01-02', dracula, null, 4, source))
 
         const journey = log.readingJourney()
 
@@ -109,9 +112,9 @@ describe('Reading journey', () => {
     })
 
     test('items should be connected properly even if added in arbitrary order', () => {
-        log.addReadingProgress(date(2025, 1, 1), dracula, null, 10, source)
-        log.addReadingProgress(date(2025, 1, 3), dracula, null, 30, source)
-        log.addReadingProgress(date(2025, 1, 2), dracula, null, 20, source)
+        log.add(progress('2025-01-01', dracula, null, 10, source))
+        log.add(progress('2025-01-03', dracula, null, 30, source))
+        log.add(progress('2025-01-02', dracula, null, 20, source))
 
         const journey = log.readingJourney()
 
@@ -129,17 +132,17 @@ describe('Reading journey', () => {
         const shiningNote = new FakeNote('the-shining.md', new StaticMetadata({}), [])
         const dailyNote4 = new FakeNote('2025-02-06.md', new StaticMetadata({}), [])
         const dailyNote5 = new FakeNote('2025-02-10.md', new StaticMetadata({}), [])
-        log.addActionToJourney(date(2025, 2, 3), dracula, 'started', dailyNote1)
-        log.addReadingProgress(date(2025, 2, 3), dracula, 1, 10, dailyNote1)
-        log.addActionToJourney(date(2025, 2, 4), dracula, 'abandoned', dailyNote2)
-        log.addActionToJourney(date(2025, 2, 5), dracula, 'started', dailyNote3)
-        log.addReadingProgress(date(2025, 2, 4), shining, null, 50, shiningNote)
-        log.addActionToJourney(date(2025, 2, 4), shining, 'abandoned', shiningNote)
-        log.addReadingProgress(date(2025, 2, 5), dracula, null, 20, dailyNote4)
-        log.addReadingProgress(date(2025, 2, 10), dracula, null, 100, dailyNote5)
-        log.addActionToJourney(date(2025, 2, 10), dracula, 'finished', dailyNote5)
-        log.addActionToJourney(date(2025, 2, 1), shining, 'started', shiningNote)
-        log.addReadingProgress(date(2025, 2, 1), shining, 10, 20, shiningNote)
+        log.add(started('2025-02-03', dracula, dailyNote1))
+        log.add(progress('2025-02-03', dracula, 1, 10, dailyNote1))
+        log.add(abandoned('2025-02-04', dracula, dailyNote2))
+        log.add(started('2025-02-05', dracula, dailyNote3))
+        log.add(progress('2025-02-04', shining, null, 50, shiningNote))
+        log.add(abandoned('2025-02-05', shining, shiningNote))
+        log.add(progress('2025-02-05', dracula, null, 20, dailyNote4))
+        log.add(progress('2025-02-10', dracula, null, 100, dailyNote5))
+        log.add(finished('2025-02-10', dracula, dailyNote5))
+        log.add(started('2025-02-01', shining, shiningNote))
+        log.add(progress('2025-02-01', shining, 10, 20, shiningNote))
 
         log.removeBySource(shiningNote)
 
@@ -163,6 +166,33 @@ function readingProgressAsString(value: ReadingJourneyItem): string {
     return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.metadata.title}: ${value.startPage}-${value.endPage}`
 }
 
-function date(year: number, month: number, day: number): Date {
-    return new Date(year, month - 1, day, 0, 0, 0, 0)
+function started(date: string, book: Book, source: Note): ReadingJourneyItemInput {
+    return action('started', date, book, source)
+}
+
+function finished(date: string, book: Book, source: Note): ReadingJourneyItemInput {
+    return action('finished', date, book, source)
+}
+
+function abandoned(date: string, book: Book, source: Note): ReadingJourneyItemInput {
+    return action('abandoned', date, book, source)
+}
+
+function action(
+    action: 'started' | 'finished' | 'abandoned',
+    date: string,
+    book: Book,
+    source: Note,
+): ReadingJourneyItemInput {
+    return { action, date: DateTime.fromISO(date).toJSDate(), book, source }
+}
+
+function progress(
+    date: string,
+    book: Book,
+    startPage: number | null,
+    endPage: number,
+    source: Note,
+): ReadingJourneyItemInput {
+    return { action: 'progress', date: DateTime.fromISO(date).toJSDate(), book, startPage, endPage, source }
 }

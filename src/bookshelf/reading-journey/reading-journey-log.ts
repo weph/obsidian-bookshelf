@@ -63,19 +63,6 @@ export class ReadingProgress implements ReadingJourneyProgressItem {
 export class ReadingJourneyLog {
     private items: Array<ReadingJourneyItemAction | ReadingProgress> = []
 
-    public addActionToJourney(
-        date: Date,
-        book: Book,
-        action: 'started' | 'finished' | 'abandoned',
-        source: Note,
-    ): void {
-        this.add({ action, date, book, source })
-    }
-
-    public addReadingProgress(date: Date, book: Book, startPage: number | null, endPage: number, source: Note): void {
-        this.add({ action: 'progress', date, book, source, startPage, endPage })
-    }
-
     public add(item: ReadingJourneyItemInput): void {
         switch (item.action) {
             case 'started':
@@ -93,7 +80,7 @@ export class ReadingJourneyLog {
         this.items.splice(this.positionForDate(date), 0, { action, date, book, source })
     }
 
-    public addProgress(input: ReadingJourneyItemProgressInput): void {
+    private addProgress(input: ReadingJourneyItemProgressInput): void {
         const { date, book, source, startPage, endPage } = input
 
         const pos = this.positionForDate(date)
