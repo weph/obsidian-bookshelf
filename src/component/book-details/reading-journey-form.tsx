@@ -7,6 +7,7 @@ import { Button } from '../button/button'
 import { Book } from '../../bookshelf/book'
 import { ReadingJourneyMatch } from '../../bookshelf/note-processing/note-processor'
 import styles from './reading-journey-form.module.scss'
+import { position } from '../../bookshelf/reading-journey/position'
 
 type Action = 'started' | 'finished' | 'abandoned' | 'progress'
 
@@ -47,13 +48,24 @@ export function ReadingJourneyForm({ book, add }: Props) {
     const endId = useId()
 
     const handleAdd = async () => {
-        await add({
-            action: action,
-            bookNote: book.note!,
-            date: DateTime.fromISO(date).toJSDate(),
-            startPage: start === '' ? null : parseInt(start),
-            endPage: parseInt(end),
-        })
+        const dateObject = DateTime.fromISO(date).toJSDate()
+
+        switch (action) {
+            case 'started':
+            case 'abandoned':
+            case 'finished':
+                await add({ action: action, bookNote: book.note!, date: dateObject })
+                break
+            case 'progress':
+                await add({
+                    action: action,
+                    bookNote: book.note!,
+                    date: dateObject,
+                    start: start === '' ? null : position(start),
+                    end: position(end),
+                })
+                break
+        }
 
         setStart('')
         setEnd('')

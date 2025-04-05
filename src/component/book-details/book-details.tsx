@@ -25,7 +25,7 @@ export function BookDetails({ book, openNote, addProgress }: Props) {
             case 'abandoned':
                 return item.action
             case 'progress':
-                return `${item.startPage}-${item.endPage}`
+                return `${item.start}-${item.end}`
         }
     }
 

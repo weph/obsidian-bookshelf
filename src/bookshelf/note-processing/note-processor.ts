@@ -1,5 +1,7 @@
 import { Note } from '../note'
 
+import { Position } from '../reading-journey/position'
+
 interface ActionMatch {
     action: 'started' | 'finished' | 'abandoned'
     bookNote: Note
@@ -10,8 +12,8 @@ interface ProgressMatch {
     action: 'progress'
     bookNote: Note
     date: Date
-    startPage: number | null
-    endPage: number
+    start: Position | null
+    end: Position
 }
 
 export type ReadingJourneyMatch = ProgressMatch | ActionMatch

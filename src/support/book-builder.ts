@@ -4,6 +4,7 @@ import { ReadingJourney } from '../bookshelf/reading-journey/reading-journey'
 import { Note } from '../bookshelf/note'
 import { FakeNote } from './fake-note'
 import { StaticMetadata } from '../bookshelf/metadata/metadata'
+import { position } from '../bookshelf/reading-journey/position'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type OmitUnion<T, K extends keyof any> = T extends any ? Omit<T, K> : never
@@ -27,6 +28,8 @@ export class BookBuilder {
             {
                 action: 'progress',
                 date,
+                start: position(startPage),
+                end: position(endPage),
                 startPage,
                 endPage,
                 pages: pages,

@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest'
 import { bookNotePatterns } from './book-note-pattern'
+import { Page } from '../../position'
 
 const validPatterns = {
     started: '{date}: Started',
@@ -23,8 +24,8 @@ test.each([
     ['2025-02-20: Started', { action: 'started', date: new Date(2025, 1, 20) }],
     ['2025-02-20: Abandoned', { action: 'abandoned', date: new Date(2025, 1, 20) }],
     ['2025-02-20: Finished', { action: 'finished', date: new Date(2025, 1, 20) }],
-    ['2025-02-20: 5-25', { action: 'progress', date: new Date(2025, 1, 20), startPage: 5, endPage: 25 }],
-    ['2025-02-20: 50', { action: 'progress', date: new Date(2025, 1, 20), startPage: null, endPage: 50 }],
+    ['2025-02-20: 5-25', { action: 'progress', date: new Date(2025, 1, 20), start: new Page(5), end: new Page(25) }],
+    ['2025-02-20: 50', { action: 'progress', date: new Date(2025, 1, 20), start: null, end: new Page(50) }],
 ])('Input "%s" should return matches: %s', (input, expected) => {
     const result = bookNotePatterns(validPatterns, 'yyyy-MM-dd')
 

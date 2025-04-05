@@ -1,5 +1,6 @@
 import { PatternCollection } from '../pattern-collection'
 import { patternMatcher, transformer } from '../pattern'
+import { position, Position } from '../../position'
 
 interface ActionMatch {
     action: 'started' | 'finished' | 'abandoned'
@@ -9,8 +10,8 @@ interface ActionMatch {
 interface ProgressMatch {
     action: 'progress'
     book: string
-    startPage: number | null
-    endPage: number
+    start: Position | null
+    end: Position
 }
 
 export type DailyNoteMatch = ProgressMatch | ActionMatch
@@ -45,8 +46,8 @@ function absoluteProgressMatcher(pattern: string) {
         (matches): DailyNoteMatch => ({
             action: 'progress',
             book: matches.book,
-            startPage: parseInt(matches.startPage),
-            endPage: parseInt(matches.endPage),
+            start: position(matches.startPage),
+            end: position(matches.endPage),
         }),
     )
 }
@@ -63,8 +64,8 @@ function relativeProgressMatcher(pattern: string) {
         (matches): DailyNoteMatch => ({
             action: 'progress',
             book: matches.book,
-            startPage: null,
-            endPage: parseInt(matches.endPage),
+            start: null,
+            end: position(matches.endPage),
         }),
     )
 }

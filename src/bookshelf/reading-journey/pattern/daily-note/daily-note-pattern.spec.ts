@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest'
 import { dailyNotePatterns } from './daily-note-pattern'
+import { Page } from '../../position'
 
 const validPatterns = {
     started: '{book}: Started',
@@ -15,8 +16,8 @@ test.each([
     ['[[Dracula]]: Started', { action: 'started', book: '[[Dracula]]' }],
     ['[[Dracula]]: Abandoned', { action: 'abandoned', book: '[[Dracula]]' }],
     ['[[Dracula]]: Finished', { action: 'finished', book: '[[Dracula]]' }],
-    ['[[Dracula]]: 5-25', { action: 'progress', book: '[[Dracula]]', startPage: 5, endPage: 25 }],
-    ['[[Dracula]]: 50', { action: 'progress', book: '[[Dracula]]', startPage: null, endPage: 50 }],
+    ['[[Dracula]]: 5-25', { action: 'progress', book: '[[Dracula]]', start: new Page(5), end: new Page(25) }],
+    ['[[Dracula]]: 50', { action: 'progress', book: '[[Dracula]]', start: null, end: new Page(50) }],
 ])('Input "%s" should return matches: %s', (input, expected) => {
     const result = dailyNotePatterns(validPatterns)
 

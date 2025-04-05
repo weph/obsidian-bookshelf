@@ -7,6 +7,7 @@ import { FakeNote } from '../support/fake-note'
 import { StaticMetadata } from './metadata/metadata'
 import { BookshelfFactory, Configuration } from './bookshelf-factory'
 import { InMemoryNotes } from '../support/in-memory-notes'
+import { position } from './reading-journey/position'
 
 let bookshelf: Bookshelf
 
@@ -720,8 +721,8 @@ describe('Adding items to reading journey', () => {
             action: 'progress',
             bookNote: dracula,
             date: new Date(2025, 0, 3),
-            startPage: 1,
-            endPage: 50,
+            start: position(1),
+            end: position(50),
         })
         await bookshelf.addToReadingJourney({
             action: 'abandoned',
@@ -737,8 +738,8 @@ describe('Adding items to reading journey', () => {
             action: 'progress',
             bookNote: dracula,
             date: new Date(2025, 0, 5),
-            startPage: null,
-            endPage: 350,
+            start: null,
+            end: position(350),
         })
         await bookshelf.addToReadingJourney({
             action: 'finished',
@@ -783,8 +784,8 @@ describe('Adding items to reading journey', () => {
             action: 'progress',
             bookNote: dracula,
             date: new Date(2025, 0, 3),
-            startPage: 1,
-            endPage: 50,
+            start: position(1),
+            end: position(50),
         })
         await bookshelf.addToReadingJourney({
             action: 'abandoned',
@@ -800,8 +801,8 @@ describe('Adding items to reading journey', () => {
             action: 'progress',
             bookNote: dracula,
             date: new Date(2025, 0, 5),
-            startPage: null,
-            endPage: 350,
+            start: null,
+            end: position(350),
         })
         await bookshelf.addToReadingJourney({
             action: 'finished',
