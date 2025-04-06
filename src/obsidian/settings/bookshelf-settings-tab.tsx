@@ -199,7 +199,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Reading progress (absolute)')
-            .setDesc('Supported tokens: {date}, {startPage}, {endPage}')
+            .setDesc('Supported tokens: {date}, {start}, {end}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.absoluteProgress).onChange(async (value) => {
                     this.plugin.settings.bookNote.patterns.absoluteProgress = value.trim()
@@ -210,7 +210,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Reading progress (relative)')
-            .setDesc('Supported tokens: {date}, {endPage}')
+            .setDesc('Supported tokens: {date}, {end}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.bookNote.patterns.relativeProgress).onChange(async (value) => {
                     this.plugin.settings.bookNote.patterns.relativeProgress = value.trim()
@@ -302,7 +302,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Reading progress (absolute)')
-            .setDesc('Supported tokens: {book}, {startPage}, {endPage}')
+            .setDesc('Supported tokens: {book}, {start}, {end}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.absoluteProgress).onChange(async (value) => {
                     this.plugin.settings.dailyNote.patterns.absoluteProgress = value.trim()
@@ -313,7 +313,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Reading progress (relative)')
-            .setDesc('Supported tokens: {book}, {endPage}')
+            .setDesc('Supported tokens: {book}, {end}')
             .addText((field) => {
                 field.setValue(this.plugin.settings.dailyNote.patterns.relativeProgress).onChange(async (value) => {
                     this.plugin.settings.dailyNote.patterns.relativeProgress = value.trim()

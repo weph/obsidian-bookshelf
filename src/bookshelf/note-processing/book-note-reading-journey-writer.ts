@@ -36,13 +36,13 @@ export class BookNoteReadingJourneyWriter implements ReadingJourneyWriter {
                 if (item.start === null) {
                     return this.patterns.relativeProgress
                         .replace('{date}', formattedDate)
-                        .replace('{endPage}', item.end.toString())
+                        .replace('{end}', item.end.toString())
                 }
 
                 return this.patterns.absoluteProgress
                     .replace('{date}', formattedDate)
-                    .replace('{startPage}', item.start.toString())
-                    .replace('{endPage}', item.end.toString())
+                    .replace('{start}', item.start.toString())
+                    .replace('{end}', item.end.toString())
         }
     }
 }

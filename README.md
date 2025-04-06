@@ -111,8 +111,8 @@ You may use the following tokens in your patterns. Each pattern setting denotes 
 
 - `{book}` WikiLink to the book
 - `{date}` Date of the entry formatted according to **Date format** setting
-- `{startPage}` The page you started reading on
-- `{endPage}` The last page you read
+- `{start}` The page you started reading on
+- `{end}` The last page you read
 
 Let's say reading progress entries in your daily notes look like this:
 
@@ -120,4 +120,4 @@ Let's say reading progress entries in your daily notes look like this:
 - Read [[The Shining]] from page 12 to page 133
 ```
 
-In this case, you should use the following pattern: `Read {book} from page {startPage} to page {endPage}`.
+In this case, you should use the following pattern: `Read {book} from page {start} to page {end}`.

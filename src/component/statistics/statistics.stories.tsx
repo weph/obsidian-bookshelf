@@ -32,8 +32,8 @@ const bookshelf = BookshelfFactory.fromConfiguration({
                 started: '{date}: Started reading',
                 abandoned: '{date}: Abandoned book',
                 finished: '{date}: Finished reading',
-                absoluteProgress: '{date}: {startPage}-{endPage}',
-                relativeProgress: '{date}: {endPage}',
+                absoluteProgress: '{date}: {start}-{end}',
+                relativeProgress: '{date}: {end}',
             },
         },
         dailyNote: {
@@ -43,8 +43,8 @@ const bookshelf = BookshelfFactory.fromConfiguration({
                 started: 'Started reading {book}',
                 abandoned: 'Abandoned {book}',
                 finished: 'Finished reading {book}',
-                absoluteProgress: 'Read {book}: {startPage}-{endPage}',
-                relativeProgress: 'Read {book}: {endPage}',
+                absoluteProgress: 'Read {book}: {start}-{end}',
+                relativeProgress: 'Read {book}: {end}',
             },
         },
         readingProgress: {

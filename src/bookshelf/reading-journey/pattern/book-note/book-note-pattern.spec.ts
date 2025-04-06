@@ -6,8 +6,8 @@ const validPatterns = {
     started: '{date}: Started',
     abandoned: '{date}: Abandoned',
     finished: '{date}: Finished',
-    absoluteProgress: '{date}: {startPage}-{endPage}',
-    relativeProgress: '{date}: {endPage}',
+    absoluteProgress: '{date}: {start}-{end}',
+    relativeProgress: '{date}: {end}',
 }
 
 test.each([

@@ -10,6 +10,7 @@ import { Book } from '../bookshelf/book'
 import { BookModal } from './modal/book-modal'
 import './bookshelf-plugin.css'
 import { ObsidianNotes } from './obsidian-notes'
+import { migratedSettings } from './settings/versions/migrated-settings'
 
 export interface DailyNotesSettings {
     enabled: boolean
@@ -184,7 +185,7 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     async loadSettings() {
-        this.settings = assign(DEFAULT_SETTINGS, await this.loadData())
+        this.settings = assign(DEFAULT_SETTINGS, migratedSettings(await this.loadData()) as BookshelfPluginSettings)
     }
 
     async saveSettings() {

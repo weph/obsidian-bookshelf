@@ -36,15 +36,13 @@ export class DailyNoteReadingJourneyWriter implements ReadingJourneyWriter {
                 return this.patterns[item.action].replace('{book}', book)
             case 'progress':
                 if (item.start === null) {
-                    return this.patterns.relativeProgress
-                        .replace('{book}', book)
-                        .replace('{endPage}', item.end.toString())
+                    return this.patterns.relativeProgress.replace('{book}', book).replace('{end}', item.end.toString())
                 }
 
                 return this.patterns.absoluteProgress
                     .replace('{book}', book)
-                    .replace('{startPage}', item.start.toString())
-                    .replace('{endPage}', item.end.toString())
+                    .replace('{start}', item.start.toString())
+                    .replace('{end}', item.end.toString())
         }
     }
 }

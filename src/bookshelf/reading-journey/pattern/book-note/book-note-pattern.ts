@@ -46,8 +46,8 @@ function absoluteProgressMatcher(pattern: string, dateFormat: string) {
         patternMatcher(
             {
                 date: '.+',
-                startPage: '\\d+',
-                endPage: '\\d+',
+                start: '\\d+',
+                end: '\\d+',
             },
             pattern,
         ),
@@ -60,8 +60,8 @@ function absoluteProgressMatcher(pattern: string, dateFormat: string) {
             return {
                 action: 'progress',
                 date: dateObject.toJSDate(),
-                start: position(matches.startPage),
-                end: position(matches.endPage),
+                start: position(matches.start),
+                end: position(matches.end),
             }
         },
     )
@@ -72,7 +72,7 @@ function relativeProgressMatcher(pattern: string, dateFormat: string) {
         patternMatcher(
             {
                 date: '.+',
-                endPage: '\\d+',
+                end: '\\d+',
             },
             pattern,
         ),
@@ -86,7 +86,7 @@ function relativeProgressMatcher(pattern: string, dateFormat: string) {
                 action: 'progress',
                 date: dateObject.toJSDate(),
                 start: null,
-                end: position(matches.endPage),
+                end: position(matches.end),
             }
         },
     )
