@@ -7,4 +7,10 @@
     border-color: var(--bookshelf--ui--dropdown--border-color);
     font-weight: var(--bookshelf--ui--input--font-weight);
     padding: var(--bookshelf--ui--input--padding);
+    box-sizing: border-box;
+
+    &.error {
+        color: var(--text-error);
+        border-color: var(--background-modifier-error);
+    }
 }

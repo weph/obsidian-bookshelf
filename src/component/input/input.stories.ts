@@ -17,6 +17,13 @@ type Story = StoryObj<typeof Input>
 
 export const Primary: Story = {}
 
+export const Error: Story = {
+    args: {
+        value: 'invalid value',
+        error: true,
+    },
+}
+
 export const SearchWithPlaceholder: Story = {
     args: {
         type: 'search',

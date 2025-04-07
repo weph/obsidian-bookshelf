@@ -6,12 +6,13 @@ interface Props {
     placeholder: string
     value: string
     onUpdate: (value: string) => void
+    error?: boolean
     autoFocus?: boolean
     id?: string
     className?: string
 }
 
-export function Input({ type, placeholder, value, onUpdate, autoFocus, id, className }: Props) {
+export function Input({ type, placeholder, value, onUpdate, error, autoFocus, id, className }: Props) {
     const ref = useRef<HTMLInputElement>(null)
     const [currentValue, setCurrentValue] = useState(value)
 
@@ -29,7 +30,7 @@ export function Input({ type, placeholder, value, onUpdate, autoFocus, id, class
         <input
             ref={ref}
             id={id}
-            className={`${styles.input} ${className || ''}`}
+            className={`${styles.input} ${error && styles.error} ${className || ''}`}
             type={type}
             placeholder={placeholder}
             value={value}
