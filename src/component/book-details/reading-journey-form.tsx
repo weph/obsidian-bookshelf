@@ -7,21 +7,21 @@ import { Button } from '../button/button'
 import { Book } from '../../bookshelf/book'
 import { ReadingJourneyMatch } from '../../bookshelf/note-processing/note-processor'
 import styles from './reading-journey-form.module.scss'
-import { position } from '../../bookshelf/reading-journey/position/position'
+import { Position, position } from '../../bookshelf/reading-journey/position/position'
 
 type Action = 'started' | 'finished' | 'abandoned' | 'progress'
 
-function initialValues(bookJourney: ReadingJourney): { action: Action; page: number } {
+function initialValues(bookJourney: ReadingJourney): { action: Action; start: Position } {
     const lastItem = bookJourney.lastItem()
 
     switch (lastItem?.action) {
         case 'started':
-            return { action: 'progress', page: 1 }
+            return { action: 'progress', start: position(1) }
         case 'progress':
-            return { action: 'progress', page: lastItem.endPage + 1 }
+            return { action: 'progress', start: lastItem.end.next() }
     }
 
-    return { action: 'started', page: 1 }
+    return { action: 'started', start: position(1) }
 }
 
 const actions: Array<DropdownOption<Action>> = [
@@ -36,13 +36,35 @@ interface Props {
     add: (item: ReadingJourneyMatch) => Promise<void>
 }
 
+interface PositionState {
+    inputValue: string
+    positionValue: Position | null
+    error: boolean
+}
+
+function initialPositionState(): PositionState {
+    return { inputValue: '', positionValue: null, error: false }
+}
+
+function positionState(inputValue: string): PositionState {
+    let positionValue = null
+    let error = false
+    try {
+        positionValue = position(inputValue)
+    } catch {
+        error = true
+    }
+
+    return { inputValue, positionValue, error }
+}
+
 export function ReadingJourneyForm({ book, add }: Props) {
     const initial = initialValues(book.readingJourney)
 
     const [action, setAction] = useState<Action>(initial.action)
     const [date, setDate] = useState(DateTime.now().toISODate())
-    const [start, setStart] = useState<string>('')
-    const [end, setEnd] = useState<string>('')
+    const [start, setStart] = useState<PositionState>(initialPositionState())
+    const [end, setEnd] = useState<PositionState>(initialPositionState())
 
     const startId = useId()
     const endId = useId()
@@ -57,18 +79,22 @@ export function ReadingJourneyForm({ book, add }: Props) {
                 await add({ action: action, bookNote: book.note!, date: dateObject })
                 break
             case 'progress':
+                if (end.positionValue === null) {
+                    throw new Error('Cannot add progress without end position')
+                }
+
                 await add({
                     action: action,
                     bookNote: book.note!,
                     date: dateObject,
-                    start: start === '' ? null : position(start),
-                    end: position(end),
+                    start: start.positionValue,
+                    end: end.positionValue,
                 })
                 break
         }
 
-        setStart('')
-        setEnd('')
+        setStart(initialPositionState())
+        setEnd(initialPositionState())
 
         switch (action) {
             case 'started':
@@ -82,6 +108,17 @@ export function ReadingJourneyForm({ book, add }: Props) {
         }
     }
 
+    const handleStart = (inputValue: string) => {
+        const state =
+            inputValue.trim() === '' ? { inputValue, positionValue: null, error: false } : positionState(inputValue)
+
+        setStart(state)
+    }
+
+    const handleEnd = (inputValue: string) => {
+        setEnd(positionState(inputValue))
+    }
+
     const valid = (): boolean => {
         switch (action) {
             case 'started':
@@ -89,7 +126,7 @@ export function ReadingJourneyForm({ book, add }: Props) {
             case 'abandoned':
                 return DateTime.fromISO(date).isValid
             case 'progress':
-                return DateTime.fromISO(date).isValid && !Number.isNaN(parseInt(end))
+                return DateTime.fromISO(date).isValid && !start.error && !end.error && end.positionValue !== null
         }
     }
 
@@ -105,10 +142,11 @@ export function ReadingJourneyForm({ book, add }: Props) {
                     <Input
                         id={startId}
                         className={styles.startInput}
-                        type="number"
-                        placeholder={initial.page.toString()}
-                        value={start}
-                        onUpdate={setStart}
+                        type="text"
+                        placeholder={initial.start.toString()}
+                        value={start.inputValue}
+                        error={start.error}
+                        onUpdate={handleStart}
                     />
                     <label htmlFor={endId} className={styles.endLabel}>
                         to
@@ -116,10 +154,11 @@ export function ReadingJourneyForm({ book, add }: Props) {
                     <Input
                         id={endId}
                         className={styles.endInput}
-                        type="number"
+                        type="text"
                         placeholder=""
-                        value={end}
-                        onUpdate={setEnd}
+                        value={end.inputValue}
+                        error={end.error}
+                        onUpdate={handleEnd}
                         autoFocus={true}
                     />
                 </>
