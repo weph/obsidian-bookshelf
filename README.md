@@ -67,10 +67,12 @@ By default, Bookshelf looks for reading progress entries under the "Reading Jour
 the "Reading" heading in your daily notes. You can change these headings in the settings to match your preferred note
 structure.
 
-You can specify the number of pages read by providing a start and end page, or just an end page.
+You can track reading progress by entering a start and end position, or just an end position. Positions can be either
+**page numbers** or **percentages** (e.g., `10-60%` or just `25%`).
 
-- If only an end page is given, Bookshelf assumes the reading continued from the last recorded page.
-- If no prior entry exists for the book, Bookshelf assumes reading started from page 1.
+- If only an end position is given, Bookshelf assumes the reading continued from the last recorded position.
+- If no prior entry exists for the book, Bookshelf assumes reading started from page 1 or 0%, depending on the type of
+  entry.
 
 For example, if the first entry logs reading from pages 10 to 180, and the next entry specifies only page 290, Bookshelf
 assumes you read from page 181 to 290.

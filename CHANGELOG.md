@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.8.0...main`][0.8.0...main].
 
+### Added
+
+- Support for tracking reading progress using percentages
+
 ## [`0.8.0`][0.8.0] - 2025-04-03
 
 For a full diff see [`0.7.0...0.8.0`][0.7.0...0.8.0].

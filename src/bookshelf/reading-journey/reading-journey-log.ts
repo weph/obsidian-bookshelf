@@ -55,7 +55,7 @@ export class ReadingProgress implements ReadingJourneyProgressItem {
             return this.end.first()
         }
 
-        return this.previous.end.next()
+        return this.previous.end.next(this.book)
     }
 
     get startPage(): number {

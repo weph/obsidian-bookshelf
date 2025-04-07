@@ -38,17 +38,28 @@ function absoluteProgressMatcher(pattern: string) {
         patternMatcher(
             {
                 book: '.+',
-                start: '\\d+',
-                end: '\\d+',
+                start: '.+',
+                end: '.+',
             },
             pattern,
         ),
-        (matches): DailyNoteMatch => ({
-            action: 'progress',
-            book: matches.book,
-            start: position(matches.start),
-            end: position(matches.end),
-        }),
+        (matches): DailyNoteMatch | null => {
+            let start
+            let end
+            try {
+                start = position(matches.start)
+                end = position(matches.end)
+            } catch {
+                return null
+            }
+
+            return {
+                action: 'progress',
+                book: matches.book,
+                start,
+                end,
+            }
+        },
     )
 }
 
@@ -57,16 +68,25 @@ function relativeProgressMatcher(pattern: string) {
         patternMatcher(
             {
                 book: '.+',
-                end: '\\d+',
+                end: '.+',
             },
             pattern,
         ),
-        (matches): DailyNoteMatch => ({
-            action: 'progress',
-            book: matches.book,
-            start: null,
-            end: position(matches.end),
-        }),
+        (matches): DailyNoteMatch | null => {
+            let end
+            try {
+                end = position(matches.end)
+            } catch {
+                return null
+            }
+
+            return {
+                action: 'progress',
+                book: matches.book,
+                start: null,
+                end,
+            }
+        },
     )
 }
 

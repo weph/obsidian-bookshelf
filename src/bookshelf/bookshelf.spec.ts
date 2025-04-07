@@ -148,7 +148,7 @@ describe('Note processing', () => {
         expect(bookshelf.book(note)).toBe(book)
     })
 
-    test('It should create reading journey from book note', async () => {
+    test('It should create reading journey from book note (pages)', async () => {
         await bookshelf.process(
             new FakeNote('Books/The Shining.md', new StaticMetadata({}), [
                 '2025-01-01: Started reading',
@@ -164,6 +164,26 @@ describe('Note processing', () => {
             '2025-01-01: The Shining: 10-150',
             '2025-01-02: The Shining: 151-250',
             '2025-01-03: The Shining: 251-447',
+            '2025-01-03: The Shining: finished',
+        ])
+    })
+
+    test('It should create reading journey from book note (percentages)', async () => {
+        await bookshelf.process(
+            new FakeNote('Books/The Shining.md', new StaticMetadata({}), [
+                '2025-01-01: Started reading',
+                '2025-01-01: 20%',
+                '2025-01-02: 60%',
+                '2025-01-03: 100%',
+                '2025-01-03: Finished reading',
+            ]),
+        )
+
+        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+            '2025-01-01: The Shining: started',
+            '2025-01-01: The Shining: 0%-20%',
+            '2025-01-02: The Shining: 21%-60%',
+            '2025-01-03: The Shining: 61%-100%',
             '2025-01-03: The Shining: finished',
         ])
     })
@@ -244,7 +264,7 @@ describe('Note processing', () => {
         expect(result.map((b) => b.metadata.title)).toEqual([])
     })
 
-    test('It should create reading journey from daily note', async () => {
+    test('It should create reading journey from daily note (pages)', async () => {
         notes.add(new FakeNote('The Shining', new StaticMetadata({}), []))
 
         await bookshelf.process(
@@ -260,6 +280,26 @@ describe('Note processing', () => {
             '2025-01-01: The Shining: started',
             '2025-01-01: The Shining: 10-100',
             '2025-01-01: The Shining: 101-447',
+            '2025-01-01: The Shining: finished',
+        ])
+    })
+
+    test('It should create reading journey from daily note (percentages)', async () => {
+        notes.add(new FakeNote('The Shining', new StaticMetadata({}), []))
+
+        await bookshelf.process(
+            new FakeNote('2025-01-01.md', new StaticMetadata({}), [
+                'Started reading [[The Shining]]',
+                'Read [[The Shining]]: 30%',
+                'Read [[The Shining]]: 31%-100%',
+                'Finished reading [[The Shining]]',
+            ]),
+        )
+
+        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+            '2025-01-01: The Shining: started',
+            '2025-01-01: The Shining: 0%-30%',
+            '2025-01-01: The Shining: 31%-100%',
             '2025-01-01: The Shining: finished',
         ])
     })
@@ -837,7 +877,7 @@ function readingProgressAsString(value: ReadingJourneyItem): string {
         return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.metadata.title}: ${value.action}`
     }
 
-    return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.metadata.title}: ${value.startPage}-${value.endPage}`
+    return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.metadata.title}: ${value.start}-${value.end}`
 }
 
 async function generatorAsArray<T>(gen: AsyncIterable<T>): Promise<T[]> {

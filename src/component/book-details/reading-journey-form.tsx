@@ -1,4 +1,3 @@
-import { ReadingJourney } from '../../bookshelf/reading-journey/reading-journey'
 import { useId, useState } from 'react'
 import { DateTime } from 'luxon'
 import { Dropdown, DropdownOption } from '../dropdown/dropdown'
@@ -11,14 +10,14 @@ import { Position, position } from '../../bookshelf/reading-journey/position/pos
 
 type Action = 'started' | 'finished' | 'abandoned' | 'progress'
 
-function initialValues(bookJourney: ReadingJourney): { action: Action; start: Position } {
-    const lastItem = bookJourney.lastItem()
+function initialValues(book: Book): { action: Action; start: Position } {
+    const lastItem = book.readingJourney.lastItem()
 
     switch (lastItem?.action) {
         case 'started':
             return { action: 'progress', start: position(1) }
         case 'progress':
-            return { action: 'progress', start: lastItem.end.next() }
+            return { action: 'progress', start: lastItem.end.next(book) }
     }
 
     return { action: 'started', start: position(1) }
@@ -59,7 +58,7 @@ function positionState(inputValue: string): PositionState {
 }
 
 export function ReadingJourneyForm({ book, add }: Props) {
-    const initial = initialValues(book.readingJourney)
+    const initial = initialValues(book)
 
     const [action, setAction] = useState<Action>(initial.action)
     const [date, setDate] = useState(DateTime.now().toISODate())
@@ -137,7 +136,7 @@ export function ReadingJourneyForm({ book, add }: Props) {
             {action === 'progress' && (
                 <>
                     <label htmlFor={startId} className={styles.startLabel}>
-                        From page
+                        From
                     </label>
                     <Input
                         id={startId}

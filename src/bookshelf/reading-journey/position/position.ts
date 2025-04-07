@@ -1,10 +1,11 @@
 import { Book } from '../../book'
 import { Page } from './page'
+import { Percentage } from './percentage'
 
 export interface Position {
     first(): Position
 
-    next(): Position
+    next(book: Book): Position
 
     pageInBook(book: Book): number
 
@@ -22,6 +23,10 @@ export function position(value: number | string): Position {
 
         if (`${parsedValue}` === trimmedValue) {
             return new Page(parsedValue)
+        }
+
+        if (`${parsedValue}%` === trimmedValue) {
+            return new Percentage(parsedValue)
         }
     }
 
