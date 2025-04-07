@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest'
-import { Page, position } from './position'
+import { position } from './position'
+import { Page } from './page'
 
 test.each([
     [1, new Page(1)],

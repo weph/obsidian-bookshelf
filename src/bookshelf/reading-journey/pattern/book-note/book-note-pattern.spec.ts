@@ -1,6 +1,7 @@
 import { expect, test } from 'vitest'
 import { bookNotePatterns } from './book-note-pattern'
-import { Page } from '../../position'
+
+import { Page } from '../../position/page'
 
 const validPatterns = {
     started: '{date}: Started',

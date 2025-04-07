@@ -7,7 +7,7 @@ import { Button } from '../button/button'
 import { Book } from '../../bookshelf/book'
 import { ReadingJourneyMatch } from '../../bookshelf/note-processing/note-processor'
 import styles from './reading-journey-form.module.scss'
-import { position } from '../../bookshelf/reading-journey/position'
+import { position } from '../../bookshelf/reading-journey/position/position'
 
 type Action = 'started' | 'finished' | 'abandoned' | 'progress'
 

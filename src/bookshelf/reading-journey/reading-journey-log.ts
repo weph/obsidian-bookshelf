@@ -1,7 +1,7 @@
 import { Book } from '../book'
 import { ReadingJourney } from './reading-journey'
 import { Note } from '../note'
-import { Position } from './position'
+import { Position } from './position/position'
 
 interface ReadingJournalItemBase {
     date: Date

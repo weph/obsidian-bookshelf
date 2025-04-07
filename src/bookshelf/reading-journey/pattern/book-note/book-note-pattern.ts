@@ -1,7 +1,7 @@
 import { PatternCollection } from '../pattern-collection'
 import { patternMatcher, transformer } from '../pattern'
 import { DateTime } from 'luxon'
-import { position, Position } from '../../position'
+import { position, Position } from '../../position/position'
 
 interface ActionMatch {
     action: 'started' | 'finished' | 'abandoned'

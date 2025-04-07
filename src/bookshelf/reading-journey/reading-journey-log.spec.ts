@@ -6,7 +6,7 @@ import { StaticMetadata } from '../metadata/metadata'
 import { Book } from '../book'
 import { Note } from '../note'
 import { DateTime } from 'luxon'
-import { position } from './position'
+import { position } from './position/position'
 
 const book = new BookBuilder().build()
 const source = new FakeNote('', new StaticMetadata({}), [])

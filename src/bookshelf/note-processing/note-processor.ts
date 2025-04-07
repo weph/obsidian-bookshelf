@@ -1,6 +1,6 @@
 import { Note } from '../note'
 
-import { Position } from '../reading-journey/position'
+import { Position } from '../reading-journey/position/position'
 
 interface ActionMatch {
     action: 'started' | 'finished' | 'abandoned'

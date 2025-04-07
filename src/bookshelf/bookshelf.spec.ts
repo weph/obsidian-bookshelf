@@ -7,7 +7,7 @@ import { FakeNote } from '../support/fake-note'
 import { StaticMetadata } from './metadata/metadata'
 import { BookshelfFactory, Configuration } from './bookshelf-factory'
 import { InMemoryNotes } from '../support/in-memory-notes'
-import { position } from './reading-journey/position'
+import { position } from './reading-journey/position/position'
 
 let bookshelf: Bookshelf
 
