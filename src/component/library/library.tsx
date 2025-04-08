@@ -6,6 +6,7 @@ import { Dropdown, DropdownOption } from '../dropdown/dropdown'
 import { BookTable } from '../table/table'
 import styles from './library.module.scss'
 import { SortDropdownOption } from './book-sort-options'
+import { bookGroupingOptions, GroupingDropdownOption } from './book-grouping-options'
 
 type ViewType = 'gallery' | 'table'
 
@@ -31,8 +32,10 @@ const viewOptions: Array<DropdownOption<ViewType>> = [
 export function Library({ books, sortOptions, onBookClick }: Props) {
     const [searchTerm, setSearchTerm] = useState<string>('')
     const [sortOption, setSortOption] = useState<SortDropdownOption | null>(sortOptions[0])
+    const [groupingOption, setGroupingOption] = useState<GroupingDropdownOption>(bookGroupingOptions[0])
     const [statusFilter, setStatusFilter] = useState<ReadingStatus | null>(null)
     const [view, setView] = useState<ViewType>('gallery')
+    const ViewComponent = view === 'gallery' ? Gallery : BookTable
 
     const content = () => {
         if (books.length === 0) {
@@ -60,11 +63,16 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
             )
         }
 
-        if (view === 'table') {
-            return <BookTable books={filteredBooks} onBookClick={onBookClick} />
+        if (groupingOption.grouped) {
+            return Array.from(groupingOption.grouped(filteredBooks)).map((entry) => (
+                <div key={entry[0]}>
+                    <h2>{entry[0] || 'N/A'}</h2>
+                    <ViewComponent books={entry[1]} onBookClick={onBookClick} />
+                </div>
+            ))
         }
 
-        return <Gallery books={filteredBooks} onBookClick={onBookClick} />
+        return <ViewComponent books={filteredBooks} onBookClick={onBookClick} />
     }
 
     return (
@@ -83,6 +91,12 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
                         value={sortOption?.value}
                         options={sortOptions}
                         onChange={(o) => setSortOption(o)}
+                    />
+                    <Dropdown
+                        label="Grouping"
+                        value={groupingOption.value}
+                        options={bookGroupingOptions}
+                        onChange={(o) => setGroupingOption(o)}
                     />
                     <Dropdown
                         label="Status"
