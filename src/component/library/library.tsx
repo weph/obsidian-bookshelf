@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Book, ReadingStatus } from '../../bookshelf/book'
 import { Gallery } from '../gallery/gallery'
 import { Dropdown, DropdownOption } from '../dropdown/dropdown'
-import { BookSortOptions } from '../../bookshelf/sort/book-sort-options'
+import { BookSortOptions } from './sort/book-sort-options'
 import { BookTable } from '../table/table'
 import styles from './library.module.scss'
 

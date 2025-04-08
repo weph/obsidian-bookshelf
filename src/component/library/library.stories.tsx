@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { Book } from '../../bookshelf/book'
 import { algorithms, books } from '../../support/book-fixtures'
 import { Library } from './library'
-import { defaultBookSortOptions } from '../../bookshelf/sort/default-book-sort-options'
+import { defaultBookSortOptions } from './sort/default-book-sort-options'
 import { fn } from '@storybook/test'
 
 const meta = {

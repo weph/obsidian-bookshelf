@@ -2,7 +2,7 @@ import { ItemView, WorkspaceLeaf } from 'obsidian'
 import { StrictMode } from 'react'
 import { createRoot, Root } from 'react-dom/client'
 import { Bookshelf } from '../../bookshelf/bookshelf'
-import { defaultBookSortOptions } from '../../bookshelf/sort/default-book-sort-options'
+import { defaultBookSortOptions } from '../../component/library/sort/default-book-sort-options'
 import { Library } from '../../component/library/library'
 import BookshelfPlugin from '../bookshelf-plugin'
 
