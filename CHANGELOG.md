@@ -13,6 +13,10 @@ For a full diff see [`0.8.0...main`][0.8.0...main].
 
 - Support for tracking reading progress using percentages
 
+### Fixed
+
+- Sorting by reading progress
+
 ## [`0.8.0`][0.8.0] - 2025-04-03
 
 For a full diff see [`0.7.0...0.8.0`][0.7.0...0.8.0].

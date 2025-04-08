@@ -38,19 +38,13 @@ export const bookSortOptions: Array<SortDropdownOption> = [
         value: 'reading_progress_desc',
         label: 'Reading progress: Newest-Oldest',
         compareFn: (a, b) =>
-            stringDifference(
-                b.readingJourney.lastItem()?.date.toUTCString(),
-                a.readingJourney.lastItem()?.date.toUTCString(),
-            ),
+            numberDifference(b.readingJourney.lastItem()?.date.getTime(), a.readingJourney.lastItem()?.date.getTime()),
     },
     {
         value: 'reading_progress_asc',
         label: 'Reading progress: Oldest-Newest',
         compareFn: (a, b) =>
-            stringDifference(
-                a.readingJourney.lastItem()?.date.toUTCString(),
-                b.readingJourney.lastItem()?.date.toUTCString(),
-            ),
+            numberDifference(a.readingJourney.lastItem()?.date.getTime(), b.readingJourney.lastItem()?.date.getTime()),
     },
     {
         value: 'pages_asc',
