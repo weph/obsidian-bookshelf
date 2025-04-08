@@ -3,15 +3,15 @@ import { useState } from 'react'
 import { Book, ReadingStatus } from '../../bookshelf/book'
 import { Gallery } from '../gallery/gallery'
 import { Dropdown, DropdownOption } from '../dropdown/dropdown'
-import { BookSortOptions } from './sort/book-sort-options'
 import { BookTable } from '../table/table'
 import styles from './library.module.scss'
+import { SortDropdownOption } from './book-sort-options'
 
 type ViewType = 'gallery' | 'table'
 
 export interface Props {
     books: Array<Book>
-    sortOptions: BookSortOptions
+    sortOptions: Array<SortDropdownOption>
     onBookClick: (book: Book) => void
 }
 
@@ -30,21 +30,9 @@ const viewOptions: Array<DropdownOption<ViewType>> = [
 
 export function Library({ books, sortOptions, onBookClick }: Props) {
     const [searchTerm, setSearchTerm] = useState<string>('')
-    const [sortOption, setSortOption] = useState<string>('')
+    const [sortOption, setSortOption] = useState<SortDropdownOption | null>(sortOptions[0])
     const [statusFilter, setStatusFilter] = useState<ReadingStatus | null>(null)
     const [view, setView] = useState<ViewType>('gallery')
-
-    const sortFunction = (): ((a: Book, b: Book) => number) => {
-        if (sortOption !== '') {
-            return sortOptions.compareFunction(sortOption)
-        }
-
-        if (sortOptions.titles().length > 0) {
-            return sortOptions.compareFunction(sortOptions.titles()[0])
-        }
-
-        return () => 0
-    }
 
     const content = () => {
         if (books.length === 0) {
@@ -64,7 +52,7 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
 
                 return b.metadata.title.toLowerCase().includes(searchTerm.toLowerCase())
             })
-            .sort(sortFunction())
+            .sort(sortOption?.compareFn)
 
         if (searchTerm && filteredBooks.length === 0) {
             return (
@@ -92,19 +80,19 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
                     />
                     <Dropdown
                         label="Sort"
-                        value={sortOption}
-                        options={sortOptions.titles().map((title) => ({ value: title, label: title }))}
-                        onChange={setSortOption}
+                        value={sortOption?.value}
+                        options={sortOptions}
+                        onChange={(o) => setSortOption(o)}
                     />
                     <Dropdown
                         label="Status"
                         value={statusFilter}
                         options={statusFilterOptions}
-                        onChange={setStatusFilter}
+                        onChange={(o) => setStatusFilter(o.value)}
                     />
                 </div>
                 <div>
-                    <Dropdown label="View" value={view} options={viewOptions} onChange={setView} />
+                    <Dropdown label="View" value={view} options={viewOptions} onChange={(o) => setView(o.value)} />
                 </div>
             </div>
             <div className={styles.content} role="main">

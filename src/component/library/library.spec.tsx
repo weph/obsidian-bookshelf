@@ -3,21 +3,18 @@ import userEvent, { UserEvent } from '@testing-library/user-event'
 import { waitFor } from '@testing-library/dom'
 import { Book } from '../../bookshelf/book'
 import { BookBuilder } from '../../support/book-builder'
-import { BookSortOptions } from './sort/book-sort-options'
 import { Library, Props } from './library'
 import { render, screen } from '@testing-library/react'
+import { SortDropdownOption } from './book-sort-options'
 
 const onBookClick = vi.fn()
 let user: UserEvent
-
-const sortByOrderOfAdditionOnly = new BookSortOptions()
-sortByOrderOfAdditionOnly.add('', () => 0)
 
 function renderLibrary(props: Partial<Props>): void {
     render(
         <Library
             books={props.books || []}
-            sortOptions={props.sortOptions || sortByOrderOfAdditionOnly}
+            sortOptions={props.sortOptions || [{ value: '', label: '', compareFn: () => 0 }]}
             onBookClick={props.onBookClick || onBookClick}
         />,
     )
@@ -103,9 +100,18 @@ describe('Sorting', () => {
     beforeEach(() => {
         const books = [book('Pet Sematary'), book('Of Mice and Men'), book('Animal Farm')]
 
-        const sortOptions = new BookSortOptions()
-        sortOptions.add('asc', (a, b) => a.metadata.title.localeCompare(b.metadata.title))
-        sortOptions.add('desc', (a, b) => b.metadata.title.localeCompare(a.metadata.title))
+        const sortOptions: Array<SortDropdownOption> = [
+            {
+                value: 'asc',
+                label: 'asc',
+                compareFn: (a, b) => a.metadata.title.localeCompare(b.metadata.title),
+            },
+            {
+                value: 'desc',
+                label: 'desc',
+                compareFn: (a, b) => b.metadata.title.localeCompare(a.metadata.title),
+            },
+        ]
 
         renderLibrary({ books, sortOptions })
     })

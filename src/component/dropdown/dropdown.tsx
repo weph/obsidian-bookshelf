@@ -5,21 +5,28 @@ export interface DropdownOption<T> {
     label: string
 }
 
-interface Props<T> {
+interface Props<TValue, T extends DropdownOption<TValue>> {
     label: string
-    value: T
-    options: Array<DropdownOption<T>>
-    onChange: (value: T) => void
+    value: TValue
+    options: Array<T>
+    onChange: (option: T) => void
     id?: string
     className?: string
 }
 
-export function Dropdown<T>({ label, value, options, onChange, id, className }: Props<T>) {
+export function Dropdown<TValue, T extends DropdownOption<TValue>>({
+    label,
+    value,
+    options,
+    onChange,
+    id,
+    className,
+}: Props<TValue, T>) {
     return (
         <select
             id={id}
             className={`${styles.dropdown} ${className || ''}`}
-            onChange={(e) => onChange(options[parseInt(e.target.value)].value)}
+            onChange={(e) => onChange(options[parseInt(e.target.value)])}
             aria-label={label}
             value={options.findIndex((v) => v.value === value)}
         >

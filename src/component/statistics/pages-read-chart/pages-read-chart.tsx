@@ -1,66 +1,72 @@
 import { Chart, TimeSeriesScale, TimeUnit } from 'chart.js/auto'
 import 'chartjs-adapter-luxon'
 import { Interval, Statistics } from '../../../bookshelf/reading-journey/statistics/statistics'
-import { Dropdown } from '../../dropdown/dropdown'
+import { Dropdown, DropdownOption } from '../../dropdown/dropdown'
 import { useEffect, useState } from 'react'
 import { Bar } from 'react-chartjs-2'
 
-interface IntervalValue {
-    chart: TimeUnit
-    statistics: Interval
-    label: string
-}
+type AvailableInterval = 'year' | 'month' | 'week' | 'day'
 
 interface Props {
     statistics: Statistics
-    availableIntervals: Array<'year' | 'month' | 'week' | 'day'>
+    availableIntervals: Array<AvailableInterval>
 }
 
-const intervals: { [key: string]: IntervalValue } = {
-    year: {
+interface IntervalDropdownOption extends DropdownOption<AvailableInterval> {
+    chart: TimeUnit
+    statistics: Interval
+}
+
+const intervalOptions: Array<IntervalDropdownOption> = [
+    {
+        value: 'year',
+        label: 'Year',
         chart: 'year',
         statistics: Interval.Year,
-        label: 'Year',
     },
-    month: {
+    {
+        value: 'month',
+        label: 'Month',
         chart: 'month',
         statistics: Interval.Month,
-        label: 'Month',
     },
-    week: {
+    {
+        value: 'week',
+        label: 'Week',
         chart: 'week',
         statistics: Interval.Week,
-        label: 'Week',
     },
-    day: {
+    {
+        value: 'day',
+        label: 'Day',
         chart: 'day',
         statistics: Interval.Day,
-        label: 'Day',
     },
-}
+]
 
 Chart.register(TimeSeriesScale)
 
 export function PagesReadChart({ statistics, availableIntervals }: Props) {
-    const [interval, setInterval] = useState(availableIntervals[0])
-
-    const intervalOptions = availableIntervals.map((i) => ({
-        value: i,
-        label: intervals[i].label,
-    }))
+    const availableIntervalOptions = intervalOptions.filter((o) => availableIntervals.includes(o.value))
+    const [interval, setInterval] = useState<IntervalDropdownOption>(availableIntervalOptions[0])
 
     useEffect(() => {
-        setInterval(availableIntervals[0])
+        setInterval(availableIntervalOptions[0])
     }, [availableIntervals])
 
-    const data = Array.from(statistics.pagesRead(intervals[interval].statistics).entries()).map((entry) => ({
+    const data = Array.from(statistics.pagesRead(interval.statistics).entries()).map((entry) => ({
         x: entry[0].getTime(),
         y: entry[1],
     }))
 
     return (
         <>
-            <Dropdown label="Interval" value={interval} options={intervalOptions} onChange={setInterval} />
+            <Dropdown
+                label="Interval"
+                value={interval.value}
+                options={availableIntervalOptions}
+                onChange={(o) => setInterval(o)}
+            />
 
             <div style={{ width: '100%', aspectRatio: '2/1' }}>
                 <Bar
@@ -84,7 +90,7 @@ export function PagesReadChart({ statistics, availableIntervals }: Props) {
                             x: {
                                 type: 'timeseries',
                                 time: {
-                                    unit: intervals[interval].chart,
+                                    unit: interval.chart,
                                 },
                             },
                             y: {

@@ -10,7 +10,7 @@
         "!src/component/book-details/*",
         "!src/component/button/*",
         "!src/component/gallery/*",
-        "!src/component/library/sort/default-book-sort-options.ts",
+        "!src/component/library/book-sort-options.ts",
         "!src/component/star-rating/*",
         "!src/component/statistics/**/*",
         "!src/component/table/*",

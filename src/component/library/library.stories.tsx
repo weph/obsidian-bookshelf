@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { Book } from '../../bookshelf/book'
 import { algorithms, books } from '../../support/book-fixtures'
 import { Library } from './library'
-import { defaultBookSortOptions } from './sort/default-book-sort-options'
+import { bookSortOptions } from './book-sort-options'
 import { fn } from '@storybook/test'
 
 const meta = {
@@ -13,7 +13,7 @@ export default meta
 type Story = StoryObj<typeof Library>
 
 function renderFunction(books: Array<Book>) {
-    return () => <Library books={books} sortOptions={defaultBookSortOptions()} onBookClick={fn()} />
+    return () => <Library books={books} sortOptions={bookSortOptions} onBookClick={fn()} />
 }
 
 export const Primary: Story = {

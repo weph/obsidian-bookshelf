@@ -27,7 +27,7 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
 
     return (
         <div className={styles.statistics}>
-            <Dropdown label="Years" value={year} options={yearOptions} onChange={setYear} />
+            <Dropdown label="Years" value={year} options={yearOptions} onChange={(o) => setYear(o.value)} />
             <div className={styles.container}>
                 <h2>Books {year}</h2>
                 <div className={styles.counts}>

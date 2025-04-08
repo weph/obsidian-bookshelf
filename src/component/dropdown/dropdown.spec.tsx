@@ -3,8 +3,8 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Dropdown } from './dropdown'
 
-const fooValue = 'foo-value'
-const barValue = 'bar-value'
+const fooOption = { value: 'foo', label: 'Foo' }
+const barOption = { value: 'bar', label: 'Bar' }
 const onChange = vi.fn()
 
 beforeEach(() => {
@@ -13,15 +13,7 @@ beforeEach(() => {
 
 it('should show selected value', async () => {
     render(
-        <Dropdown
-            label="my-dropdown"
-            value={barValue}
-            options={[
-                { value: fooValue, label: 'Foo' },
-                { value: barValue, label: 'Bar' },
-            ]}
-            onChange={onChange}
-        />,
+        <Dropdown label="my-dropdown" value={barOption.value} options={[fooOption, barOption]} onChange={onChange} />,
     )
 
     expect(screen.getByLabelText('my-dropdown')).toHaveDisplayValue('Bar')
@@ -29,46 +21,22 @@ it('should show selected value', async () => {
 
 it('should update selected value', async () => {
     const result = render(
-        <Dropdown
-            label="my-dropdown"
-            value={barValue}
-            options={[
-                { value: fooValue, label: 'Foo' },
-                { value: barValue, label: 'Bar' },
-            ]}
-            onChange={onChange}
-        />,
+        <Dropdown label="my-dropdown" value={barOption.value} options={[fooOption, barOption]} onChange={onChange} />,
     )
 
     result.rerender(
-        <Dropdown
-            label="my-dropdown"
-            value={fooValue}
-            options={[
-                { value: fooValue, label: 'Foo' },
-                { value: barValue, label: 'Bar' },
-            ]}
-            onChange={onChange}
-        />,
+        <Dropdown label="my-dropdown" value={fooOption.value} options={[fooOption, barOption]} onChange={onChange} />,
     )
 
     expect(screen.getByLabelText('my-dropdown')).toHaveDisplayValue('Foo')
 })
 
 it('should notify about changes', async () => {
-    render(
-        <Dropdown
-            label="my-dropdown"
-            value={''}
-            options={[
-                { value: fooValue, label: 'Foo' },
-                { value: barValue, label: 'Bar' },
-            ]}
-            onChange={onChange}
-        />,
-    )
+    const fooOption = { value: 'foo', label: 'Foo' }
+    const barOption = { value: 'bar', label: 'Bar' }
+    render(<Dropdown label="my-dropdown" value={''} options={[fooOption, barOption]} onChange={onChange} />)
 
     await userEvent.selectOptions(await screen.findByLabelText('my-dropdown'), screen.getByText('Bar'))
 
-    expect(onChange).toHaveBeenCalledWith(barValue)
+    expect(onChange).toHaveBeenCalledWith(barOption)
 })
