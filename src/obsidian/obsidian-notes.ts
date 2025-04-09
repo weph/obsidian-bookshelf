@@ -1,5 +1,5 @@
-import { Note } from 'src/bookshelf/note'
-import { Notes } from '../bookshelf/notes'
+import { Note } from 'src/bookshelf/note/note'
+import { Notes } from '../bookshelf/note/notes'
 import { App, TFile } from 'obsidian'
 import { ObsidianNote } from './obsidian-note'
 import { createDailyNote, getAllDailyNotes, getDailyNote } from 'obsidian-daily-notes-interface'

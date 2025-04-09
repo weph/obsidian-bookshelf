@@ -1,9 +1,9 @@
 import { PatternCollection } from '../reading-journey/pattern/pattern-collection'
 import { DailyNoteMatch } from '../reading-journey/pattern/daily-note/daily-note-pattern'
-import { Note } from '../note'
+import { Note } from '../note/note'
 import { dailyNoteDate } from '../daily-notes/daily-note-date'
 import { emptyResult, NoteData, NoteProcessor } from './note-processor'
-import { Notes } from '../notes'
+import { Notes } from '../note/notes'
 
 export class DailyNoteProcessor implements NoteProcessor {
     constructor(

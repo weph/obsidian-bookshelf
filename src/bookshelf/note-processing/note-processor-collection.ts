@@ -1,4 +1,4 @@
-import { Note } from '../note'
+import { Note } from '../note/note'
 import { emptyResult, NoteData, NoteProcessor } from './note-processor'
 
 export class NoteProcessorCollection implements NoteProcessor {

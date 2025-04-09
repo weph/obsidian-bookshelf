@@ -1,7 +1,7 @@
 import { ReadingJourneyMatch } from './note-processor'
 import { ReadingJourneyWriter } from './reading-journey-writer'
-import { Notes } from '../notes'
-import { Note } from '../note'
+import { Notes } from '../note/notes'
+import { Note } from '../note/note'
 
 interface Patterns {
     absoluteProgress: string

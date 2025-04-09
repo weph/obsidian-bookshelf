@@ -1,9 +1,9 @@
 import { Book, BookMetadata } from '../bookshelf/book'
 import { ReadingJourneyItem } from '../bookshelf/reading-journey/reading-journey-log'
 import { ReadingJourney } from '../bookshelf/reading-journey/reading-journey'
-import { Note } from '../bookshelf/note'
+import { Note } from '../bookshelf/note/note'
 import { FakeNote } from './fake-note'
-import { StaticMetadata } from '../bookshelf/metadata/metadata'
+import { StaticMetadata } from '../bookshelf/note/metadata'
 import { position } from '../bookshelf/reading-journey/position/position'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,6 +1,6 @@
 import { PatternCollection } from '../reading-journey/pattern/pattern-collection'
 import { BookNoteMatch } from '../reading-journey/pattern/book-note/book-note-pattern'
-import { Note } from '../note'
+import { Note } from '../note/note'
 import { emptyResult, NoteData, NoteProcessor } from './note-processor'
 
 export class BookNoteProcessor implements NoteProcessor {

@@ -1,6 +1,6 @@
 import { App, TFile } from 'obsidian'
-import { Metadata, ObsidianMetadata } from 'src/bookshelf/metadata/metadata'
-import { Note } from '../bookshelf/note'
+import { Metadata, ObsidianMetadata } from 'src/bookshelf/note/metadata'
+import { Note } from '../bookshelf/note/note'
 
 interface Location {
     start: number

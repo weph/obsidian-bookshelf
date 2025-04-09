@@ -1,4 +1,4 @@
-import { Metadata, PropertyValue } from './metadata'
+import { Metadata, PropertyValue } from '../note/metadata'
 import { BookMetadata } from '../book'
 import { Reference } from 'obsidian'
 

@@ -1,4 +1,4 @@
-import { Metadata } from './metadata/metadata'
+import { Metadata } from './metadata'
 
 export interface Note {
     readonly path: string

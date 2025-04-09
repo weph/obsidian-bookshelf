@@ -1,6 +1,6 @@
 import { describe, expect, it, test } from 'vitest'
 import { BookMetadataFactory } from './book-metadata-factory'
-import { StaticMetadata } from './metadata'
+import { StaticMetadata } from '../note/metadata'
 
 const factory = new BookMetadataFactory(
     {

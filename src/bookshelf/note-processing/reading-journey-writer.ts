@@ -1,5 +1,5 @@
 import { ReadingJourneyMatch } from './note-processor'
-import { Note } from '../note'
+import { Note } from '../note/note'
 
 export interface ReadingJourneyWriter {
     /**

@@ -1,4 +1,4 @@
-import { Note } from '../note'
+import { Note } from '../note/note'
 
 import { Position } from '../reading-journey/position/position'
 

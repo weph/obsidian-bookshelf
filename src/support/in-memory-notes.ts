@@ -1,7 +1,7 @@
-import { Note } from '../bookshelf/note'
-import { Notes } from '../bookshelf/notes'
+import { Note } from '../bookshelf/note/note'
+import { Notes } from '../bookshelf/note/notes'
 import { FakeNote } from './fake-note'
-import { StaticMetadata } from '../bookshelf/metadata/metadata'
+import { StaticMetadata } from '../bookshelf/note/metadata'
 
 export class InMemoryNotes implements Notes {
     private notesByName: Map<string, Note> = new Map()
