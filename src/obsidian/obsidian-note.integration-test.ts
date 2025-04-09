@@ -1,9 +1,16 @@
 import { ObsidianNote } from './obsidian-note'
 import expect from 'expect'
-import { afterAll, beforeAll, describe, test } from '../support/integration-test/integration-test'
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    test,
+} from '../support/integration-test/integration-test'
 
 describe('obsidian-note', () => {
-    describe('frontmatter', () => {
+    describe('read frontmatter', () => {
         beforeAll(async (context) => {
             await context.deleteFile('meta.md')
             await context.createFile(
@@ -95,6 +102,120 @@ list:
                 {
                     displayText: 'Title',
                     key: 'list.4',
+                    link: 'Note',
+                    original: '[[Note|Title]]',
+                },
+            ])
+        })
+    })
+
+    describe('write frontmatter', () => {
+        beforeEach(async (context) => {
+            await context.deleteFile('meta.md')
+            await context.createFile(
+                'meta.md',
+                `---
+field: "value"
+---
+`,
+            )
+        })
+
+        afterEach(async (context) => {
+            await context.deleteFile('meta.md')
+        })
+
+        test('update existing field', async (context) => {
+            const note = new ObsidianNote(context.file('meta.md'), context.app)
+
+            await note.metadata.set('field', 'new-value')
+
+            await context.waitForUpdate('meta.md')
+            expect(await note.content()).toEqual(`---
+field: new-value
+---
+`)
+            expect(note.metadata.value('field')).toEqual('new-value')
+        })
+
+        test('add new field', async (context) => {
+            const note = new ObsidianNote(context.file('meta.md'), context.app)
+
+            await note.metadata.set('new-field', 'new-value')
+
+            await context.waitForUpdate('meta.md')
+            expect(await note.content()).toEqual(`---
+field: value
+new-field: new-value
+---
+`)
+            expect(note.metadata.value('new-field')).toEqual('new-value')
+        })
+
+        test('string', async (context) => {
+            const note = new ObsidianNote(context.file('meta.md'), context.app)
+
+            await note.metadata.set('field', 'string value')
+
+            await context.waitForUpdate('meta.md')
+            expect(note.metadata.value('field')).toBe('string value')
+        })
+
+        test('numeric (int)', async (context) => {
+            const note = new ObsidianNote(context.file('meta.md'), context.app)
+
+            await note.metadata.set('field', 123)
+
+            await context.waitForUpdate('meta.md')
+            expect(note.metadata.value('field')).toBe(123)
+        })
+
+        test('numeric (float)', async (context) => {
+            const note = new ObsidianNote(context.file('meta.md'), context.app)
+
+            await note.metadata.set('field', 1.23)
+
+            await context.waitForUpdate('meta.md')
+            expect(note.metadata.value('field')).toBe(1.23)
+        })
+
+        test('boolean', async (context) => {
+            const note = new ObsidianNote(context.file('meta.md'), context.app)
+
+            await note.metadata.set('field', true)
+
+            await context.waitForUpdate('meta.md')
+            expect(note.metadata.value('field')).toBe(true)
+        })
+
+        test('link', async (context) => {
+            const note = new ObsidianNote(context.file('meta.md'), context.app)
+
+            await note.metadata.set('field', '[[Note|Title]]')
+
+            await context.waitForUpdate('meta.md')
+            expect(note.metadata.value('field')).toEqual({
+                displayText: 'Title',
+                key: 'field',
+                link: 'Note',
+                original: '[[Note|Title]]',
+            })
+        })
+
+        test('list', async (context) => {
+            const note = new ObsidianNote(context.file('meta.md'), context.app)
+
+            await note.metadata.set('field', ['a', 1, 1.23, false, '[[Note|Title]]'])
+
+            await context.waitForUpdate('meta.md')
+            expect(note.metadata.value('field')).toEqual([
+                'a',
+                1,
+                1.23,
+                false,
+                {
+                    displayText: 'Title',
+                    key: 'field.4',
                     link: 'Note',
                     original: '[[Note|Title]]',
                 },

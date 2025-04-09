@@ -1,5 +1,5 @@
-import { App, TFile } from 'obsidian'
-import { Metadata, ObsidianMetadata } from 'src/bookshelf/note/metadata'
+import { App, CachedMetadata, FrontmatterLinkCache, TFile } from 'obsidian'
+import { Metadata, PropertyValue } from 'src/bookshelf/note/metadata'
 import { Note } from '../bookshelf/note/note'
 
 interface Location {
@@ -12,6 +12,34 @@ interface Locations {
     list: Location | null
 }
 
+class ObsidianMetadata implements Metadata {
+    private links = new Map<string, FrontmatterLinkCache>()
+
+    constructor(
+        private app: App,
+        private file: TFile,
+        private metadata: CachedMetadata,
+    ) {
+        for (const link of metadata.frontmatterLinks || []) {
+            this.links.set(link.key, link)
+        }
+    }
+
+    public async set(property: string, value: PropertyValue | Array<PropertyValue> | null): Promise<void> {
+        await this.app.fileManager.processFrontMatter(this.file, (frontmatter) => (frontmatter[property] = value))
+    }
+
+    public value(property: string): PropertyValue | Array<PropertyValue> | null {
+        const value = this.metadata.frontmatter?.[property] || null
+
+        if (Array.isArray(value)) {
+            return value.map((v, i) => this.links.get(`${property}.${i}`) || v)
+        }
+
+        return this.links.get(property) || value
+    }
+}
+
 export class ObsidianNote implements Note {
     constructor(
         private file: TFile,
@@ -19,7 +47,7 @@ export class ObsidianNote implements Note {
     ) {}
 
     get metadata(): Metadata {
-        return new ObsidianMetadata(this.obsidianMetadata)
+        return new ObsidianMetadata(this.app, this.file, this.obsidianMetadata)
     }
 
     private get obsidianMetadata() {
