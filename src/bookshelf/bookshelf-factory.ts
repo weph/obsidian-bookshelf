@@ -1,17 +1,17 @@
 import { BookshelfPluginSettings } from '../obsidian/settings/bookshelf-plugin-settings'
 import { Bookshelf } from './bookshelf'
-import { bookNotePatterns } from './reading-journey/pattern/book-note/book-note-pattern'
-import { dailyNotePatterns } from './reading-journey/pattern/daily-note/daily-note-pattern'
+import { bookNotePatterns } from './note-processing/book-note/book-note-pattern'
+import { dailyNotePatterns } from './note-processing/daily-note/daily-note-pattern'
 import { BookMetadataFactory } from './metadata/book-metadata-factory'
 import { DailyNotesSettings } from '../obsidian/bookshelf-plugin'
-import { BookNoteProcessor } from './note-processing/book-note-processor'
-import { DailyNoteProcessor } from './note-processing/daily-note-processor'
+import { BookNoteProcessor } from './note-processing/book-note/book-note-processor'
+import { DailyNoteProcessor } from './note-processing/daily-note/daily-note-processor'
 import { NoteProcessorCollection } from './note-processing/note-processor-collection'
 import { NoteProcessor } from './note-processing/note-processor'
 import { Notes } from './note/notes'
-import { BookNoteReadingJourneyWriter } from './note-processing/book-note-reading-journey-writer'
+import { BookNoteReadingJourneyWriter } from './note-processing/book-note/book-note-reading-journey-writer'
 import { ReadingJourneyWriter } from './note-processing/reading-journey-writer'
-import { DailyNoteReadingJourneyWriter } from './note-processing/daily-note-reading-journey-writer'
+import { DailyNoteReadingJourneyWriter } from './note-processing/daily-note/daily-note-reading-journey-writer'
 
 export interface Configuration {
     settings: BookshelfPluginSettings

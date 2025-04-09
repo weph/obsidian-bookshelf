@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest'
 import { dailyNotePatterns } from './daily-note-pattern'
 
-import { Page } from '../../position/page'
-import { Percentage } from '../../position/percentage'
+import { Page } from '../../reading-journey/position/page'
+import { Percentage } from '../../reading-journey/position/percentage'
 
 const validPatterns = {
     started: '{book}: Started',

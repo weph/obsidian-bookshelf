@@ -1,7 +1,7 @@
-import { PatternCollection } from '../pattern-collection'
-import { patternMatcher, transformer } from '../pattern'
+import { PatternCollection } from '../pattern/pattern-collection'
+import { patternMatcher, transformer } from '../pattern/pattern'
 import { DateTime } from 'luxon'
-import { position, Position } from '../../position/position'
+import { position, Position } from '../../reading-journey/position/position'
 
 interface ActionMatch {
     action: 'started' | 'finished' | 'abandoned'
