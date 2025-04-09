@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import userEvent, { UserEvent } from '@testing-library/user-event'
 import { waitFor } from '@testing-library/dom'
-import { Book } from '../../bookshelf/book'
+import { Book } from '../../bookshelf/book/book'
 import { BookBuilder } from '../../support/book-builder'
 import { Library, Props } from './library'
 import { render, screen } from '@testing-library/react'

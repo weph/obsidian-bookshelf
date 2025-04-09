@@ -1,9 +1,9 @@
-import { Book, BookMetadata, ReadingStatus } from './book'
+import { Book, BookMetadata, ReadingStatus } from './book/book'
 import { ReadingJourneyLog } from './reading-journey/reading-journey-log'
 import { Statistics } from './reading-journey/statistics/statistics'
 import { ReadingJourney } from './reading-journey/reading-journey'
 import { Note } from './note/note'
-import { BookMetadataFactory } from './metadata/book-metadata-factory'
+import { BookMetadataFactory } from './book/book-metadata-factory'
 import { NoteProcessor, ReadingJourneyMatch } from './note-processing/note-processor'
 import { ReadingJourneyWriter } from './note-processing/reading-journey-writer'
 

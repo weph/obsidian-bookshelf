@@ -1,5 +1,5 @@
 import { App, Modal } from 'obsidian'
-import { Book } from '../../bookshelf/book'
+import { Book } from '../../bookshelf/book/book'
 import { createRoot, Root } from 'react-dom/client'
 import { StrictMode } from 'react'
 import { BookDetails } from '../../component/book-details/book-details'

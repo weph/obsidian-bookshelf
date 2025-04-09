@@ -2,7 +2,7 @@ import { BookshelfPluginSettings } from '../obsidian/settings/bookshelf-plugin-s
 import { Bookshelf } from './bookshelf'
 import { bookNotePatterns } from './note-processing/book-note/book-note-pattern'
 import { dailyNotePatterns } from './note-processing/daily-note/daily-note-pattern'
-import { BookMetadataFactory } from './metadata/book-metadata-factory'
+import { BookMetadataFactory } from './book/book-metadata-factory'
 import { DailyNotesSettings } from '../obsidian/bookshelf-plugin'
 import { BookNoteProcessor } from './note-processing/book-note/book-note-processor'
 import { DailyNoteProcessor } from './note-processing/daily-note/daily-note-processor'

@@ -1,5 +1,5 @@
 import { Bookshelf } from '../../bookshelf/bookshelf'
-import { Book } from '../../bookshelf/book'
+import { Book } from '../../bookshelf/book/book'
 import { Dropdown, DropdownOption } from '../dropdown/dropdown'
 import { useState } from 'react'
 import { PagesReadChart } from './pages-read-chart/pages-read-chart'

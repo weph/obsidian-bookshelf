@@ -1,5 +1,5 @@
 import { ReadingJourneyItem } from './reading-journey-log'
-import { Book } from '../book'
+import { Book } from '../book/book'
 import { Statistics } from './statistics/statistics'
 
 export class ReadingJourney {

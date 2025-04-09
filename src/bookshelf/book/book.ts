@@ -1,5 +1,5 @@
-import { ReadingJourney } from './reading-journey/reading-journey'
-import { Note } from './note/note'
+import { ReadingJourney } from '../reading-journey/reading-journey'
+import { Note } from '../note/note'
 
 export type ReadingStatus = 'unread' | 'reading' | 'abandoned' | 'finished'
 

@@ -1,4 +1,4 @@
-import { Book, BookMetadata } from '../bookshelf/book'
+import { Book, BookMetadata } from '../bookshelf/book/book'
 import { ReadingJourneyItem } from '../bookshelf/reading-journey/reading-journey-log'
 import { ReadingJourney } from '../bookshelf/reading-journey/reading-journey'
 import { Note } from '../bookshelf/note/note'

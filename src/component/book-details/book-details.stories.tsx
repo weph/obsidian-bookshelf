@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { BookBuilder } from '../../support/book-builder'
 import { fn } from '@storybook/test'
 import { tddByExample } from '../../support/book-fixtures'
-import { Book } from '../../bookshelf/book'
+import { Book } from '../../bookshelf/book/book'
 import { BookDetails } from './book-details'
 
 const meta = {

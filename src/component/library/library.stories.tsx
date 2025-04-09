@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Book } from '../../bookshelf/book'
+import { Book } from '../../bookshelf/book/book'
 import { algorithms, books } from '../../support/book-fixtures'
 import { Library } from './library'
 import { bookSortOptions } from './book-sort-options'

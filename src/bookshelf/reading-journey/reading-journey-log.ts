@@ -1,4 +1,4 @@
-import { Book } from '../book'
+import { Book } from '../book/book'
 import { ReadingJourney } from './reading-journey'
 import { Note } from '../note/note'
 import { Position } from './position/position'

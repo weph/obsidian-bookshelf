@@ -6,7 +6,7 @@ import { BookshelfPluginSettings, DEFAULT_SETTINGS } from './settings/bookshelf-
 import { BookshelfSettingsTab } from './settings/bookshelf-settings-tab'
 import { StatisticsView, VIEW_TYPE_STATISTICS } from './view/statistics-view'
 import { BookshelfFactory } from '../bookshelf/bookshelf-factory'
-import { Book } from '../bookshelf/book'
+import { Book } from '../bookshelf/book/book'
 import { BookModal } from './modal/book-modal'
 import './bookshelf-plugin.css'
 import { ObsidianNotes } from './obsidian-notes'

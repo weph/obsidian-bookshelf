@@ -1,5 +1,5 @@
 import { AggregatedTimeSeries } from './aggregated-time-series'
-import { Book } from '../../book'
+import { Book } from '../../book/book'
 import { ReadingJourney } from '../reading-journey'
 
 export enum Interval {

@@ -1,4 +1,4 @@
-import { Book } from '../../bookshelf/book'
+import { Book } from '../../bookshelf/book/book'
 import { StarRating } from '../star-rating/star-rating'
 import styles from './table.module.scss'
 import { TagList } from '../tag-list/tag-list'

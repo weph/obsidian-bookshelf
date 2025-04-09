@@ -3,7 +3,7 @@ import { ReadingJourneyItem, ReadingJourneyItemInput, ReadingJourneyLog, Reading
 import { BookBuilder } from '../../support/book-builder'
 import { FakeNote } from '../../support/fake-note'
 import { StaticMetadata } from '../note/metadata'
-import { Book } from '../book'
+import { Book } from '../book/book'
 import { Note } from '../note/note'
 import { DateTime } from 'luxon'
 import { position } from './position/position'

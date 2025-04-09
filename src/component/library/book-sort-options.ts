@@ -1,5 +1,5 @@
 import { DropdownOption } from '../dropdown/dropdown'
-import { Book } from '../../bookshelf/book'
+import { Book } from '../../bookshelf/book/book'
 
 function stringDifference(a: string | undefined, b: string | undefined): number {
     return (a || '').localeCompare(b || '')

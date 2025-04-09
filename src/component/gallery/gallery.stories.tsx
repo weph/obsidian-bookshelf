@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { Gallery } from './gallery'
 import { algorithms, books } from '../../support/book-fixtures'
 import { fn } from '@storybook/test'
-import { Book } from '../../bookshelf/book'
+import { Book } from '../../bookshelf/book/book'
 
 const meta = {
     title: 'Gallery',

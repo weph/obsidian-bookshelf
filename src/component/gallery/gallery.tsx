@@ -1,4 +1,4 @@
-import { Book } from '../../bookshelf/book'
+import { Book } from '../../bookshelf/book/book'
 import { GalleryCard } from './gallery-card'
 import styles from './gallery.module.scss'
 

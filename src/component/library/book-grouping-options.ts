@@ -1,5 +1,5 @@
 import { DropdownOption } from '../dropdown/dropdown'
-import { Book } from '../../bookshelf/book'
+import { Book } from '../../bookshelf/book/book'
 
 export interface GroupingDropdownOption extends DropdownOption<string | null> {
     grouped?: (books: Array<Book>) => Map<string | null, Array<Book>>

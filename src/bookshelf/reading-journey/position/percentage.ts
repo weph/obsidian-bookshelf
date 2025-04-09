@@ -1,4 +1,4 @@
-import { Book } from 'src/bookshelf/book'
+import { Book } from 'src/bookshelf/book/book'
 import { Position } from './position'
 
 export class Percentage implements Position {

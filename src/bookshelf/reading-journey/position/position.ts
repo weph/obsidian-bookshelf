@@ -1,4 +1,4 @@
-import { Book } from '../../book'
+import { Book } from '../../book/book'
 import { Page } from './page'
 import { Percentage } from './percentage'
 

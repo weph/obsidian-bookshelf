@@ -1,5 +1,5 @@
 import { Metadata, PropertyValue } from '../note/metadata'
-import { BookMetadata } from '../book'
+import { BookMetadata } from './book'
 import { Reference } from 'obsidian'
 
 type LinkToUri = (link: string) => string

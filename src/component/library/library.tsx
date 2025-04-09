@@ -1,6 +1,6 @@
 import { Input } from '../input/input'
 import { useState } from 'react'
-import { Book, ReadingStatus } from '../../bookshelf/book'
+import { Book, ReadingStatus } from '../../bookshelf/book/book'
 import { Gallery } from '../gallery/gallery'
 import { Dropdown, DropdownOption } from '../dropdown/dropdown'
 import { BookTable } from '../table/table'

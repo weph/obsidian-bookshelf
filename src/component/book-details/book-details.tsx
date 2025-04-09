@@ -1,4 +1,4 @@
-import { Book } from '../../bookshelf/book'
+import { Book } from '../../bookshelf/book/book'
 import { StarRating } from '../star-rating/star-rating'
 import { DateTime } from 'luxon'
 import { ReadingJourneyItem } from '../../bookshelf/reading-journey/reading-journey-log'
