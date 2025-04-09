@@ -8,6 +8,7 @@ import { StaticMetadata } from './note/metadata'
 import { BookshelfFactory, Configuration } from './bookshelf-factory'
 import { InMemoryNotes } from '../support/in-memory-notes'
 import { position } from './reading-journey/position/position'
+import { Book, BookMetadata } from './book/book'
 
 let bookshelf: Bookshelf
 
@@ -91,7 +92,7 @@ describe('Note processing', () => {
 
         const result = Array.from(bookshelf.all())
         expect(result).toHaveLength(1)
-        expect(result[0].metadata).toEqual({
+        expect(bookMetadata(result[0])).toEqual({
             title: 'The Shining',
             cover: 'the-shining.jpg',
             authors: ['Stephen King'],
@@ -126,7 +127,7 @@ describe('Note processing', () => {
 
         const result = Array.from(bookshelf.all())
         expect(result).toHaveLength(1)
-        expect(result[0].metadata).toEqual({
+        expect(bookMetadata(result[0])).toEqual({
             title: 'The Shining',
             cover: 'the-shining.jpg',
             authors: ['Stephen King'],
@@ -871,6 +872,17 @@ describe('Adding items to reading journey', () => {
         ])
     })
 })
+
+function bookMetadata(book: Book): BookMetadata {
+    return {
+        title: book.metadata.title,
+        cover: book.metadata.cover,
+        authors: book.metadata.authors,
+        published: book.metadata.published,
+        pages: book.metadata.pages,
+        tags: book.metadata.tags,
+    }
+}
 
 function readingProgressAsString(value: ReadingJourneyItem): string {
     if (value.action !== 'progress') {

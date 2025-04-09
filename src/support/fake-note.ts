@@ -5,7 +5,7 @@ export class FakeNote implements Note {
     constructor(
         public path: string,
         public metadata: Metadata,
-        public list: Array<string>,
+        public list: Array<string> = [],
     ) {}
 
     get identifier(): string {

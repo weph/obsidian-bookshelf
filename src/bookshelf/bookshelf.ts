@@ -10,7 +10,7 @@ import { ReadingJourneyWriter } from './note-processing/reading-journey-writer'
 class BookshelfBook implements Book {
     constructor(
         public readonly note: Note | null,
-        public metadata: BookMetadata,
+        public readonly metadata: BookMetadata,
         private readonly bookshelf: Bookshelf,
     ) {}
 
@@ -50,12 +50,7 @@ export class Bookshelf {
         const result = await this.noteProcessor.data(note)
 
         for (const bookNote of result.referencedBookNotes) {
-            const bookMetadata = this.bookMetadataFactory.create(bookNote.basename, bookNote.metadata)
-            if (this.has(bookNote)) {
-                this.update(bookNote, bookMetadata)
-            } else {
-                this.add(bookNote, bookMetadata)
-            }
+            this.add(bookNote)
         }
 
         this.readingJourneyLog.removeBySource(note)
@@ -78,19 +73,15 @@ export class Bookshelf {
         return this.bookNotes.has(note)
     }
 
-    private add(note: Note, metadata: BookMetadata): void {
+    private add(note: Note): void {
         if (this.has(note)) {
             return
         }
 
-        const book = new BookshelfBook(note, metadata, this)
+        const book = new BookshelfBook(note, this.bookMetadataFactory.create(note), this)
 
         this.bookNotes.set(note, book)
         this.books.push(book)
-    }
-
-    private update(note: Note, metadata: BookMetadata): void {
-        this.book(note).metadata = metadata
     }
 
     public book(note: Note): Book {
