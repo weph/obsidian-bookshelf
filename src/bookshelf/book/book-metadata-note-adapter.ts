@@ -12,6 +12,7 @@ export interface PropertyNames {
     pages: string
     tags: string
     rating: string
+    lists: string
 }
 
 export class BookMetadataNoteAdapter implements BookMetadata {
@@ -127,6 +128,20 @@ export class BookMetadataNoteAdapter implements BookMetadata {
         }
 
         return undefined
+    }
+
+    get lists(): Array<string> {
+        const value = this.note.metadata.value(this.propertyNames.lists)
+
+        if (Array.isArray(value)) {
+            return value.map((v) => this.text(v))
+        }
+
+        if (typeof value === 'string') {
+            return [value]
+        }
+
+        return []
     }
 
     private isReference(value: PropertyValue | null) {

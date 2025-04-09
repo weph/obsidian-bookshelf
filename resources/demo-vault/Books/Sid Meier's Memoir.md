@@ -7,6 +7,8 @@ tags:
   - video-games
 rating: 3
 pages: 286
+lists:
+  - "Game Dev Bio"
 ---
 
 ## Reading Journey

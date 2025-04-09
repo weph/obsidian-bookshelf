@@ -100,6 +100,17 @@ export class BookshelfSettingsTab extends PluginSettingTab {
                     await this.plugin.saveSettings()
                 }),
             )
+
+        new Setting(containerEl)
+            .setName('Lists')
+            .setDesc('Name of the property that contains the lists a book is on')
+            .addText((text) =>
+                text.setValue(this.plugin.settings.bookProperties.lists).onChange(async (value) => {
+                    this.plugin.settings.bookProperties.lists = value.trim()
+
+                    await this.plugin.saveSettings()
+                }),
+            )
     }
 
     private addBookNoteSection(): void {

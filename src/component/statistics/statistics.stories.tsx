@@ -23,6 +23,7 @@ const bookshelf = BookshelfFactory.fromConfiguration({
             pages: 'pages',
             tags: 'tags',
             rating: 'rating',
+            lists: 'lists',
         },
         bookNote: {
             enabled: true,

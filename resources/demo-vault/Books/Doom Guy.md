@@ -6,6 +6,8 @@ published: 2023-07-18
 tags:
   - video-games
 pages: 339
+lists:
+  - "Game Dev Bio"
 ---
 
 ## Reading Journey

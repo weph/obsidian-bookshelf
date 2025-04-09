@@ -25,6 +25,7 @@ const defaultConfiguration: Configuration = {
             pages: 'pages',
             tags: 'tags',
             rating: 'rating',
+            lists: 'lists',
         },
         bookNote: {
             enabled: true,
@@ -85,6 +86,7 @@ describe('Note processing', () => {
                     published: '1977-01-28',
                     pages: 497,
                     tags: ['novel', 'horror'],
+                    lists: ['Horror Classics', 'Favorites'],
                 }),
                 [],
             ),
@@ -99,6 +101,7 @@ describe('Note processing', () => {
             published: new Date(1977, 0, 28),
             pages: 497,
             tags: ['novel', 'horror'],
+            lists: ['Horror Classics', 'Favorites'],
         })
     })
 
@@ -111,6 +114,7 @@ describe('Note processing', () => {
                 published: '1999-12-25',
                 pages: 2,
                 tags: ['comedy'],
+                lists: ['Comfort Books'],
             }),
             [],
         )
@@ -122,6 +126,7 @@ describe('Note processing', () => {
             published: '1977-01-28',
             pages: 497,
             tags: ['novel', 'horror'],
+            lists: ['Horror Classics', 'Favorites'],
         })
         await bookshelf.process(note)
 
@@ -134,6 +139,7 @@ describe('Note processing', () => {
             published: new Date(1977, 0, 28),
             pages: 497,
             tags: ['novel', 'horror'],
+            lists: ['Horror Classics', 'Favorites'],
         })
     })
 
@@ -881,6 +887,7 @@ function bookMetadata(book: Book): BookMetadata {
         published: book.metadata.published,
         pages: book.metadata.pages,
         tags: book.metadata.tags,
+        lists: book.metadata.lists,
     }
 }
 

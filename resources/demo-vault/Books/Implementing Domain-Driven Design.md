@@ -7,4 +7,6 @@ tags:
   - computer-science
   - ddd
 pages: 656
+lists:
+  - "Programming Books"
 ---

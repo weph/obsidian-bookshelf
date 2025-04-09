@@ -8,4 +8,6 @@ tags:
   - algorithms
 cover: "[[algorithms.jpg]]"
 pages: 976
+lists:
+  - "Programming Books"
 ---

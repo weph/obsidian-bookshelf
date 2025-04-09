@@ -16,6 +16,11 @@ export const bookGroupingOptions: Array<GroupingDropdownOption> = [
         grouped: (books) => grouped(books, (b) => [b.metadata.title[0].toUpperCase()], 'asc'),
     },
     {
+        value: 'list',
+        label: 'List',
+        grouped: (books) => grouped(books, (b) => (b.metadata.lists.length > 0 ? b.metadata.lists : [null]), 'asc'),
+    },
+    {
         value: 'author',
         label: 'Author',
         grouped: (books) =>

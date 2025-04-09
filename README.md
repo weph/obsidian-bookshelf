@@ -51,6 +51,7 @@ It currently processes the following metadata:
 - Total number of pages (property: `pages`)
 - Tags (property: `tags`)
 - Rating (property: `rating`)
+- Lists (property: `lists`)
 
 If your book notes use different property names, you can customize them in the plugin's settings.
 

@@ -11,6 +11,7 @@ const propertyNames: PropertyNames = {
     pages: 'pages',
     tags: 'tags',
     rating: 'rating',
+    lists: 'lists',
 }
 
 const linkToUri: LinkToUri = (link) => `uri://${link}`
@@ -227,5 +228,25 @@ describe('Rating', () => {
         const result = bookMetadata(new FakeNote('Title', new StaticMetadata({ rating: [3] })))
 
         expect(result.rating).toBeUndefined()
+    })
+})
+
+describe('Lists', () => {
+    it('should be an empty list if property is not set', () => {
+        const result = bookMetadata(new FakeNote('Title', new StaticMetadata({})))
+
+        expect(result.lists).toEqual([])
+    })
+
+    it('should be used as is if property value is an array', () => {
+        const result = bookMetadata(new FakeNote('Title', new StaticMetadata({ lists: ['foo', 'bar'] })))
+
+        expect(result.lists).toEqual(['foo', 'bar'])
+    })
+
+    it('should be converted to an array if it is a string', () => {
+        const result = bookMetadata(new FakeNote('Title', new StaticMetadata({ lists: 'foo' })))
+
+        expect(result.lists).toEqual(['foo'])
     })
 })

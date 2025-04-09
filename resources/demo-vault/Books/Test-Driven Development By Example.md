@@ -9,4 +9,7 @@ tags:
   - tdd
 rating: 5
 pages: 216
+lists:
+  - "Programming Books"
+  - "Testing"
 ---

@@ -8,4 +8,6 @@ tags:
   - computer-science
   - programming
 pages: 256
+lists:
+  - "Programming Books"
 ---

@@ -8,4 +8,6 @@ tags:
   - retro-computing
   - optimization
 pages: 1342
+lists:
+  - "Programming Books"
 ---

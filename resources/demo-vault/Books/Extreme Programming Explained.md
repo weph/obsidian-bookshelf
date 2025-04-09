@@ -5,4 +5,6 @@ author:
   - "[[Cynthia Andres]]"
 published: 1999-10-05
 pages: 224
+lists:
+  - "Programming Books"
 ---

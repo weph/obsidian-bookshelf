@@ -12,7 +12,8 @@ For a full diff see [`0.8.0...main`][0.8.0...main].
 ### Added
 
 - Support for tracking reading progress using percentages
-- Grouping of books in library view in alphabetical order, by author, year, and rating
+- Ability to add books to multiple lists
+- Grouping of books in library view in alphabetical order, by list, author, year, and rating
 
 ### Fixed
 

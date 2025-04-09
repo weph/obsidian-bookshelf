@@ -7,4 +7,6 @@ published: 2010-07-27
 tags:
   - computer-science
 pages: 463
+lists:
+  - "Programming Books"
 ---

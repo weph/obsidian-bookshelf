@@ -12,4 +12,6 @@ tags:
   - programming
   - patterns
 pages: 416
+lists:
+  - "Programming Books"
 ---

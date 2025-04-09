@@ -7,4 +7,6 @@ tags:
   - computer-science
   - patterns
 pages: 431
+lists:
+  - "Programming Books"
 ---
