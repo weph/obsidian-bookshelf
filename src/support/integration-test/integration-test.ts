@@ -11,7 +11,7 @@ export interface TestContext {
 
     deleteFile(name: string): Promise<void>
 
-    waitForUpdate(name: string, fn: () => Promise<void>): Promise<void>
+    waitForUpdate(name: string): Promise<void>
 }
 
 type TestFunction = (context: TestContext) => void | Promise<void>
