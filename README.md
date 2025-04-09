@@ -12,6 +12,10 @@ insights into your reading habits with beautiful charts.
 - Install and enable the plugin
 - Open the plugin settings to customize as needed
 
+## Examples
+
+For example book notes, reading logs, and setup ideas, visit the [demo vault](resources/demo-vault).
+
 ## How to use
 
 ### The Views
