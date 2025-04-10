@@ -1,0 +1,36 @@
+.icon {
+    color: var(--icon-color);
+    opacity: var(--icon-opacity);
+
+    svg {
+        width: var(--icon-size);
+        height: var(--icon-size);
+    }
+}
+
+.clickable {
+    -webkit-app-region: no-drag;
+    background-color: transparent;
+    display: inline-block;
+    padding: var(--size-2-2) var(--size-2-3);
+    cursor: var(--cursor);
+    border-radius: var(--clickable-icon-radius);
+    transition: opacity 0.15s ease-in-out;
+    height: auto;
+    color: var(--icon-color);
+    opacity: var(--icon-opacity);
+    box-sizing: border-box;
+
+    svg {
+        display: block;
+        width: var(--icon-size);
+        height: var(--icon-size);
+    }
+
+    &:hover {
+        box-shadow: none;
+        opacity: var(--icon-opacity-hover);
+        color: var(--icon-color-hover);
+        background-color: var(--background-modifier-hover);
+    }
+}

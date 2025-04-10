@@ -8,6 +8,7 @@ import styles from './book-details.module.scss'
 import { CoverPlaceholder } from '../cover-placeholder/cover-placeholder'
 import { ExternalLink } from 'lucide-react'
 import { TagList } from '../tag-list/tag-list'
+import { Icon } from '../icon/icon'
 
 interface Props {
     book: Book
@@ -39,7 +40,7 @@ export function BookDetails({ book, openNote, addProgress }: Props) {
                     <div className={styles.title}>
                         {title}
                         <div className={styles.openNote}>
-                            <ExternalLink size={18} onClick={() => openNote(book)} />
+                            <Icon icon={ExternalLink} onClick={() => openNote(book)} />
                         </div>
                     </div>
                     {authors && authors.length > 0 && <div className={styles.authors}>by {authors.join(', ')}</div>}
