@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.9.0...main`][0.9.0...main].
 
+### Changed
+
+- Improved library navigation on mobile
+
 ## [`0.9.0`][0.9.0] - 2025-04-09
 
 For a full diff see [`0.8.0...0.9.0`][0.8.0...0.9.0].

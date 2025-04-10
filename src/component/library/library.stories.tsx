@@ -17,6 +17,20 @@ function renderFunction(books: Array<Book>) {
 }
 
 export const Primary: Story = {
+    parameters: {
+        viewport: {
+            defaultViewport: 'tablet',
+        },
+    },
+    render: renderFunction(Object.values(books)),
+}
+
+export const Mobile: Story = {
+    parameters: {
+        viewport: {
+            defaultViewport: 'mobile1',
+        },
+    },
     render: renderFunction(Object.values(books)),
 }
 

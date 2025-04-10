@@ -26,6 +26,28 @@
     }
 }
 
+.mobileNavigation {
+    width: 100%;
+
+    .searchBar {
+        display: flex;
+        flex-direction: row;
+        gap: 0.25rem;
+
+        input {
+            width: 100%;
+            flex-grow: 1;
+        }
+    }
+
+    .mobileNavigationFilters {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+}
+
 .messageContainer {
     text-align: center;
     margin-top: 20px;

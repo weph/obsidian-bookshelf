@@ -11,7 +11,8 @@
 .clickable {
     -webkit-app-region: no-drag;
     background-color: transparent;
-    display: inline-block;
+    display: flex;
+    align-items: center;
     padding: var(--size-2-2) var(--size-2-3);
     cursor: var(--cursor);
     border-radius: var(--clickable-icon-radius);
