@@ -13,6 +13,10 @@ For a full diff see [`0.9.0...main`][0.9.0...main].
 
 - Improved library navigation on mobile
 
+### Fixed
+
+- Fixed some styles for RTL languages
+
 ## [`0.9.0`][0.9.0] - 2025-04-09
 
 For a full diff see [`0.8.0...0.9.0`][0.8.0...0.9.0].

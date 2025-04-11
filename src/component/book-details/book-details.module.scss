@@ -27,7 +27,7 @@
 
     .openNote {
         display: inline-block;
-        margin-left: 0.25rem;
+        margin-inline-start: 0.25rem;
         vertical-align: middle;
 
         svg {
@@ -52,7 +52,7 @@
 
         > * + *:before {
             content: '·';
-            margin-right: 0.25rem;
+            margin-inline-end: 0.25rem;
         }
     }
 
@@ -62,13 +62,13 @@
 
     .readingJourney {
         position: relative;
-        padding-left: 1rem;
+        padding-inline-start: 1rem;
         list-style: none;
 
         li {
             position: relative;
-            padding-left: 1rem;
-            border-left: 2px solid var(--color-base-100);
+            padding-inline-start: 1rem;
+            border-inline-start: 2px solid var(--color-base-100);
             font-size: var(--font-ui-small);
             padding-bottom: 0.75rem;
             line-height: 1;
@@ -80,7 +80,7 @@
             &:before {
                 content: ' ';
                 position: absolute;
-                left: -8px;
+                inset-inline-start: -8px;
                 width: 8px;
                 height: 8px;
                 border: 3px solid var(--color-base-100);
