@@ -13,11 +13,11 @@ export interface Props {
 }
 
 export function Statistics({ bookshelf, onBookClick }: Props) {
-    const [year, setYear] = useState<number | null>(null)
+    const [year, setYear] = useState<number | undefined>(undefined)
     const statistics = bookshelf.statistics(year)
     const actions = statistics.actions()
-    const yearOptions: Array<DropdownOption<number | null>> = [
-        { value: null, label: 'All' },
+    const yearOptions: Array<DropdownOption<number | undefined>> = [
+        { value: undefined, label: 'All' },
         ...bookshelf
             .statistics()
             .years()

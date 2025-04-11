@@ -11,6 +11,7 @@ import { BookModal } from './modal/book-modal'
 import './bookshelf-plugin.css'
 import { ObsidianNotes } from './obsidian-notes'
 import { migratedSettings } from './settings/versions/migrated-settings'
+import { BookshelfReference } from '../bookshelf/bookshelf-reference'
 
 export interface DailyNotesSettings {
     enabled: boolean
@@ -21,7 +22,7 @@ export interface DailyNotesSettings {
 export default class BookshelfPlugin extends Plugin {
     public settings: BookshelfPluginSettings
 
-    private bookshelf: Bookshelf
+    private bookshelf: BookshelfReference
 
     private notes: ObsidianNotes
 
@@ -93,7 +94,11 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     private createBookshelf(): void {
-        this.bookshelf = BookshelfFactory.fromConfiguration({
+        this.bookshelf = new BookshelfReference(this.newBookshelfInstance())
+    }
+
+    private newBookshelfInstance(): Bookshelf {
+        return BookshelfFactory.fromConfiguration({
             settings: this.settings,
             dailyNotesSettings: this.dailyNotesSettings(),
             notes: this.notes,
@@ -119,7 +124,7 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     private recreateBookshelf = debounce({ delay: 500 }, async () => {
-        this.createBookshelf()
+        this.bookshelf.replaceInstance(this.newBookshelfInstance())
         this.updateViews()
         await this.processAllNotes()
     })

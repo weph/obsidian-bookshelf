@@ -12,6 +12,7 @@ import { Notes } from './note/notes'
 import { BookNoteReadingJourneyWriter } from './note-processing/book-note/book-note-reading-journey-writer'
 import { ReadingJourneyWriter } from './note-processing/reading-journey-writer'
 import { DailyNoteReadingJourneyWriter } from './note-processing/daily-note/daily-note-reading-journey-writer'
+import { BookshelfImpl } from './bookshelf-impl'
 
 export interface Configuration {
     settings: BookshelfPluginSettings
@@ -47,7 +48,7 @@ export class BookshelfFactory {
             )
         }
 
-        return new Bookshelf(
+        return new BookshelfImpl(
             new BookMetadataFactory(settings.bookProperties, config.linkToUri),
             new NoteProcessorCollection(processors),
             this.readingJourneyWriter(config),
