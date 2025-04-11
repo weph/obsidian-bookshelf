@@ -16,6 +16,7 @@ For a full diff see [`0.9.0...main`][0.9.0...main].
 ### Fixed
 
 - Fixed some styles for RTL languages
+- X-axis of pages read bar chart was reset when re-rendered
 
 ## [`0.9.0`][0.9.0] - 2025-04-09
 

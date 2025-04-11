@@ -51,7 +51,9 @@ export function PagesReadChart({ statistics, availableIntervals }: Props) {
     const [interval, setInterval] = useState<IntervalDropdownOption>(availableIntervalOptions[0])
 
     useEffect(() => {
-        setInterval(availableIntervalOptions[0])
+        if (!availableIntervalOptions.includes(interval)) {
+            setInterval(availableIntervalOptions[0])
+        }
     }, [availableIntervals])
 
     const data = Array.from(statistics.pagesRead(interval.statistics).entries()).map((entry) => ({
