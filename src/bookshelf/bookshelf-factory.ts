@@ -13,11 +13,13 @@ import { BookNoteReadingJourneyWriter } from './note-processing/book-note/book-n
 import { ReadingJourneyWriter } from './note-processing/reading-journey-writer'
 import { DailyNoteReadingJourneyWriter } from './note-processing/daily-note/daily-note-reading-journey-writer'
 import { BookshelfImpl } from './bookshelf-impl'
+import { Subscribers } from './subscriber/subscribers'
 
 export interface Configuration {
     settings: BookshelfPluginSettings
     dailyNotesSettings: DailyNotesSettings
     notes: Notes
+    subscribers?: Subscribers
 
     linkToUri(link: string): string
 }
@@ -52,6 +54,7 @@ export class BookshelfFactory {
             new BookMetadataFactory(settings.bookProperties, config.linkToUri),
             new NoteProcessorCollection(processors),
             this.readingJourneyWriter(config),
+            config.subscribers || new Subscribers(),
         )
     }
 

@@ -12,6 +12,7 @@ import './bookshelf-plugin.css'
 import { ObsidianNotes } from './obsidian-notes'
 import { migratedSettings } from './settings/versions/migrated-settings'
 import { BookshelfReference } from '../bookshelf/bookshelf-reference'
+import { Subscribers } from '../bookshelf/subscriber/subscribers'
 
 export interface DailyNotesSettings {
     enabled: boolean
@@ -22,16 +23,17 @@ export interface DailyNotesSettings {
 export default class BookshelfPlugin extends Plugin {
     public settings: BookshelfPluginSettings
 
-    private bookshelf: BookshelfReference
-
     private notes: ObsidianNotes
 
-    private bookModal: BookModal | null = null
+    private subscribers: Subscribers
+
+    private bookshelf: BookshelfReference
 
     async onload() {
         await this.loadSettings()
 
         this.notes = new ObsidianNotes(this.app)
+        this.subscribers = new Subscribers()
 
         this.createBookshelf()
 
@@ -88,9 +90,7 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     public openBookModal(book: Book): void {
-        this.bookModal = new BookModal(this.app, this.bookshelf, book)
-        this.bookModal.onClose = () => (this.bookModal = null)
-        this.bookModal.open()
+        new BookModal(this.app, this.bookshelf, book).open()
     }
 
     private createBookshelf(): void {
@@ -102,6 +102,7 @@ export default class BookshelfPlugin extends Plugin {
             settings: this.settings,
             dailyNotesSettings: this.dailyNotesSettings(),
             notes: this.notes,
+            subscribers: this.subscribers,
             linkToUri: this.linkToUri.bind(this),
         })
     }
@@ -125,7 +126,6 @@ export default class BookshelfPlugin extends Plugin {
 
     private recreateBookshelf = debounce({ delay: 500 }, async () => {
         this.bookshelf.replaceInstance(this.newBookshelfInstance())
-        this.updateViews()
         await this.processAllNotes()
     })
 
@@ -145,12 +145,10 @@ export default class BookshelfPlugin extends Plugin {
 
     private async handleFile(file: TFile): Promise<void> {
         await this.bookshelf.process(this.notes.noteByFile(file))
-        this.updateViews()
     }
 
     private async handleDelete(file: TFile): Promise<void> {
         this.bookshelf.remove(this.notes.noteByFile(file))
-        this.updateViews()
     }
 
     private linkToUri(link: string): string {
@@ -162,18 +160,6 @@ export default class BookshelfPlugin extends Plugin {
 
         return this.app.vault.getResourcePath(coverFile)
     }
-
-    private updateViews = debounce({ delay: 100 }, () => {
-        for (const view of [VIEW_TYPE_LIBRARY, VIEW_TYPE_STATISTICS]) {
-            for (const leaf of this.app.workspace.getLeavesOfType(view)) {
-                if ('update' in leaf.view && typeof leaf.view.update === 'function') {
-                    leaf.view.update(this.bookshelf)
-                }
-            }
-        }
-
-        this.bookModal?.update()
-    })
 
     private async activateView(viewType: string): Promise<void> {
         const { workspace } = this.app

@@ -11,6 +11,7 @@
         "!src/component/book-details/*",
         "!src/component/button/*",
         "!src/component/gallery/*",
+        "!src/component/hooks/use-synced-data.ts",
         "!src/component/library/book-sort-options.ts",
         "!src/component/library/book-grouping-options.ts",
         "!src/component/star-rating/*",

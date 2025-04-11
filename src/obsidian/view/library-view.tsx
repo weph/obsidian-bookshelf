@@ -5,6 +5,8 @@ import { Bookshelf } from '../../bookshelf/bookshelf'
 import { bookSortOptions } from '../../component/library/book-sort-options'
 import { Library } from '../../component/library/library'
 import BookshelfPlugin from '../bookshelf-plugin'
+import { useSyncedData } from '../../component/hooks/use-synced-data'
+import { Book } from '../../bookshelf/book/book'
 
 export const VIEW_TYPE_LIBRARY = 'library'
 
@@ -38,12 +40,17 @@ export class LibraryView extends ItemView {
 
         this.root!.render(
             <StrictMode>
-                <Library
-                    books={Array.from(this.bookshelf.all())}
-                    sortOptions={bookSortOptions}
+                <SyncedLibrary
+                    bookshelf={this.bookshelf}
                     onBookClick={(book) => this.bookshelfPlugin.openBookModal(book)}
                 />
             </StrictMode>,
         )
     }
+}
+
+function SyncedLibrary({ bookshelf, onBookClick }: { bookshelf: Bookshelf; onBookClick: (book: Book) => void }) {
+    const books = useSyncedData(bookshelf, (b) => Array.from(b.all()))
+
+    return <Library books={books} sortOptions={bookSortOptions} onBookClick={onBookClick} />
 }

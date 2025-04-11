@@ -1,11 +1,12 @@
 import { Bookshelf } from '../../bookshelf/bookshelf'
 import { Book } from '../../bookshelf/book/book'
-import { Dropdown, DropdownOption } from '../dropdown/dropdown'
+import { Dropdown } from '../dropdown/dropdown'
 import { useState } from 'react'
 import { PagesReadChart } from './pages-read-chart/pages-read-chart'
 import { Gallery } from '../gallery/gallery'
 import { TagUsageChart } from './tag-usage-chart/tag-usage-chart'
 import styles from './statistics.module.scss'
+import { useSyncedData } from '../hooks/use-synced-data'
 
 export interface Props {
     bookshelf: Bookshelf
@@ -14,16 +15,16 @@ export interface Props {
 
 export function Statistics({ bookshelf, onBookClick }: Props) {
     const [year, setYear] = useState<number | undefined>(undefined)
-    const statistics = bookshelf.statistics(year)
+    const statistics = useSyncedData(bookshelf, (b) => b.statistics(year))
     const actions = statistics.actions()
-    const yearOptions: Array<DropdownOption<number | undefined>> = [
+    const yearOptions = useSyncedData(bookshelf, (b) => [
         { value: undefined, label: 'All' },
-        ...bookshelf
+        ...b
             .statistics()
             .years()
             .reverse()
             .map((y) => ({ value: y, label: y.toString() })),
-    ]
+    ])
 
     return (
         <div className={styles.statistics}>
@@ -55,7 +56,9 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
                 </div>
                 <PagesReadChart
                     statistics={statistics}
-                    availableIntervals={year === null ? ['year', 'month', 'week', 'day'] : ['month', 'week', 'day']}
+                    availableIntervals={
+                        year === undefined ? ['year', 'month', 'week', 'day'] : ['month', 'week', 'day']
+                    }
                 />
             </div>
             <div className={styles.container}>

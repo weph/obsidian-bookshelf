@@ -7,6 +7,7 @@ import { NoteProcessor, ReadingJourneyMatch } from './note-processing/note-proce
 import { ReadingJourneyWriter } from './note-processing/reading-journey-writer'
 import { Statistics } from './reading-journey/statistics/statistics'
 import { Bookshelf } from './bookshelf'
+import { Subscribers } from './subscriber/subscribers'
 
 class BookshelfBook implements Book {
     constructor(
@@ -38,13 +39,13 @@ class BookshelfBook implements Book {
 export class BookshelfImpl implements Bookshelf {
     private bookNotes = new WeakMap<Note, Book>()
     private books: Array<Book> = []
-
     private readingJourneyLog = new ReadingJourneyLog()
 
     constructor(
         private readonly bookMetadataFactory: BookMetadataFactory,
         private readonly noteProcessor: NoteProcessor,
         private readonly readingJourneyWriter: ReadingJourneyWriter,
+        private readonly subscribers: Subscribers,
     ) {}
 
     public async process(note: Note): Promise<void> {
@@ -58,6 +59,8 @@ export class BookshelfImpl implements Bookshelf {
         for (const item of result.readingJourney) {
             this.readingJourneyLog.add({ ...item, book: this.book(item.bookNote), source: note })
         }
+
+        this.notifySubscribers()
     }
 
     public remove(note: Note): void {
@@ -68,6 +71,8 @@ export class BookshelfImpl implements Bookshelf {
 
         this.books.splice(this.books.indexOf(book), 1)
         this.readingJourneyLog.removeByBook(book)
+
+        this.notifySubscribers()
     }
 
     public has(note: Note): boolean {
@@ -113,5 +118,13 @@ export class BookshelfImpl implements Bookshelf {
 
     public async addToReadingJourney(item: ReadingJourneyMatch): Promise<void> {
         await this.process(await this.readingJourneyWriter.add(item))
+    }
+
+    public subscribe(subscriber: () => void): () => void {
+        return this.subscribers.add(subscriber)
+    }
+
+    private notifySubscribers(): void {
+        this.subscribers.notify()
     }
 }

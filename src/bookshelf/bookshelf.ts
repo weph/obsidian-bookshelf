@@ -20,4 +20,6 @@ export interface Bookshelf {
     statistics(year?: number): Statistics
 
     addToReadingJourney(item: ReadingJourneyMatch): Promise<void>
+
+    subscribe(subscriber: () => void): () => void
 }

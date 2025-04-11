@@ -4,6 +4,7 @@ import { createRoot, Root } from 'react-dom/client'
 import { StrictMode } from 'react'
 import { BookDetails } from '../../component/book-details/book-details'
 import { Bookshelf } from '../../bookshelf/bookshelf'
+import { useSyncedData } from '../../component/hooks/use-synced-data'
 
 export class BookModal extends Modal {
     private root: Root
@@ -25,7 +26,8 @@ export class BookModal extends Modal {
 
         this.root.render(
             <StrictMode>
-                <BookDetails
+                <SyncedBookDetails
+                    bookshelf={this.bookshelf}
                     book={this.book}
                     openNote={async () => {
                         this.close()
@@ -34,9 +36,28 @@ export class BookModal extends Modal {
                             await this.app.workspace.openLinkText(this.book.note.basename, '')
                         }
                     }}
-                    addProgress={async (item) => await this.bookshelf.addToReadingJourney(item)}
                 />
             </StrictMode>,
         )
     }
+}
+
+function SyncedBookDetails({
+    bookshelf,
+    book,
+    openNote,
+}: {
+    bookshelf: Bookshelf
+    book: Book
+    openNote: (book: Book) => void
+}) {
+    useSyncedData(bookshelf, (b) => Array.from(b.all()))
+
+    return (
+        <BookDetails
+            book={book}
+            openNote={openNote}
+            addProgress={async (item) => await bookshelf.addToReadingJourney(item)}
+        />
+    )
 }

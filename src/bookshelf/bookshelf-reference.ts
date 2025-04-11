@@ -43,4 +43,8 @@ export class BookshelfReference implements Bookshelf {
     public async addToReadingJourney(item: ReadingJourneyMatch): Promise<void> {
         await this.bookshelf.addToReadingJourney(item)
     }
+
+    public subscribe(subscriber: () => void): () => void {
+        return this.bookshelf.subscribe(subscriber)
+    }
 }

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test } from 'vitest'
+import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { Bookshelf } from './bookshelf'
 import { ReadingJourneyItem } from './reading-journey/reading-journey-log'
 import { Interval } from './reading-journey/statistics/statistics'
@@ -876,6 +876,87 @@ describe('Adding items to reading journey', () => {
             '2025-01-05: Dracula: 51-350',
             '2025-01-05: Dracula: finished',
         ])
+    })
+})
+
+describe('Subscribers', () => {
+    test('Notify subscribers when new book was added', async () => {
+        const subscriber1 = vi.fn()
+        const subscriber2 = vi.fn()
+        bookshelf.subscribe(subscriber1)
+        bookshelf.subscribe(subscriber2)
+
+        await bookshelf.process(new FakeNote('Books/Dracula.md', new StaticMetadata({}), []))
+
+        expect(subscriber1).toHaveBeenCalledOnce()
+        expect(subscriber2).toHaveBeenCalledOnce()
+    })
+
+    test('Notify subscribers when book was removed', async () => {
+        const subscriber1 = vi.fn()
+        const subscriber2 = vi.fn()
+        bookshelf.subscribe(subscriber1)
+        bookshelf.subscribe(subscriber2)
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), [])
+        await bookshelf.process(dracula)
+        subscriber1.mockReset()
+        subscriber2.mockReset()
+
+        bookshelf.remove(dracula)
+
+        expect(subscriber1).toHaveBeenCalledOnce()
+        expect(subscriber2).toHaveBeenCalledOnce()
+    })
+
+    test('Notify subscribers when reading progress was updated from note', async () => {
+        const subscriber1 = vi.fn()
+        const subscriber2 = vi.fn()
+        bookshelf.subscribe(subscriber1)
+        bookshelf.subscribe(subscriber2)
+        const shining = new FakeNote('Books/The Shining', new StaticMetadata({}), [])
+        notes.add(shining)
+        await bookshelf.process(shining)
+        subscriber1.mockReset()
+        subscriber2.mockReset()
+
+        await bookshelf.process(
+            new FakeNote('2025-01-01.md', new StaticMetadata({}), ['Started reading [[The Shining]]']),
+        )
+
+        expect(subscriber1).toHaveBeenCalledOnce()
+        expect(subscriber2).toHaveBeenCalledOnce()
+    })
+
+    test('Notify subscribers when item was added to reading journey', async () => {
+        const subscriber1 = vi.fn()
+        const subscriber2 = vi.fn()
+        bookshelf.subscribe(subscriber1)
+        bookshelf.subscribe(subscriber2)
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), [])
+        await bookshelf.process(dracula)
+        subscriber1.mockReset()
+        subscriber2.mockReset()
+
+        await bookshelf.addToReadingJourney({ action: 'started', bookNote: dracula, date: new Date(2025, 3, 10) })
+
+        expect(subscriber1).toHaveBeenCalledOnce()
+        expect(subscriber2).toHaveBeenCalledOnce()
+    })
+
+    test('Subscriber must not be notified anymore after unsubscribing', async () => {
+        const subscriber1 = vi.fn()
+        const subscriber2 = vi.fn()
+        const subscriber3 = vi.fn()
+        bookshelf.subscribe(subscriber1)
+        const unsubscribe2 = bookshelf.subscribe(subscriber2)
+        bookshelf.subscribe(subscriber3)
+
+        unsubscribe2()
+        await bookshelf.process(new FakeNote('Books/Dracula.md', new StaticMetadata({}), []))
+
+        expect(subscriber1).toHaveBeenCalledOnce()
+        expect(subscriber2).not.toHaveBeenCalled()
+        expect(subscriber3).toHaveBeenCalledOnce()
     })
 })
 
