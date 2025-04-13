@@ -11,6 +11,8 @@ import { Book } from '../../bookshelf/book/book'
 export const VIEW_TYPE_LIBRARY = 'library'
 
 export class LibraryView extends ItemView {
+    public icon = 'library-big'
+
     constructor(
         leaf: WorkspaceLeaf,
         private bookshelfPlugin: BookshelfPlugin,

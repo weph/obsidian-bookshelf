@@ -8,6 +8,8 @@ import BookshelfPlugin from '../bookshelf-plugin'
 export const VIEW_TYPE_STATISTICS = 'statistics'
 
 export class StatisticsView extends ItemView {
+    public icon = 'chart-spline'
+
     constructor(
         leaf: WorkspaceLeaf,
         private bookshelfPlugin: BookshelfPlugin,
