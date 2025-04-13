@@ -60,6 +60,10 @@ export class BookshelfImpl implements Bookshelf {
             this.readingJourneyLog.add({ ...item, book: this.book(item.bookNote), source: note })
         }
 
+        if (this.has(note) && !result.referencedBookNotes.has(note)) {
+            this.remove(note)
+        }
+
         this.notifySubscribers()
     }
 

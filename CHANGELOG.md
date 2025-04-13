@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.10.0...main`][0.10.0...main].
 
+### Fixed
+
+- Books weren't removed when notes were moved to a different folder
+
 ## [`0.10.0`][0.10.0] - 2025-04-11
 
 For a full diff see [`0.9.0...0.10.0`][0.9.0...0.10.0].
