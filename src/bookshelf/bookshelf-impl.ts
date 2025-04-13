@@ -75,6 +75,7 @@ export class BookshelfImpl implements Bookshelf {
 
         this.books.splice(this.books.indexOf(book), 1)
         this.readingJourneyLog.removeByBook(book)
+        this.bookNotes.delete(note)
 
         this.notifySubscribers()
     }

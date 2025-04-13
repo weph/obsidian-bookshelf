@@ -432,6 +432,26 @@ describe('Note processing', () => {
         expect(Array.from(bookshelf.all()).map((b) => b.metadata.title)).toEqual(['The Shining', 'Dracula'])
     })
 
+    test('After moving a book note to a different folder and back to the book folder, it should be a book again', async () => {
+        const shining = new FakeNote('Books/The Shining.md', new StaticMetadata({}), [])
+        const animalFarm = new FakeNote('Books/Animal Farm.md', new StaticMetadata({}), [])
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), [])
+        await bookshelf.process(shining)
+        await bookshelf.process(animalFarm)
+        await bookshelf.process(dracula)
+
+        animalFarm.path = 'Notes/Animal Farm.md'
+        await bookshelf.process(animalFarm)
+        animalFarm.path = 'Books/Animal Farm.md'
+        await bookshelf.process(animalFarm)
+
+        expect(Array.from(bookshelf.all()).map((b) => b.metadata.title)).toEqual([
+            'The Shining',
+            'Dracula',
+            'Animal Farm',
+        ])
+    })
+
     test('Moving a book note to a different folder should remove the related reading process', async () => {
         const shining = new FakeNote('Books/The Shining.md', new StaticMetadata({}), [])
         const animalFarm = new FakeNote('Books/Animal Farm.md', new StaticMetadata({}), [])
