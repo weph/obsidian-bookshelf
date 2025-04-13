@@ -1,6 +1,6 @@
 import { ItemView, WorkspaceLeaf } from 'obsidian'
 import { StrictMode } from 'react'
-import { createRoot, Root } from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 import { Bookshelf } from '../../bookshelf/bookshelf'
 import { bookSortOptions } from '../../component/library/book-sort-options'
 import { Library } from '../../component/library/library'
@@ -11,8 +11,6 @@ import { Book } from '../../bookshelf/book/book'
 export const VIEW_TYPE_LIBRARY = 'library'
 
 export class LibraryView extends ItemView {
-    private root: Root | null = null
-
     constructor(
         leaf: WorkspaceLeaf,
         private bookshelfPlugin: BookshelfPlugin,
@@ -21,24 +19,16 @@ export class LibraryView extends ItemView {
         super(leaf)
     }
 
-    getViewType(): string {
+    public getViewType(): string {
         return VIEW_TYPE_LIBRARY
     }
 
-    getDisplayText(): string {
+    public getDisplayText(): string {
         return 'Bookshelf library'
     }
 
     protected async onOpen(): Promise<void> {
-        this.root = createRoot(this.containerEl.children[1])
-
-        this.update(this.bookshelf)
-    }
-
-    public update(bookshelf: Bookshelf): void {
-        this.bookshelf = bookshelf
-
-        this.root!.render(
+        createRoot(this.containerEl.children[1]).render(
             <StrictMode>
                 <SyncedLibrary
                     bookshelf={this.bookshelf}

@@ -1,6 +1,6 @@
 import { ItemView, WorkspaceLeaf } from 'obsidian'
 import { Bookshelf } from '../../bookshelf/bookshelf'
-import { createRoot, Root } from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 import { StrictMode } from 'react'
 import { Statistics } from '../../component/statistics/statistics'
 import BookshelfPlugin from '../bookshelf-plugin'
@@ -8,8 +8,6 @@ import BookshelfPlugin from '../bookshelf-plugin'
 export const VIEW_TYPE_STATISTICS = 'statistics'
 
 export class StatisticsView extends ItemView {
-    private root: Root | null = null
-
     constructor(
         leaf: WorkspaceLeaf,
         private bookshelfPlugin: BookshelfPlugin,
@@ -18,24 +16,16 @@ export class StatisticsView extends ItemView {
         super(leaf)
     }
 
-    getViewType(): string {
+    public getViewType(): string {
         return VIEW_TYPE_STATISTICS
     }
 
-    getDisplayText(): string {
+    public getDisplayText(): string {
         return 'Bookshelf statistics'
     }
 
     protected async onOpen(): Promise<void> {
-        this.root = createRoot(this.containerEl.children[1])
-
-        this.update(this.bookshelf)
-    }
-
-    public update(bookshelf: Bookshelf): void {
-        this.bookshelf = bookshelf
-
-        this.root!.render(
+        createRoot(this.containerEl.children[1]).render(
             <StrictMode>
                 <Statistics
                     bookshelf={this.bookshelf}

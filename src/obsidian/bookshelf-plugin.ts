@@ -34,8 +34,7 @@ export default class BookshelfPlugin extends Plugin {
 
         this.notes = new ObsidianNotes(this.app)
         this.subscribers = new Subscribers()
-
-        this.createBookshelf()
+        this.bookshelf = new BookshelfReference(this.newBookshelfInstance())
 
         this.addSettingTab(new BookshelfSettingsTab(this.app, this))
         this.setupViews()
@@ -93,10 +92,6 @@ export default class BookshelfPlugin extends Plugin {
         new BookModal(this.app, this.bookshelf, book).open()
     }
 
-    private createBookshelf(): void {
-        this.bookshelf = new BookshelfReference(this.newBookshelfInstance())
-    }
-
     private newBookshelfInstance(): Bookshelf {
         return BookshelfFactory.fromConfiguration({
             settings: this.settings,
@@ -123,11 +118,6 @@ export default class BookshelfPlugin extends Plugin {
         this.registerEvent(this.app.vault.on('rename', (file: TFile) => this.handleFile(file)))
         this.registerEvent(this.app.vault.on('delete', (file: TFile) => this.handleDelete(file)))
     }
-
-    private recreateBookshelf = debounce({ delay: 500 }, async () => {
-        this.bookshelf.replaceInstance(this.newBookshelfInstance())
-        await this.processAllNotes()
-    })
 
     private async processAllNotes(): Promise<void> {
         await Promise.all(this.app.vault.getMarkdownFiles().map((file) => this.handleFile(file)))
@@ -184,4 +174,9 @@ export default class BookshelfPlugin extends Plugin {
 
         this.recreateBookshelf()
     }
+
+    private recreateBookshelf = debounce({ delay: 500 }, async () => {
+        this.bookshelf.replaceInstance(this.newBookshelfInstance())
+        await this.processAllNotes()
+    })
 }

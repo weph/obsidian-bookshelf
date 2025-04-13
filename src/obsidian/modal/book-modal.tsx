@@ -1,14 +1,12 @@
 import { App, Modal } from 'obsidian'
 import { Book } from '../../bookshelf/book/book'
-import { createRoot, Root } from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 import { StrictMode } from 'react'
 import { BookDetails } from '../../component/book-details/book-details'
 import { Bookshelf } from '../../bookshelf/bookshelf'
 import { useSyncedData } from '../../component/hooks/use-synced-data'
 
 export class BookModal extends Modal {
-    private root: Root
-
     constructor(
         app: App,
         private readonly bookshelf: Bookshelf,
@@ -16,15 +14,9 @@ export class BookModal extends Modal {
     ) {
         super(app)
 
-        this.root = createRoot(this.contentEl)
-
-        this.update()
-    }
-
-    public update(): void {
         this.setTitle('Book details')
 
-        this.root.render(
+        createRoot(this.contentEl).render(
             <StrictMode>
                 <SyncedBookDetails
                     bookshelf={this.bookshelf}
