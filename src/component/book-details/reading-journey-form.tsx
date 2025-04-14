@@ -169,7 +169,7 @@ export function ReadingJourneyForm({ book, add }: Props) {
                 </>
             )}
             <div className={styles.add}>
-                <Button text="add" onClick={() => handleAdd()} disabled={!valid()} />
+                <Button text="add" accent={true} onClick={() => handleAdd()} disabled={!valid()} />
             </div>
         </div>
     )
