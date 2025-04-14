@@ -1,4 +1,4 @@
-.button {
+button.button {
     display: block;
     appearance: none;
     height: var(--bookshelf--ui--button--height);
@@ -6,11 +6,27 @@
     border-width: var(--bookshelf--ui--button--border-width);
     box-shadow: var(--bookshelf--ui--button--box-shadow);
     font-weight: var(--bookshelf--ui--button--font-weight);
-    background-color: var(--bookshelf--ui--button--background);
     padding: var(--bookshelf--ui--button--padding);
 
     &:hover {
-        background-color: var(--bookshelf--ui--button--hover--background);
         box-shadow: var(--bookshelf--ui--button--hover--box-shadow);
+    }
+
+    &.regular {
+        color: var(--text-normal);
+        background-color: var(--interactive-normal);
+
+        &:hover {
+            background-color: var(--interactive-hover);
+        }
+    }
+
+    &.accent {
+        color: var(--text-on-accent);
+        background-color: var(--interactive-accent);
+
+        &:hover {
+            background-color: var(--interactive-accent-hover);
+        }
     }
 }

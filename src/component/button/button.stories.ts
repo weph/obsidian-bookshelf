@@ -13,3 +13,9 @@ export default meta
 type Story = StoryObj<typeof Button>
 
 export const Primary: Story = {}
+
+export const Accent: Story = {
+    args: {
+        accent: true,
+    },
+}
