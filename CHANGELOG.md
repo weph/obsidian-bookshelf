@@ -13,6 +13,7 @@ For a full diff see [`0.10.0...main`][0.10.0...main].
 
 - Custom icon to library and statistics tab ✨
 - Property for personal comment
+- Number of pages read per item in book details modal
 
 ### Fixed
 

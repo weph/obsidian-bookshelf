@@ -26,6 +26,10 @@ export function BookDetails({ book, openNote, addProgress }: Props) {
             case 'abandoned':
                 return item.action
             case 'progress':
+                if (book.metadata.pages !== undefined) {
+                    return `${item.start}-${item.end} (${item.pages} pages)`
+                }
+
                 return `${item.start}-${item.end}`
         }
     }
