@@ -111,6 +111,17 @@ export class BookshelfSettingsTab extends PluginSettingTab {
                     await this.plugin.saveSettings()
                 }),
             )
+
+        new Setting(containerEl)
+            .setName('Comment')
+            .setDesc('Name of the property that contains your personal comment about the book')
+            .addText((text) =>
+                text.setValue(this.plugin.settings.bookProperties.comment).onChange(async (value) => {
+                    this.plugin.settings.bookProperties.comment = value.trim()
+
+                    await this.plugin.saveSettings()
+                }),
+            )
     }
 
     private addBookNoteSection(): void {

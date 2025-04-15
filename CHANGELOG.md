@@ -12,6 +12,7 @@ For a full diff see [`0.10.0...main`][0.10.0...main].
 ### Added
 
 - Custom icon to library and statistics tab ✨
+- Property for personal comment
 
 ### Fixed
 

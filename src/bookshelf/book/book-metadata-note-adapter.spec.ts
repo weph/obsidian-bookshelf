@@ -12,6 +12,7 @@ const propertyNames: PropertyNames = {
     tags: 'tags',
     rating: 'rating',
     lists: 'lists',
+    comment: 'comment',
 }
 
 const linkToUri: LinkToUri = (link) => `uri://${link}`
@@ -248,5 +249,22 @@ describe('Lists', () => {
         const result = bookMetadata(new FakeNote('Title', new StaticMetadata({ lists: 'foo' })))
 
         expect(result.lists).toEqual(['foo'])
+    })
+})
+
+describe('Comment', () => {
+    test.each([
+        [undefined, undefined],
+        [true, undefined],
+        [123, undefined],
+        [[], undefined],
+        [['foo'], undefined],
+        ['my comment', 'my comment'],
+    ])('Metadata property "%s" should be %s', (value, expected) => {
+        const result = bookMetadata(
+            new FakeNote('Title', new StaticMetadata(value !== undefined ? { comment: value } : {})),
+        )
+
+        expect(result.comment).toEqual(expected)
     })
 })

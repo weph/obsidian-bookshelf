@@ -17,7 +17,7 @@ interface Props {
 }
 
 export function BookDetails({ book, openNote, addProgress }: Props) {
-    const { cover, title, authors, published, pages, rating, tags } = book.metadata
+    const { cover, title, authors, published, pages, rating, tags, comment } = book.metadata
 
     const journeyItemText = (item: ReadingJourneyItem) => {
         switch (item.action) {
@@ -51,6 +51,8 @@ export function BookDetails({ book, openNote, addProgress }: Props) {
                     </div>
 
                     {tags && <TagList className={styles.tags} tags={tags} />}
+
+                    {comment && <q className={styles.comment}>{comment}</q>}
                 </div>
             </div>
             <div>

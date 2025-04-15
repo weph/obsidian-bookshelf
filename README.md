@@ -56,6 +56,7 @@ It currently processes the following metadata:
 - Tags (property: `tags`)
 - Rating (property: `rating`)
 - Lists (property: `lists`)
+- Comment (property: `comment`)
 
 If your book notes use different property names, you can customize them in the plugin's settings.
 

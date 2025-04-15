@@ -26,6 +26,7 @@ const defaultConfiguration: Configuration = {
             tags: 'tags',
             rating: 'rating',
             lists: 'lists',
+            comment: 'comment',
         },
         bookNote: {
             enabled: true,

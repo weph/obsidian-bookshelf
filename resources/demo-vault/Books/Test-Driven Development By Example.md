@@ -10,6 +10,7 @@ tags:
 rating: 5
 pages: 216
 lists:
-  - "Programming Books"
-  - "Testing"
+  - Programming Books
+  - Testing
+comment: Probably the best introduction to TDD ever written
 ---
