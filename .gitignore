@@ -10,6 +10,9 @@ node_modules
 
 /dist
 
+/docs/build
+/docs/.docusaurus
+
 # Exclude sourcemaps
 *.map
 
