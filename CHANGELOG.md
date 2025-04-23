@@ -17,6 +17,10 @@ For a full diff see [`0.11.0...main`][0.11.0...main].
 - Allow filtering books in the library by list ([#7])\
   The list filter will only appear if you're using lists.
 
+### Fixed
+
+- The library view now correctly displays a "no results" message when no books match the active filters or search query
+
 ## [`0.11.0`][0.11.0] - 2025-04-15
 
 For a full diff see [`0.10.0...0.11.0`][0.10.0...0.11.0].

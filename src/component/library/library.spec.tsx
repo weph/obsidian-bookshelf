@@ -79,7 +79,7 @@ describe('Search', () => {
         await user.type(screen.getByPlaceholderText('Search...'), 'foobar')
 
         expect(mainContent()).toHaveTextContent('No books found')
-        expect(mainContent()).toHaveTextContent('Try a different search term or check your spelling.')
+        expect(mainContent()).toHaveTextContent('Try adjusting your search or filters.')
     })
 
     test('resetting the query should bring back all books', async () => {

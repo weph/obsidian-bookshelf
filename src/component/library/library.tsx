@@ -75,10 +75,8 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
             })
             .sort(sortOption?.compareFn)
 
-        if (searchTerm && filteredBooks.length === 0) {
-            return (
-                <EmptyState headline="No books found" message="Try a different search term or check your spelling." />
-            )
+        if (filteredBooks.length === 0) {
+            return <EmptyState headline="No books found" message="Try adjusting your search or filters." />
         }
 
         if (groupingOption.grouped) {
