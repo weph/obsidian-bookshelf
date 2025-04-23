@@ -36,6 +36,9 @@ At the top of the library view are several controls:
 
 You can also toggle between gallery and table view.
 
+Clicking on a book opens the [Book Details Modal](views.md#book-details-modal). To open the book's note directly
+instead, hold a modifier key while clicking (CMD on macOS, CTRL on Windows and Linux).
+
 ## Statistics
 
 ![Statistics](/img/statistics.png)

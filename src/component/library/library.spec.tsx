@@ -134,7 +134,7 @@ describe('Clicking on a book cover', () => {
 
         await user.click(await screen.findByLabelText('Into Thin Air'))
 
-        expect(onBookClick).toHaveBeenCalledWith(intoThinAir)
+        expect(onBookClick).toHaveBeenCalledWith(intoThinAir, expect.anything())
     })
 })
 

@@ -1,10 +1,11 @@
 import { Book } from '../../bookshelf/book/book'
 import { GalleryCard } from './gallery-card'
 import styles from './gallery.module.scss'
+import { MouseEvent } from 'react'
 
 interface Props {
     books: Array<Book>
-    onBookClick: (book: Book) => void
+    onBookClick: (book: Book, event: MouseEvent) => void
 }
 
 export function Gallery({ books, onBookClick }: Props) {
@@ -15,7 +16,7 @@ export function Gallery({ books, onBookClick }: Props) {
                     key={index}
                     title={book.metadata.title}
                     cover={book.metadata.cover}
-                    onClick={() => onBookClick(book)}
+                    onClick={(e) => onBookClick(book, e)}
                 />
             ))}
         </div>

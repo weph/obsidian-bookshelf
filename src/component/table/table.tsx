@@ -2,10 +2,11 @@ import { Book } from '../../bookshelf/book/book'
 import { StarRating } from '../star-rating/star-rating'
 import styles from './table.module.scss'
 import { TagList } from '../tag-list/tag-list'
+import { MouseEvent } from 'react'
 
 interface Props {
     books: Array<Book>
-    onBookClick: (book: Book) => void
+    onBookClick: (book: Book, event: MouseEvent) => void
 }
 
 export function BookTable({ books, onBookClick }: Props) {
@@ -24,7 +25,7 @@ export function BookTable({ books, onBookClick }: Props) {
             </thead>
             <tbody>
                 {books.map((book, index) => (
-                    <tr key={index} onClick={() => onBookClick(book)}>
+                    <tr key={index} onClick={(e) => onBookClick(book, e)}>
                         <td>{book.metadata.title}</td>
                         <td>
                             {(book.metadata.authors || []).map((author, i) => (

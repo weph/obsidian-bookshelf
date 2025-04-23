@@ -34,7 +34,7 @@ export class LibraryView extends ItemView {
             <StrictMode>
                 <SyncedLibrary
                     bookshelf={this.bookshelf}
-                    onBookClick={(book) => this.bookshelfPlugin.openBookModal(book)}
+                    onBookClick={this.bookshelfPlugin.handleBookClick.bind(this.bookshelfPlugin)}
                 />
             </StrictMode>,
         )

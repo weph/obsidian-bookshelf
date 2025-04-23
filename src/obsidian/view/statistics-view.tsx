@@ -31,7 +31,7 @@ export class StatisticsView extends ItemView {
             <StrictMode>
                 <Statistics
                     bookshelf={this.bookshelf}
-                    onBookClick={(book) => this.bookshelfPlugin.openBookModal(book)}
+                    onBookClick={this.bookshelfPlugin.handleBookClick.bind(this.bookshelfPlugin)}
                 />
             </StrictMode>,
         )

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { Gallery } from './gallery'
 import { algorithms, books } from '../../support/book-fixtures'
-import { fn } from '@storybook/test'
+import { action } from '@storybook/addon-actions'
 import { Book } from '../../bookshelf/book/book'
 
 const meta = {
@@ -13,7 +13,7 @@ export default meta
 type Story = StoryObj<typeof Gallery>
 
 function renderFunction(books: Array<Book>) {
-    return () => <Gallery books={books} onBookClick={fn()} />
+    return () => <Gallery books={books} onBookClick={action('onBookClick')} />
 }
 
 export const Primary: Story = {

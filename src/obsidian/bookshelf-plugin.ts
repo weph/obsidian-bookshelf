@@ -13,6 +13,7 @@ import { ObsidianNotes } from './obsidian-notes'
 import { migratedSettings } from './settings/versions/migrated-settings'
 import { BookshelfReference } from '../bookshelf/bookshelf-reference'
 import { Subscribers } from '../bookshelf/subscriber/subscribers'
+import { MouseEvent } from 'react'
 
 export interface DailyNotesSettings {
     enabled: boolean
@@ -86,6 +87,17 @@ export default class BookshelfPlugin extends Plugin {
                 this.openBookModal(this.bookshelf.book(note))
             },
         })
+    }
+
+    public async handleBookClick(book: Book, event: MouseEvent): Promise<void> {
+        const isMac = window.navigator.userAgent.toLowerCase().includes('mac')
+        const modifierPressed = (isMac && event.metaKey) || (!isMac && event.ctrlKey)
+
+        if (modifierPressed) {
+            return this.openBookNote(book)
+        }
+
+        this.openBookModal(book)
     }
 
     public openBookModal(book: Book): void {
