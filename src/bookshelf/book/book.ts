@@ -16,7 +16,7 @@ export interface BookMetadata {
 }
 
 export interface Book {
-    note: Note | null
+    note: Note
     metadata: BookMetadata
     readingJourney: ReadingJourney
     status: ReadingStatus

@@ -40,7 +40,7 @@ export class BookBuilder {
 
     public build(): Book {
         const book: Book = {
-            note: this.note,
+            note: this.note || new FakeNote(`Books/${this.metadata.title}.md`, new StaticMetadata({}), []),
             metadata: {
                 ...this.defaultMetadata(),
                 ...this.metadata,

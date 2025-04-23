@@ -11,7 +11,7 @@ import { Subscribers } from './subscriber/subscribers'
 
 class BookshelfBook implements Book {
     constructor(
-        public readonly note: Note | null,
+        public readonly note: Note,
         public readonly metadata: BookMetadata,
         private readonly bookshelf: Bookshelf,
     ) {}
