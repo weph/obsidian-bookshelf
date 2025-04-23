@@ -31,12 +31,23 @@ const viewOptions: Array<DropdownOption<ViewType>> = [
     { value: 'table', label: 'Table' },
 ]
 
+function listOptions(books: Array<Book>): Array<DropdownOption<string | null>> {
+    const lists = Array.from(new Set(books.map((b) => b.metadata.lists).flat()))
+    if (lists.length === 0) {
+        return []
+    }
+
+    return [{ value: null, label: 'All lists' }, ...lists.map((l) => ({ value: l, label: l }))]
+}
+
 export function Library({ books, sortOptions, onBookClick }: Props) {
     const [searchTerm, setSearchTerm] = useState<string>('')
     const [sortOption, setSortOption] = useState<SortDropdownOption | null>(sortOptions[0])
     const [groupingOption, setGroupingOption] = useState<GroupingDropdownOption>(bookGroupingOptions[0])
     const [statusFilter, setStatusFilter] = useState<ReadingStatus | null>(null)
+    const [list, setList] = useState<string | null>(null)
     const [view, setView] = useState<ViewType>('gallery')
+    const lists = listOptions(books)
     const ViewComponent = view === 'gallery' ? Gallery : BookTable
     const NavigationComponent = window.innerWidth < 640 ? MobileNavigation : DesktopNavigation
 
@@ -53,6 +64,10 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
         const filteredBooks = books
             .filter((b) => {
                 if (statusFilter !== null && b.status !== statusFilter) {
+                    return false
+                }
+
+                if (list !== null && !b.metadata.lists.includes(list)) {
                     return false
                 }
 
@@ -91,6 +106,9 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
                     setGroupingOption={setGroupingOption}
                     statusFilter={statusFilter}
                     setStatusFilter={setStatusFilter}
+                    lists={lists}
+                    list={list}
+                    setList={setList}
                     view={view}
                     setView={setView}
                 />
@@ -112,6 +130,9 @@ interface NavigationProps {
     setGroupingOption: (value: GroupingDropdownOption) => void
     statusFilter: ReadingStatus | null
     setStatusFilter: (value: ReadingStatus | null) => void
+    lists: Array<DropdownOption<string | null>>
+    list: string | null
+    setList: (value: string | null) => void
     view: ViewType
     setView: (value: ViewType) => void
 }
@@ -127,11 +148,19 @@ function DesktopNavigation(props: NavigationProps) {
                     onUpdate={props.setSearchTerm}
                     autoFocus={true}
                 />
+                {props.lists.length > 0 && (
+                    <Dropdown
+                        label="List"
+                        value={props.list}
+                        options={props.lists}
+                        onChange={(o) => props.setList(o.value)}
+                    />
+                )}
                 <Dropdown
-                    label="Sort"
-                    value={props.sortOption?.value}
-                    options={props.sortOptions}
-                    onChange={(o) => props.setSortOption(o)}
+                    label="Status"
+                    value={props.statusFilter}
+                    options={statusFilterOptions}
+                    onChange={(o) => props.setStatusFilter(o.value)}
                 />
                 <Dropdown
                     label="Grouping"
@@ -140,10 +169,10 @@ function DesktopNavigation(props: NavigationProps) {
                     onChange={(o) => props.setGroupingOption(o)}
                 />
                 <Dropdown
-                    label="Status"
-                    value={props.statusFilter}
-                    options={statusFilterOptions}
-                    onChange={(o) => props.setStatusFilter(o.value)}
+                    label="Sort"
+                    value={props.sortOption?.value}
+                    options={props.sortOptions}
+                    onChange={(o) => props.setSortOption(o)}
                 />
             </div>
             <div>
@@ -181,11 +210,19 @@ function MobileNavigation(props: NavigationProps) {
                         options={viewOptions}
                         onChange={(o) => props.setView(o.value)}
                     />
+                    {props.lists.length > 0 && (
+                        <Dropdown
+                            label="List"
+                            value={props.list}
+                            options={props.lists}
+                            onChange={(o) => props.setList(o.value)}
+                        />
+                    )}
                     <Dropdown
-                        label="Sort"
-                        value={props.sortOption?.value}
-                        options={props.sortOptions}
-                        onChange={(o) => props.setSortOption(o)}
+                        label="Status"
+                        value={props.statusFilter}
+                        options={statusFilterOptions}
+                        onChange={(o) => props.setStatusFilter(o.value)}
                     />
                     <Dropdown
                         label="Grouping"
@@ -194,10 +231,10 @@ function MobileNavigation(props: NavigationProps) {
                         onChange={(o) => props.setGroupingOption(o)}
                     />
                     <Dropdown
-                        label="Status"
-                        value={props.statusFilter}
-                        options={statusFilterOptions}
-                        onChange={(o) => props.setStatusFilter(o.value)}
+                        label="Sort"
+                        value={props.sortOption?.value}
+                        options={props.sortOptions}
+                        onChange={(o) => props.setSortOption(o)}
                     />
                 </div>
             )}

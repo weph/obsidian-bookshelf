@@ -14,6 +14,8 @@ For a full diff see [`0.11.0...main`][0.11.0...main].
 - Open book note directly from gallery/table view ([#8])\
   You can now open a book's note directly by holding a modifier key while clicking a book in the gallery or table view
   (CMD on macOS, CTRL on Windows and Linux). Thanks to [@soundslikeinfo] for the suggestion!
+- Allow filtering books in the library by list ([#7])\
+  The list filter will only appear if you're using lists.
 
 ## [`0.11.0`][0.11.0] - 2025-04-15
 
@@ -181,5 +183,6 @@ For a full diff see [`0.2.2...0.3.0`][0.2.2...0.3.0].
 [0.9.0...0.10.0]: https://github.com/weph/obsidian-bookshelf/compare/0.9.0...0.10.0
 [0.10.0...0.11.0]: https://github.com/weph/obsidian-bookshelf/compare/0.10.0...0.11.0
 [0.11.0...main]: https://github.com/weph/obsidian-bookshelf/compare/0.11.0...main
+[#7]: https://github.com/weph/obsidian-bookshelf/issues/7
 [#8]: https://github.com/weph/obsidian-bookshelf/issues/8
 [@soundslikeinfo]: https://github.com/soundslikeinfo

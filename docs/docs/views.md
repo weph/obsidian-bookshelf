@@ -19,13 +19,7 @@ library" from the command palette.
 At the top of the library view are several controls:
 
 - **Search field** to search for books using a text query
-- **Sort order** to sort books by different criteria and directions
-- **Grouping** to group books by:
-    - Alphabetically (starting letter)
-    - List
-    - Author
-    - Year (publication year)
-    - Rating
+- **List** to filter books by list (only visible if you're using lists)
 - **Reading state filter** (Learn more about reading state on
   the [Reading Progress page](reading-progress.md#reading-state))
     - All books
@@ -33,6 +27,13 @@ At the top of the library view are several controls:
     - Reading
     - Abandoned
     - Finished
+- **Grouping** to group books by:
+    - Alphabetically (starting letter)
+    - List
+    - Author
+    - Year (publication year)
+    - Rating
+- **Sort order** to sort books by different criteria and directions
 
 You can also toggle between gallery and table view.
 
