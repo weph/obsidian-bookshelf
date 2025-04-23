@@ -89,7 +89,11 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     public openBookModal(book: Book): void {
-        new BookModal(this.app, this.bookshelf, book).open()
+        new BookModal(this.app, this, this.bookshelf, book).open()
+    }
+
+    public async openBookNote(book: Book): Promise<void> {
+        await this.app.workspace.openLinkText(book.note.basename, '')
     }
 
     private newBookshelfInstance(): Bookshelf {

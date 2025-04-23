@@ -5,10 +5,12 @@ import { StrictMode } from 'react'
 import { BookDetails } from '../../component/book-details/book-details'
 import { Bookshelf } from '../../bookshelf/bookshelf'
 import { useSyncedData } from '../../component/hooks/use-synced-data'
+import BookshelfPlugin from '../bookshelf-plugin'
 
 export class BookModal extends Modal {
     constructor(
         app: App,
+        private bookshelfPlugin: BookshelfPlugin,
         private readonly bookshelf: Bookshelf,
         private readonly book: Book,
     ) {
@@ -23,10 +25,7 @@ export class BookModal extends Modal {
                     book={this.book}
                     openNote={async () => {
                         this.close()
-
-                        if (this.book.note) {
-                            await this.app.workspace.openLinkText(this.book.note.basename, '')
-                        }
+                        await this.bookshelfPlugin.openBookNote(this.book)
                     }}
                 />
             </StrictMode>,
