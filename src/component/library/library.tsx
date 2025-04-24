@@ -51,6 +51,20 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
     const ViewComponent = view === 'gallery' ? Gallery : BookTable
     const NavigationComponent = window.innerWidth < 640 ? MobileNavigation : DesktopNavigation
 
+    const filteredBooks = books
+        .filter((b) => {
+            if (statusFilter !== null && b.status !== statusFilter) {
+                return false
+            }
+
+            if (list !== null && !b.metadata.lists.includes(list)) {
+                return false
+            }
+
+            return b.metadata.title.toLowerCase().includes(searchTerm.toLowerCase())
+        })
+        .sort(sortOption?.compareFn)
+
     const content = () => {
         if (books.length === 0) {
             return (
@@ -61,34 +75,30 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
             )
         }
 
-        const filteredBooks = books
-            .filter((b) => {
-                if (statusFilter !== null && b.status !== statusFilter) {
-                    return false
-                }
-
-                if (list !== null && !b.metadata.lists.includes(list)) {
-                    return false
-                }
-
-                return b.metadata.title.toLowerCase().includes(searchTerm.toLowerCase())
-            })
-            .sort(sortOption?.compareFn)
-
         if (filteredBooks.length === 0) {
             return <EmptyState headline="No books found" message="Try adjusting your search or filters." />
         }
 
         if (groupingOption.grouped) {
-            return Array.from(groupingOption.grouped(filteredBooks)).map((entry) => (
-                <div key={entry[0]}>
-                    <h2>{entry[0] || 'N/A'}</h2>
-                    <ViewComponent books={entry[1]} onBookClick={onBookClick} />
-                </div>
-            ))
+            return (
+                <>
+                    <BookCount total={books.length} filtered={filteredBooks.length} />
+                    {Array.from(groupingOption.grouped(filteredBooks)).map((entry) => (
+                        <div key={entry[0]}>
+                            <h2>{entry[0] || 'N/A'}</h2>
+                            <ViewComponent books={entry[1]} onBookClick={onBookClick} />
+                        </div>
+                    ))}
+                </>
+            )
         }
 
-        return <ViewComponent books={filteredBooks} onBookClick={onBookClick} />
+        return (
+            <>
+                <BookCount total={books.length} filtered={filteredBooks.length} />
+                <ViewComponent books={filteredBooks} onBookClick={onBookClick} />
+            </>
+        )
     }
 
     return (
@@ -236,6 +246,16 @@ function MobileNavigation(props: NavigationProps) {
                     />
                 </div>
             )}
+        </div>
+    )
+}
+
+function BookCount({ total, filtered }: { total: number; filtered: number }) {
+    return (
+        <div className={styles.bookCount}>
+            {total === filtered
+                ? `Showing all ${total} books in your library`
+                : `Showing ${filtered} books (out of ${total} total)`}
         </div>
     )
 }

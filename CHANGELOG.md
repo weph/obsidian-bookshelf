@@ -16,6 +16,7 @@ For a full diff see [`0.11.0...main`][0.11.0...main].
   (CMD on macOS, CTRL on Windows and Linux). Thanks to [@soundslikeinfo] for the suggestion!
 - Allow filtering books in the library by list ([#7])\
   The list filter will only appear if you're using lists.
+- Show number of books in library ([#12])
 
 ### Fixed
 
@@ -189,4 +190,5 @@ For a full diff see [`0.2.2...0.3.0`][0.2.2...0.3.0].
 [0.11.0...main]: https://github.com/weph/obsidian-bookshelf/compare/0.11.0...main
 [#7]: https://github.com/weph/obsidian-bookshelf/issues/7
 [#8]: https://github.com/weph/obsidian-bookshelf/issues/8
+[#12]: https://github.com/weph/obsidian-bookshelf/issues/12
 [@soundslikeinfo]: https://github.com/soundslikeinfo
