@@ -40,6 +40,10 @@ function listOptions(books: Array<Book>): Array<DropdownOption<string | null>> {
     return [{ value: null, label: 'All lists' }, ...lists.map((l) => ({ value: l, label: l }))]
 }
 
+function pluralize(count: number, noun: string, suffix = 's'): string {
+    return `${count} ${noun}${count !== 1 ? suffix : ''}`
+}
+
 export function Library({ books, sortOptions, onBookClick }: Props) {
     const [searchTerm, setSearchTerm] = useState<string>('')
     const [sortOption, setSortOption] = useState<SortDropdownOption | null>(sortOptions[0])
@@ -87,7 +91,7 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
                         <div className={styles.group} key={entry[0]}>
                             <div className={styles.groupHeading}>
                                 <h2>{entry[0] || 'N/A'}</h2>
-                                <div className={styles.booksInGroup}>{entry[1].length} books</div>
+                                <div className={styles.booksInGroup}>{pluralize(entry[1].length, 'book')}</div>
                             </div>
                             <ViewComponent books={entry[1]} onBookClick={onBookClick} />
                         </div>
@@ -254,13 +258,19 @@ function MobileNavigation(props: NavigationProps) {
 }
 
 function BookCount({ total, filtered }: { total: number; filtered: number }) {
-    return (
-        <div className={styles.bookCount}>
-            {total === filtered
-                ? `Showing all ${total} books in your library`
-                : `Showing ${filtered} books (out of ${total} total)`}
-        </div>
-    )
+    function message() {
+        if (filtered !== total) {
+            return `Showing ${pluralize(filtered, 'book')} (out of ${total} total)`
+        }
+
+        if (total === 1) {
+            return 'Showing the only book in your library'
+        }
+
+        return `Showing all ${total} books in your library`
+    }
+
+    return <div className={styles.bookCount}>{message()}</div>
 }
 
 function EmptyState({ headline, message }: { headline: string; message: string }) {
