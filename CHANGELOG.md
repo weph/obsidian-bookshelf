@@ -16,7 +16,9 @@ For a full diff see [`0.11.0...main`][0.11.0...main].
   (CMD on macOS, CTRL on Windows and Linux). Thanks to [@soundslikeinfo] for the suggestion!
 - Allow filtering books in the library by list ([#7])\
   The list filter will only appear if you're using lists.
-- Show number of books in library ([#12])
+- Show number of books in library ([#12])\
+  The total number of books is now displayed at the top of the library. When searching or applying filters, you'll see
+  both the number of matching books and the total. If books are grouped, the count for each group will also be shown.
 
 ### Fixed
 
