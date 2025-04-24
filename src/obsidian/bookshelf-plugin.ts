@@ -14,6 +14,8 @@ import { migratedSettings } from './settings/versions/migrated-settings'
 import { BookshelfReference } from '../bookshelf/bookshelf-reference'
 import { Subscribers } from '../bookshelf/subscriber/subscribers'
 import { MouseEvent } from 'react'
+import { appHasDailyNotesPluginLoaded, getDailyNoteSettings } from 'obsidian-daily-notes-interface'
+import { BookshelfDummy } from '../bookshelf/bookshelf-dummy'
 
 export interface DailyNotesSettings {
     enabled: boolean
@@ -35,7 +37,7 @@ export default class BookshelfPlugin extends Plugin {
 
         this.notes = new ObsidianNotes(this.app)
         this.subscribers = new Subscribers()
-        this.bookshelf = new BookshelfReference(this.newBookshelfInstance())
+        this.bookshelf = new BookshelfReference(new BookshelfDummy(this.subscribers))
 
         this.addSettingTab(new BookshelfSettingsTab(this.app, this))
         this.setupViews()
@@ -127,6 +129,8 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     private async initialNoteProcessing(): Promise<void> {
+        this.bookshelf.replaceInstance(this.newBookshelfInstance())
+
         await this.processAllNotes()
 
         this.registerEvent(this.app.metadataCache.on('resolve', async (file) => await this.handleFile(file)))
@@ -140,13 +144,17 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     public dailyNotesSettings(): DailyNotesSettings {
-        // @ts-expect-error internalPlugins is not exposed
-        const plugin = this.app.internalPlugins.getEnabledPluginById('daily-notes')
-        if (plugin === null) {
+        if (!appHasDailyNotesPluginLoaded()) {
             return { enabled: false, format: '', folder: null }
         }
 
-        return { enabled: true, format: plugin.options.format || 'YYYY-MM-DD', folder: plugin.options.folder || null }
+        const settings = getDailyNoteSettings()
+
+        return {
+            enabled: true,
+            format: settings.format || 'YYYY-MM-DD',
+            folder: settings.folder || null,
+        }
     }
 
     private async handleFile(file: TFile): Promise<void> {

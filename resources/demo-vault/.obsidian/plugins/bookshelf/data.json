@@ -1,11 +1,15 @@
 {
+  "settingsVersion": 20250406,
   "booksFolder": "Books",
   "bookProperties": {
     "cover": "cover",
     "author": "author",
     "published": "published",
+    "pages": "pages",
     "tags": "tags",
-    "rating": "rating"
+    "rating": "rating",
+    "lists": "lists",
+    "comment": "comment"
   },
   "bookNote": {
     "enabled": true,
@@ -15,8 +19,8 @@
       "started": "{date}: Started",
       "finished": "{date}: Finished",
       "abandoned": "{date}: Abandoned",
-      "absoluteProgress": "{date}: {startPage}-{endPage}",
-      "relativeProgress": "{date}: {endPage}"
+      "absoluteProgress": "{date}: {start}-{end}",
+      "relativeProgress": "{date}: {end}"
     }
   },
   "dailyNote": {
@@ -26,11 +30,11 @@
       "started": "Started {book}",
       "finished": "Finished {book}",
       "abandoned": "Abandoned {book}",
-      "absoluteProgress": "Read {book}: {startPage}-{endPage}",
-      "relativeProgress": "Read {book}: {endPage}"
+      "absoluteProgress": "Read {book}: {start}-{end}",
+      "relativeProgress": "Read {book}: {end}"
     }
   },
   "readingProgress": {
-    "newEntryLocation": "bookNote"
+    "newEntryLocation": "dailyNote"
   }
 }
