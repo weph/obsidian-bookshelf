@@ -1,0 +1,17 @@
+.releaseNotesModal {
+    h2 {
+        font-size: var(--font-ui-large);
+    }
+
+    h3 {
+        font-size: var(--font-ui-medium);
+    }
+
+    ul {
+        padding-inline-start: 1.5rem;
+    }
+
+    li {
+        margin-block-end: 1rem;
+    }
+}

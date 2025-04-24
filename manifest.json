@@ -1,7 +1,7 @@
 {
     "id": "bookshelf",
     "name": "Bookshelf",
-    "version": "0.11.0",
+    "version": "0.12.0",
     "minAppVersion": "1.0.0",
     "description": "Organize your book notes, track your reading progress, and gain insights into your reading habits with detailed charts and statistics.",
     "author": "Philip Weinke",

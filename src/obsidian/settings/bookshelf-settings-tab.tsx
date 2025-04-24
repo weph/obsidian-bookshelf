@@ -18,12 +18,29 @@ export class BookshelfSettingsTab extends PluginSettingTab {
     display(): void {
         this.containerEl.empty()
 
+        this.addGeneralSettings()
+
         this.addBooksSettings()
         this.addBookProperties()
 
         this.addReadingProgressSection()
         this.addBookNoteSection()
         this.addDailyNotesSection()
+    }
+
+    private addGeneralSettings(): void {
+        const { containerEl } = this
+
+        new Setting(containerEl)
+            .setName('Release notes')
+            .setDesc('Display release notes after updating to a new version')
+            .addToggle((toggle) =>
+                toggle.setValue(this.plugin.settings.showReleaseNotes).onChange(async (value) => {
+                    this.plugin.settings.showReleaseNotes = value
+
+                    await this.plugin.saveSettings()
+                }),
+            )
     }
 
     private addBooksSettings(): void {

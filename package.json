@@ -1,6 +1,6 @@
 {
     "name": "obsidian-bookshelf",
-    "version": "0.11.0",
+    "version": "0.12.0",
     "description": "Manage your books and reading progress in Obsidian",
     "main": "main.js",
     "scripts": {
@@ -46,6 +46,7 @@
         "builtin-modules": "^5.0.0",
         "esbuild": "^0.25",
         "esbuild-copy-files-plugin": "^1.2.1",
+        "esbuild-plugin-replace": "^1.4.0",
         "esbuild-sass-plugin": "^3.3.1",
         "eslint": "^9.19.0",
         "eslint-config-prettier": "^10.0.1",

@@ -16,6 +16,8 @@ import { Subscribers } from '../bookshelf/subscriber/subscribers'
 import { MouseEvent } from 'react'
 import { appHasDailyNotesPluginLoaded, getDailyNoteSettings } from 'obsidian-daily-notes-interface'
 import { BookshelfDummy } from '../bookshelf/bookshelf-dummy'
+import { ReleaseNotesModal } from './modal/release-notes-modal'
+import { Version } from './modal/version'
 
 export interface DailyNotesSettings {
     enabled: boolean
@@ -24,6 +26,7 @@ export interface DailyNotesSettings {
 }
 
 export default class BookshelfPlugin extends Plugin {
+    public readonly version = Version.fromString('__bookshelf_plugin_version__')
     public settings: BookshelfPluginSettings
 
     private notes: ObsidianNotes
@@ -45,6 +48,7 @@ export default class BookshelfPlugin extends Plugin {
         this.setupCommands()
 
         this.processAllNotesOnceWorkspaceIsReady()
+        this.showReleaseNotes()
     }
 
     private setupViews(): void {
@@ -141,6 +145,14 @@ export default class BookshelfPlugin extends Plugin {
 
     private async processAllNotes(): Promise<void> {
         await Promise.all(this.app.vault.getMarkdownFiles().map((file) => this.handleFile(file)))
+    }
+
+    private showReleaseNotes(): void {
+        const previousVersion = Version.fromString(this.settings.previousVersion || '0.0.0')
+
+        if (this.settings.showReleaseNotes && this.version.greaterThan(previousVersion)) {
+            this.app.workspace.onLayoutReady(() => new ReleaseNotesModal(this.app, this).open())
+        }
     }
 
     public dailyNotesSettings(): DailyNotesSettings {

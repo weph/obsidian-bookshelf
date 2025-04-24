@@ -36,5 +36,7 @@
   },
   "readingProgress": {
     "newEntryLocation": "dailyNote"
-  }
+  },
+  "previousVersion": "0.11.0",
+  "showReleaseNotes": true
 }

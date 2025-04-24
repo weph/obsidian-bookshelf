@@ -47,6 +47,8 @@ export interface BookshelfPluginSettings extends VersionedSettings {
     readingProgress: {
         newEntryLocation: NoteType
     }
+    previousVersion: string
+    showReleaseNotes: boolean
 }
 
 export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
@@ -88,4 +90,6 @@ export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
     readingProgress: {
         newEntryLocation: 'bookNote',
     },
+    previousVersion: '0.0.0',
+    showReleaseNotes: true,
 }

@@ -54,6 +54,8 @@ const defaultConfiguration: Configuration = {
         readingProgress: {
             newEntryLocation: 'bookNote',
         },
+        previousVersion: '0.0.0',
+        showReleaseNotes: true,
     },
     dailyNotesSettings: {
         enabled: true,

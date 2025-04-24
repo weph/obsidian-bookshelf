@@ -52,6 +52,8 @@ const bookshelf = BookshelfFactory.fromConfiguration({
         readingProgress: {
             newEntryLocation: 'bookNote',
         },
+        previousVersion: '0.0.0',
+        showReleaseNotes: true,
     },
     dailyNotesSettings: {
         enabled: true,
