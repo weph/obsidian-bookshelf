@@ -35,6 +35,27 @@
     }
 }
 
+.group {
+    margin-bottom: 4rem;
+
+    .groupHeading {
+        margin-block-start: 2rem;
+        margin-block-end: 2rem;
+
+        h2 {
+            padding-block-end: 0.25rem;
+            margin: 0;
+            margin-block-end: 0.5rem;
+            border-bottom: 1px solid var(--divider-color);
+        }
+
+        .booksInGroup {
+            color: var(--color-base-60);
+            font-size: var(--font-smallest);
+        }
+    }
+}
+
 .mobileNavigation {
     width: 100%;
 

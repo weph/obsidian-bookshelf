@@ -84,8 +84,11 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
                 <>
                     <BookCount total={books.length} filtered={filteredBooks.length} />
                     {Array.from(groupingOption.grouped(filteredBooks)).map((entry) => (
-                        <div key={entry[0]}>
-                            <h2>{entry[0] || 'N/A'}</h2>
+                        <div className={styles.group} key={entry[0]}>
+                            <div className={styles.groupHeading}>
+                                <h2>{entry[0] || 'N/A'}</h2>
+                                <div className={styles.booksInGroup}>{entry[1].length} books</div>
+                            </div>
                             <ViewComponent books={entry[1]} onBookClick={onBookClick} />
                         </div>
                     ))}
