@@ -1,6 +1,6 @@
-import { ItemView, WorkspaceLeaf } from 'obsidian'
-import { StrictMode, useState } from 'react'
-import { createRoot } from 'react-dom/client'
+import { ItemView, ViewStateResult, WorkspaceLeaf } from 'obsidian'
+import { StrictMode, useEffect, useState } from 'react'
+import { createRoot, Root } from 'react-dom/client'
 import { Bookshelf } from '../../bookshelf/bookshelf'
 import { bookSortOptions } from '../../component/library/book-sort-options'
 import { Library, Settings } from '../../component/library/library'
@@ -13,12 +13,25 @@ export const VIEW_TYPE_LIBRARY = 'library'
 export class LibraryView extends ItemView {
     public icon = 'library-big'
 
+    private root: Root
+
+    private settings: Settings = {
+        search: '',
+        list: null,
+        status: null,
+        grouping: null,
+        sort: null,
+        view: 'gallery',
+    }
+
     constructor(
         leaf: WorkspaceLeaf,
         private bookshelfPlugin: BookshelfPlugin,
         private bookshelf: Bookshelf,
     ) {
         super(leaf)
+
+        this.root = createRoot(this.contentEl)
     }
 
     public getViewType(): string {
@@ -29,10 +42,31 @@ export class LibraryView extends ItemView {
         return 'Bookshelf library'
     }
 
+    public async setState(state: Settings, result: ViewStateResult): Promise<void> {
+        this.settings = state
+
+        this.render()
+
+        return super.setState(state, result)
+    }
+
+    public getState(): Record<string, unknown> {
+        return { ...this.settings }
+    }
+
     protected async onOpen(): Promise<void> {
-        createRoot(this.containerEl.children[1]).render(
+        this.render()
+    }
+
+    private render(): void {
+        this.root.render(
             <StrictMode>
                 <SyncedLibrary
+                    initialSettings={this.settings}
+                    settingsChanged={(settings) => {
+                        this.settings = settings
+                        this.app.workspace.requestSaveLayout()
+                    }}
                     bookshelf={this.bookshelf}
                     onBookClick={this.bookshelfPlugin.handleBookClick.bind(this.bookshelfPlugin)}
                 />
@@ -41,21 +75,29 @@ export class LibraryView extends ItemView {
     }
 }
 
-function SyncedLibrary({ bookshelf, onBookClick }: { bookshelf: Bookshelf; onBookClick: (book: Book) => void }) {
-    const [settings, setSettings] = useState<Settings>({
-        search: '',
-        list: null,
-        status: null,
-        grouping: null,
-        sort: null,
-        view: 'gallery',
-    })
+function SyncedLibrary({
+    initialSettings,
+    settingsChanged,
+    bookshelf,
+    onBookClick,
+}: {
+    initialSettings: Settings
+    settingsChanged: (settings: Settings) => void
+    bookshelf: Bookshelf
+    onBookClick: (book: Book) => void
+}) {
+    const [settings, setSettings] = useState<Settings>(initialSettings)
     const books = useSyncedData(bookshelf, (b) => Array.from(b.all()))
+
+    useEffect(() => setSettings(initialSettings), [initialSettings])
 
     return (
         <Library
             settings={settings}
-            settingsChanged={setSettings}
+            settingsChanged={(settings) => {
+                setSettings(settings)
+                settingsChanged(settings)
+            }}
             books={books}
             sortOptions={bookSortOptions}
             onBookClick={onBookClick}
