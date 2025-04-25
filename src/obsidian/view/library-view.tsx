@@ -3,7 +3,7 @@ import { StrictMode, useEffect, useState } from 'react'
 import { createRoot, Root } from 'react-dom/client'
 import { Bookshelf } from '../../bookshelf/bookshelf'
 import { bookSortOptions } from '../../component/library/book-sort-options'
-import { Library, Settings } from '../../component/library/library'
+import { initialSettings, Library, Settings } from '../../component/library/library'
 import BookshelfPlugin from '../bookshelf-plugin'
 import { useSyncedData } from '../../component/hooks/use-synced-data'
 import { Book } from '../../bookshelf/book/book'
@@ -15,14 +15,7 @@ export class LibraryView extends ItemView {
 
     private root: Root
 
-    private settings: Settings = {
-        search: '',
-        list: null,
-        status: null,
-        grouping: null,
-        sort: null,
-        view: 'gallery',
-    }
+    private settings: Settings = initialSettings
 
     constructor(
         leaf: WorkspaceLeaf,

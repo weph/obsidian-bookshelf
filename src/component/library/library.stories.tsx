@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { Book } from '../../bookshelf/book/book'
 import { algorithms, books } from '../../support/book-fixtures'
-import { Library, Settings } from './library'
+import { initialSettings, Library, Settings } from './library'
 import { bookSortOptions } from './book-sort-options'
 import { fn } from '@storybook/test'
 import { useState } from 'react'
@@ -15,14 +15,7 @@ type Story = StoryObj<typeof Library>
 
 function renderFunction(books: Array<Book>) {
     return () => {
-        const [settings, setSettings] = useState<Settings>({
-            search: '',
-            list: null,
-            status: null,
-            grouping: null,
-            sort: null,
-            view: 'gallery',
-        })
+        const [settings, setSettings] = useState<Settings>(initialSettings)
 
         return (
             <Library

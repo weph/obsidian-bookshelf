@@ -3,26 +3,17 @@ import userEvent, { UserEvent } from '@testing-library/user-event'
 import { waitFor } from '@testing-library/dom'
 import { Book } from '../../bookshelf/book/book'
 import { BookBuilder } from '../../support/book-builder'
-import { Library, Props, Settings } from './library'
+import { initialSettings, Library, Props } from './library'
 import { render, screen } from '@testing-library/react'
 import { SortDropdownOption } from './book-sort-options'
 
 const onBookClick = vi.fn()
 let user: UserEvent
 
-const defaultSettings: Settings = {
-    search: '',
-    list: null,
-    status: null,
-    grouping: null,
-    sort: null,
-    view: 'gallery',
-}
-
 function renderLibrary(props: Partial<Props>): void {
     render(
         <Library
-            settings={props.settings || defaultSettings}
+            settings={props.settings || initialSettings}
             settingsChanged={vi.fn()}
             books={props.books || []}
             sortOptions={props.sortOptions || [{ value: '', label: '', compareFn: () => 0 }]}
@@ -72,7 +63,7 @@ describe('Search', () => {
     ])('Searching for "%s" should show the following books: %s', async (query, expected) => {
         renderLibrary({
             settings: {
-                ...defaultSettings,
+                ...initialSettings,
                 search: query,
             },
             books: [
@@ -89,7 +80,7 @@ describe('Search', () => {
     test('should show a message if no books match the query', async () => {
         renderLibrary({
             settings: {
-                ...defaultSettings,
+                ...initialSettings,
                 search: 'foobar',
             },
             books: [
@@ -128,7 +119,7 @@ describe('Sorting', () => {
     })
 
     test('Books should be ordered by selected sort option', async () => {
-        renderLibrary({ settings: { ...defaultSettings, sort: 'desc' }, books, sortOptions })
+        renderLibrary({ settings: { ...initialSettings, sort: 'desc' }, books, sortOptions })
 
         expect(cardTitles()).toEqual(['Pet Sematary', 'Of Mice and Men', 'Animal Farm'])
     })
