@@ -9,6 +9,7 @@ import { SortDropdownOption } from './book-sort-options'
 import { bookGroupingOptions } from './book-grouping-options'
 import { Icon } from '../icon/icon'
 import { SlidersHorizontal } from 'lucide-react'
+import { Button } from '../button/button'
 
 type ViewType = 'gallery' | 'table'
 
@@ -19,6 +20,15 @@ export interface Settings {
     grouping: string | null
     sort: string | null
     view: ViewType
+}
+
+export const initialSettings: Settings = {
+    search: '',
+    list: null,
+    status: null,
+    grouping: null,
+    sort: null,
+    view: 'gallery',
 }
 
 export interface Props {
@@ -61,6 +71,7 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
     const lists = listOptions(books)
     const ViewComponent = settings.view === 'gallery' ? Gallery : BookTable
     const NavigationComponent = window.innerWidth < 640 ? MobileNavigation : DesktopNavigation
+    const reset = () => settingsChanged(initialSettings)
 
     const filteredBooks = books
         .filter((b) => {
@@ -123,6 +134,7 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
                     settingsChanged={settingsChanged}
                     sortOptions={sortOptions}
                     lists={lists}
+                    reset={reset}
                 />
             </div>
             <div className={styles.content} role="main">
@@ -137,9 +149,12 @@ interface NavigationProps {
     settingsChanged: (newSettings: Settings) => void
     sortOptions: Array<SortDropdownOption>
     lists: Array<DropdownOption<string | null>>
+    reset: () => void
 }
 
-function DesktopNavigation({ settings, settingsChanged, lists, sortOptions }: NavigationProps) {
+function DesktopNavigation({ settings, settingsChanged, lists, sortOptions, reset }: NavigationProps) {
+    const settingsModified = JSON.stringify(settings) !== JSON.stringify(initialSettings)
+
     return (
         <>
             <div className={styles.left}>
@@ -176,6 +191,7 @@ function DesktopNavigation({ settings, settingsChanged, lists, sortOptions }: Na
                     options={sortOptions}
                     onChange={(o) => settingsChanged({ ...settings, sort: o.value })}
                 />
+                {settingsModified && <Button text="Reset" onClick={() => reset()} accent={true} />}
             </div>
             <div>
                 <Dropdown
@@ -189,8 +205,9 @@ function DesktopNavigation({ settings, settingsChanged, lists, sortOptions }: Na
     )
 }
 
-function MobileNavigation({ settings, settingsChanged, lists, sortOptions }: NavigationProps) {
+function MobileNavigation({ settings, settingsChanged, lists, sortOptions, reset }: NavigationProps) {
     const [filtersVisible, setFiltersVisible] = useState(false)
+    const settingsModified = JSON.stringify(settings) !== JSON.stringify(initialSettings)
 
     return (
         <div className={styles.mobileNavigation}>
@@ -238,6 +255,7 @@ function MobileNavigation({ settings, settingsChanged, lists, sortOptions }: Nav
                         options={sortOptions}
                         onChange={(o) => settingsChanged({ ...settings, sort: o.value })}
                     />
+                    {settingsModified && <Button text="Reset" onClick={() => reset()} accent={true} />}
                 </div>
             )}
         </div>
