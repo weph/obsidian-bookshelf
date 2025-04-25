@@ -6,13 +6,24 @@ import { Dropdown, DropdownOption } from '../dropdown/dropdown'
 import { BookTable } from '../table/table'
 import styles from './library.module.scss'
 import { SortDropdownOption } from './book-sort-options'
-import { bookGroupingOptions, GroupingDropdownOption } from './book-grouping-options'
+import { bookGroupingOptions } from './book-grouping-options'
 import { Icon } from '../icon/icon'
 import { SlidersHorizontal } from 'lucide-react'
 
 type ViewType = 'gallery' | 'table'
 
+export interface Settings {
+    search: string
+    list: string | null
+    status: ReadingStatus | null
+    grouping: string | null
+    sort: string | null
+    view: ViewType
+}
+
 export interface Props {
+    settings: Settings
+    settingsChanged: (newSettings: Settings) => void
     books: Array<Book>
     sortOptions: Array<SortDropdownOption>
     onBookClick: (book: Book) => void
@@ -44,28 +55,24 @@ function pluralize(count: number, noun: string, suffix = 's'): string {
     return `${count} ${noun}${count !== 1 ? suffix : ''}`
 }
 
-export function Library({ books, sortOptions, onBookClick }: Props) {
-    const [searchTerm, setSearchTerm] = useState<string>('')
-    const [sortOption, setSortOption] = useState<SortDropdownOption | null>(sortOptions[0])
-    const [groupingOption, setGroupingOption] = useState<GroupingDropdownOption>(bookGroupingOptions[0])
-    const [statusFilter, setStatusFilter] = useState<ReadingStatus | null>(null)
-    const [list, setList] = useState<string | null>(null)
-    const [view, setView] = useState<ViewType>('gallery')
+export function Library({ settings, settingsChanged, books, sortOptions, onBookClick }: Props) {
+    const groupingOption = bookGroupingOptions.find((v) => v.value === settings.grouping) || bookGroupingOptions[0]
+    const sortOption = sortOptions.find((o) => o.value === settings.sort) || sortOptions[0]
     const lists = listOptions(books)
-    const ViewComponent = view === 'gallery' ? Gallery : BookTable
+    const ViewComponent = settings.view === 'gallery' ? Gallery : BookTable
     const NavigationComponent = window.innerWidth < 640 ? MobileNavigation : DesktopNavigation
 
     const filteredBooks = books
         .filter((b) => {
-            if (statusFilter !== null && b.status !== statusFilter) {
+            if (settings.status !== null && b.status !== settings.status) {
                 return false
             }
 
-            if (list !== null && !b.metadata.lists.includes(list)) {
+            if (settings.list !== null && !b.metadata.lists.includes(settings.list)) {
                 return false
             }
 
-            return b.metadata.title.toLowerCase().includes(searchTerm.toLowerCase())
+            return b.metadata.title.toLowerCase().includes(settings.search.toLowerCase())
         })
         .sort(sortOption?.compareFn)
 
@@ -112,20 +119,10 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
         <div className={styles.library}>
             <div className={styles.header}>
                 <NavigationComponent
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
+                    settings={settings}
+                    settingsChanged={settingsChanged}
                     sortOptions={sortOptions}
-                    sortOption={sortOption}
-                    setSortOption={setSortOption}
-                    groupingOption={groupingOption}
-                    setGroupingOption={setGroupingOption}
-                    statusFilter={statusFilter}
-                    setStatusFilter={setStatusFilter}
                     lists={lists}
-                    list={list}
-                    setList={setList}
-                    view={view}
-                    setView={setView}
                 />
             </div>
             <div className={styles.content} role="main">
@@ -136,73 +133,63 @@ export function Library({ books, sortOptions, onBookClick }: Props) {
 }
 
 interface NavigationProps {
-    searchTerm: string
-    setSearchTerm: (value: string) => void
+    settings: Settings
+    settingsChanged: (newSettings: Settings) => void
     sortOptions: Array<SortDropdownOption>
-    sortOption: SortDropdownOption | null
-    setSortOption: (value: SortDropdownOption | null) => void
-    groupingOption: GroupingDropdownOption
-    setGroupingOption: (value: GroupingDropdownOption) => void
-    statusFilter: ReadingStatus | null
-    setStatusFilter: (value: ReadingStatus | null) => void
     lists: Array<DropdownOption<string | null>>
-    list: string | null
-    setList: (value: string | null) => void
-    view: ViewType
-    setView: (value: ViewType) => void
 }
 
-function DesktopNavigation(props: NavigationProps) {
+function DesktopNavigation({ settings, settingsChanged, lists, sortOptions }: NavigationProps) {
     return (
         <>
             <div className={styles.left}>
                 <Input
                     type="search"
                     placeholder="Search..."
-                    value={props.searchTerm}
-                    onUpdate={props.setSearchTerm}
+                    value={settings.search}
+                    onUpdate={(search) => settingsChanged({ ...settings, search })}
                     autoFocus={true}
                 />
-                {props.lists.length > 0 && (
+                {lists.length > 0 && (
                     <Dropdown
                         label="List"
-                        value={props.list}
-                        options={props.lists}
-                        onChange={(o) => props.setList(o.value)}
+                        value={settings.list}
+                        options={lists}
+                        onChange={(o) => settingsChanged({ ...settings, list: o.value })}
                     />
                 )}
                 <Dropdown
                     label="Status"
-                    value={props.statusFilter}
+                    value={settings.status}
                     options={statusFilterOptions}
-                    onChange={(o) => props.setStatusFilter(o.value)}
+                    onChange={(o) => settingsChanged({ ...settings, status: o.value })}
                 />
                 <Dropdown
                     label="Grouping"
-                    value={props.groupingOption.value}
+                    value={settings.grouping}
                     options={bookGroupingOptions}
-                    onChange={(o) => props.setGroupingOption(o)}
+                    onChange={(o) => settingsChanged({ ...settings, grouping: o.value })}
                 />
                 <Dropdown
                     label="Sort"
-                    value={props.sortOption?.value}
-                    options={props.sortOptions}
-                    onChange={(o) => props.setSortOption(o)}
+                    value={settings.sort}
+                    options={sortOptions}
+                    onChange={(o) => settingsChanged({ ...settings, sort: o.value })}
                 />
             </div>
             <div>
                 <Dropdown
                     label="View"
-                    value={props.view}
+                    value={settings.view}
                     options={viewOptions}
-                    onChange={(o) => props.setView(o.value)}
+                    onChange={(o) => settingsChanged({ ...settings, view: o.value })}
                 />
             </div>
         </>
     )
 }
 
-function MobileNavigation(props: NavigationProps) {
+function MobileNavigation({ settings, settingsChanged, lists, sortOptions }: NavigationProps) {
     const [filtersVisible, setFiltersVisible] = useState(false)
 
     return (
@@ -211,8 +198,8 @@ function MobileNavigation(props: NavigationProps) {
                 <Input
                     type="search"
                     placeholder="Search..."
-                    value={props.searchTerm}
-                    onUpdate={props.setSearchTerm}
+                    value={settings.search}
+                    onUpdate={(search) => settingsChanged({ ...settings, search })}
                     autoFocus={true}
                 />
                 <Icon icon={SlidersHorizontal} onClick={() => setFiltersVisible(!filtersVisible)} />
@@ -221,35 +208,35 @@ function MobileNavigation(props: NavigationProps) {
                 <div className={styles.mobileNavigationFilters}>
                     <Dropdown
                         label="View"
-                        value={props.view}
+                        value={settings.view}
                         options={viewOptions}
-                        onChange={(o) => props.setView(o.value)}
+                        onChange={(o) => settingsChanged({ ...settings, view: o.value })}
                     />
-                    {props.lists.length > 0 && (
+                    {lists.length > 0 && (
                         <Dropdown
                             label="List"
-                            value={props.list}
-                            options={props.lists}
-                            onChange={(o) => props.setList(o.value)}
+                            value={settings.list}
+                            options={lists}
+                            onChange={(o) => settingsChanged({ ...settings, list: o.value })}
                         />
                     )}
                     <Dropdown
                         label="Status"
-                        value={props.statusFilter}
+                        value={settings.status}
                         options={statusFilterOptions}
-                        onChange={(o) => props.setStatusFilter(o.value)}
+                        onChange={(o) => settingsChanged({ ...settings, status: o.value })}
                     />
                     <Dropdown
                         label="Grouping"
-                        value={props.groupingOption.value}
+                        value={settings.grouping}
                         options={bookGroupingOptions}
-                        onChange={(o) => props.setGroupingOption(o)}
+                        onChange={(o) => settingsChanged({ ...settings, grouping: o.value })}
                     />
                     <Dropdown
                         label="Sort"
-                        value={props.sortOption?.value}
-                        options={props.sortOptions}
-                        onChange={(o) => props.setSortOption(o)}
+                        value={settings.sort}
+                        options={sortOptions}
+                        onChange={(o) => settingsChanged({ ...settings, sort: o.value })}
                     />
                 </div>
             )}

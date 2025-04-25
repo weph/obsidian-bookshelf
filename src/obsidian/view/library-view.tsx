@@ -1,9 +1,9 @@
 import { ItemView, WorkspaceLeaf } from 'obsidian'
-import { StrictMode } from 'react'
+import { StrictMode, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Bookshelf } from '../../bookshelf/bookshelf'
 import { bookSortOptions } from '../../component/library/book-sort-options'
-import { Library } from '../../component/library/library'
+import { Library, Settings } from '../../component/library/library'
 import BookshelfPlugin from '../bookshelf-plugin'
 import { useSyncedData } from '../../component/hooks/use-synced-data'
 import { Book } from '../../bookshelf/book/book'
@@ -42,7 +42,23 @@ export class LibraryView extends ItemView {
 }
 
 function SyncedLibrary({ bookshelf, onBookClick }: { bookshelf: Bookshelf; onBookClick: (book: Book) => void }) {
+    const [settings, setSettings] = useState<Settings>({
+        search: '',
+        list: null,
+        status: null,
+        grouping: null,
+        sort: null,
+        view: 'gallery',
+    })
     const books = useSyncedData(bookshelf, (b) => Array.from(b.all()))
 
-    return <Library books={books} sortOptions={bookSortOptions} onBookClick={onBookClick} />
+    return (
+        <Library
+            settings={settings}
+            settingsChanged={setSettings}
+            books={books}
+            sortOptions={bookSortOptions}
+            onBookClick={onBookClick}
+        />
+    )
 }
