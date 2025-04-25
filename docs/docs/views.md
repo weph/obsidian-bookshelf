@@ -37,6 +37,15 @@ At the top of the library view are several controls:
 
 You can also toggle between gallery and table view.
 
+Bookshelf remembers changes you make to these controls as part of the workspace. If the library tab was open when you
+closed Obsidian, it'll reopen in the same state.
+
+:::tip
+If you're using the Workspaces plugin to manage different layouts, each layout can have its own library configuration.
+Just remember to save the layout after adjusting the controls. For more details, see
+the [Workspaces plugin documentation](https://help.obsidian.md/plugins/workspaces).
+:::
+
 Clicking on a book opens the [Book Details Modal](views.md#book-details-modal). To open the book's note directly
 instead, hold a modifier key while clicking (CMD on macOS, CTRL on Windows and Linux).
 

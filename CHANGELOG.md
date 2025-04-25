@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.12.0...main`][0.12.0...main].
 
+### Added
+
+- Remember library settings ([#11](https://github.com/weph/obsidian-bookshelf/issues/11))\
+  Bookshelf now remembers your library settings (search term, list, grouping, sort, and view mode) as part of the
+  workspace. If the library tab was open when you closed Obsidian, it'll reopen in the same state.
+
 ## [`0.12.0`][0.12.0] - 2025-04-24
 
 For a full diff see [`0.12.0...main`][0.12.0...main].
