@@ -1,0 +1,7 @@
+body {
+    --bookshelf--gallery-card--background-color: red;
+    --bookshelf--gallery-card--shadow: 5px 5px 5px black;
+
+    --bookshelf--library--header--background: blue;
+    --bookshelf--library--header--padding: 20px;
+}

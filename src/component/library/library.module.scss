@@ -1,10 +1,15 @@
+body {
+    --bookshelf--library--header--background: var(--background-primary);
+    --bookshelf--library--header--padding: var(--size-4-3);
+}
+
 .library {
     .header {
         position: sticky;
         top: 0;
         left: 0;
         width: 100%;
-        background-color: var(--bookshelf--library--header-background);
+        background-color: var(--bookshelf--library--header--background);
         z-index: 9999;
         box-sizing: border-box;
 
@@ -12,7 +17,7 @@
         flex-direction: row;
         justify-content: space-between;
         gap: var(--size-4-3);
-        padding: var(--bookshelf--library--header-padding);
+        padding: var(--bookshelf--library--header--padding);
 
         .left {
             display: flex;
@@ -84,6 +89,6 @@
 
     p {
         font-style: italic;
-        color: var(--bookshelf--text--color-dimmed);
+        color: var(--text-faint);
     }
 }

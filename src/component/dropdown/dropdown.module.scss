@@ -1,3 +1,18 @@
+body {
+    --bookshelf--ui--dropdown--height: var(--input-height);
+    --bookshelf--ui--dropdown--border-color: var(--background-modifier-border);
+    --bookshelf--ui--dropdown--border-radius: var(--input-radius);
+    --bookshelf--ui--dropdown--border-width: 0;
+    --bookshelf--ui--dropdown--font-weight: var(--input-font-weight);
+    --bookshelf--ui--dropdown--box-shadow: var(--input-shadow);
+    --bookshelf--ui--dropdown--background: var(--dropdown-background);
+    --bookshelf--ui--dropdown--background-blend-mode: var(--dropdown-background-blend-mode);
+    --bookshelf--ui--dropdown--background-hover: var(--dropdown-background-hover);
+    --bookshelf--ui--dropdown--background-position: var(--dropdown-background-position);
+    --bookshelf--ui--dropdown--background-size: var(--dropdown-background-size);
+    --bookshelf--ui--dropdown--padding: var(--dropdown-padding);
+}
+
 .dropdown {
     display: block;
     appearance: none;

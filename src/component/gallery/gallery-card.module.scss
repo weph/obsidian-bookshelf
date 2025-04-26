@@ -1,3 +1,8 @@
+body {
+    --bookshelf--gallery-card--background-color: var(--background-primary-alt);
+    --bookshelf--gallery-card--shadow: var(--shadow-s);
+}
+
 .galleryCard {
     display: flex;
     flex-flow: column;

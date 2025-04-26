@@ -1,4 +1,12 @@
-.input {
+body {
+    --bookshelf--ui--input--height: var(--input-height);
+    --bookshelf--ui--input--border-radius: var(--input-radius);
+    --bookshelf--ui--input--border-width: var(--input-border-width);
+    --bookshelf--ui--input--font-weight: var(--input-font-weight);
+    --bookshelf--ui--input--padding: var(--size-4-1) var(--size-4-2);
+}
+
+input.input {
     -webkit-appearance: none;
     height: var(--bookshelf--ui--input--height);
     border-style: solid;
