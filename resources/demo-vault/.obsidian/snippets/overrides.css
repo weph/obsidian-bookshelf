@@ -1,6 +1,10 @@
 body {
+    --bookshelf--gallery-card--height: auto;
+    --bookshelf--gallery-card--padding: 15px;
+    --bookshelf--gallery-card--border-radius: 25px;
     --bookshelf--gallery-card--background-color: red;
     --bookshelf--gallery-card--shadow: 5px 5px 5px black;
+    --bookshelf--gallery-card--image--border-radius: 25px;
 
     --bookshelf--library--header--background: blue;
     --bookshelf--library--header--padding: 20px;

@@ -1,6 +1,9 @@
 body {
+    --bookshelf--gallery-card--padding: 8px;
+    --bookshelf--gallery-card--border-radius: 6px;
     --bookshelf--gallery-card--background-color: var(--background-primary-alt);
     --bookshelf--gallery-card--shadow: var(--shadow-s);
+    --bookshelf--gallery-card--image--border-radius: 0;
 }
 
 .galleryCard {
@@ -9,15 +12,18 @@ body {
     justify-content: center;
     position: relative;
     width: 100%;
+    height: fit-content;
     max-width: 200px;
-    background-color: var(--bookshelf--gallery-card--background-color);
-    padding: 10px;
-    box-shadow: var(--bookshelf--gallery-card--shadow);
     box-sizing: border-box;
+    background-color: var(--bookshelf--gallery-card--background-color);
+    padding: var(--bookshelf--gallery-card--padding);
+    box-shadow: var(--bookshelf--gallery-card--shadow);
+    border-radius: var(--bookshelf--gallery-card--border-radius);
 
     img {
         display: block;
         width: 100%;
+        border-radius: var(--bookshelf--gallery-card--image--border-radius);
     }
 
     .title {
@@ -37,9 +43,10 @@ body {
         top: 0;
         width: 100%;
         height: 100%;
-        padding: 10px;
+        padding: var(--bookshelf--gallery-card--padding);
         background-color: rgb(from var(--bookshelf--gallery-card--background-color) r g b / 0.8);
         box-sizing: border-box;
+        border-radius: var(--bookshelf--gallery-card--border-radius);
     }
 
     &:hover .overlay {
