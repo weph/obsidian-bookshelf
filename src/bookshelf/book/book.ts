@@ -1,12 +1,13 @@
 import { ReadingJourney } from '../reading-journey/reading-journey'
 import { Note } from '../note/note'
+import { Link } from './link'
 
 export type ReadingStatus = 'unread' | 'reading' | 'abandoned' | 'finished'
 
 export interface BookMetadata {
     readonly title: string
     readonly cover?: string
-    readonly authors?: Array<string>
+    readonly authors: Array<string | Link>
     readonly published?: Date
     readonly pages?: number
     readonly tags?: Array<string>

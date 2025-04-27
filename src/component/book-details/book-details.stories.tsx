@@ -15,7 +15,7 @@ type Story = StoryObj<typeof BookDetails>
 function renderFunction(book: Book) {
     return () => (
         <div style={{ maxWidth: '550px' }}>
-            <BookDetails book={book} openNote={fn()} addProgress={async () => {}} />
+            <BookDetails book={book} openLink={fn()} addProgress={async () => {}} />
         </div>
     )
 }

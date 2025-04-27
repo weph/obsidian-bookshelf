@@ -57,6 +57,7 @@ export class BookBuilder {
     private defaultMetadata(): BookMetadata {
         return {
             title: 'Book Title',
+            authors: [],
             lists: [],
         }
     }

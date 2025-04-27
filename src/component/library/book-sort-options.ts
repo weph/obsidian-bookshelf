@@ -1,5 +1,6 @@
 import { DropdownOption } from '../dropdown/dropdown'
 import { Book } from '../../bookshelf/book/book'
+import { Link } from '../../bookshelf/book/link'
 
 function stringDifference(a: string | undefined, b: string | undefined): number {
     return (a || '').localeCompare(b || '')
@@ -11,6 +12,10 @@ function numberDifference(a: number | undefined, b: number | undefined): number 
 
 export interface SortDropdownOption extends DropdownOption<string> {
     compareFn(a: Book, b: Book): number
+}
+
+function authorName(a: string | Link | undefined): string | undefined {
+    return a instanceof Link ? a.displayText : a
 }
 
 export const bookSortOptions: Array<SortDropdownOption> = [
@@ -27,12 +32,12 @@ export const bookSortOptions: Array<SortDropdownOption> = [
     {
         value: 'author_asc',
         label: 'Author: A-Z',
-        compareFn: (a, b) => stringDifference(a.metadata.authors?.[0], b.metadata.authors?.[0]),
+        compareFn: (a, b) => stringDifference(authorName(a.metadata.authors?.[0]), authorName(b.metadata.authors?.[0])),
     },
     {
         value: 'author_desc',
         label: 'Author: Z-A',
-        compareFn: (a, b) => stringDifference(b.metadata.authors?.[0], a.metadata.authors?.[0]),
+        compareFn: (a, b) => stringDifference(authorName(b.metadata.authors?.[0]), authorName(a.metadata.authors?.[0])),
     },
     {
         value: 'reading_progress_desc',

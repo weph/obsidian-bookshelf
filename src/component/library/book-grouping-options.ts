@@ -1,5 +1,6 @@
 import { DropdownOption } from '../dropdown/dropdown'
 import { Book } from '../../bookshelf/book/book'
+import { Link } from '../../bookshelf/book/link'
 
 export interface GroupingDropdownOption extends DropdownOption<string | null> {
     grouped?: (books: Array<Book>) => Map<string | null, Array<Book>>
@@ -24,11 +25,7 @@ export const bookGroupingOptions: Array<GroupingDropdownOption> = [
         value: 'author',
         label: 'Author',
         grouped: (books) =>
-            grouped(
-                books,
-                (b) => (b.metadata.authors && b.metadata.authors.length > 0 ? b.metadata.authors : [null]),
-                'asc',
-            ),
+            grouped(books, (b) => b.metadata.authors.map((a) => (a instanceof Link ? a.displayText : a)), 'asc'),
     },
     {
         value: 'year',

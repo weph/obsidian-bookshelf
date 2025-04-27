@@ -9,14 +9,15 @@ import { CoverPlaceholder } from '../cover-placeholder/cover-placeholder'
 import { ExternalLink } from 'lucide-react'
 import { TagList } from '../tag-list/tag-list'
 import { Icon } from '../icon/icon'
+import { Link } from '../../bookshelf/book/link'
 
 interface Props {
     book: Book
-    openNote: (book: Book) => void
+    openLink: (book: Book | Link) => void
     addProgress: (item: ReadingJourneyMatch) => Promise<void>
 }
 
-export function BookDetails({ book, openNote, addProgress }: Props) {
+export function BookDetails({ book, openLink, addProgress }: Props) {
     const { cover, title, authors, published, pages, rating, tags, comment } = book.metadata
 
     const journeyItemText = (item: ReadingJourneyItem) => {
@@ -44,10 +45,10 @@ export function BookDetails({ book, openNote, addProgress }: Props) {
                     <div className={styles.title}>
                         {title}
                         <div className={styles.openNote}>
-                            <Icon icon={ExternalLink} onClick={() => openNote(book)} />
+                            <Icon icon={ExternalLink} onClick={() => openLink(book)} />
                         </div>
                     </div>
-                    {authors && authors.length > 0 && <div className={styles.authors}>by {authors.join(', ')}</div>}
+                    {authors.length > 0 && <Authors authors={authors} openLink={openLink} />}
                     <div className={styles.pagesAndDate}>
                         {pages && <div>{pages} pages</div>}
                         {published && <div>{published.getFullYear()}</div>}
@@ -71,6 +72,36 @@ export function BookDetails({ book, openNote, addProgress }: Props) {
                     </li>
                 </ul>
             </div>
+        </div>
+    )
+}
+
+interface AuthorsProps {
+    authors: Array<string | Link>
+    openLink: (link: Link) => void
+}
+
+function Authors({ authors, openLink }: AuthorsProps) {
+    return (
+        <div className={styles.authors}>
+            by{' '}
+            {authors.map((author, i) => [
+                i > 0 && ', ',
+                author instanceof Link ? (
+                    <a
+                        key={i}
+                        href="#"
+                        onClick={(event) => {
+                            event.preventDefault()
+                            openLink(author)
+                        }}
+                    >
+                        {author.displayText}
+                    </a>
+                ) : (
+                    <span key={i}>{author}</span>
+                ),
+            ])}
         </div>
     )
 }

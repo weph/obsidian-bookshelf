@@ -2,6 +2,7 @@ import { PropertyValue } from '../note/metadata'
 import { BookMetadata } from './book'
 import { Reference } from 'obsidian'
 import { Note } from '../note/note'
+import { Link } from './link'
 
 export type LinkToUri = (link: string) => string
 
@@ -41,7 +42,7 @@ export class BookMetadataNoteAdapter implements BookMetadata {
         return undefined
     }
 
-    get authors(): Array<string> {
+    get authors(): Array<string | Link> {
         const value = this.note.metadata.value(this.propertyNames.author)
 
         if (value === null || typeof value === 'boolean') {
@@ -49,10 +50,10 @@ export class BookMetadataNoteAdapter implements BookMetadata {
         }
 
         if (Array.isArray(value)) {
-            return value.map((v) => this.text(v))
+            return value.map((v) => (this.isReference(v) ? Link.from(v) : v.toString()))
         }
 
-        return [this.isReference(value) ? this.linkText(value) : value.toString()]
+        return [this.isReference(value) ? Link.from(value) : value.toString()]
     }
 
     get published(): Date | undefined {

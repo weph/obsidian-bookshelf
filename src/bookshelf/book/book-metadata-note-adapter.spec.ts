@@ -3,6 +3,7 @@ import { StaticMetadata } from '../note/metadata'
 import { FakeNote } from '../../support/fake-note'
 import { BookMetadataNoteAdapter, LinkToUri, PropertyNames } from './book-metadata-note-adapter'
 import { Note } from '../note/note'
+import { Link } from './link'
 
 const propertyNames: PropertyNames = {
     cover: 'cover',
@@ -100,6 +101,9 @@ describe('Cover', () => {
 })
 
 describe('Author', () => {
+    const janeDoeReference = { key: 'author', link: 'Jane Doe', original: '[[Jane Doe]]' }
+    const johnDoeReference = { key: 'author', link: 'John Doe', original: '[[John Doe]]' }
+
     test.each([
         [undefined, []],
         [true, []],
@@ -109,15 +113,10 @@ describe('Author', () => {
             ['Jane Doe', 'John Doe'],
             ['Jane Doe', 'John Doe'],
         ],
-        [{ key: 'author', link: 'Jane Doe', original: '[[Jane Doe]]' }, ['Jane Doe']],
-        [{ key: 'author', link: 'Jane Doe', original: '[[Jane Doe]]', displayText: 'J. Doe' }, ['J. Doe']],
+        [janeDoeReference, [Link.from(janeDoeReference)]],
         [
-            [
-                { key: 'author', link: 'Jane Doe', original: '[[Jane Doe]]', displayText: 'J. Doe' },
-                'Foo Bar',
-                { key: 'author', link: 'John Doe', original: '[[John Doe]]' },
-            ],
-            ['J. Doe', 'Foo Bar', 'John Doe'],
+            [janeDoeReference, 'Foo Bar', johnDoeReference],
+            [Link.from(janeDoeReference), 'Foo Bar', Link.from(johnDoeReference)],
         ],
     ])('Metadata property "%s" should be %s', (value, expected) => {
         const result = bookMetadata(

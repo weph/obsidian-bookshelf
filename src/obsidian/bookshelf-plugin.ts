@@ -17,6 +17,7 @@ import { appHasDailyNotesPluginLoaded, getDailyNoteSettings } from 'obsidian-dai
 import { BookshelfDummy } from '../bookshelf/bookshelf-dummy'
 import { ReleaseNotesModal } from './modal/release-notes-modal'
 import { Version } from './modal/version'
+import { Link } from '../bookshelf/book/link'
 
 export interface DailyNotesSettings {
     enabled: boolean
@@ -99,7 +100,7 @@ export default class BookshelfPlugin extends Plugin {
         const modifierPressed = (isMac && event.metaKey) || (!isMac && event.ctrlKey)
 
         if (modifierPressed) {
-            return this.openBookNote(book)
+            return this.openLink(book)
         }
 
         this.openBookModal(book)
@@ -109,7 +110,16 @@ export default class BookshelfPlugin extends Plugin {
         new BookModal(this.app, this, this.bookshelf, book).open()
     }
 
-    public async openBookNote(book: Book): Promise<void> {
+    public async openLink(book: Book | Link): Promise<void> {
+        if (book instanceof Link) {
+            if (book.type === 'external') {
+                location.href = book.target
+            } else {
+                await this.app.workspace.openLinkText(book.target, '')
+            }
+            return
+        }
+
         await this.app.workspace.openLinkText(book.note.basename, '')
     }
 

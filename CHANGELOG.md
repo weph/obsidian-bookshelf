@@ -17,6 +17,9 @@ For a full diff see [`0.12.0...main`][0.12.0...main].
 - Documentation for styling Bookshelf\
   There's a [new section in the documentation](https://weph.github.io/obsidian-bookshelf/docs/styling) listing the
   available CSS variables for easier tweaking of Bookshelf's appearance. There aren't many yet, but more are on the way.
+- Make authors clickable in book details modal\
+  If an author is entered as a WikiLink in the metadata, it will now appear as a clickable link in the book details
+  modal.
 
 ### Changed
 

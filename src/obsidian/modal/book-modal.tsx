@@ -6,6 +6,7 @@ import { BookDetails } from '../../component/book-details/book-details'
 import { Bookshelf } from '../../bookshelf/bookshelf'
 import { useSyncedData } from '../../component/hooks/use-synced-data'
 import BookshelfPlugin from '../bookshelf-plugin'
+import { Link } from '../../bookshelf/book/link'
 
 export class BookModal extends Modal {
     constructor(
@@ -23,9 +24,9 @@ export class BookModal extends Modal {
                 <SyncedBookDetails
                     bookshelf={this.bookshelf}
                     book={this.book}
-                    openNote={async () => {
+                    openLink={async (book: Book | Link) => {
                         this.close()
-                        await this.bookshelfPlugin.openBookNote(this.book)
+                        await this.bookshelfPlugin.openLink(book)
                     }}
                 />
             </StrictMode>,
@@ -36,18 +37,18 @@ export class BookModal extends Modal {
 function SyncedBookDetails({
     bookshelf,
     book,
-    openNote,
+    openLink,
 }: {
     bookshelf: Bookshelf
     book: Book
-    openNote: (book: Book) => void
+    openLink: (book: Book | Link) => void
 }) {
     useSyncedData(bookshelf, (b) => Array.from(b.all()))
 
     return (
         <BookDetails
             book={book}
-            openNote={openNote}
+            openLink={openLink}
             addProgress={async (item) => await bookshelf.addToReadingJourney(item)}
         />
     )
