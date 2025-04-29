@@ -32,8 +32,8 @@ Sticking to the suggested types ensures the best results.
 **Property type:** Text\
 **Default name:** `cover`
 
-The book's cover. This can be a URL (e.g. `https://book.test/book-cover.jpg`) or a [Link to a file](https://help.obsidian.md/links#Link+to+a+file) inside your vault
-(e.g. `[[book-cover.jpg]]`)
+The book's cover. This can be a URL (e.g. `https://book.test/book-cover.jpg`) or
+a [Link to a file](https://help.obsidian.md/links#Link+to+a+file) inside your vault (e.g. `[[book-cover.jpg]]`)
 
 ### Authors
 
@@ -41,7 +41,8 @@ The book's cover. This can be a URL (e.g. `https://book.test/book-cover.jpg`) or
 **Default name:** `author`
 
 Name or names of the author. You can use a text field if only want to keep track of a single author, or a list of
-multiple authors. If you maintain author notes inside your vault, you can use [WikiLinks](https://help.obsidian.md/links#Supported+formats+for+internal+links).
+multiple authors. If you maintain author notes inside your vault, you can
+use [WikiLinks](https://help.obsidian.md/links#Supported+formats+for+internal+links).
 
 ### Publishing Date
 
@@ -82,7 +83,7 @@ Negative numbers are not supported.
 
 Lists are another dimension in Bookshelf to organize your books.
 You can assign a book to one or more lists (e.g. "Favorites", "Sci-Fi Classics").
-To group books by lists in the **Library**, select **List** from the grouping dropdown.
+To group books by lists in the [Library](views.md#library), select **List** from the grouping dropdown.
 
 ### Comment
 
@@ -90,12 +91,13 @@ To group books by lists in the **Library**, select **List** from the grouping dr
 **Default name:** `comment`
 
 A personal comment on that book.
-This is shown in the **book details modal** and can be your opinion, a summary, or any other note that helps you recall key information at a glance.
+This is shown in the [Book Details Modal](views.md#book-details-modal) and can be your opinion, a summary, or any other
+note that helps you recall key information at a glance.
 
 ### Links
 
 **Property type:** List\
 **Default name:** `links`
 
-A list of links to external websites (e.g., `https://books.test/dracula`) or related notes within your vault (`[[Dracula (Reading Notes)]]`).
-These links will appear in the **Book Details Modal**.
+A list of links to external websites (e.g., `https://books.test/dracula`) or related notes within your vault
+(`[[Dracula (Reading Notes)]]`). These links will appear in the [Book Details Modal](views.md#book-details-modal).

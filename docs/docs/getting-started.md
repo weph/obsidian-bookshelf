@@ -30,7 +30,7 @@ To learn more about Bookshelf's views, see the [Views section](views.md).
 By default, Bookshelf looks for your book notes in a folder named **Books** at the root of your vault.
 If you already use a different folder, or you prefer a different name, you can change this in the plugin settings.
 
-Any note created in the configured folder will automatically show up in the **Library** view.
+Any note created in the configured folder will automatically show up in the [Library view](views.md#library).
 
 Here's an example of a fully annotated book note using all supported fields:
 
@@ -64,8 +64,8 @@ To learn more about the properties and how to customize them, see the [Book Note
 
 ## Tracking reading progress
 
-If you checked the **Statistics** view after creating your first book note and saw that it was still empty, it's
-because no reading progress has been tracked yet.
+If you checked the [Statistics view](views.md#statistics) after creating your first book note and saw that it was still
+empty, it's because no reading progress has been tracked yet.
 
 To get started, add a **Reading Journey** section to your book note like this:
 
