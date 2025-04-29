@@ -18,7 +18,7 @@ test('internal link', () => {
 
 test.each([
     ['https://foo.test/', 'foo.test'],
-    ['https://foo.bar.foobar.test/foo/bar', 'foobar.test'],
+    ['https://foo.bar.foo-bar.foobar.test/foo/bar', 'foobar.test'],
 ])('Display text of %o should be %o', (input, expected) => {
     expect(Link.from(input).displayText).toEqual(expected)
 })

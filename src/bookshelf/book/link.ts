@@ -16,7 +16,7 @@ export class Link {
         }
 
         const url = new URL(input)
-        const displayValue = url.host.replace(/^.+\.([^.]+\..+)$/, '$1')
+        const displayValue = url.host.replace(/.+\.([^.]+\.)/, '$1')
 
         return new Link('external', input, displayValue, input)
     }

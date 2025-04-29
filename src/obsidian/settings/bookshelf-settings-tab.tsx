@@ -139,6 +139,17 @@ export class BookshelfSettingsTab extends PluginSettingTab {
                     await this.plugin.saveSettings()
                 }),
             )
+
+        new Setting(containerEl)
+            .setName('Links')
+            .setDesc('Name of the property that holds links to external websites or internal notes related to the book')
+            .addText((text) =>
+                text.setValue(this.plugin.settings.bookProperties.links).onChange(async (value) => {
+                    this.plugin.settings.bookProperties.links = value.trim()
+
+                    await this.plugin.saveSettings()
+                }),
+            )
     }
 
     private addBookNoteSection(): void {

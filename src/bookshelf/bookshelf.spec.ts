@@ -9,6 +9,7 @@ import { BookshelfFactory, Configuration } from './bookshelf-factory'
 import { InMemoryNotes } from '../support/in-memory-notes'
 import { position } from './reading-journey/position/position'
 import { Book, BookMetadata } from './book/book'
+import { Link } from './book/link'
 
 let bookshelf: Bookshelf
 
@@ -27,6 +28,7 @@ const defaultConfiguration: Configuration = {
             rating: 'rating',
             lists: 'lists',
             comment: 'comment',
+            links: 'links',
         },
         bookNote: {
             enabled: true,
@@ -90,6 +92,7 @@ describe('Note processing', () => {
                     pages: 497,
                     tags: ['novel', 'horror'],
                     lists: ['Horror Classics', 'Favorites'],
+                    links: ['https://books.test/the-shining'],
                 }),
                 [],
             ),
@@ -105,6 +108,7 @@ describe('Note processing', () => {
             pages: 497,
             tags: ['novel', 'horror'],
             lists: ['Horror Classics', 'Favorites'],
+            links: [Link.from('https://books.test/the-shining')],
         })
     })
 
@@ -118,6 +122,7 @@ describe('Note processing', () => {
                 pages: 2,
                 tags: ['comedy'],
                 lists: ['Comfort Books'],
+                links: ['https://books.test/the-shoning'],
             }),
             [],
         )
@@ -130,6 +135,7 @@ describe('Note processing', () => {
             pages: 497,
             tags: ['novel', 'horror'],
             lists: ['Horror Classics', 'Favorites'],
+            links: ['https://books.test/the-shining'],
         })
         await bookshelf.process(note)
 
@@ -143,6 +149,7 @@ describe('Note processing', () => {
             pages: 497,
             tags: ['novel', 'horror'],
             lists: ['Horror Classics', 'Favorites'],
+            links: [Link.from('https://books.test/the-shining')],
         })
     })
 
@@ -1033,6 +1040,7 @@ function bookMetadata(book: Book): BookMetadata {
         pages: book.metadata.pages,
         tags: book.metadata.tags,
         lists: book.metadata.lists,
+        links: book.metadata.links,
     }
 }
 

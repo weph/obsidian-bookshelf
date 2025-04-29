@@ -1,0 +1,40 @@
+.internalLink,
+.externalLink {
+    font-weight: var(--link-weight);
+    text-decoration-thickness: var(--link-decoration-thickness);
+    box-sizing: border-box;
+}
+
+.internalLink {
+    color: var(--link-color);
+    text-decoration-line: var(--link-decoration);
+    cursor: var(--cursor-link);
+
+    &:hover {
+        color: var(--link-color-hover);
+        text-decoration-line: var(--link-decoration-hover);
+    }
+}
+
+.externalLink {
+    color: var(--link-external-color);
+    text-decoration-line: var(--link-external-decoration);
+    cursor: var(--cursor-link);
+    filter: var(--link-external-filter);
+
+    background-position: center right;
+    background-repeat: no-repeat;
+    background-image:
+        linear-gradient(transparent, transparent),
+        url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWV4dGVybmFsLWxpbmstaWNvbiBsdWNpZGUtZXh0ZXJuYWwtbGluayI+PHBhdGggZD0iTTE1IDNoNnY2Ii8+PHBhdGggZD0iTTEwIDE0IDIxIDMiLz48cGF0aCBkPSJNMTggMTN2NmEyIDIgMCAwIDEtMiAySDVhMiAyIDAgMCAxLTItMlY4YTIgMiAwIDAgMSAyLTJoNiIvPjwvc3ZnPg==);
+    background-size: 0.825em;
+    padding-inline-end: 0.9em;
+    background-position-y: 0.2em;
+
+    transition: opacity 0.15s ease-in-out;
+
+    &:hover {
+        color: var(--link-external-color-hover);
+        text-decoration-line: var(--link-external-decoration-hover);
+    }
+}

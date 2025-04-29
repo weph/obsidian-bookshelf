@@ -15,6 +15,7 @@ export interface PropertyNames {
     rating: string
     lists: string
     comment: string
+    links: string
 }
 
 export class BookMetadataNoteAdapter implements BookMetadata {
@@ -154,6 +155,26 @@ export class BookMetadataNoteAdapter implements BookMetadata {
         }
 
         return undefined
+    }
+
+    get links(): Array<Link> {
+        const value = this.note.metadata.value(this.propertyNames.links)
+
+        const sourceLinks = Array.isArray(value) ? value : [value]
+
+        return sourceLinks
+            .map((v) => {
+                if (!(this.isReference(v) || typeof v === 'string')) {
+                    return null
+                }
+
+                try {
+                    return Link.from(v)
+                } catch {
+                    return null
+                }
+            })
+            .filter((v) => v !== null)
     }
 
     private isReference(value: PropertyValue | null) {

@@ -59,6 +59,7 @@ export class BookBuilder {
             title: 'Book Title',
             authors: [],
             lists: [],
+            links: [],
         }
     }
 }

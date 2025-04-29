@@ -10,6 +10,7 @@ import { ExternalLink } from 'lucide-react'
 import { TagList } from '../tag-list/tag-list'
 import { Icon } from '../icon/icon'
 import { Link } from '../../bookshelf/book/link'
+import { TextLink } from '../text-link/text-link'
 
 interface Props {
     book: Book
@@ -18,7 +19,7 @@ interface Props {
 }
 
 export function BookDetails({ book, openLink, addProgress }: Props) {
-    const { cover, title, authors, published, pages, rating, tags, comment } = book.metadata
+    const { cover, title, authors, published, pages, rating, tags, comment, links } = book.metadata
 
     const journeyItemText = (item: ReadingJourneyItem) => {
         switch (item.action) {
@@ -56,6 +57,16 @@ export function BookDetails({ book, openLink, addProgress }: Props) {
                     </div>
 
                     {tags && <TagList className={styles.tags} tags={tags} />}
+
+                    {links && (
+                        <ul className={styles.links}>
+                            {links.map((l, i) => (
+                                <li key={i}>
+                                    <TextLink link={l} onClick={openLink} />
+                                </li>
+                            ))}
+                        </ul>
+                    )}
 
                     {comment && <q className={styles.comment}>{comment}</q>}
                 </div>

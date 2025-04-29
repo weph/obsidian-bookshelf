@@ -20,6 +20,9 @@ For a full diff see [`0.12.0...main`][0.12.0...main].
 - Make authors clickable in book details modal\
   If an author is entered as a WikiLink in the metadata, it will now appear as a clickable link in the book details
   modal.
+- Add support for links to external websites or notes ([#21](https://github.com/weph/obsidian-bookshelf/issues/21))\
+  You can now add links to external websites or notes within your vault to a book. They'll be displayed as clickable
+  links in the book details modal. Thanks to [@TechnoMaverick](https://github.com/TechnoMaverick) for the suggestion!
 
 ### Changed
 

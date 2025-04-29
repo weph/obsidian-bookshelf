@@ -1,4 +1,5 @@
 import { BookBuilder } from './book-builder'
+import { Link } from '../bookshelf/book/link'
 
 export const algorithms = new BookBuilder()
     .with('title', 'Algorithms')
@@ -89,6 +90,12 @@ export const tddByExample = new BookBuilder()
     .with('rating', 5)
     .with('comment', 'Probably the best introduction to TDD ever written')
     .with('lists', ['Testing', 'Classic'])
+    .with('links', [
+        Link.from('https://www.goodreads.com/book/show/387190.Test_Driven_Development'),
+        Link.from('https://hardcover.app/books/test-driven-development-by-example'),
+        Link.from('https://app.thestorygraph.com/books/4a300d01-8a10-4e53-a60a-35b801d31e0f'),
+        new Link('internal', 'Test-Driven Development', 'Test-Driven Development', '[[Test-Driven Development]]'),
+    ])
     .withReadingProgress(new Date(2025, 0, 1), 1, 10)
     .withReadingProgress(new Date(2025, 0, 2), 11, 50)
     .withReadingProgress(new Date(2025, 0, 3), 51, 100)
