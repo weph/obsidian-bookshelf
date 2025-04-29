@@ -23,7 +23,7 @@ export class InMemoryNotes implements Notes {
     }
 
     public async dailyNote(date: Date): Promise<Note> {
-        const key = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
+        const key = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}.md`
 
         if (!this.notesByName.has(key)) {
             this.notesByName.set(key, new FakeNote(key, new StaticMetadata({}), []))

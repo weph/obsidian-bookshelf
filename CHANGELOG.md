@@ -29,6 +29,10 @@ For a full diff see [`0.12.0...main`][0.12.0...main].
 - Tweaked gallery card appearance ([#20](https://github.com/weph/obsidian-bookshelf/issues/20))\
   Cards now look a little tighter. Thanks again [@soundslikeinfo](https://github.com/soundslikeinfo) for the suggestion!
 
+### Fixed
+
+- Made daily note detection more robust ([#22](https://github.com/weph/obsidian-bookshelf/issues/22))\
+
 ## [`0.12.0`][0.12.0] - 2025-04-24
 
 For a full diff see [`0.12.0...main`][0.12.0...main].
