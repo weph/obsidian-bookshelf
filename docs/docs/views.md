@@ -11,7 +11,7 @@ Bookshelf adds three views to Obsidian:
 ![Library](/img/library.png)
 
 The library view displays all books in your vault.
-To learn more about what Bookshelf considers a book, see the [Book Notes section](book-notes.mdx).
+To learn more about what Bookshelf considers a book, see the [Book Notes section](book-notes.md).
 
 To open the library, click the ![library icon](/img/library-big.svg) icon in the ribbon or select "Open
 library" from the command palette.

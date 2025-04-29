@@ -59,7 +59,7 @@ comment: Good, but not as riveting as the original series
 :::tip
 You can find more examples in
 the [demo vault](https://github.com/weph/obsidian-bookshelf/tree/main/resources/demo-vault).
-To learn more about the properties and how to customize them, see the [Book Notes section](book-notes.mdx).
+To learn more about the properties and how to customize them, see the [Book Notes section](book-notes.md).
 :::
 
 ## Tracking reading progress
