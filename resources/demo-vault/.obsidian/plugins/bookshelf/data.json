@@ -9,7 +9,8 @@
     "tags": "tags",
     "rating": "rating",
     "lists": "lists",
-    "comment": "comment"
+    "comment": "comment",
+    "links": "links"
   },
   "bookNote": {
     "enabled": true,
@@ -37,6 +38,6 @@
   "readingProgress": {
     "newEntryLocation": "dailyNote"
   },
-  "previousVersion": "0.11.0",
+  "previousVersion": "0.12.0",
   "showReleaseNotes": true
 }

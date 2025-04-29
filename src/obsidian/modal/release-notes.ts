@@ -1,4 +1,25 @@
 export const releaseNotes = {
+    '0.13.0': `
+### Added
+
+- **Remember library settings** ([#11](https://github.com/weph/obsidian-bookshelf/issues/11))\\
+  Bookshelf now remembers your library settings (search term, list, grouping, sort, and view mode) as part of the workspace. If the library tab was open when you closed Obsidian, it'll reopen in the same state.
+- **Documentation for styling Bookshelf**\\
+  There's a [new section in the documentation](https://weph.github.io/obsidian-bookshelf/docs/styling) listing the available CSS variables for easier tweaking of Bookshelf's appearance. There aren't many yet, but more are on the way.
+- **Make authors clickable in book details modal**\\
+  If an author is entered as a WikiLink in the metadata, it will now appear as a clickable link in the book details modal.
+- **Add support for links to external websites or notes** ([#21](https://github.com/weph/obsidian-bookshelf/issues/21))\\
+  You can now add links to external websites or notes within your vault to a book. They'll be displayed as clickable links in the book details modal. Thanks to [@TechnoMaverick](https://github.com/TechnoMaverick) for the suggestion!
+
+### Changed
+
+- **Tweaked gallery card appearance** ([#20](https://github.com/weph/obsidian-bookshelf/issues/20))\\
+  Cards now look a little tighter. Thanks again [@soundslikeinfo](https://github.com/soundslikeinfo) for the suggestion!
+
+### Fixed
+
+- Made daily note detection more robust ([#22](https://github.com/weph/obsidian-bookshelf/issues/22))
+`,
     '0.12.0': `
 ### Added
 

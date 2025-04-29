@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-For a full diff see [`0.12.0...main`][0.12.0...main].
+For a full diff see [`0.13.0...main`][0.13.0...main].
+
+## [`0.13.0`][0.13.0] - 2025-04-29
+
+For a full diff see [`0.12.0...0.13.0`][0.12.0...0.13.0].
 
 ### Added
 
@@ -31,11 +35,11 @@ For a full diff see [`0.12.0...main`][0.12.0...main].
 
 ### Fixed
 
-- Made daily note detection more robust ([#22](https://github.com/weph/obsidian-bookshelf/issues/22))\
+- Made daily note detection more robust ([#22](https://github.com/weph/obsidian-bookshelf/issues/22))
 
 ## [`0.12.0`][0.12.0] - 2025-04-24
 
-For a full diff see [`0.12.0...main`][0.12.0...main].
+For a full diff see [`0.11.0...0.12.0`][0.11.0...0.12.0].
 
 ### Added
 
@@ -213,6 +217,7 @@ For a full diff see [`0.2.2...0.3.0`][0.2.2...0.3.0].
 [0.10.0]: https://github.com/weph/obsidian-bookshelf/releases/tag/0.10.0
 [0.11.0]: https://github.com/weph/obsidian-bookshelf/releases/tag/0.11.0
 [0.12.0]: https://github.com/weph/obsidian-bookshelf/releases/tag/0.12.0
+[0.13.0]: https://github.com/weph/obsidian-bookshelf/releases/tag/0.13.0
 [0.2.2...0.3.0]: https://github.com/weph/obsidian-bookshelf/compare/0.2.2...0.3.0
 [0.3.0...0.3.1]: https://github.com/weph/obsidian-bookshelf/compare/0.3.0...0.3.1
 [0.3.1...0.4.0]: https://github.com/weph/obsidian-bookshelf/compare/0.3.1...0.4.0
@@ -225,4 +230,5 @@ For a full diff see [`0.2.2...0.3.0`][0.2.2...0.3.0].
 [0.9.0...0.10.0]: https://github.com/weph/obsidian-bookshelf/compare/0.9.0...0.10.0
 [0.10.0...0.11.0]: https://github.com/weph/obsidian-bookshelf/compare/0.10.0...0.11.0
 [0.11.0...0.12.0]: https://github.com/weph/obsidian-bookshelf/compare/0.11.0...0.12.0
-[0.12.0...main]: https://github.com/weph/obsidian-bookshelf/compare/0.12.0...main
+[0.12.0...0.13.0]: https://github.com/weph/obsidian-bookshelf/compare/0.12.0...0.13.0
+[0.13.0...main]: https://github.com/weph/obsidian-bookshelf/compare/0.12.0...main
