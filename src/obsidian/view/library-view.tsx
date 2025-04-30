@@ -35,8 +35,15 @@ export class LibraryView extends ItemView {
         return 'Bookshelf library'
     }
 
-    public async setState(state: Settings, result: ViewStateResult): Promise<void> {
-        this.settings = state
+    public async setState(state: Partial<Settings>, result: ViewStateResult): Promise<void> {
+        this.settings = {
+            search: state.search || initialSettings.search,
+            list: state.list || initialSettings.list,
+            status: state.status || initialSettings.status,
+            grouping: state.grouping || initialSettings.grouping,
+            sort: state.sort || initialSettings.sort,
+            view: state.view || initialSettings.view,
+        }
 
         this.render()
 

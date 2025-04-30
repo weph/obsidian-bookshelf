@@ -7,7 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-For a full diff see [`0.13.0...main`][0.13.0...main].
+For a full diff see [`0.13.1...main`][0.13.1...main].
+
+## [`0.13.1`][0.13.1] - 2025-04-30
+
+For a full diff see [`0.13.0...0.13.1`][0.13.0...0.13.1].
+
+### Fixed
+
+- Properly initialize library settings after upgrade ([#24](https://github.com/weph/obsidian-bookshelf/issues/24))\
+  Upgrading from 0.12.0 to 0.13.0 caused the Library to appear empty until users manually pressed the "Reset" button.
+  This is now fixed.
 
 ## [`0.13.0`][0.13.0] - 2025-04-29
 
@@ -218,6 +228,7 @@ For a full diff see [`0.2.2...0.3.0`][0.2.2...0.3.0].
 [0.11.0]: https://github.com/weph/obsidian-bookshelf/releases/tag/0.11.0
 [0.12.0]: https://github.com/weph/obsidian-bookshelf/releases/tag/0.12.0
 [0.13.0]: https://github.com/weph/obsidian-bookshelf/releases/tag/0.13.0
+[0.13.1]: https://github.com/weph/obsidian-bookshelf/releases/tag/0.13.1
 [0.2.2...0.3.0]: https://github.com/weph/obsidian-bookshelf/compare/0.2.2...0.3.0
 [0.3.0...0.3.1]: https://github.com/weph/obsidian-bookshelf/compare/0.3.0...0.3.1
 [0.3.1...0.4.0]: https://github.com/weph/obsidian-bookshelf/compare/0.3.1...0.4.0
@@ -231,4 +242,5 @@ For a full diff see [`0.2.2...0.3.0`][0.2.2...0.3.0].
 [0.10.0...0.11.0]: https://github.com/weph/obsidian-bookshelf/compare/0.10.0...0.11.0
 [0.11.0...0.12.0]: https://github.com/weph/obsidian-bookshelf/compare/0.11.0...0.12.0
 [0.12.0...0.13.0]: https://github.com/weph/obsidian-bookshelf/compare/0.12.0...0.13.0
-[0.13.0...main]: https://github.com/weph/obsidian-bookshelf/compare/0.12.0...main
+[0.13.0...0.13.1]: https://github.com/weph/obsidian-bookshelf/compare/0.13.0...0.13.1
+[0.13.1...main]: https://github.com/weph/obsidian-bookshelf/compare/0.12.0...main

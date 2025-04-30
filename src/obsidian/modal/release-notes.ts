@@ -1,4 +1,10 @@
 export const releaseNotes = {
+    '0.13.1': `
+### Fixed
+
+- **Properly initialize library settings after upgrade** ([#24](https://github.com/weph/obsidian-bookshelf/issues/24))\\
+  Upgrading from 0.12.0 to 0.13.0 caused the Library to appear empty until users manually pressed the "Reset" button. This is now fixed.
+`,
     '0.13.0': `
 ### Added
 
