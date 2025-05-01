@@ -1,4 +1,4 @@
-import { Position } from './position'
+import { Part, Position } from './position'
 
 export class Page implements Position {
     constructor(private value: number) {}
@@ -17,5 +17,9 @@ export class Page implements Position {
 
     public toString(): string {
         return this.value.toString()
+    }
+
+    public part(): Part {
+        return 'main'
     }
 }

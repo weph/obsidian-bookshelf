@@ -1,6 +1,9 @@
 import { Book } from '../../book/book'
 import { Page } from './page'
 import { Percentage } from './percentage'
+import { RomanNumeral } from './roman-numeral'
+
+export type Part = 'front-matter' | 'main'
 
 export interface Position {
     first(): Position
@@ -10,6 +13,8 @@ export interface Position {
     pageInBook(book: Book): number
 
     toString(): string
+
+    part(): Part
 }
 
 export function position(value: number | string): Position {
@@ -27,6 +32,12 @@ export function position(value: number | string): Position {
 
         if (`${parsedValue}%` === trimmedValue) {
             return new Percentage(parsedValue)
+        }
+
+        try {
+            return RomanNumeral.fromString(trimmedValue)
+        } catch {
+            // this is a little ugly
         }
     }
 

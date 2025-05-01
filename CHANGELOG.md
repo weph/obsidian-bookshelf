@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.13.1...main`][0.13.1...main].
 
+### Added
+
+- Track reading progress using Roman numerals ([#10](https://github.com/weph/obsidian-bookshelf/issues/10))\
+  Want to track every page, including those front matter sections? You can now enter Roman numerals to log your progress
+  more precisely.
+
 ## [`0.13.1`][0.13.1] - 2025-04-30
 
 For a full diff see [`0.13.0...0.13.1`][0.13.0...0.13.1].

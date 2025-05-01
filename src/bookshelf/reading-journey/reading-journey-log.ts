@@ -51,7 +51,7 @@ export class ReadingProgress implements ReadingJourneyProgressItem {
             return this._start
         }
 
-        if (this.previous === null) {
+        if (this.previous === null || this.previous.end.part() !== this.end.part()) {
             return this.end.first()
         }
 

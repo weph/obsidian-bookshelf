@@ -1,5 +1,5 @@
 import { Book } from 'src/bookshelf/book/book'
-import { Position } from './position'
+import { Part, Position } from './position'
 
 export class Percentage implements Position {
     constructor(private value: number) {}
@@ -32,5 +32,9 @@ export class Percentage implements Position {
 
     public toString(): string {
         return `${this.value}%`
+    }
+
+    public part(): Part {
+        return 'main'
     }
 }

@@ -33,6 +33,13 @@ describe('Reading Progress', () => {
 
             expect(subject.startPage).toBe(11)
         })
+
+        test('start page should be 1 if previous reading progress is from a different book part', () => {
+            const previous = new ReadingProgress(new Date(), book, null, position('x'), position('xx'), source)
+            const subject = new ReadingProgress(new Date(), book, previous, null, position(10), source)
+
+            expect(subject.startPage).toBe(1)
+        })
     })
 
     describe('Pages (difference between end and start page + 1)', () => {

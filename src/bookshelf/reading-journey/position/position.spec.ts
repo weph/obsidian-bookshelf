@@ -2,12 +2,14 @@ import { expect, test } from 'vitest'
 import { position } from './position'
 import { Page } from './page'
 import { Percentage } from './percentage'
+import { RomanNumeral } from './roman-numeral'
 
 test.each([
     [1, new Page(1)],
     ['123', new Page(123)],
     [' 123 ', new Page(123)],
     ['25%', new Percentage(25)],
+    ['xxiv', new RomanNumeral(24)],
 ])('position(%o) should return %o', (input, expected) => {
     expect(position(input)).toEqual(expected)
 })

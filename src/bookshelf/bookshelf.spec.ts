@@ -205,6 +205,26 @@ describe('Note processing', () => {
         ])
     })
 
+    test('It should create reading journey from book note (front matter to main)', async () => {
+        await bookshelf.process(
+            new FakeNote('Books/The Shining.md', new StaticMetadata({}), [
+                '2025-01-01: Started reading',
+                '2025-01-01: xii-xv',
+                '2025-01-02: xxiii',
+                '2025-01-03: 120',
+                '2025-01-03: Finished reading',
+            ]),
+        )
+
+        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+            '2025-01-01: The Shining: started',
+            '2025-01-01: The Shining: xii-xv',
+            '2025-01-02: The Shining: xvi-xxiii',
+            '2025-01-03: The Shining: 1-120',
+            '2025-01-03: The Shining: finished',
+        ])
+    })
+
     test('It should update reading journey from book note', async () => {
         const note = new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-01-01: Started reading'])
         await bookshelf.process(note)
@@ -317,6 +337,28 @@ describe('Note processing', () => {
             '2025-01-01: The Shining: started',
             '2025-01-01: The Shining: 0%-30%',
             '2025-01-01: The Shining: 31%-100%',
+            '2025-01-01: The Shining: finished',
+        ])
+    })
+
+    test('It should create reading journey from daily note (front matter to main)', async () => {
+        notes.add(new FakeNote('The Shining', new StaticMetadata({}), []))
+
+        await bookshelf.process(
+            new FakeNote('2025-01-01.md', new StaticMetadata({}), [
+                'Started reading [[The Shining]]',
+                'Read [[The Shining]]: xii-xv',
+                'Read [[The Shining]]: xxiii',
+                'Read [[The Shining]]: 120',
+                'Finished reading [[The Shining]]',
+            ]),
+        )
+
+        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+            '2025-01-01: The Shining: started',
+            '2025-01-01: The Shining: xii-xv',
+            '2025-01-01: The Shining: xvi-xxiii',
+            '2025-01-01: The Shining: 1-120',
             '2025-01-01: The Shining: finished',
         ])
     })

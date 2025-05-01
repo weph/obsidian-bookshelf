@@ -8,7 +8,8 @@ Bookshelf tracks your reading progress based on entries in your **book notes** a
 A reading progress entry consists of a date, a book, and a recorded action (such as starting, reading, or finishing a
 book).
 
-You can add reading progress entries manually by writing them in your notes, or use the form in the **book details dialog**
+You can add reading progress entries manually by writing them in your notes, or use the form in the **book details
+dialog**
 to add them more easily. The location for these entries can be configured in the settings.
 
 By default, Bookshelf looks for reading progress entries under the "Reading Journey" heading in your book notes and
@@ -30,17 +31,30 @@ If a book has no entries, it is considered unread.
 
 ## Tracking Progress
 
-You can track reading progress by entering a start and end position, or just an end position. Positions can be either
-**page numbers** or **percentages** (e.g., `10-60%` or just `25%`). If you're using percentages, you have to set the
-[total number of pages property](book-notes#total-number-of-pages) in the book note so Bookshelf can convert them to
-page numbers in the statistics.
+You can track reading progress by entering a start and end position, or just an end position. Positions can be:
 
-- If only an end position is given, Bookshelf assumes the reading continued from the last recorded position.
-- If no prior entry exists for the book, Bookshelf assumes reading started from page 1 or 0%, depending on the type of
-  entry.
+- **Page numbers** (`30`)
+- **Percentages** (`25%`)
+- **Roman numerals** (`xviii`)
 
-For example, if the first entry logs reading from pages 10 to 180, and the next entry specifies only page 290, Bookshelf
-assumes you read from page 181 to 290.
+If you're using percentages, you have to set the [total number of pages property](book-notes#total-number-of-pages) in
+the book note so Bookshelf can convert them to page numbers in the statistics.
+
+Bookshelf makes a few assumptions when interpreting progress entries:
+
+- If only an end position is given, it assumes you continued from the last recorded position.
+- If the last recorded position was a Roman numeral and the current one is a page number, it assumes you moved from the
+  front matter into the main part (starting at page 1).
+- If there's no prior entry, it assumes you started reading from page 1 or 0%, depending on the type of entry.
+
+**Example**
+
+```
+- 2024-12-05: x-xv  <- explicit start and end in Roman numerals
+- 2024-12-06: xxx   <- implicit start at xvi from previous entry
+- 2024-12-07: 15    <- implicit start at page 1 (transition from front matter)
+- 2024-12-08: 76    <- implicit start at page 16 from previous entry
+```
 
 ## Book Notes
 
