@@ -34,7 +34,7 @@ export function BookTable({ books, onBookClick }: Props) {
                             ))}
                         </td>
                         <td className={styles.pubDate}>{book.metadata.published?.getFullYear() || ''}</td>
-                        <td className={styles.pages}>{book.metadata.pages || ''}</td>
+                        <td className={styles.pages}>{book.metadata.pages?.toLocaleString() || ''}</td>
                         <td>
                             <StarRating value={book.metadata.rating || 0} />
                         </td>

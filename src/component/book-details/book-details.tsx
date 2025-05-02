@@ -51,7 +51,7 @@ export function BookDetails({ book, openLink, addProgress }: Props) {
                     </div>
                     {authors.length > 0 && <Authors authors={authors} openLink={openLink} />}
                     <div className={styles.pagesAndDate}>
-                        {pages && <div>{pages} pages</div>}
+                        {pages && <div>{pages.toLocaleString()} pages</div>}
                         {published && <div>{published.getFullYear()}</div>}
                         {rating && <StarRating value={rating} />}
                     </div>
