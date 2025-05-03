@@ -15,7 +15,7 @@ export interface BookMetadata {
     readonly lists: Array<string>
     readonly comment?: string
     readonly links: Array<Link>
-    readonly series?: string
+    readonly series?: string | Link
 }
 
 export interface Book {

@@ -24,7 +24,12 @@ export const bookGroupingOptions: Array<GroupingDropdownOption> = [
     {
         value: 'series',
         label: 'Series',
-        grouped: (books) => grouped(books, (b) => [b.metadata.series || null], 'asc'),
+        grouped: (books) =>
+            grouped(
+                books,
+                (b) => [b.metadata.series instanceof Link ? b.metadata.series.displayText : b.metadata.series || null],
+                'asc',
+            ),
     },
     {
         value: 'author',

@@ -293,12 +293,15 @@ describe('Links', () => {
 })
 
 describe('series', () => {
+    const reference = { key: 'series', link: 'Book Series', original: '[[Book Series]]' }
+
     test.each([
         [undefined, undefined],
         [true, undefined],
         [123, undefined],
         [[], undefined],
         ['foo', 'foo'],
+        [reference, Link.from(reference)],
     ])('Metadata property "%o" should be %o', (value, expected) => {
         const result = bookMetadata(
             new FakeNote('Title', new StaticMetadata(value !== undefined ? { series: value } : {})),

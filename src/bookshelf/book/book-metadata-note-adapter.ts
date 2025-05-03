@@ -152,11 +152,23 @@ export class BookMetadataNoteAdapter implements BookMetadata {
             .filter((v) => v !== null)
     }
 
-    get series(): string | undefined {
+    get series(): string | Link | undefined {
         const value = this.note.metadata.value(this.propertyNames.series)
+
+        if (Array.isArray(value)) {
+            return undefined
+        }
 
         if (typeof value === 'string') {
             return value
+        }
+
+        if (this.isReference(value)) {
+            try {
+                return Link.from(value)
+            } catch {
+                return undefined
+            }
         }
 
         return undefined
