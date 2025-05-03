@@ -29,6 +29,7 @@ const defaultConfiguration: Configuration = {
             lists: 'lists',
             comment: 'comment',
             links: 'links',
+            series: 'series',
         },
         bookNote: {
             enabled: true,

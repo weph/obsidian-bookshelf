@@ -16,6 +16,7 @@ export interface PropertyNames {
     lists: string
     comment: string
     links: string
+    series: string
 }
 
 export class BookMetadataNoteAdapter implements BookMetadata {
@@ -149,6 +150,16 @@ export class BookMetadataNoteAdapter implements BookMetadata {
                 }
             })
             .filter((v) => v !== null)
+    }
+
+    get series(): string | undefined {
+        const value = this.note.metadata.value(this.propertyNames.series)
+
+        if (typeof value === 'string') {
+            return value
+        }
+
+        return undefined
     }
 
     private isReference(value: PropertyValue | null) {
