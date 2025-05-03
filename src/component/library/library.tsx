@@ -159,11 +159,12 @@ function DesktopNavigation({ settings, settingsChanged, lists, sortOptions, rese
         <>
             <div className={styles.left}>
                 <Input
-                    type="search"
+                    type="text"
                     placeholder="Search..."
                     value={settings.search}
                     onUpdate={(search) => settingsChanged({ ...settings, search })}
                     autoFocus={true}
+                    clearable={true}
                 />
                 {lists.length > 0 && (
                     <Dropdown
@@ -213,11 +214,13 @@ function MobileNavigation({ settings, settingsChanged, lists, sortOptions, reset
         <div className={styles.mobileNavigation}>
             <div className={styles.searchBar}>
                 <Input
-                    type="search"
+                    className={styles.searchInput}
+                    type="text"
                     placeholder="Search..."
                     value={settings.search}
                     onUpdate={(search) => settingsChanged({ ...settings, search })}
                     autoFocus={true}
+                    clearable={true}
                 />
                 <Icon icon={SlidersHorizontal} onClick={() => setFiltersVisible(!filtersVisible)} />
             </div>

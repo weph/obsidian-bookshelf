@@ -14,6 +14,8 @@ For a full diff see [`0.13.1...main`][0.13.1...main].
 - Track reading progress using Roman numerals ([#10](https://github.com/weph/obsidian-bookshelf/issues/10))\
   Want to track every page, including those front matter sections? You can now enter Roman numerals to log your progress
   more precisely.
+- Add button to clear search input\
+  You can now clear the search term by using the familiar "x" icon in the search field.
 
 ## [`0.13.1`][0.13.1] - 2025-04-30
 

@@ -6,37 +6,49 @@ interface Props {
     placeholder: string
     value: string
     onUpdate: (value: string) => void
+    clearable?: boolean
     error?: boolean
     autoFocus?: boolean
     id?: string
     className?: string
 }
 
-export function Input({ type, placeholder, value, onUpdate, error, autoFocus, id, className }: Props) {
+export function Input({ type, placeholder, value, onUpdate, clearable, error, autoFocus, id, className }: Props) {
     const ref = useRef<HTMLInputElement>(null)
     const [currentValue, setCurrentValue] = useState(value)
 
-    const handleUpdate = () => {
-        const newValue = ref.current?.value || ''
-        if (newValue === currentValue) {
-            return
-        }
+    function setNewValue(value: string): void {
+        setCurrentValue(value)
+        onUpdate(value)
+    }
 
-        setCurrentValue(newValue)
-        onUpdate(newValue)
+    function handleUpdate(): void {
+        const newValue = ref.current?.value || ''
+        if (newValue !== currentValue) {
+            setNewValue(newValue)
+        }
+    }
+
+    function clear(): void {
+        setNewValue('')
     }
 
     return (
-        <input
-            ref={ref}
-            id={id}
-            className={`${styles.input} ${error && styles.error} ${className || ''}`}
-            type={type}
-            placeholder={placeholder}
-            value={value}
-            onKeyUp={() => handleUpdate()}
-            onChange={() => handleUpdate()}
-            autoFocus={autoFocus}
-        />
+        <div className={`${styles.container} ${className || ''}`}>
+            <input
+                ref={ref}
+                id={id}
+                className={`${styles.input} ${error && styles.error}`}
+                type={type}
+                placeholder={placeholder}
+                value={value}
+                onKeyUp={() => handleUpdate()}
+                onChange={() => handleUpdate()}
+                autoFocus={autoFocus}
+            />
+            {clearable && value && (
+                <div className={styles.clear} onClick={() => clear()} aria-label="Clear search"></div>
+            )}
+        </div>
     )
 }

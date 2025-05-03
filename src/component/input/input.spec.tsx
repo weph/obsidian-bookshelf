@@ -1,8 +1,9 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, test, vi } from 'vitest'
 import { Input } from './input'
 import { fireEvent } from '@testing-library/dom'
 import { EventType } from '@testing-library/dom/types/events'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
 const onUpdate = vi.fn()
 
@@ -48,4 +49,13 @@ describe('onUpdate', () => {
         expect(onUpdate).toHaveBeenNthCalledWith(2, 'bar')
         expect(onUpdate).toHaveBeenNthCalledWith(3, 'baz')
     })
+})
+
+test('clear search', async () => {
+    render(<Input type={''} placeholder={''} value={'value'} onUpdate={onUpdate} clearable={true} />)
+
+    await userEvent.click(screen.getByLabelText('Clear search'))
+
+    expect(onUpdate).toHaveBeenCalledTimes(1)
+    expect(onUpdate).toHaveBeenNthCalledWith(1, '')
 })

@@ -24,6 +24,20 @@ export const Error: Story = {
     },
 }
 
+export const ClearableWithoutValue: Story = {
+    args: {
+        value: '',
+        clearable: true,
+    },
+}
+
+export const ClearableWithValue: Story = {
+    args: {
+        value: 'value',
+        clearable: true,
+    },
+}
+
 export const SearchWithPlaceholder: Story = {
     args: {
         type: 'search',
