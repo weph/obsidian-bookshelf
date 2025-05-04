@@ -86,20 +86,7 @@ export class BookMetadataNoteAdapter implements BookMetadata {
     }
 
     get pages(): number | undefined {
-        const value = this.firstValue(this.propertyNames.pages)
-
-        if (typeof value === 'number') {
-            return value
-        }
-
-        if (typeof value === 'string') {
-            const parsedValue = parseInt(value)
-            if (!Number.isNaN(parsedValue) && `${parsedValue}` === value) {
-                return parsedValue
-            }
-        }
-
-        return undefined
+        return this.intOrUndefined(this.note.metadata.value(this.propertyNames.pages))
     }
 
     get tags() {
@@ -117,20 +104,7 @@ export class BookMetadataNoteAdapter implements BookMetadata {
     }
 
     get rating(): number | undefined {
-        const value = this.note.metadata.value(this.propertyNames.rating)
-
-        if (typeof value === 'number') {
-            return value
-        }
-
-        if (typeof value === 'string') {
-            const parsedValue = parseFloat(value)
-            if (!isNaN(parsedValue)) {
-                return parsedValue
-            }
-        }
-
-        return undefined
+        return this.floatOrUndefined(this.note.metadata.value(this.propertyNames.rating))
     }
 
     get lists(): Array<string> {
@@ -193,5 +167,35 @@ export class BookMetadataNoteAdapter implements BookMetadata {
         const value = this.note.metadata.value(property)
 
         return Array.isArray(value) ? value[0] : value
+    }
+
+    private intOrUndefined(value: Array<PropertyValue> | PropertyValue | null): number | undefined {
+        if (typeof value === 'number') {
+            return value
+        }
+
+        if (typeof value === 'string') {
+            const parsedValue = parseInt(value)
+            if (!Number.isNaN(parsedValue) && `${parsedValue}` === value) {
+                return parsedValue
+            }
+        }
+
+        return undefined
+    }
+
+    private floatOrUndefined(value: Array<PropertyValue> | PropertyValue | null): number | undefined {
+        if (typeof value === 'number') {
+            return value
+        }
+
+        if (typeof value === 'string') {
+            const parsedValue = parseFloat(value)
+            if (!isNaN(parsedValue)) {
+                return parsedValue
+            }
+        }
+
+        return undefined
     }
 }
