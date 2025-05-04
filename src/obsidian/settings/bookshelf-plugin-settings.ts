@@ -22,6 +22,7 @@ export interface BookshelfPluginSettings extends VersionedSettings {
         comment: string
         links: string
         series: string
+        positionInSeries: string
     }
     bookNote: {
         enabled: boolean
@@ -67,6 +68,7 @@ export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
         comment: 'comment',
         links: 'links',
         series: 'series',
+        positionInSeries: 'position-in-series',
     },
     bookNote: {
         enabled: true,

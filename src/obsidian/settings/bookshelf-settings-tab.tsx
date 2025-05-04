@@ -161,6 +161,17 @@ export class BookshelfSettingsTab extends PluginSettingTab {
                     await this.plugin.saveSettings()
                 }),
             )
+
+        new Setting(containerEl)
+            .setName('Position in series')
+            .setDesc("Name of the property that contains the book's position within its series")
+            .addText((text) =>
+                text.setValue(this.plugin.settings.bookProperties.positionInSeries).onChange(async (value) => {
+                    this.plugin.settings.bookProperties.positionInSeries = value.trim()
+
+                    await this.plugin.saveSettings()
+                }),
+            )
     }
 
     private addBookNoteSection(): void {

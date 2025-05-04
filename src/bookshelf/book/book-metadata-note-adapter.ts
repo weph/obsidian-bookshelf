@@ -1,5 +1,5 @@
 import { PropertyValue } from '../note/metadata'
-import { BookMetadata } from './book'
+import { BookMetadata, SeriesInfo } from './book'
 import { Reference } from 'obsidian'
 import { Note } from '../note/note'
 import { Link } from './link'
@@ -17,6 +17,7 @@ export interface PropertyNames {
     comment: string
     links: string
     series: string
+    positionInSeries: string
 }
 
 export class BookMetadataNoteAdapter implements BookMetadata {
@@ -152,20 +153,21 @@ export class BookMetadataNoteAdapter implements BookMetadata {
             .filter((v) => v !== null)
     }
 
-    get series(): string | Link | undefined {
-        const value = this.note.metadata.value(this.propertyNames.series)
+    get series(): SeriesInfo | undefined {
+        const seriesValue = this.note.metadata.value(this.propertyNames.series)
+        const position = this.floatOrUndefined(this.note.metadata.value(this.propertyNames.positionInSeries))
 
-        if (Array.isArray(value)) {
+        if (Array.isArray(seriesValue)) {
             return undefined
         }
 
-        if (typeof value === 'string') {
-            return value
+        if (typeof seriesValue === 'string') {
+            return { name: seriesValue, position }
         }
 
-        if (this.isReference(value)) {
+        if (this.isReference(seriesValue)) {
             try {
-                return Link.from(value)
+                return { name: Link.from(seriesValue), position }
             } catch {
                 return undefined
             }

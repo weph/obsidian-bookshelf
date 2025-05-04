@@ -20,6 +20,10 @@
         flex-grow: 1;
     }
 
+    .series {
+        font-size: var(--font-ui-small);
+    }
+
     .title {
         font-size: var(--font-ui-large);
         font-weight: var(--font-bold);

@@ -5,4 +5,5 @@ author:
 published: 2004-05-05
 rating: 3.5
 pages: 288
+series: Dexter
 ---

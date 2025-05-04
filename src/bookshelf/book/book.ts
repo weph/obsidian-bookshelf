@@ -4,6 +4,11 @@ import { Link } from './link'
 
 export type ReadingStatus = 'unread' | 'reading' | 'abandoned' | 'finished'
 
+export interface SeriesInfo {
+    name: string | Link
+    position?: number
+}
+
 export interface BookMetadata {
     readonly title: string
     readonly cover?: string
@@ -15,7 +20,7 @@ export interface BookMetadata {
     readonly lists: Array<string>
     readonly comment?: string
     readonly links: Array<Link>
-    readonly series?: string | Link
+    readonly series?: SeriesInfo
 }
 
 export interface Book {

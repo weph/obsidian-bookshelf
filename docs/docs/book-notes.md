@@ -110,4 +110,11 @@ A list of links to external websites (e.g., `https://books.test/dracula`) or rel
 The name of the book series this title belongs to. You can use a plain string or a [WikiLink][WikiLink] if you have a
 dedicated note for the series.
 
+### Series Position
+
+**Property type:** Number\
+**Default name:** `position-in-series`
+
+The book's position within its series. For example, enter 1 for the first book, 2 for the second, and so on.
+
 [WikiLink]: https://help.obsidian.md/links#Supported+formats+for+internal+links
