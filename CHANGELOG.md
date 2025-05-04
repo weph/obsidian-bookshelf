@@ -17,6 +17,11 @@ For a full diff see [`0.13.1...main`][0.13.1...main].
 - Add button to clear search input\
   You can now clear the search term by using the familiar "x" icon in the search field.
 
+### Changed
+
+- Extended search\
+  The search field now also matches against author names and book series.
+
 ### Fixed
 
 - Always show number of pages read\
