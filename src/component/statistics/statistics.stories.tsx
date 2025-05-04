@@ -26,6 +26,8 @@ const bookshelf = BookshelfFactory.fromConfiguration({
             lists: 'lists',
             comment: 'comment',
             links: 'links',
+            series: 'series',
+            positionInSeries: 'position-in-series',
         },
         bookNote: {
             enabled: true,

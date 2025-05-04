@@ -42,7 +42,7 @@ a [Link to a file](https://help.obsidian.md/links#Link+to+a+file) inside your va
 
 Name or names of the author. You can use a text field if only want to keep track of a single author, or a list of
 multiple authors. If you maintain author notes inside your vault, you can
-use [WikiLinks](https://help.obsidian.md/links#Supported+formats+for+internal+links).
+use [WikiLinks][WikiLink].
 
 ### Publishing Date
 
@@ -101,3 +101,20 @@ note that helps you recall key information at a glance.
 
 A list of links to external websites (e.g., `https://books.test/dracula`) or related notes within your vault
 (`[[Dracula (Reading Notes)]]`). These links will appear in the [Book Details Modal](views.md#book-details-modal).
+
+### Series
+
+**Property type:** Text\
+**Default name:** `series`
+
+The name of the book series this title belongs to. You can use a plain string or a [WikiLink][WikiLink] if you have a
+dedicated note for the series.
+
+### Series Position
+
+**Property type:** Number\
+**Default name:** `position-in-series`
+
+The book's position within its series. For example, enter 1 for the first book, 2 for the second, and so on.
+
+[WikiLink]: https://help.obsidian.md/links#Supported+formats+for+internal+links

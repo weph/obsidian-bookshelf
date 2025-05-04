@@ -8,6 +8,8 @@ tags:
   - young-adult
   - dystopian
 pages: 390
+series: "Hunger Games"
+position-in-series: 3
 ---
 
 ## Reading Journey

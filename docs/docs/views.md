@@ -30,6 +30,7 @@ At the top of the library view are several controls:
 - **Grouping** to group books by:
     - Alphabetically (starting letter)
     - List
+    - Series
     - Author
     - Year (publication year)
     - Rating

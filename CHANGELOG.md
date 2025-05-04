@@ -16,6 +16,14 @@ For a full diff see [`0.13.1...main`][0.13.1...main].
   more precisely.
 - Add button to clear search input\
   You can now clear the search term by using the familiar "x" icon in the search field.
+- Add support for book series ([#14](https://github.com/weph/obsidian-bookshelf/issues/14))\
+  You can now add book series information (series name and position in series). The book details modal displays this
+  info, and you can group, sort, and search by series.
+
+### Changed
+
+- Extended search\
+  The search field now also matches against author names and book series.
 
 ### Fixed
 

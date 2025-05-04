@@ -15,6 +15,8 @@ const propertyNames: PropertyNames = {
     lists: 'lists',
     comment: 'comment',
     links: 'links',
+    series: 'series',
+    positionInSeries: 'positionInSeries',
 }
 
 const linkToUri: LinkToUri = (link) => `uri://${link}`
@@ -288,5 +290,35 @@ describe('Links', () => {
         )
 
         expect(result.links).toEqual(expected)
+    })
+})
+
+describe('series', () => {
+    const reference = { key: 'series', link: 'Book Series', original: '[[Book Series]]' }
+
+    test.each([
+        [undefined, undefined, undefined],
+        [true, undefined, undefined],
+        [123, undefined, undefined],
+        [[], undefined, undefined],
+        ['foo', undefined, { name: 'foo' }],
+        [reference, undefined, { name: Link.from(reference) }],
+        ['foo', 3, { name: 'foo', position: 3 }],
+        ['foo', '4', { name: 'foo', position: 4 }],
+        ['foo', 0.5, { name: 'foo', position: 0.5 }],
+        ['foo', '0.5', { name: 'foo', position: 0.5 }],
+        [reference, 5, { name: Link.from(reference), position: 5 }],
+    ])('Series "%o" and position "%o" should be %o', (series, positionInSeries, expected) => {
+        const result = bookMetadata(
+            new FakeNote(
+                'Title',
+                new StaticMetadata({
+                    series: series || null,
+                    positionInSeries: positionInSeries || null,
+                }),
+            ),
+        )
+
+        expect(result.series).toEqual(expected)
     })
 })

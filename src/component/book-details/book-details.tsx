@@ -43,6 +43,7 @@ export function BookDetails({ book, openLink, addProgress }: Props) {
                     {cover ? <img src={cover} alt={title} /> : <CoverPlaceholder title={title} />}
                 </div>
                 <div className={styles.details}>
+                    <Series book={book} />
                     <div className={styles.title}>
                         {title}
                         <div className={styles.openNote}>
@@ -83,6 +84,19 @@ export function BookDetails({ book, openLink, addProgress }: Props) {
                     </li>
                 </ul>
             </div>
+        </div>
+    )
+}
+
+function Series({ book }: { book: Book }) {
+    const series = book.metadata.series
+    if (series === undefined) {
+        return <></>
+    }
+
+    return (
+        <div className={styles.series}>
+            {series.position ? `#${series.position} in ${series.name}` : `Part of ${series.name}`}
         </div>
     )
 }

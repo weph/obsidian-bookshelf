@@ -22,6 +22,11 @@ export const bookGroupingOptions: Array<GroupingDropdownOption> = [
         grouped: (books) => grouped(books, (b) => (b.metadata.lists.length > 0 ? b.metadata.lists : [null]), 'asc'),
     },
     {
+        value: 'series',
+        label: 'Series',
+        grouped: (books) => grouped(books, (b) => [seriesName(b)], 'asc'),
+    },
+    {
         value: 'author',
         label: 'Author',
         grouped: (books) =>
@@ -39,6 +44,19 @@ export const bookGroupingOptions: Array<GroupingDropdownOption> = [
             grouped(books, (b) => [b.metadata.rating ? `${b.metadata.rating.toFixed(1)} stars` : '0 stars'], 'desc'),
     },
 ]
+
+function seriesName(book: Book): string | null {
+    const series = book.metadata.series
+    if (series === undefined) {
+        return null
+    }
+
+    if (series.name instanceof Link) {
+        return series.name.displayText
+    }
+
+    return series.name
+}
 
 function grouped(
     books: Array<Book>,
