@@ -1,5 +1,5 @@
 import { DropdownOption } from '../dropdown/dropdown'
-import { Book } from '../../bookshelf/book/book'
+import { Book, BookMetadata } from '../../bookshelf/book/book'
 import { Link } from '../../bookshelf/book/link'
 
 function stringDifference(a: string | undefined, b: string | undefined): number {
@@ -10,11 +10,23 @@ function numberDifference(a: number | undefined, b: number | undefined): number 
     return (a || 0) - (b || 0)
 }
 
+function seriesDifference(a: BookMetadata, b: BookMetadata): number {
+    const aInfo = a.series || { name: a.title }
+    const bInfo = b.series || { name: b.title }
+
+    const titleDifference = stringDifference(stringValue(aInfo.name), stringValue(bInfo.name))
+    if (titleDifference === 0) {
+        return numberDifference(aInfo.position, bInfo.position)
+    }
+
+    return titleDifference
+}
+
 export interface SortDropdownOption extends DropdownOption<string> {
     compareFn(a: Book, b: Book): number
 }
 
-function authorName(a: string | Link | undefined): string | undefined {
+function stringValue(a: string | Link | undefined): string | undefined {
     return a instanceof Link ? a.displayText : a
 }
 
@@ -30,14 +42,26 @@ export const bookSortOptions: Array<SortDropdownOption> = [
         compareFn: (a, b) => stringDifference(b.metadata.title, a.metadata.title),
     },
     {
+        value: 'series_asc',
+        label: 'Series: A-Z',
+        compareFn: (a, b) => seriesDifference(a.metadata, b.metadata),
+    },
+    {
+        value: 'series_desc',
+        label: 'Series: Z-A',
+        compareFn: (a, b) => seriesDifference(b.metadata, a.metadata),
+    },
+    {
         value: 'author_asc',
         label: 'Author: A-Z',
-        compareFn: (a, b) => stringDifference(authorName(a.metadata.authors?.[0]), authorName(b.metadata.authors?.[0])),
+        compareFn: (a, b) =>
+            stringDifference(stringValue(a.metadata.authors?.[0]), stringValue(b.metadata.authors?.[0])),
     },
     {
         value: 'author_desc',
         label: 'Author: Z-A',
-        compareFn: (a, b) => stringDifference(authorName(b.metadata.authors?.[0]), authorName(a.metadata.authors?.[0])),
+        compareFn: (a, b) =>
+            stringDifference(stringValue(b.metadata.authors?.[0]), stringValue(a.metadata.authors?.[0])),
     },
     {
         value: 'reading_progress_desc',
