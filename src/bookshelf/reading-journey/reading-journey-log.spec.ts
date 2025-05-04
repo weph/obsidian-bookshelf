@@ -43,23 +43,85 @@ describe('Reading Progress', () => {
     })
 
     describe('Pages (difference between end and start page + 1)', () => {
-        test('start page', () => {
-            const subject = new ReadingProgress(new Date(), book, null, position(5), position(12), source)
+        describe('page numbers', () => {
+            test('start and end', () => {
+                const subject = new ReadingProgress(new Date(), book, null, position(5), position(12), source)
 
-            expect(subject.pages).toBe(8)
+                expect(subject.pages).toBe(8)
+            })
+
+            test('no start, no previous reading progress', () => {
+                const subject = new ReadingProgress(new Date(), book, null, null, position(10), source)
+
+                expect(subject.pages).toBe(10)
+            })
+
+            test('no start, but previous reading progress', () => {
+                const previous = new ReadingProgress(new Date(), book, null, position(1), position(10), source)
+                const subject = new ReadingProgress(new Date(), book, previous, null, position(25), source)
+
+                expect(subject.pages).toBe(15)
+            })
         })
 
-        test('no start page, no previous reading progress', () => {
-            const subject = new ReadingProgress(new Date(), book, null, null, position(10), source)
+        describe('percentages', () => {
+            describe('total pages unknown', () => {
+                test('start and end', () => {
+                    const subject = new ReadingProgress(new Date(), book, null, position('5%'), position('12%'), source)
 
-            expect(subject.pages).toBe(10)
-        })
+                    expect(subject.pages).toBe(null)
+                })
 
-        test('no start page, but previous reading progress', () => {
-            const previous = new ReadingProgress(new Date(), book, null, position(1), position(10), source)
-            const subject = new ReadingProgress(new Date(), book, previous, null, position(25), source)
+                test('no start, no previous reading progress', () => {
+                    const subject = new ReadingProgress(new Date(), book, null, null, position('12%'), source)
 
-            expect(subject.pages).toBe(15)
+                    expect(subject.pages).toBe(null)
+                })
+
+                test('no start, but previous reading progress', () => {
+                    const previous = new ReadingProgress(
+                        new Date(),
+                        book,
+                        null,
+                        position('1%'),
+                        position('10%'),
+                        source,
+                    )
+                    const subject = new ReadingProgress(new Date(), book, previous, null, position('25%'), source)
+
+                    expect(subject.pages).toBe(null)
+                })
+            })
+
+            describe('total pages known', () => {
+                const book = new BookBuilder().with('pages', 200).build()
+
+                test('start and end, total pages known', () => {
+                    const subject = new ReadingProgress(new Date(), book, null, position('5%'), position('12%'), source)
+
+                    expect(subject.pages).toBe(15)
+                })
+
+                test('no start, no previous reading progress', () => {
+                    const subject = new ReadingProgress(new Date(), book, null, null, position('12%'), source)
+
+                    expect(subject.pages).toBe(24)
+                })
+
+                test('no start, but previous reading progress', () => {
+                    const previous = new ReadingProgress(
+                        new Date(),
+                        book,
+                        null,
+                        position('1%'),
+                        position('10%'),
+                        source,
+                    )
+                    const subject = new ReadingProgress(new Date(), book, previous, null, position('25%'), source)
+
+                    expect(subject.pages).toBe(29)
+                })
+            })
         })
     })
 })

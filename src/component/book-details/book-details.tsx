@@ -28,7 +28,7 @@ export function BookDetails({ book, openLink, addProgress }: Props) {
             case 'abandoned':
                 return item.action
             case 'progress':
-                if (book.metadata.pages !== undefined) {
+                if (item.pages !== undefined) {
                     return `${item.start}-${item.end} (${item.pages} pages)`
                 }
 

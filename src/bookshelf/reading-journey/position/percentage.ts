@@ -10,21 +10,23 @@ export class Percentage implements Position {
 
     public next(book: Book): Position {
         const pages = book.metadata.pages
-        if (pages === undefined) {
+        const currentPage = this.pageInBook(book)
+
+        if (pages === undefined || currentPage === null) {
             return new Percentage(this.value + 1)
         }
 
-        return new Percentage(Math.round(((this.pageInBook(book) + 1) / pages) * 100))
+        return new Percentage(Math.round(((currentPage + 1) / pages) * 100))
     }
 
-    public pageInBook(book: Book): number {
+    public pageInBook(book: Book): number | null {
         if (this.value === 0) {
             return 1
         }
 
         const pages = book.metadata.pages
         if (pages === undefined) {
-            return 0
+            return null
         }
 
         return Math.round((pages / 100) * this.value)

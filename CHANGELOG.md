@@ -17,6 +17,13 @@ For a full diff see [`0.13.1...main`][0.13.1...main].
 - Add button to clear search input\
   You can now clear the search term by using the familiar "x" icon in the search field.
 
+### Fixed
+
+- Always show number of pages read\
+  The number of pages read is now correctly shown in the book details modal when tracking progress using page numbers.
+  Previously, it was only shown if the total number of pages was known. This makes sense for percentage-based tracking,
+  but not when using actual page numbers.
+
 ## [`0.13.1`][0.13.1] - 2025-04-30
 
 For a full diff see [`0.13.0...0.13.1`][0.13.0...0.13.1].

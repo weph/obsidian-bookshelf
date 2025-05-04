@@ -10,7 +10,7 @@ export interface Position {
 
     next(book: Book): Position
 
-    pageInBook(book: Book): number
+    pageInBook(book: Book): number | null
 
     toString(): string
 

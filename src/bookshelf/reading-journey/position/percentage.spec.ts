@@ -7,8 +7,8 @@ test.each([
     [100, 1, 1], // 1% is still page 1
     [123, 50, 62], // round up
     [123, 49, 60], // round down
-    [undefined, 50, 0], // total number of pages unknown: 0 (for now)
-])('pageInBook: %d pages at %d% => page %d', (pages, percentage, expected) => {
+    [undefined, 50, null], // total number of pages unknown: null
+])('pageInBook: %o pages at %d% => page %d', (pages, percentage, expected) => {
     const book = new BookBuilder().with('pages', pages).build()
 
     expect(new Percentage(percentage).pageInBook(book)).toBe(expected)

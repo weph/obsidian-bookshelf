@@ -17,9 +17,9 @@ export interface ReadingJourneyProgressItem extends ReadingJournalItemBase {
     action: 'progress'
     start: Position | null
     end: Position
-    startPage: number
-    endPage: number
-    pages: number
+    startPage: number | null
+    endPage: number | null
+    pages: number | null
 }
 
 export type ReadingJourneyItem = ReadingJourneyItemAction | ReadingJourneyProgressItem
@@ -58,16 +58,23 @@ export class ReadingProgress implements ReadingJourneyProgressItem {
         return this.previous.end.next(this.book)
     }
 
-    get startPage(): number {
+    get startPage(): number | null {
         return this.start.pageInBook(this.book)
     }
 
-    get endPage(): number {
+    get endPage(): number | null {
         return this.end.pageInBook(this.book)
     }
 
-    get pages(): number {
-        return this.endPage - this.startPage + 1
+    get pages(): number | null {
+        const startPage = this.startPage
+        const endPage = this.endPage
+
+        if (startPage === null || endPage === null) {
+            return null
+        }
+
+        return endPage - startPage + 1
     }
 }
 

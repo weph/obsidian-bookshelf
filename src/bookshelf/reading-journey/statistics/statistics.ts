@@ -59,14 +59,16 @@ export class Statistics {
                 continue
             }
 
-            series.add(item.date, item.pages)
+            series.add(item.date, item.pages || 0)
         }
 
         return series.asMap()
     }
 
     public totalNumberOfPages(): number {
-        return this.readingJourney.items().reduce((acc, item) => acc + (item.action === 'progress' ? item.pages : 0), 0)
+        return this.readingJourney
+            .items()
+            .reduce((acc, item) => acc + (item.action === 'progress' ? item.pages || 0 : 0), 0)
     }
 
     public books(): Array<Book> {
