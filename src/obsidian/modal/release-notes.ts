@@ -1,4 +1,24 @@
 export const releaseNotes = {
+    '0.14.0': `
+### Added
+
+- **Track reading progress using Roman numerals** ([#10](https://github.com/weph/obsidian-bookshelf/issues/10))\\
+  Want to track every page, including those front matter sections? You can now enter Roman numerals to log your progress more precisely.
+- **Add button to clear search input**\\
+  You can now clear the search term by using the familiar "x" icon in the search field.
+- **Add support for book series** ([#14](https://github.com/weph/obsidian-bookshelf/issues/14))\\
+  You can now add book series information (series name and position in series). The book details modal displays this info, and you can group, sort, and search by series.
+
+### Changed
+
+- **Extended search**\\
+  The search field now also matches against author names and book series.
+
+### Fixed
+
+- **Always show number of pages read**\\
+  The number of pages read is now correctly shown in the book details modal when tracking progress using page numbers. Previously, it was only shown if the total number of pages was known. This makes sense for percentage-based tracking, but not when using actual page numbers.
+`,
     '0.13.1': `
 ### Fixed
 

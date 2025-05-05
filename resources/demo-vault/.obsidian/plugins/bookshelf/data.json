@@ -10,7 +10,9 @@
     "rating": "rating",
     "lists": "lists",
     "comment": "comment",
-    "links": "links"
+    "links": "links",
+    "series": "series",
+    "positionInSeries": "position-in-series"
   },
   "bookNote": {
     "enabled": true,
@@ -38,6 +40,6 @@
   "readingProgress": {
     "newEntryLocation": "dailyNote"
   },
-  "previousVersion": "0.13.0",
+  "previousVersion": "0.13.1",
   "showReleaseNotes": true
 }
