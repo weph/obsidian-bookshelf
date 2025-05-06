@@ -71,13 +71,13 @@ export class ObsidianNote implements Note {
     }
 
     public async *listItems(sectionHeading: string): AsyncGenerator<string> {
-        const locations = await this.locations(sectionHeading)
+        const lines = (await this.content()).split('\n')
+        const locations = await this.locations(sectionHeading, lines)
 
         if (locations.list === null) {
             return
         }
 
-        const lines = (await this.content()).split('\n')
         for (const listItem of this.obsidianMetadata.listItems || []) {
             const line = listItem.position.start.line
 
@@ -90,10 +90,10 @@ export class ObsidianNote implements Note {
     }
 
     public async appendToList(sectionHeading: string, item: string): Promise<void> {
-        const contents = await this.app.vault.cachedRead(this.file)
+        const contents = await this.app.vault.read(this.file)
         const lines = contents.split('\n')
 
-        const { section, list } = await this.locations(sectionHeading)
+        const { section, list } = await this.locations(sectionHeading, lines)
 
         if (section !== null) {
             if (list !== null) {
@@ -121,10 +121,7 @@ export class ObsidianNote implements Note {
         await this.app.vault.modify(this.file, lines.join('\n'))
     }
 
-    private async locations(sectionHeading: string): Promise<Locations> {
-        const contents = await this.app.vault.cachedRead(this.file)
-        const lines = contents.split('\n')
-
+    private async locations(sectionHeading: string, lines: Array<string>): Promise<Locations> {
         const result: Locations = { section: null, list: null }
 
         for (const section of this.obsidianMetadata.sections || []) {
