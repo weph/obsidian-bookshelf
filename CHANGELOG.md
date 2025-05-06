@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.14.0...main`][0.14.0...main].
 
+### Changed
+
+- Prefer note heading as book title ([#25](https://github.com/weph/obsidian-bookshelf/issues/25))\
+  A book's title is now taken from the first level-one heading in the note. If the first heading in the note is a
+  different level or there's no heading at all, Bookshelf falls back to using the note's filename as before.
+
 ## [`0.14.0`][0.14.0] - 2025-05-05
 
 For a full diff see [`0.13.1...0.14.0`][0.13.1...0.14.0].

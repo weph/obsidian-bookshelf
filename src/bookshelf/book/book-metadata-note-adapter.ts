@@ -28,7 +28,7 @@ export class BookMetadataNoteAdapter implements BookMetadata {
     ) {}
 
     get title(): string {
-        return this.note.basename
+        return this.note.heading?.trim() || this.note.basename
     }
 
     get cover(): string | undefined {

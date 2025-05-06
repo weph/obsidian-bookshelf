@@ -26,10 +26,26 @@ function bookMetadata(note: Note): BookMetadataNoteAdapter {
 }
 
 describe('Title', () => {
-    it('should be used as is', () => {
-        const result = bookMetadata(new FakeNote('Book Title.md', new StaticMetadata({})))
+    it('should be note heading', () => {
+        const note = new FakeNote('book-note.md', new StaticMetadata({}))
+        note.heading = 'The Book Title'
+        const result = bookMetadata(note)
 
-        expect(result.title).toBe('Book Title')
+        expect(result.title).toBe('The Book Title')
+    })
+
+    it('should be note name if note has no heading', () => {
+        const result = bookMetadata(new FakeNote('book-note.md', new StaticMetadata({})))
+
+        expect(result.title).toBe('book-note')
+    })
+
+    it('should be note name if note heading is an empty string', () => {
+        const note = new FakeNote('book-note.md', new StaticMetadata({}))
+        note.heading = ' '
+        const result = bookMetadata(note)
+
+        expect(result.title).toBe('book-note')
     })
 })
 

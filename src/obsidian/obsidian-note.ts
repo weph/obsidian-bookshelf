@@ -66,6 +66,16 @@ export class ObsidianNote implements Note {
         return this.file.basename
     }
 
+    get heading(): string | null {
+        const first = this.obsidianMetadata.headings?.[0]
+
+        if (first === undefined || first.level !== 1) {
+            return null
+        }
+
+        return first.heading
+    }
+
     public async content(): Promise<string> {
         return await this.app.vault.cachedRead(this.file)
     }

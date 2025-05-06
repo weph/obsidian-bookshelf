@@ -2,6 +2,8 @@ import { Note } from '../bookshelf/note/note'
 import { Metadata } from '../bookshelf/note/metadata'
 
 export class FakeNote implements Note {
+    public heading: string | null = null
+
     constructor(
         public path: string,
         public metadata: Metadata,

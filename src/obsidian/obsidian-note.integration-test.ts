@@ -223,6 +223,47 @@ new-field: new-value
         })
     })
 
+    describe('heading', () => {
+        beforeAll(async (context) => {
+            await context.createFile('heading.md', '')
+        })
+
+        afterAll(async (context) => {
+            await context.deleteFile('heading.md')
+        })
+
+        test('should be null if note has heading', async (context) => {
+            const note = new ObsidianNote(context.file('heading.md'), context.app)
+
+            expect(note.heading).toBeNull()
+        })
+
+        test('should be the first level one heading', async (context) => {
+            const note = new ObsidianNote(context.file('heading.md'), context.app)
+            await context.updateFile(
+                'heading.md',
+                `# First Heading
+# Second Heading
+# Third Heading
+`,
+            )
+
+            expect(note.heading).toBe('First Heading')
+        })
+
+        test('should be null if the first heading is not a level one heading', async (context) => {
+            const note = new ObsidianNote(context.file('heading.md'), context.app)
+            await context.updateFile(
+                'heading.md',
+                `## First Heading
+# Second Heading
+`,
+            )
+
+            expect(note.heading).toBeNull()
+        })
+    })
+
     describe('listItems', () => {
         beforeAll(async (context) => {
             await context.createFile('listItems.md', '')
