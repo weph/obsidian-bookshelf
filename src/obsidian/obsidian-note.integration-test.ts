@@ -314,8 +314,8 @@ new-field: new-value
             await context.updateFile('appendToList.md', ``)
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await context.waitForUpdate('appendToList.md')
             await note.appendToList('Relevant Heading', 'Item 1')
+            await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`## Relevant Heading
 
@@ -331,8 +331,8 @@ foo: bar
             )
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await context.waitForUpdate('appendToList.md')
             await note.appendToList('Relevant Heading', 'Item 1')
+            await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`---
 foo: bar
@@ -354,8 +354,8 @@ Some text`,
             )
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await context.waitForUpdate('appendToList.md')
             await note.appendToList('Relevant Heading', 'Item 1')
+            await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`# Note Title
 
@@ -372,8 +372,8 @@ Some text
             await context.updateFile('appendToList.md', `# Relevant Heading`)
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await context.waitForUpdate('appendToList.md')
             await note.appendToList('Relevant Heading', 'Item 1')
+            await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`# Relevant Heading
 
@@ -390,8 +390,8 @@ Lorem ipsum dolor sit amet`,
             )
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await context.waitForUpdate('appendToList.md')
             await note.appendToList('Relevant Heading', 'Item 1')
+            await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`# Relevant Heading
 
@@ -412,8 +412,8 @@ Lorem ipsum dolor sit amet
             )
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await context.waitForUpdate('appendToList.md')
             await note.appendToList('Relevant Heading', 'Item 1')
+            await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`# Heading 1
 
@@ -433,8 +433,8 @@ Lorem ipsum dolor sit amet
             )
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await context.waitForUpdate('appendToList.md')
             await note.appendToList('Relevant Heading', 'Item 1')
+            await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`# Heading 1
 # Relevant Heading
@@ -453,8 +453,8 @@ Lorem ipsum dolor sit amet
             )
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await context.waitForUpdate('appendToList.md')
             await note.appendToList('Relevant Heading', 'Item 2')
+            await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`# Relevant Heading
 
@@ -471,8 +471,8 @@ Lorem ipsum dolor sit amet
             )
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await context.waitForUpdate('appendToList.md')
             await note.appendToList('Relevant Heading', 'Item 2')
+            await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`# Relevant Heading
 
