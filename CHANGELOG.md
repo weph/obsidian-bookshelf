@@ -14,6 +14,9 @@ For a full diff see [`0.14.0...main`][0.14.0...main].
 - Prefer note heading as book title ([#25](https://github.com/weph/obsidian-bookshelf/issues/25))\
   A book's title is now taken from the first level-one heading in the note. If the first heading in the note is a
   different level or there's no heading at all, Bookshelf falls back to using the note's filename as before.
+- Improve fallback group titles\
+  When grouping books by a certain criterion in the library, the fallback group now has a more descriptive title instead
+  of just "N/A". The title is also displayed in italics to help distinguish it from regular group titles.
 
 ## [`0.14.0`][0.14.0] - 2025-05-05
 

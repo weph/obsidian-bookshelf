@@ -111,13 +111,14 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
         }
 
         if (groupingOption.grouped) {
+            const groupedBooks = groupingOption.grouped(filteredBooks)
             return (
                 <>
                     <BookCount total={books.length} filtered={filteredBooks.length} />
-                    {Array.from(groupingOption.grouped(filteredBooks)).map((entry) => (
+                    {Array.from(groupedBooks.groups).map((entry) => (
                         <div className={styles.group} key={entry[0]}>
-                            <div className={styles.groupHeading}>
-                                <h2>{entry[0] || 'N/A'}</h2>
+                            <div className={`${styles.groupHeading} ${entry[0] === null ? styles.fallbackGroup : ''}`}>
+                                <h2>{entry[0] === null ? groupedBooks.nullLabel : entry[0]}</h2>
                                 <div className={styles.booksInGroup}>{pluralize(entry[1].length, 'book')}</div>
                             </div>
                             <ViewComponent books={entry[1]} onBookClick={onBookClick} />

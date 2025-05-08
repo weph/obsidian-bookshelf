@@ -54,6 +54,10 @@ body {
             border-bottom: 1px solid var(--divider-color);
         }
 
+        &.fallbackGroup h2 {
+            font-style: italic;
+        }
+
         .booksInGroup {
             color: var(--color-base-60);
             font-size: var(--font-smallest);
