@@ -18,6 +18,11 @@ For a full diff see [`0.14.0...main`][0.14.0...main].
   When grouping books by a certain criterion in the library, the fallback group now has a more descriptive title instead
   of just "N/A". The title is also displayed in italics to help distinguish it from regular group titles.
 
+### Fixed
+
+- Books without an author were not displayed when grouping by author
+- Books without a rating were incorrectly grouped with books rated 0
+
 ## [`0.14.0`][0.14.0] - 2025-05-05
 
 For a full diff see [`0.13.1...0.14.0`][0.13.1...0.14.0].
