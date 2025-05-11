@@ -10,7 +10,6 @@ import { bookGroupingOptions } from './book-grouping-options'
 import { Icon } from '../icon/icon'
 import { SlidersHorizontal } from 'lucide-react'
 import { Button } from '../button/button'
-import { Link } from '../../bookshelf/book/link'
 import { Books } from '../../bookshelf/book/books'
 
 type ViewType = 'gallery' | 'table'
@@ -75,27 +74,7 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
     const NavigationComponent = window.innerWidth < 640 ? MobileNavigation : DesktopNavigation
     const reset = () => settingsChanged(initialSettings)
 
-    const filteredBooks = books
-        .filter((b) => {
-            if (settings.status !== null && b.status !== settings.status) {
-                return false
-            }
-
-            if (settings.list !== null && !b.metadata.lists.includes(settings.list)) {
-                return false
-            }
-
-            const searchableFields = [b.metadata.title.toLowerCase()]
-            const series = b.metadata.series
-            if (series) {
-                searchableFields.push(series.name instanceof Link ? series.name.displayText : series.name)
-            }
-
-            searchableFields.push(...b.metadata.authors.map((a) => (a instanceof Link ? a.displayText : a)))
-
-            return searchableFields.some((f) => f.toLowerCase().includes(settings.search.toLowerCase()))
-        })
-        .sort(sortOption?.compareFn)
+    const filteredBooks = books.matching(settings).sort(sortOption?.compareFn)
 
     const content = () => {
         if (books.length === 0) {
