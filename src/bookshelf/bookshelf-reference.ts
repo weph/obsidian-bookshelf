@@ -4,6 +4,7 @@ import { ReadingJourney } from './reading-journey/reading-journey'
 import { Statistics } from './reading-journey/statistics/statistics'
 import { ReadingJourneyMatch } from './note-processing/note-processor'
 import { Bookshelf } from './bookshelf'
+import { Books } from './book/books'
 
 export class BookshelfReference implements Bookshelf {
     constructor(private bookshelf: Bookshelf) {}
@@ -28,7 +29,7 @@ export class BookshelfReference implements Bookshelf {
         return this.bookshelf.book(note)
     }
 
-    public all(): Iterable<Book> {
+    public all(): Books {
         return this.bookshelf.all()
     }
 

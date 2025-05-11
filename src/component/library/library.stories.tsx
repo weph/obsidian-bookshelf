@@ -5,6 +5,7 @@ import { initialSettings, Library, Settings } from './library'
 import { bookSortOptions } from './book-sort-options'
 import { fn } from '@storybook/test'
 import { useState } from 'react'
+import { Books } from '../../bookshelf/book/books'
 
 const meta = {
     title: 'Library',
@@ -21,7 +22,7 @@ function renderFunction(books: Array<Book>) {
             <Library
                 settings={settings}
                 settingsChanged={setSettings}
-                books={books}
+                books={new Books(books)}
                 sortOptions={bookSortOptions}
                 onBookClick={fn()}
             />

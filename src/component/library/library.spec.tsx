@@ -6,6 +6,7 @@ import { BookBuilder } from '../../support/book-builder'
 import { initialSettings, Library, Props } from './library'
 import { render, screen } from '@testing-library/react'
 import { SortDropdownOption } from './book-sort-options'
+import { Books } from '../../bookshelf/book/books'
 
 const onBookClick = vi.fn()
 let user: UserEvent
@@ -15,7 +16,7 @@ function renderLibrary(props: Partial<Props>): void {
         <Library
             settings={props.settings || initialSettings}
             settingsChanged={vi.fn()}
-            books={props.books || []}
+            books={props.books || new Books([])}
             sortOptions={props.sortOptions || [{ value: '', label: '', compareFn: () => 0 }]}
             onBookClick={props.onBookClick || onBookClick}
         />,
@@ -32,7 +33,7 @@ beforeEach(() => {
 
 describe('Empty library', () => {
     beforeEach(() => {
-        renderLibrary({ books: [] })
+        renderLibrary({ books: new Books([]) })
     })
 
     test('has no books', () => {
@@ -49,7 +50,7 @@ describe('Empty library', () => {
 
 describe('Library', () => {
     test('should show all books', async () => {
-        renderLibrary({ books: [book('Algorithms'), book('Refactoring')] })
+        renderLibrary({ books: new Books([book('Algorithms'), book('Refactoring')]) })
 
         await waitFor(() => expect(cardTitles()).toEqual(['Algorithms', 'Refactoring']))
     })
@@ -66,12 +67,12 @@ describe('Search', () => {
                 ...initialSettings,
                 search: query,
             },
-            books: [
+            books: new Books([
                 book('BDD in Action'),
                 book('Into Thin Air'),
                 book('Web Components in Action'),
                 book('Web Accessibility Cookbook'),
-            ],
+            ]),
         })
 
         expect(cardTitles()).toEqual(expected)
@@ -83,12 +84,12 @@ describe('Search', () => {
                 ...initialSettings,
                 search: 'foobar',
             },
-            books: [
+            books: new Books([
                 book('BDD in Action'),
                 book('Into Thin Air'),
                 book('Web Components in Action'),
                 book('Web Accessibility Cookbook'),
-            ],
+            ]),
         })
 
         expect(mainContent()).toHaveTextContent('No books found')
@@ -97,7 +98,7 @@ describe('Search', () => {
 })
 
 describe('Sorting', () => {
-    const books = [book('Pet Sematary'), book('Of Mice and Men'), book('Animal Farm')]
+    const books = new Books([book('Pet Sematary'), book('Of Mice and Men'), book('Animal Farm')])
 
     const sortOptions: Array<SortDropdownOption> = [
         {
@@ -128,7 +129,7 @@ describe('Sorting', () => {
 describe('Clicking on a book cover', () => {
     test('should call callback', async () => {
         const intoThinAir = book('Into Thin Air')
-        renderLibrary({ books: [intoThinAir] })
+        renderLibrary({ books: new Books([intoThinAir]) })
 
         await user.click(await screen.findByLabelText('Into Thin Air'))
 

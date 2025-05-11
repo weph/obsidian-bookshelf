@@ -8,6 +8,7 @@ import { ReadingJourneyWriter } from './note-processing/reading-journey-writer'
 import { Statistics } from './reading-journey/statistics/statistics'
 import { Bookshelf } from './bookshelf'
 import { Subscribers } from './subscriber/subscribers'
+import { Books } from './book/books'
 
 class BookshelfBook implements Book {
     constructor(
@@ -105,8 +106,8 @@ export class BookshelfImpl implements Bookshelf {
         return result
     }
 
-    public all(): Iterable<Book> {
-        return this.books.values()
+    public all(): Books {
+        return new Books(this.books)
     }
 
     public readingJourney(): ReadingJourney {

@@ -3,6 +3,7 @@ import { Statistics } from './reading-journey/statistics/statistics'
 import { ReadingJourney } from './reading-journey/reading-journey'
 import { Note } from './note/note'
 import { ReadingJourneyMatch } from './note-processing/note-processor'
+import { Books } from './book/books'
 
 export interface Bookshelf {
     process(note: Note): Promise<void>
@@ -13,7 +14,7 @@ export interface Bookshelf {
 
     book(note: Note): Book
 
-    all(): Iterable<Book>
+    all(): Books
 
     readingJourney(): ReadingJourney
 

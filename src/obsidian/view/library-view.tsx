@@ -87,7 +87,7 @@ function SyncedLibrary({
     onBookClick: (book: Book) => void
 }) {
     const [settings, setSettings] = useState<Settings>(initialSettings)
-    const books = useSyncedData(bookshelf, (b) => Array.from(b.all()))
+    const books = useSyncedData(bookshelf, (b) => b.all())
 
     useEffect(() => setSettings(initialSettings), [initialSettings])
 

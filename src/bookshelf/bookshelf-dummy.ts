@@ -3,6 +3,7 @@ import { Bookshelf } from './bookshelf'
 import { ReadingJourney } from './reading-journey/reading-journey'
 import { Statistics } from './reading-journey/statistics/statistics'
 import { Subscribers } from './subscriber/subscribers'
+import { Books } from './book/books'
 
 export class BookshelfDummy implements Bookshelf {
     constructor(private readonly subscribers: Subscribers) {}
@@ -19,8 +20,8 @@ export class BookshelfDummy implements Bookshelf {
         throw new Error('Not implemented.')
     }
 
-    public all(): Iterable<Book> {
-        return []
+    public all(): Books {
+        return new Books([])
     }
 
     public readingJourney(): ReadingJourney {

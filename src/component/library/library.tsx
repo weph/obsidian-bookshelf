@@ -11,6 +11,7 @@ import { Icon } from '../icon/icon'
 import { SlidersHorizontal } from 'lucide-react'
 import { Button } from '../button/button'
 import { Link } from '../../bookshelf/book/link'
+import { Books } from '../../bookshelf/book/books'
 
 type ViewType = 'gallery' | 'table'
 
@@ -35,7 +36,7 @@ export const initialSettings: Settings = {
 export interface Props {
     settings: Settings
     settingsChanged: (newSettings: Settings) => void
-    books: Array<Book>
+    books: Books
     sortOptions: Array<SortDropdownOption>
     onBookClick: (book: Book) => void
 }
@@ -53,7 +54,7 @@ const viewOptions: Array<DropdownOption<ViewType>> = [
     { value: 'table', label: 'Table' },
 ]
 
-function listOptions(books: Array<Book>): Array<DropdownOption<string | null>> {
+function listOptions(books: Books): Array<DropdownOption<string | null>> {
     const lists = Array.from(new Set(books.map((b) => b.metadata.lists).flat()))
     if (lists.length === 0) {
         return []
@@ -111,7 +112,7 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
         }
 
         if (groupingOption.grouped) {
-            const groupedBooks = groupingOption.grouped(filteredBooks)
+            const groupedBooks = groupingOption.grouped(Array.from(filteredBooks))
             return (
                 <>
                     <BookCount total={books.length} filtered={filteredBooks.length} />
@@ -131,7 +132,7 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
         return (
             <>
                 <BookCount total={books.length} filtered={filteredBooks.length} />
-                <ViewComponent books={filteredBooks} onBookClick={onBookClick} />
+                <ViewComponent books={Array.from(filteredBooks)} onBookClick={onBookClick} />
             </>
         )
     }
