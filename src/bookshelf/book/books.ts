@@ -1,6 +1,10 @@
 import { Book, ReadingStatus } from './book'
+import { FieldFilter } from './search/field-filter'
+import { Contains } from './search/contains'
+import { And } from './search/and'
+import { ReadingStatusFilter } from './search/reading-status-filter'
 
-interface Query {
+export interface Query {
     search: string
     list: string | null
     status: ReadingStatus | null
@@ -26,25 +30,27 @@ export class Books {
     }
 
     public matching(query: Query): Books {
-        return this.filter((b) => {
-            if (query.status !== null && b.status !== query.status) {
-                return false
-            }
+        const expressions = []
 
-            if (query.list !== null && !b.metadata.lists.includes(query.list)) {
-                return false
-            }
+        if (query.status !== null) {
+            expressions.push(new ReadingStatusFilter(query.status))
+        }
 
-            const searchableFields = [b.metadata.title.toLowerCase()]
-            const series = b.metadata.series
-            if (series) {
-                searchableFields.push(series.name.toString())
-            }
+        if (query.list !== null) {
+            expressions.push(new FieldFilter('lists', query.list))
+        }
 
-            searchableFields.push(...b.metadata.authors.map((a) => a.toString()))
+        if (query.search !== '') {
+            expressions.push(new Contains(query.search))
+        }
 
-            return searchableFields.some((f) => f.toLowerCase().includes(query.search.toLowerCase()))
-        })
+        if (expressions.length === 0) {
+            return new Books(this.books)
+        }
+
+        const expr = new And(expressions)
+
+        return this.filter((b) => expr.matches(b))
     }
 
     [Symbol.iterator](): Iterator<Book> {

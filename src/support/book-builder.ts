@@ -1,4 +1,4 @@
-import { Book, BookMetadata } from '../bookshelf/book/book'
+import { Book, BookMetadata, ReadingStatus } from '../bookshelf/book/book'
 import { ReadingJourneyItem } from '../bookshelf/reading-journey/reading-journey-log'
 import { ReadingJourney } from '../bookshelf/reading-journey/reading-journey'
 import { Note } from '../bookshelf/note/note'
@@ -14,28 +14,38 @@ export class BookBuilder {
         private readonly note: Note | null = null,
         private readonly metadata: Partial<BookMetadata> = {},
         private readonly readingJourney: Array<OmitUnion<ReadingJourneyItem, 'book'>> = [],
+        private readonly status: ReadingStatus = 'unread',
     ) {}
 
     public with<K extends keyof BookMetadata>(property: K, value: BookMetadata[K]): BookBuilder {
-        return new BookBuilder(this.note, { ...this.metadata, [property]: value }, this.readingJourney)
+        return new BookBuilder(this.note, { ...this.metadata, [property]: value }, this.readingJourney, this.status)
+    }
+
+    public withStatus(status: ReadingStatus): BookBuilder {
+        return new BookBuilder(this.note, this.metadata, this.readingJourney, status)
     }
 
     public withReadingProgress(date: Date, startPage: number, endPage: number): BookBuilder {
         const pages = endPage - startPage + 1
 
-        return new BookBuilder(this.note, this.metadata, [
-            ...this.readingJourney,
-            {
-                action: 'progress',
-                date,
-                start: position(startPage),
-                end: position(endPage),
-                startPage,
-                endPage,
-                pages: pages,
-                source: new FakeNote('', new StaticMetadata({}), []),
-            },
-        ])
+        return new BookBuilder(
+            this.note,
+            this.metadata,
+            [
+                ...this.readingJourney,
+                {
+                    action: 'progress',
+                    date,
+                    start: position(startPage),
+                    end: position(endPage),
+                    startPage,
+                    endPage,
+                    pages: pages,
+                    source: new FakeNote('', new StaticMetadata({}), []),
+                },
+            ],
+            this.status,
+        )
     }
 
     public build(): Book {
@@ -46,7 +56,7 @@ export class BookBuilder {
                 ...this.metadata,
             },
             readingJourney: new ReadingJourney([]),
-            status: 'unread',
+            status: this.status,
         }
 
         book.readingJourney = new ReadingJourney(this.readingJourney.map((rp) => ({ ...rp, book })))
