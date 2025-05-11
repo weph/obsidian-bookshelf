@@ -1,5 +1,4 @@
 import { Book } from './book'
-import { Link } from './link'
 
 export interface GroupedBooks {
     groups: Map<string | null, Array<Book>>
@@ -36,11 +35,7 @@ export function groupedBySeries(books: Array<Book>): GroupedBooks {
             return null
         }
 
-        if (series.name instanceof Link) {
-            return series.name.displayText
-        }
-
-        return series.name
+        return series.name.toString()
     }
 
     return {
@@ -57,7 +52,7 @@ export function groupedByAuthor(books: Array<Book>): GroupedBooks {
             return [null]
         }
 
-        return authors.map((a) => (a instanceof Link ? a.displayText : a))
+        return authors.map((a) => a.toString())
     }
 
     return {

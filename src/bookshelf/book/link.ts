@@ -20,4 +20,8 @@ export class Link {
 
         return new Link('external', input, displayValue, input)
     }
+
+    public toString(): string {
+        return this.displayText
+    }
 }

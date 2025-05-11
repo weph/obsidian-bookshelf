@@ -1,5 +1,4 @@
 import { Book, ReadingStatus } from './book'
-import { Link } from './link'
 
 interface Query {
     search: string
@@ -39,10 +38,10 @@ export class Books {
             const searchableFields = [b.metadata.title.toLowerCase()]
             const series = b.metadata.series
             if (series) {
-                searchableFields.push(series.name instanceof Link ? series.name.displayText : series.name)
+                searchableFields.push(series.name.toString())
             }
 
-            searchableFields.push(...b.metadata.authors.map((a) => (a instanceof Link ? a.displayText : a)))
+            searchableFields.push(...b.metadata.authors.map((a) => a.toString()))
 
             return searchableFields.some((f) => f.toLowerCase().includes(query.search.toLowerCase()))
         })

@@ -3,7 +3,6 @@ import { StarRating } from '../star-rating/star-rating'
 import styles from './table.module.scss'
 import { TagList } from '../tag-list/tag-list'
 import { MouseEvent } from 'react'
-import { Link } from '../../bookshelf/book/link'
 
 interface Props {
     books: Array<Book>
@@ -30,7 +29,7 @@ export function BookTable({ books, onBookClick }: Props) {
                         <td>{book.metadata.title}</td>
                         <td>
                             {(book.metadata.authors || []).map((author, i) => (
-                                <div key={i}>{author instanceof Link ? author.displayText : author}</div>
+                                <div key={i}>{author.toString()}</div>
                             ))}
                         </td>
                         <td className={styles.pubDate}>{book.metadata.published?.getFullYear() || ''}</td>
