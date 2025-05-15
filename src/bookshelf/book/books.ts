@@ -2,7 +2,6 @@ import { Book, ReadingStatus } from './book'
 import { FieldFilter } from './search/field-filter'
 import { Contains } from './search/contains'
 import { And } from './search/and'
-import { ReadingStatusFilter } from './search/reading-status-filter'
 
 export interface Query {
     search: string
@@ -33,11 +32,11 @@ export class Books {
         const expressions = []
 
         if (query.status !== null) {
-            expressions.push(new ReadingStatusFilter(query.status))
+            expressions.push(new FieldFilter('status', query.status))
         }
 
         if (query.list !== null) {
-            expressions.push(new FieldFilter('lists', query.list))
+            expressions.push(new FieldFilter('list', query.list))
         }
 
         if (query.search !== '') {
