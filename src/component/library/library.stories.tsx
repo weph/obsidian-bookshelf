@@ -6,6 +6,8 @@ import { bookSortOptions } from './book-sort-options'
 import { fn } from '@storybook/test'
 import { useState } from 'react'
 import { Books } from '../../bookshelf/book/books'
+import { ExpressionFactory } from '../../bookshelf/book/search/expression-factory'
+import { parser } from '../../bookshelf/book/search/parser'
 
 const meta = {
     title: 'Library',
@@ -25,6 +27,7 @@ function renderFunction(books: Array<Book>) {
                 books={new Books(books)}
                 sortOptions={bookSortOptions}
                 onBookClick={fn()}
+                expressionFactory={new ExpressionFactory(parser())}
             />
         )
     }

@@ -1,7 +1,5 @@
 import { Book, ReadingStatus } from './book'
-import { FieldFilter } from './search/field-filter'
-import { Contains } from './search/contains'
-import { And } from './search/and'
+import { Expression } from './search/expression'
 
 export interface Query {
     search: string
@@ -28,27 +26,7 @@ export class Books {
         return new Books([...this.books].sort(compare))
     }
 
-    public matching(query: Query): Books {
-        const expressions = []
-
-        if (query.status !== null) {
-            expressions.push(new FieldFilter('status', query.status))
-        }
-
-        if (query.list !== null) {
-            expressions.push(new FieldFilter('list', query.list))
-        }
-
-        if (query.search !== '') {
-            expressions.push(new Contains(query.search))
-        }
-
-        if (expressions.length === 0) {
-            return new Books(this.books)
-        }
-
-        const expr = new And(expressions)
-
+    public matching(expr: Expression): Books {
         return this.filter((b) => expr.matches(b))
     }
 

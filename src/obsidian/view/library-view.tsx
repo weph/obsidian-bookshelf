@@ -7,6 +7,8 @@ import { initialSettings, Library, Settings } from '../../component/library/libr
 import BookshelfPlugin from '../bookshelf-plugin'
 import { useSyncedData } from '../../component/hooks/use-synced-data'
 import { Book } from '../../bookshelf/book/book'
+import { ExpressionFactory } from '../../bookshelf/book/search/expression-factory'
+import { parser } from '../../bookshelf/book/search/parser'
 
 export const VIEW_TYPE_LIBRARY = 'library'
 
@@ -101,6 +103,7 @@ function SyncedLibrary({
             books={books}
             sortOptions={bookSortOptions}
             onBookClick={onBookClick}
+            expressionFactory={new ExpressionFactory(parser())}
         />
     )
 }

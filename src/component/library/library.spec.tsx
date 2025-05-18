@@ -7,6 +7,8 @@ import { initialSettings, Library, Props } from './library'
 import { render, screen } from '@testing-library/react'
 import { SortDropdownOption } from './book-sort-options'
 import { Books } from '../../bookshelf/book/books'
+import { ExpressionFactory } from '../../bookshelf/book/search/expression-factory'
+import { parser } from '../../bookshelf/book/search/parser'
 
 const onBookClick = vi.fn()
 let user: UserEvent
@@ -19,6 +21,7 @@ function renderLibrary(props: Partial<Props>): void {
             books={props.books || new Books([])}
             sortOptions={props.sortOptions || [{ value: '', label: '', compareFn: () => 0 }]}
             onBookClick={props.onBookClick || onBookClick}
+            expressionFactory={new ExpressionFactory(parser())}
         />,
     )
 }

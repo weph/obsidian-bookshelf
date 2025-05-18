@@ -11,6 +11,7 @@ import { Icon } from '../icon/icon'
 import { SlidersHorizontal } from 'lucide-react'
 import { Button } from '../button/button'
 import { Books } from '../../bookshelf/book/books'
+import { ExpressionFactory } from '../../bookshelf/book/search/expression-factory'
 
 type ViewType = 'gallery' | 'table'
 
@@ -38,6 +39,7 @@ export interface Props {
     books: Books
     sortOptions: Array<SortDropdownOption>
     onBookClick: (book: Book) => void
+    expressionFactory: ExpressionFactory
 }
 
 const statusFilterOptions: Array<DropdownOption<ReadingStatus | null>> = [
@@ -66,7 +68,7 @@ function pluralize(count: number, noun: string, suffix = 's'): string {
     return `${count} ${noun}${count !== 1 ? suffix : ''}`
 }
 
-export function Library({ settings, settingsChanged, books, sortOptions, onBookClick }: Props) {
+export function Library({ settings, settingsChanged, books, sortOptions, onBookClick, expressionFactory }: Props) {
     const groupingOption = bookGroupingOptions.find((v) => v.value === settings.grouping) || bookGroupingOptions[0]
     const sortOption = sortOptions.find((o) => o.value === settings.sort) || sortOptions[0]
     const lists = listOptions(books)
@@ -74,7 +76,7 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
     const NavigationComponent = window.innerWidth < 640 ? MobileNavigation : DesktopNavigation
     const reset = () => settingsChanged(initialSettings)
 
-    const filteredBooks = books.matching(settings).sort(sortOption?.compareFn)
+    const filteredBooks = books.matching(expressionFactory.fromQuery(settings)).sort(sortOption?.compareFn)
 
     const content = () => {
         if (books.length === 0) {
