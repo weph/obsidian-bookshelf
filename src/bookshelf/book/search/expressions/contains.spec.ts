@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
-import { BookBuilder } from '../../../support/book-builder'
-import { Link } from '../link'
+import { BookBuilder } from '../../../../support/book-builder'
+import { Link } from '../../link'
 import { Contains } from './contains'
 
 const book = new BookBuilder()

@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 import { Books } from './books'
 import { BookBuilder } from '../../support/book-builder'
-import { Contains } from './search/contains'
+import { Contains } from './search/expressions/contains'
 
 test.each([
     [new Contains('hunger'), ['The Hunger Games']],

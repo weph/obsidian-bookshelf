@@ -1,5 +1,5 @@
 import { Expression } from './expression'
-import { Contains } from './contains'
+import { Contains } from './expressions/contains'
 import {
     alt,
     amb,
@@ -12,9 +12,9 @@ import {
     seq,
     tok,
 } from 'typescript-parsec'
-import { And } from './and'
-import { FieldFilter } from './field-filter'
-import { MatchAll } from './match-all'
+import { And } from './expressions/and'
+import { FieldFilter } from './expressions/field-filter'
+import { MatchAll } from './expressions/match-all'
 
 export type Parser = (input: string) => Expression
 

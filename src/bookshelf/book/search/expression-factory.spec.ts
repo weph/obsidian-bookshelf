@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest'
 import { ExpressionFactory } from './expression-factory'
 import { parser } from './parser'
-import { MatchAll } from './match-all'
-import { Contains } from './contains'
-import { FieldFilter } from './field-filter'
-import { And } from './and'
+import { MatchAll } from './expressions/match-all'
+import { Contains } from './expressions/contains'
+import { FieldFilter } from './expressions/field-filter'
+import { And } from './expressions/and'
 import { Query } from '../books'
 
 describe('fromQuery', () => {

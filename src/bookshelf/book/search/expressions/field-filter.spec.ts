@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 import { FieldFilter } from './field-filter'
-import { BookBuilder } from '../../../support/book-builder'
-import { Link } from '../link'
+import { BookBuilder } from '../../../../support/book-builder'
+import { Link } from '../../link'
 
 const book = new BookBuilder()
     .with('title', 'A Book Title')

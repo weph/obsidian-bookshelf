@@ -1,8 +1,8 @@
 import { Parser } from './parser'
 import { Expression } from './expression'
 import { Query } from '../books'
-import { FieldFilter } from './field-filter'
-import { And } from './and'
+import { FieldFilter } from './expressions/field-filter'
+import { And } from './expressions/and'
 
 export class ExpressionFactory {
     constructor(private readonly parsedExpression: Parser) {}

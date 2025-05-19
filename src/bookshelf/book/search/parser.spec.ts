@@ -1,9 +1,9 @@
 import { describe, expect, test } from 'vitest'
 import { parser } from './parser'
-import { Contains } from './contains'
-import { And } from './and'
-import { FieldFilter } from './field-filter'
-import { MatchAll } from './match-all'
+import { Contains } from './expressions/contains'
+import { And } from './expressions/and'
+import { FieldFilter } from './expressions/field-filter'
+import { MatchAll } from './expressions/match-all'
 
 const parsedExpression = (input: string) => parser()(input)
 

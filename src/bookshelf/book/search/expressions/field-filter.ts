@@ -1,5 +1,5 @@
-import { Expression } from './expression'
-import { Book } from '../book'
+import { Expression } from '../expression'
+import { Book } from '../../book'
 
 export class FieldFilter implements Expression {
     constructor(
