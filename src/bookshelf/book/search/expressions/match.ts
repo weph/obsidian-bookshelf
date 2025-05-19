@@ -1,8 +1,9 @@
 import { Expression } from '../expression'
 import { Book } from '../../book'
+import { Condition } from '../condition'
 
 export class Match implements Expression {
-    constructor(private readonly term: string) {}
+    constructor(private readonly condition: Condition) {}
 
     matches(book: Book): boolean {
         const searchableFields = [book.metadata.title]
@@ -14,6 +15,6 @@ export class Match implements Expression {
 
         searchableFields.push(...book.metadata.authors.map((a) => a.toString()))
 
-        return searchableFields.some((f) => f.toLowerCase().includes(this.term.toLowerCase()))
+        return searchableFields.some((f) => this.condition.matches(f))
     }
 }

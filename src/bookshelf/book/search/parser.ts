@@ -15,6 +15,8 @@ import {
 import { And } from './expressions/and'
 import { MatchField } from './expressions/match-field'
 import { MatchAll } from './expressions/match-all'
+import { Contains } from './conditions/contains'
+import { Equals } from './conditions/equals'
 
 export type Parser = (input: string) => Expression
 
@@ -43,10 +45,10 @@ export function parser(): Parser {
 
     const fieldExpression = apply(
         seq(tok(TokenKind.Term), tok(TokenKind.Colon), quotedString),
-        (token) => new MatchField(token[0].text, token[2]),
+        (token) => new MatchField(token[0].text, new Equals(token[2])),
     )
 
-    const quotedExpression = apply(quotedString, (str) => new Match(str))
+    const quotedExpression = apply(quotedString, (str) => new Match(new Contains(str)))
 
     const containsExpression = apply(
         rep_sc(
@@ -60,11 +62,13 @@ export function parser(): Parser {
         ),
         (token) =>
             new Match(
-                token
-                    .map((t) => t.text)
-                    .join('')
-                    .trim()
-                    .replace(/^"/, ''),
+                new Contains(
+                    token
+                        .map((t) => t.text)
+                        .join('')
+                        .trim()
+                        .replace(/^"/, ''),
+                ),
             ),
     )
 

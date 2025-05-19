@@ -1,18 +1,17 @@
 import { Expression } from '../expression'
 import { Book } from '../../book'
+import { Condition } from '../condition'
 
 export class MatchField implements Expression {
     constructor(
         private readonly field: string,
-        private readonly value: string,
+        private readonly condition: Condition,
     ) {}
 
     matches(book: Book): boolean {
         const value = this.fieldValue(book)
 
-        return Array.isArray(value)
-            ? value.map((v) => v.toLowerCase()).includes(this.value.toLowerCase())
-            : value?.toLowerCase() === this.value.toLowerCase()
+        return Array.isArray(value) ? value.some((v) => this.condition.matches(v)) : this.condition.matches(value)
     }
 
     private fieldValue(book: Book): string | Array<string> | null {
