@@ -1,5 +1,5 @@
 import { Expression } from './expression'
-import { Contains } from './expressions/contains'
+import { Match } from './expressions/match'
 import {
     alt,
     amb,
@@ -13,7 +13,7 @@ import {
     tok,
 } from 'typescript-parsec'
 import { And } from './expressions/and'
-import { FieldFilter } from './expressions/field-filter'
+import { MatchField } from './expressions/match-field'
 import { MatchAll } from './expressions/match-all'
 
 export type Parser = (input: string) => Expression
@@ -43,10 +43,10 @@ export function parser(): Parser {
 
     const fieldExpression = apply(
         seq(tok(TokenKind.Term), tok(TokenKind.Colon), quotedString),
-        (token) => new FieldFilter(token[0].text, token[2]),
+        (token) => new MatchField(token[0].text, token[2]),
     )
 
-    const quotedExpression = apply(quotedString, (str) => new Contains(str))
+    const quotedExpression = apply(quotedString, (str) => new Match(str))
 
     const containsExpression = apply(
         rep_sc(
@@ -59,7 +59,7 @@ export function parser(): Parser {
             ),
         ),
         (token) =>
-            new Contains(
+            new Match(
                 token
                     .map((t) => t.text)
                     .join('')

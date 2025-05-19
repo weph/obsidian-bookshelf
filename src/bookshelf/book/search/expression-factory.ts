@@ -1,7 +1,7 @@
 import { Parser } from './parser'
 import { Expression } from './expression'
 import { Query } from '../books'
-import { FieldFilter } from './expressions/field-filter'
+import { MatchField } from './expressions/match-field'
 import { And } from './expressions/and'
 
 export class ExpressionFactory {
@@ -15,11 +15,11 @@ export class ExpressionFactory {
         const expressions = [this.fromString(query.search)]
 
         if (query.list !== null) {
-            expressions.push(new FieldFilter('list', query.list))
+            expressions.push(new MatchField('list', query.list))
         }
 
         if (query.status !== null) {
-            expressions.push(new FieldFilter('status', query.status))
+            expressions.push(new MatchField('status', query.status))
         }
 
         if (expressions.length === 1) {

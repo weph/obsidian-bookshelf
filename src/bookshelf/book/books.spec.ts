@@ -1,11 +1,11 @@
 import { expect, test } from 'vitest'
 import { Books } from './books'
 import { BookBuilder } from '../../support/book-builder'
-import { Contains } from './search/expressions/contains'
+import { Match } from './search/expressions/match'
 
 test.each([
-    [new Contains('hunger'), ['The Hunger Games']],
-    [new Contains('games'), ['The Hunger Games', 'Vintage Games']],
+    [new Match('hunger'), ['The Hunger Games']],
+    [new Match('games'), ['The Hunger Games', 'Vintage Games']],
 ])('books.match(%o) => %o', (expr, expected) => {
     const books = new Books([
         new BookBuilder().with('title', 'The Hunger Games').build(),

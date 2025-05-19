@@ -1,7 +1,7 @@
 import { Expression } from '../expression'
 import { Book } from '../../book'
 
-export class Contains implements Expression {
+export class Match implements Expression {
     constructor(private readonly term: string) {}
 
     matches(book: Book): boolean {

@@ -1,7 +1,7 @@
 import { Expression } from '../expression'
 import { Book } from '../../book'
 
-export class FieldFilter implements Expression {
+export class MatchField implements Expression {
     constructor(
         private readonly field: string,
         private readonly value: string,
