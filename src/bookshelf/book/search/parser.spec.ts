@@ -5,6 +5,7 @@ import { And } from './expressions/and'
 import { MatchField } from './expressions/match-field'
 import { MatchAll } from './expressions/match-all'
 import { Contains } from './conditions/contains'
+import { Equals } from './conditions/equals'
 
 const parsedExpression = (input: string) => parser()(input)
 
@@ -67,6 +68,16 @@ describe('Field filter', () => {
     test('Quoted string', () => {
         expect(parsedExpression('author:"Joe Schmoe"')).toStrictEqual(
             new MatchField('author', new Contains('Joe Schmoe')),
+        )
+    })
+
+    test('Exact term', () => {
+        expect(parsedExpression('author:=Joe')).toStrictEqual(new MatchField('author', new Equals('Joe')))
+    })
+
+    test('Exact term (quoted string)', () => {
+        expect(parsedExpression('author:="Joe Schmoe"')).toStrictEqual(
+            new MatchField('author', new Equals('Joe Schmoe')),
         )
     })
 

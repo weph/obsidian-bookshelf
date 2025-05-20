@@ -8,14 +8,17 @@ import {
     expectEOF,
     expectSingleResult,
     list_sc,
+    opt,
     rep_sc,
     seq,
+    str,
     tok,
 } from 'typescript-parsec'
 import { And } from './expressions/and'
 import { MatchField } from './expressions/match-field'
 import { MatchAll } from './expressions/match-all'
 import { Contains } from './conditions/contains'
+import { Equals } from './conditions/equals'
 
 export type Parser = (input: string) => Expression
 
@@ -61,8 +64,12 @@ export function parser(): Parser {
     })
 
     const fieldExpression = apply(
-        seq(tok(TokenKind.Term), tok(TokenKind.Colon), alt(quotedString, term)),
-        (token) => new MatchField(token[0].text, new Contains(token[2])),
+        seq(tok(TokenKind.Term), tok(TokenKind.Colon), opt(str('=')), alt(quotedString, term)),
+        (token) => {
+            const condition = token[2] === undefined ? new Contains(token[3]) : new Equals(token[3])
+
+            return new MatchField(token[0].text, condition)
+        },
     )
 
     const quotedExpression = apply(quotedString, (str) => new Match(new Contains(str)))
