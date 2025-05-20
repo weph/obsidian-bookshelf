@@ -16,14 +16,14 @@ describe('fromQuery', () => {
         const query: Query = { search: '', list: null, status: null }
         const expected = new MatchAll()
 
-        expect(factory.fromQuery(query)).toEqual(expected)
+        expect(factory.fromQuery(query)).toStrictEqual(expected)
     })
 
     test('Just search', () => {
         const query: Query = { search: 'foo', list: null, status: null }
         const expected = new Match(new Contains('foo'))
 
-        expect(factory.fromQuery(query)).toEqual(expected)
+        expect(factory.fromQuery(query)).toStrictEqual(expected)
     })
 
     test('Search with filters', () => {
@@ -34,21 +34,21 @@ describe('fromQuery', () => {
             new MatchField('series', new Equals('Bar')),
         ])
 
-        expect(factory.fromQuery(query)).toEqual(expected)
+        expect(factory.fromQuery(query)).toStrictEqual(expected)
     })
 
     test('Just list', () => {
         const query: Query = { search: '', list: 'foo', status: null }
         const expected = new And([new MatchAll(), new MatchField('list', new Equals('foo'))])
 
-        expect(factory.fromQuery(query)).toEqual(expected)
+        expect(factory.fromQuery(query)).toStrictEqual(expected)
     })
 
     test('Just status', () => {
         const query: Query = { search: '', list: null, status: 'finished' }
         const expected = new And([new MatchAll(), new MatchField('status', new Equals('finished'))])
 
-        expect(factory.fromQuery(query)).toEqual(expected)
+        expect(factory.fromQuery(query)).toStrictEqual(expected)
     })
 
     test('All values', () => {
@@ -59,6 +59,6 @@ describe('fromQuery', () => {
             new MatchField('status', new Equals('finished')),
         ])
 
-        expect(factory.fromQuery(query)).toEqual(expected)
+        expect(factory.fromQuery(query)).toStrictEqual(expected)
     })
 })

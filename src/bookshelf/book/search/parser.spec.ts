@@ -11,29 +11,29 @@ const parsedExpression = (input: string) => parser()(input)
 
 describe('Empty input should return match all expression', () => {
     test('Empty input', () => {
-        expect(parsedExpression('')).toEqual(new MatchAll())
+        expect(parsedExpression('')).toStrictEqual(new MatchAll())
     })
 
     test('Empty input', () => {
-        expect(parsedExpression('    ')).toEqual(new MatchAll())
+        expect(parsedExpression('    ')).toStrictEqual(new MatchAll())
     })
 
     test('White spaces', () => {
-        expect(parsedExpression('\n \t')).toEqual(new MatchAll())
+        expect(parsedExpression('\n \t')).toStrictEqual(new MatchAll())
     })
 })
 
 describe('Term', () => {
     test('Single term', () => {
-        expect(parsedExpression('foo')).toEqual(new Match(new Contains('foo')))
+        expect(parsedExpression('foo')).toStrictEqual(new Match(new Contains('foo')))
     })
 
     test('Quoted string', () => {
-        expect(parsedExpression('"foo bar"')).toEqual(new Match(new Contains('foo bar')))
+        expect(parsedExpression('"foo bar"')).toStrictEqual(new Match(new Contains('foo bar')))
     })
 
     test('Multiple terms', () => {
-        expect(parsedExpression('foo bar')).toEqual(
+        expect(parsedExpression('foo bar')).toStrictEqual(
             new And([new Match(new Contains('foo')), new Match(new Contains('bar'))]),
         )
     })
@@ -48,28 +48,30 @@ describe('Term', () => {
             new Match(new Contains('e')),
         ])
 
-        expect(parsedExpression(input)).toEqual(expected)
+        expect(parsedExpression(input)).toStrictEqual(expected)
     })
 
     test('Incomplete quoted string', () => {
-        expect(parsedExpression('"foo')).toEqual(new Match(new Contains('foo')))
+        expect(parsedExpression('"foo')).toStrictEqual(new Match(new Contains('foo')))
     })
 
     test('Garbage', () => {
-        expect(parsedExpression('qwerty"12!@#:asdf:')).toEqual(new Match(new Contains('qwerty"12!@#:asdf:')))
+        expect(parsedExpression('qwerty"12!@#:asdf:')).toStrictEqual(new Match(new Contains('qwerty"12!@#:asdf:')))
     })
 })
 
 describe('Field filter', () => {
     test('Single field filter', () => {
-        expect(parsedExpression('author:"Joe Schmoe"')).toEqual(new MatchField('author', new Equals('Joe Schmoe')))
+        expect(parsedExpression('author:"Joe Schmoe"')).toStrictEqual(
+            new MatchField('author', new Equals('Joe Schmoe')),
+        )
     })
 
     test('Containing escaped quotes', () => {
         const input = 'author:"Joe \\"J \\\\"X \\\\\\"Y\\\\\\" \\\\" S\\" Schmoe"'
         const expected = new MatchField('author', new Equals('Joe "J \\"X \\\\"Y\\\\" \\" S" Schmoe'))
 
-        expect(parsedExpression(input)).toEqual(expected)
+        expect(parsedExpression(input)).toStrictEqual(expected)
     })
 
     test('Multiple field filter', () => {
@@ -79,35 +81,35 @@ describe('Field filter', () => {
             new MatchField('list', new Equals('Classics')),
         ])
 
-        expect(parsedExpression(input)).toEqual(expected)
+        expect(parsedExpression(input)).toStrictEqual(expected)
     })
 
     test('No filter value', () => {
         const input = 'author:'
         const expected = new Match(new Contains('author:'))
 
-        expect(parsedExpression(input)).toEqual(expected)
+        expect(parsedExpression(input)).toStrictEqual(expected)
     })
 
     test('Invalid filter value (just quotation mark)', () => {
         const input = 'author:"'
         const expected = new Match(new Contains('author:"'))
 
-        expect(parsedExpression(input)).toEqual(expected)
+        expect(parsedExpression(input)).toStrictEqual(expected)
     })
 
     test('Invalid filter value (extra quotation mark)', () => {
         const input = 'author:"Name""'
         const expected = new Match(new Contains('author:"Name""'))
 
-        expect(parsedExpression(input)).toEqual(expected)
+        expect(parsedExpression(input)).toStrictEqual(expected)
     })
 
     test('Invalid filter value (colon at the end)', () => {
         const input = 'author:foo:'
         const expected = new Match(new Contains('author:foo:'))
 
-        expect(parsedExpression(input)).toEqual(expected)
+        expect(parsedExpression(input)).toStrictEqual(expected)
     })
 })
 
@@ -120,7 +122,7 @@ test('Combination of terms and field filters', () => {
         new Match(new Contains('Bar')),
     ])
 
-    expect(parsedExpression(input)).toEqual(expected)
+    expect(parsedExpression(input)).toStrictEqual(expected)
 })
 
 test('Terms, filters, and garbage', () => {
@@ -131,5 +133,5 @@ test('Terms, filters, and garbage', () => {
         new Match(new Contains('foo":bar:xoasdaskdasd')),
     ])
 
-    expect(parsedExpression(input)).toEqual(expected)
+    expect(parsedExpression(input)).toStrictEqual(expected)
 })
