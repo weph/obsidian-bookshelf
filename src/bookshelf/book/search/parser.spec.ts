@@ -5,7 +5,6 @@ import { And } from './expressions/and'
 import { MatchField } from './expressions/match-field'
 import { MatchAll } from './expressions/match-all'
 import { Contains } from './conditions/contains'
-import { Equals } from './conditions/equals'
 
 const parsedExpression = (input: string) => parser()(input)
 
@@ -61,15 +60,19 @@ describe('Term', () => {
 })
 
 describe('Field filter', () => {
-    test('Single field filter', () => {
+    test('Single term', () => {
+        expect(parsedExpression('author:Joe')).toStrictEqual(new MatchField('author', new Contains('Joe')))
+    })
+
+    test('Quoted string', () => {
         expect(parsedExpression('author:"Joe Schmoe"')).toStrictEqual(
-            new MatchField('author', new Equals('Joe Schmoe')),
+            new MatchField('author', new Contains('Joe Schmoe')),
         )
     })
 
     test('Containing escaped quotes', () => {
         const input = 'author:"Joe \\"J \\\\"X \\\\\\"Y\\\\\\" \\\\" S\\" Schmoe"'
-        const expected = new MatchField('author', new Equals('Joe "J \\"X \\\\"Y\\\\" \\" S" Schmoe'))
+        const expected = new MatchField('author', new Contains('Joe "J \\"X \\\\"Y\\\\" \\" S" Schmoe'))
 
         expect(parsedExpression(input)).toStrictEqual(expected)
     })
@@ -77,8 +80,8 @@ describe('Field filter', () => {
     test('Multiple field filter', () => {
         const input = 'author:"Joe Schmoe" list:"Classics"'
         const expected = new And([
-            new MatchField('author', new Equals('Joe Schmoe')),
-            new MatchField('list', new Equals('Classics')),
+            new MatchField('author', new Contains('Joe Schmoe')),
+            new MatchField('list', new Contains('Classics')),
         ])
 
         expect(parsedExpression(input)).toStrictEqual(expected)
@@ -86,28 +89,28 @@ describe('Field filter', () => {
 
     test('No filter value', () => {
         const input = 'author:'
-        const expected = new Match(new Contains('author:'))
+        const expected = new MatchField('author', new Contains(''))
 
         expect(parsedExpression(input)).toStrictEqual(expected)
     })
 
     test('Invalid filter value (just quotation mark)', () => {
         const input = 'author:"'
-        const expected = new Match(new Contains('author:"'))
+        const expected = new MatchField('author', new Contains(''))
 
         expect(parsedExpression(input)).toStrictEqual(expected)
     })
 
     test('Invalid filter value (extra quotation mark)', () => {
         const input = 'author:"Name""'
-        const expected = new Match(new Contains('author:"Name""'))
+        const expected = new MatchField('author', new Contains('Name""'))
 
         expect(parsedExpression(input)).toStrictEqual(expected)
     })
 
     test('Invalid filter value (colon at the end)', () => {
         const input = 'author:foo:'
-        const expected = new Match(new Contains('author:foo:'))
+        const expected = new MatchField('author', new Contains('foo:'))
 
         expect(parsedExpression(input)).toStrictEqual(expected)
     })
@@ -117,8 +120,8 @@ test('Combination of terms and field filters', () => {
     const input = 'Foo author:"Joe Schmoe" list:"Classics" Bar'
     const expected = new And([
         new Match(new Contains('Foo')),
-        new MatchField('author', new Equals('Joe Schmoe')),
-        new MatchField('list', new Equals('Classics')),
+        new MatchField('author', new Contains('Joe Schmoe')),
+        new MatchField('list', new Contains('Classics')),
         new Match(new Contains('Bar')),
     ])
 
@@ -129,7 +132,7 @@ test('Terms, filters, and garbage', () => {
     const input = 'Foo author:"Joe Schmoe" foo":bar:xoasdaskdasd'
     const expected = new And([
         new Match(new Contains('Foo')),
-        new MatchField('author', new Equals('Joe Schmoe')),
+        new MatchField('author', new Contains('Joe Schmoe')),
         new Match(new Contains('foo":bar:xoasdaskdasd')),
     ])
 

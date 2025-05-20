@@ -16,7 +16,6 @@ import { And } from './expressions/and'
 import { MatchField } from './expressions/match-field'
 import { MatchAll } from './expressions/match-all'
 import { Contains } from './conditions/contains'
-import { Equals } from './conditions/equals'
 
 export type Parser = (input: string) => Expression
 
@@ -39,18 +38,7 @@ export function parser(): Parser {
         [true, /^[^\s:"]/g, TokenKind.NonSpace],
     ])
 
-    const quotedString = apply(tok(TokenKind.QuotedString), (token) => {
-        return token.text.substring(1, token.text.length - 1).replace(/(\\)"/g, '"')
-    })
-
-    const fieldExpression = apply(
-        seq(tok(TokenKind.Term), tok(TokenKind.Colon), quotedString),
-        (token) => new MatchField(token[0].text, new Equals(token[2])),
-    )
-
-    const quotedExpression = apply(quotedString, (str) => new Match(new Contains(str)))
-
-    const containsExpression = apply(
+    const term = apply(
         rep_sc(
             alt(
                 tok(TokenKind.Quote),
@@ -61,16 +49,25 @@ export function parser(): Parser {
             ),
         ),
         (token) =>
-            new Match(
-                new Contains(
-                    token
-                        .map((t) => t.text)
-                        .join('')
-                        .trim()
-                        .replace(/^"/, ''),
-                ),
-            ),
+            token
+                .map((t) => t.text)
+                .join('')
+                .trim()
+                .replace(/^"/, ''),
     )
+
+    const quotedString = apply(tok(TokenKind.QuotedString), (token) => {
+        return token.text.substring(1, token.text.length - 1).replace(/(\\)"/g, '"')
+    })
+
+    const fieldExpression = apply(
+        seq(tok(TokenKind.Term), tok(TokenKind.Colon), alt(quotedString, term)),
+        (token) => new MatchField(token[0].text, new Contains(token[2])),
+    )
+
+    const quotedExpression = apply(quotedString, (str) => new Match(new Contains(str)))
+
+    const containsExpression = apply(term, (token) => new Match(new Contains(token)))
 
     const parser = apply(
         list_sc(amb(alt(fieldExpression, quotedExpression, containsExpression)), tok(TokenKind.Space)),

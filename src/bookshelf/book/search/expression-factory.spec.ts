@@ -30,8 +30,8 @@ describe('fromQuery', () => {
         const query: Query = { search: 'foo author:"Jane Doe" series:"Bar"', list: null, status: null }
         const expected = new And([
             new Match(new Contains('foo')),
-            new MatchField('author', new Equals('Jane Doe')),
-            new MatchField('series', new Equals('Bar')),
+            new MatchField('author', new Contains('Jane Doe')),
+            new MatchField('series', new Contains('Bar')),
         ])
 
         expect(factory.fromQuery(query)).toStrictEqual(expected)
