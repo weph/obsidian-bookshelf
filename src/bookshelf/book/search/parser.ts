@@ -55,7 +55,6 @@ export function parser(): Parser {
             token
                 .map((t) => t.text)
                 .join('')
-                .trim()
                 .replace(/^"/, ''),
     )
 
