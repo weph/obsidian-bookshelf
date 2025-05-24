@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.14.0...main`][0.14.0...main].
 
+### Added
+
+- Advanced search ([#19](https://github.com/weph/obsidian-bookshelf/issues/19))\
+  You can now search within individual fields using operators like `=`, `>=`, and `<=`. For details and examples,
+  see the [Advanced Search](https://weph.github.io/obsidian-bookshelf/docs/views#advanced-search) section in the
+  documentation.
+
 ### Changed
 
 - Prefer note heading as book title ([#25](https://github.com/weph/obsidian-bookshelf/issues/25))\
