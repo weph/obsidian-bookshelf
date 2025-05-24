@@ -50,6 +50,53 @@ the [Workspaces plugin documentation](https://help.obsidian.md/plugins/workspace
 Clicking on a book opens the [Book Details Modal](views.md#book-details-modal). To open the book's note directly
 instead, hold a modifier key while clicking (CMD on macOS, CTRL on Windows and Linux).
 
+### Advanced Search
+
+Each word you enter in the search field is matched independently. To search for an exact phrase, enclose it in quotes,
+for example: "pet semetary". The search is also **case-insensitive**.
+
+If you need more control, you can search within individual fields. For example, to find all books you've finished, that
+have an author whose name includes "joe", that are on the list "Classics", and have a rating of at least 3.5, use:
+
+`status:=finished author:joe list:=classics rating:>=3.5`
+
+To find books you've read in 2024, try:
+
+`date:>=2024-01-01 date:<=2024-12-31`
+
+The general syntax is like this:
+
+`<field name>:[<operator>]<value>`
+
+The **operator is optional**. If no operator is given, the field is matched if it contains the value.
+
+For example:
+
+- `author:joe` matches `Joe Schmoe`, `Joey Schmoey`, and `Belle Joelle`
+- `author:="Joe Schmoe"` only matches `Joe Schmoe`.
+
+#### Fields
+
+| Field    | Description                                |
+| -------- | ------------------------------------------ |
+| `author` | Author names                               |
+| `list`   | List name                                  |
+| `rating` | rating (numeric)                           |
+| `series` | Book series                                |
+| `status` | Reading status (e.g., reading, finished)   |
+| `title`  | Book title                                 |
+| `date`   | Reading progress date (format: YYYY-MM-DD) |
+
+#### Operators
+
+| Operator | Description           |
+| -------- | --------------------- |
+| `=`      | Matches exact values  |
+| `>`      | Greater than          |
+| `>=`     | Greater than or equal |
+| `<`      | Less than             |
+| `<=`     | Less than or equal    |
+
 ## Statistics
 
 ![Statistics](/img/statistics.png)
