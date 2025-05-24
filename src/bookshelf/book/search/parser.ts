@@ -19,6 +19,10 @@ import { MatchField } from './expressions/match-field'
 import { MatchAll } from './expressions/match-all'
 import { Contains } from './conditions/contains'
 import { Equals } from './conditions/equals'
+import { GreaterThan } from './conditions/greater-than'
+import { GreaterEqual } from './conditions/greater-equal'
+import { LessEqual } from './conditions/less-equal'
+import { LessThan } from './conditions/less-than'
 
 export type Parser = (input: string) => Expression
 
@@ -29,6 +33,10 @@ enum TokenKind {
     QuotedString,
     Quote,
     NonSpace,
+    GreaterThan,
+    GreaterEqual,
+    LessThan,
+    LessEqual,
 }
 
 export function parser(): Parser {
@@ -36,6 +44,10 @@ export function parser(): Parser {
         [true, /^\s+/g, TokenKind.Space],
         [true, /^:/g, TokenKind.Colon],
         [true, /^"/g, TokenKind.Quote],
+        [true, /^>=/g, TokenKind.GreaterEqual],
+        [true, /^<=/g, TokenKind.LessEqual],
+        [true, /^>/g, TokenKind.GreaterThan],
+        [true, /^</g, TokenKind.LessThan],
         [true, /^\w+/g, TokenKind.Term],
         [true, /^"([^"\\]|(\\)+.)*"/g, TokenKind.QuotedString],
         [true, /^[^\s:"]/g, TokenKind.NonSpace],
@@ -47,6 +59,10 @@ export function parser(): Parser {
                 tok(TokenKind.Quote),
                 tok(TokenKind.NonSpace),
                 tok(TokenKind.Colon),
+                tok(TokenKind.GreaterEqual),
+                tok(TokenKind.GreaterThan),
+                tok(TokenKind.LessEqual),
+                tok(TokenKind.LessThan),
                 tok(TokenKind.Term),
                 tok(TokenKind.QuotedString),
             ),
@@ -63,9 +79,42 @@ export function parser(): Parser {
     })
 
     const fieldExpression = apply(
-        seq(tok(TokenKind.Term), tok(TokenKind.Colon), opt(str('=')), alt(quotedString, term)),
+        seq(
+            tok(TokenKind.Term),
+            tok(TokenKind.Colon),
+            opt(
+                alt(
+                    tok(TokenKind.GreaterEqual),
+                    tok(TokenKind.LessEqual),
+                    tok(TokenKind.GreaterThan),
+                    tok(TokenKind.LessThan),
+                    str('='),
+                ),
+            ),
+            alt(quotedString, term),
+        ),
         (token) => {
-            const condition = token[2] === undefined ? new Contains(token[3]) : new Equals(token[3])
+            let condition
+            switch (token[2]?.text) {
+                case '=':
+                    condition = new Equals(token[3])
+                    break
+                case '>':
+                    condition = new GreaterThan(token[3])
+                    break
+                case '>=':
+                    condition = new GreaterEqual(token[3])
+                    break
+                case '<':
+                    condition = new LessThan(token[3])
+                    break
+                case '<=':
+                    condition = new LessEqual(token[3])
+                    break
+
+                default:
+                    condition = new Contains(token[3])
+            }
 
             return new MatchField(token[0].text, condition)
         },

@@ -6,6 +6,10 @@ import { MatchField } from './expressions/match-field'
 import { MatchAll } from './expressions/match-all'
 import { Contains } from './conditions/contains'
 import { Equals } from './conditions/equals'
+import { GreaterThan } from './conditions/greater-than'
+import { GreaterEqual } from './conditions/greater-equal'
+import { LessThan } from './conditions/less-than'
+import { LessEqual } from './conditions/less-equal'
 
 const parsedExpression = (input: string) => parser()(input)
 
@@ -56,7 +60,9 @@ describe('Term', () => {
     })
 
     test('Garbage', () => {
-        expect(parsedExpression('qwerty"12!@#:asdf:')).toStrictEqual(new Match(new Contains('qwerty"12!@#:asdf:')))
+        const input = 'q=e>r>=ty"12!@#:a<s<=df:'
+
+        expect(parsedExpression(input)).toStrictEqual(new Match(new Contains(input)))
     })
 })
 
@@ -122,6 +128,34 @@ describe('Field filter', () => {
     test('Invalid filter value (colon at the end)', () => {
         const input = 'author:foo:'
         const expected = new MatchField('author', new Contains('foo:'))
+
+        expect(parsedExpression(input)).toStrictEqual(expected)
+    })
+
+    test('Greater than', () => {
+        const input = 'rating:>3'
+        const expected = new MatchField('rating', new GreaterThan('3'))
+
+        expect(parsedExpression(input)).toStrictEqual(expected)
+    })
+
+    test('Greater equal', () => {
+        const input = 'rating:>=3.5'
+        const expected = new MatchField('rating', new GreaterEqual('3.5'))
+
+        expect(parsedExpression(input)).toStrictEqual(expected)
+    })
+
+    test('Less than', () => {
+        const input = 'rating:<3'
+        const expected = new MatchField('rating', new LessThan('3'))
+
+        expect(parsedExpression(input)).toStrictEqual(expected)
+    })
+
+    test('Less equal', () => {
+        const input = 'rating:<=3.5'
+        const expected = new MatchField('rating', new LessEqual('3.5'))
 
         expect(parsedExpression(input)).toStrictEqual(expected)
     })
