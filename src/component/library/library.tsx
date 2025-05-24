@@ -76,7 +76,12 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
     const NavigationComponent = window.innerWidth < 640 ? MobileNavigation : DesktopNavigation
     const reset = () => settingsChanged(initialSettings)
 
-    const filteredBooks = books.matching(expressionFactory.fromQuery(settings)).sort(sortOption?.compareFn)
+    let filteredBooks = new Books([])
+    try {
+        filteredBooks = books.matching(expressionFactory.fromQuery(settings)).sort(sortOption?.compareFn)
+    } catch (e) {
+        console.error(`Error filtering books: ${e}`)
+    }
 
     const content = () => {
         if (books.length === 0) {
