@@ -33,7 +33,7 @@ export const ClearableWithoutValue: Story = {
 
 export const ClearableWithValue: Story = {
     args: {
-        value: 'value',
+        value: 'a pretty long input value for this field',
         clearable: true,
     },
 }

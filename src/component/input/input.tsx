@@ -38,7 +38,7 @@ export function Input({ type, placeholder, value, onUpdate, clearable, error, au
             <input
                 ref={ref}
                 id={id}
-                className={`${styles.input} ${error && styles.error}`}
+                className={`${styles.input} ${clearable && styles.clearable} ${error && styles.error}`}
                 type={type}
                 placeholder={placeholder}
                 value={value}

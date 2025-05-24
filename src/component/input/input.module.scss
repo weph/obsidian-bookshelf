@@ -22,6 +22,10 @@ input.input {
         color: var(--text-error);
         border-color: var(--background-modifier-error);
     }
+
+    &.clearable {
+        padding-right: 28px;
+    }
 }
 
 .container {
