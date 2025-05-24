@@ -1,6 +1,7 @@
 import { Expression } from '../expression'
 import { Book } from '../../book'
 import { Condition } from '../condition'
+import { DateTime } from 'luxon'
 
 export class MatchField implements Expression {
     constructor(
@@ -28,6 +29,8 @@ export class MatchField implements Expression {
                 return book.status
             case 'title':
                 return book.metadata.title
+            case 'date':
+                return book.readingJourney.map((item) => DateTime.fromJSDate(item.date).toFormat('yyyy-MM-dd'))
         }
 
         return null

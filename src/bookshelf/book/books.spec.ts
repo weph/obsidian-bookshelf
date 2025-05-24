@@ -15,6 +15,7 @@ describe('Books', () => {
                 .with('lists', ['Classics'])
                 .with('rating', 3.5)
                 .withStatus('finished')
+                .withReadingProgress(new Date(2025, 0, 1), 1, 1)
                 .build(),
             new BookBuilder()
                 .with('title', 'The Hunger Games')
@@ -22,6 +23,7 @@ describe('Books', () => {
                 .with('series', { name: 'The Hunger Games' })
                 .with('rating', 4)
                 .withStatus('reading')
+                .withReadingProgress(new Date(2025, 0, 2), 1, 1)
                 .build(),
             new BookBuilder()
                 .with('title', 'Catching Fire')
@@ -29,6 +31,7 @@ describe('Books', () => {
                 .with('series', { name: 'The Hunger Games' })
                 .with('rating', 4.5)
                 .withStatus('unread')
+                .withReadingProgress(new Date(2025, 0, 3), 1, 1)
                 .build(),
             new BookBuilder().with('title', 'Vintage Games').withStatus('abandoned').build(),
             new BookBuilder()
@@ -36,6 +39,7 @@ describe('Books', () => {
                 .with('lists', ['Classics'])
                 .with('rating', 3)
                 .withStatus('finished')
+                .withReadingProgress(new Date(2025, 0, 4), 1, 1)
                 .build(),
         ])
 
@@ -61,6 +65,12 @@ describe('Books', () => {
             const result = books.matching(new MatchField('rating', new GreaterEqual('4')))
 
             expect(result.map((b) => b.metadata.title)).toEqual(['The Hunger Games', 'Catching Fire'])
+        })
+
+        test('date >= 2025-01-03', () => {
+            const result = books.matching(new MatchField('date', new GreaterEqual('2025-01-03')))
+
+            expect(result.map((b) => b.metadata.title)).toEqual(['Catching Fire', 'Dracula'])
         })
     })
 })

@@ -13,6 +13,9 @@ describe('MatchField', () => {
         .with('published', new Date(2025, 5, 15))
         .with('series', { name: 'A Series' })
         .withStatus('finished')
+        .withReadingProgress(new Date(2025, 0, 1), 1, 10)
+        .withReadingProgress(new Date(2025, 1, 1), 11, 50)
+        .withReadingProgress(new Date(2025, 2, 15), 51, 100)
         .build()
 
     describe('Title', () => {
@@ -100,6 +103,20 @@ describe('MatchField', () => {
 
         test('must not match incorrect value', () => {
             const expression = new MatchField('status', new Equals('x'))
+
+            expect(expression.matches(book)).toBeFalsy()
+        })
+    })
+
+    describe('Reading Progress Date', () => {
+        test('should match correct value', () => {
+            const expression = new MatchField('date', new Equals('2025-02-01'))
+
+            expect(expression.matches(book)).toBeTruthy()
+        })
+
+        test('must not match incorrect value', () => {
+            const expression = new MatchField('date', new Equals('2025-02-02'))
 
             expect(expression.matches(book)).toBeFalsy()
         })
