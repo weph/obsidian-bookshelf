@@ -1,4 +1,4 @@
-import { App, Plugin, PluginManifest, TFile } from 'obsidian'
+import { App, Plugin, PluginManifest, TAbstractFile, TFile } from 'obsidian'
 import { Bookshelf } from '../bookshelf/bookshelf'
 import { LibraryView, VIEW_TYPE_LIBRARY } from './view/library-view'
 import { assign, debounce } from 'radashi'
@@ -154,8 +154,8 @@ export default class BookshelfPlugin extends Plugin {
 
         this.registerEvent(this.app.metadataCache.on('resolve', async (file) => await this.handleFile(file)))
         this.registerEvent(this.app.metadataCache.on('changed', async (file) => await this.handleFile(file)))
-        this.registerEvent(this.app.vault.on('rename', (file: TFile) => this.handleFile(file)))
-        this.registerEvent(this.app.vault.on('delete', (file: TFile) => this.handleDelete(file)))
+        this.registerEvent(this.app.vault.on('rename', (file: TAbstractFile) => this.handleFile(file)))
+        this.registerEvent(this.app.vault.on('delete', (file: TAbstractFile) => this.handleDelete(file)))
     }
 
     private async processAllNotes(): Promise<void> {
@@ -184,12 +184,16 @@ export default class BookshelfPlugin extends Plugin {
         }
     }
 
-    private async handleFile(file: TFile): Promise<void> {
-        await this.bookshelf.process(this.notes.noteByFile(file))
+    private async handleFile(file: TAbstractFile): Promise<void> {
+        if (file instanceof TFile) {
+            await this.bookshelf.process(this.notes.noteByFile(file))
+        }
     }
 
-    private async handleDelete(file: TFile): Promise<void> {
-        this.bookshelf.remove(this.notes.noteByFile(file))
+    private async handleDelete(file: TAbstractFile): Promise<void> {
+        if (file instanceof TFile) {
+            this.bookshelf.remove(this.notes.noteByFile(file))
+        }
     }
 
     private linkToUri(link: string): string {
