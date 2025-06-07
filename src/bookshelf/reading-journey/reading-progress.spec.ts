@@ -4,15 +4,16 @@ import { position } from './position/position'
 import { BookBuilder } from '../../support/book-builder'
 import { FakeNote } from '../../support/fake-note'
 import { StaticMetadata } from '../note/metadata'
+import { Page } from './position/page'
 
 const book = new BookBuilder().build()
 const source = new FakeNote('', new StaticMetadata({}), [])
 
-describe('Start page', () => {
+describe('Start', () => {
     test('given value should be used', () => {
         const subject = new ReadingProgress(new Date(), book, null, position(5), position(10), source)
 
-        expect(subject.startPage).toBe(5)
+        expect(subject.start).toStrictEqual(new Page(5))
     })
 })
 
@@ -20,21 +21,21 @@ describe('No start page', () => {
     test('start page should be 1 if there is no previous reading progress', () => {
         const subject = new ReadingProgress(new Date(), book, null, null, position(10), source)
 
-        expect(subject.startPage).toBe(1)
+        expect(subject.start).toStrictEqual(new Page(1))
     })
 
     test('start page should be end page of the previous reading progress + 1', () => {
         const previous = new ReadingProgress(new Date(), book, null, position(1), position(10), source)
         const subject = new ReadingProgress(new Date(), book, previous, null, position(10), source)
 
-        expect(subject.startPage).toBe(11)
+        expect(subject.start).toStrictEqual(new Page(11))
     })
 
     test('start page should be 1 if previous reading progress is from a different book part', () => {
         const previous = new ReadingProgress(new Date(), book, null, position('x'), position('xx'), source)
         const subject = new ReadingProgress(new Date(), book, previous, null, position(10), source)
 
-        expect(subject.startPage).toBe(1)
+        expect(subject.start).toStrictEqual(new Page(1))
     })
 })
 

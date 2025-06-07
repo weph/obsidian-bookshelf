@@ -18,8 +18,6 @@ export interface ReadingJourneyProgressItem extends ReadingJournalItemBase {
     action: 'progress'
     start: Position | null
     end: Position
-    startPage: number | null
-    endPage: number | null
     pages: number | null
 }
 

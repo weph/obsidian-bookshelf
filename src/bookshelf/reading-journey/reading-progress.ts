@@ -27,17 +27,9 @@ export class ReadingProgress implements ReadingJourneyProgressItem {
         return this.previous.end.next(this.book)
     }
 
-    get startPage(): number | null {
-        return this.start.pageInBook(this.book)
-    }
-
-    get endPage(): number | null {
-        return this.end.pageInBook(this.book)
-    }
-
     get pages(): number | null {
-        const startPage = this.startPage
-        const endPage = this.endPage
+        const startPage = this.start.pageInBook(this.book)
+        const endPage = this.end.pageInBook(this.book)
 
         if (startPage === null || endPage === null) {
             return null

@@ -38,8 +38,6 @@ export class BookBuilder {
                     date,
                     start: position(startPage),
                     end: position(endPage),
-                    startPage,
-                    endPage,
                     pages: pages,
                     source: new FakeNote('', new StaticMetadata({}), []),
                 },
