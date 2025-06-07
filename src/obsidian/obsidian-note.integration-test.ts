@@ -285,9 +285,9 @@ new-field: new-value
             )
             const note = new ObsidianNote(context.file('listItems.md'), context.app)
 
-            const result = note.listItems('Relevant Heading')
+            const result = await note.listItems('Relevant Heading')
 
-            expect(await generatorAsArray(result)).toEqual([])
+            expect(result).toEqual([])
         })
 
         test('list using dash', async (context) => {
@@ -302,9 +302,9 @@ new-field: new-value
             )
             const note = new ObsidianNote(context.file('listItems.md'), context.app)
 
-            const result = note.listItems('Relevant Heading')
+            const result = await note.listItems('Relevant Heading')
 
-            expect(await generatorAsArray(result)).toEqual(['A', 'B', 'C'])
+            expect(result).toEqual(['A', 'B', 'C'])
         })
 
         test('list using plus', async (context) => {
@@ -319,9 +319,9 @@ new-field: new-value
             )
             const note = new ObsidianNote(context.file('listItems.md'), context.app)
 
-            const result = note.listItems('Relevant Heading')
+            const result = await note.listItems('Relevant Heading')
 
-            expect(await generatorAsArray(result)).toEqual(['A', 'B', 'C'])
+            expect(result).toEqual(['A', 'B', 'C'])
         })
 
         test('list using asterisk', async (context) => {
@@ -336,9 +336,9 @@ new-field: new-value
             )
             const note = new ObsidianNote(context.file('listItems.md'), context.app)
 
-            const result = note.listItems('Relevant Heading')
+            const result = await note.listItems('Relevant Heading')
 
-            expect(await generatorAsArray(result)).toEqual(['A', 'B', 'C'])
+            expect(result).toEqual(['A', 'B', 'C'])
         })
     })
 
@@ -522,13 +522,3 @@ Lorem ipsum dolor sit amet
         })
     })
 })
-
-async function generatorAsArray<T>(gen: AsyncIterable<T>): Promise<T[]> {
-    const result: Array<T> = []
-
-    for await (const x of gen) {
-        result.push(x)
-    }
-
-    return result
-}

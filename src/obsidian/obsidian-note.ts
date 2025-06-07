@@ -80,13 +80,15 @@ export class ObsidianNote implements Note {
         return await this.app.vault.cachedRead(this.file)
     }
 
-    public async *listItems(sectionHeading: string): AsyncGenerator<string> {
+    public async listItems(sectionHeading: string): Promise<Array<string>> {
         const lines = (await this.content()).split('\n')
         const locations = await this.locations(sectionHeading, lines)
 
-        if (locations.list === null) {
-            return
+        if (locations.list === null || this.obsidianMetadata.listItems === undefined) {
+            return []
         }
+
+        const result = []
 
         for (const listItem of this.obsidianMetadata.listItems || []) {
             const line = listItem.position.start.line
@@ -95,8 +97,10 @@ export class ObsidianNote implements Note {
                 continue
             }
 
-            yield lines[line].replace(/^[-+*]\s+/, '').trim()
+            result.push(lines[line].replace(/^[-+*]\s+/, '').trim())
         }
+
+        return result
     }
 
     public async appendToList(sectionHeading: string, item: string): Promise<void> {

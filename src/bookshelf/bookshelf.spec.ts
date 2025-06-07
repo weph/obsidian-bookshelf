@@ -909,7 +909,7 @@ describe('Adding items to reading journey', () => {
             date: new Date(2025, 0, 5),
         })
 
-        expect(await generatorAsArray(dracula.listItems())).toEqual([
+        expect(await dracula.listItems()).toEqual([
             '2025-01-02: Started reading',
             '2025-01-03: 1-50',
             '2025-01-04: Abandoned book',
@@ -972,13 +972,13 @@ describe('Adding items to reading journey', () => {
             date: new Date(2025, 0, 5),
         })
 
-        expect(await generatorAsArray((await notes.dailyNote(new Date(2025, 0, 3))).listItems('Reading'))).toEqual([
+        expect(await (await notes.dailyNote(new Date(2025, 0, 3))).listItems('Reading')).toEqual([
             'Read [[Dracula]]: 1-50',
         ])
-        expect(await generatorAsArray((await notes.dailyNote(new Date(2025, 0, 4))).listItems('Reading'))).toEqual([
+        expect(await (await notes.dailyNote(new Date(2025, 0, 4))).listItems('Reading')).toEqual([
             'Abandoned [[Dracula]]',
         ])
-        expect(await generatorAsArray((await notes.dailyNote(new Date(2025, 0, 5))).listItems('Reading'))).toEqual([
+        expect(await (await notes.dailyNote(new Date(2025, 0, 5))).listItems('Reading')).toEqual([
             'Started reading [[Dracula]]',
             'Read [[Dracula]]: 350',
             'Finished reading [[Dracula]]',
@@ -1094,14 +1094,4 @@ function readingProgressAsString(value: ReadingJourneyItem): string {
     }
 
     return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.metadata.title}: ${value.start}-${value.end}`
-}
-
-async function generatorAsArray<T>(gen: AsyncIterable<T>): Promise<T[]> {
-    const result: Array<T> = []
-
-    for await (const x of gen) {
-        result.push(x)
-    }
-
-    return result
 }

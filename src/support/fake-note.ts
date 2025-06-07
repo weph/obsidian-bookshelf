@@ -22,10 +22,8 @@ export class FakeNote implements Note {
         return ''
     }
 
-    public async *listItems(): AsyncGenerator<string> {
-        for (const listItem of this.list) {
-            yield listItem
-        }
+    public async listItems(): Promise<Array<string>> {
+        return this.list
     }
 
     public async appendToList(_sectionHeading: string, item: string): Promise<void> {

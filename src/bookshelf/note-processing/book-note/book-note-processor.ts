@@ -20,7 +20,7 @@ export class BookNoteProcessor implements NoteProcessor {
         result.referencedBookNotes.add(note)
 
         if (this.patterns !== null) {
-            for await (const listItem of note.listItems(this.heading)) {
+            for (const listItem of await note.listItems(this.heading)) {
                 const matches = this.patterns.matches(listItem)
                 if (matches === null) {
                     continue
