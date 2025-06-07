@@ -92,11 +92,11 @@ export default class BookshelfPlugin extends Plugin {
 
                 const note = this.notes.noteByFile(file)
 
-                if (checking) {
-                    return this.bookshelf.has(note)
+                if (!checking) {
+                    this.openBookModal(this.bookshelf.book(note))
                 }
 
-                this.openBookModal(this.bookshelf.book(note))
+                return this.bookshelf.has(note)
             },
         })
     }

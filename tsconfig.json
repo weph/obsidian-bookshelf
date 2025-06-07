@@ -7,6 +7,7 @@
         "target": "ES6",
         "allowJs": true,
         "noImplicitAny": true,
+        "noImplicitReturns": true,
         "moduleResolution": "bundler",
         "importHelpers": true,
         "isolatedModules": true,
