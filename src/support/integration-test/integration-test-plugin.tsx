@@ -23,7 +23,7 @@ class TestRunnerView extends ItemView {
         return 'Test Runner'
     }
 
-    protected async onOpen(): Promise<void> {
+    protected override async onOpen(): Promise<void> {
         const results = await this.testSuite.run(this.context)
 
         createRoot(this.containerEl.children[1]).render(this.html(results))
@@ -84,7 +84,7 @@ export default class IntegrationTestPlugin extends Plugin {
 
     private updatedFiles = new Set<string>()
 
-    async onload() {
+    public override async onload() {
         this.registerView(
             VIEW_TYPE_TEST_RUNNER,
             (leaf) =>

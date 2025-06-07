@@ -45,7 +45,7 @@ export default class BookshelfPlugin extends Plugin {
         this.bookshelf = new BookshelfReference(new BookshelfDummy(this.subscribers))
     }
 
-    async onload() {
+    override async onload() {
         await this.loadSettings()
 
         this.addSettingTab(new BookshelfSettingsTab(this.app, this))

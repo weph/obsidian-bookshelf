@@ -8,7 +8,7 @@ import BookshelfPlugin from '../bookshelf-plugin'
 export const VIEW_TYPE_STATISTICS = 'statistics'
 
 export class StatisticsView extends ItemView {
-    public icon = 'chart-spline'
+    public override icon = 'chart-spline'
 
     constructor(
         leaf: WorkspaceLeaf,
@@ -26,7 +26,7 @@ export class StatisticsView extends ItemView {
         return 'Bookshelf statistics'
     }
 
-    protected async onOpen(): Promise<void> {
+    protected override async onOpen(): Promise<void> {
         createRoot(this.containerEl.children[1]).render(
             <StrictMode>
                 <Statistics

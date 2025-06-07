@@ -13,7 +13,7 @@ import { parser } from '../../bookshelf/book/search/parser'
 export const VIEW_TYPE_LIBRARY = 'library'
 
 export class LibraryView extends ItemView {
-    public icon = 'library-big'
+    public override icon = 'library-big'
 
     private root: Root
 
@@ -37,7 +37,7 @@ export class LibraryView extends ItemView {
         return 'Bookshelf library'
     }
 
-    public async setState(state: Partial<Settings>, result: ViewStateResult): Promise<void> {
+    public override async setState(state: Partial<Settings>, result: ViewStateResult): Promise<void> {
         this.settings = {
             search: state.search || initialSettings.search,
             list: state.list || initialSettings.list,
@@ -52,11 +52,11 @@ export class LibraryView extends ItemView {
         return super.setState(state, result)
     }
 
-    public getState(): Record<string, unknown> {
+    public override getState(): Record<string, unknown> {
         return { ...this.settings }
     }
 
-    protected async onOpen(): Promise<void> {
+    protected override async onOpen(): Promise<void> {
         this.render()
     }
 

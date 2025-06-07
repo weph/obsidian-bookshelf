@@ -14,13 +14,13 @@ export class ReleaseNotesModal extends Modal {
         this.setTitle('Bookshelf release notes')
     }
 
-    async onClose(): Promise<void> {
+    override async onClose(): Promise<void> {
         await this.bookshelfPlugin.loadSettings()
         this.bookshelfPlugin.settings.previousVersion = this.bookshelfPlugin.version.asString()
         await this.bookshelfPlugin.saveSettings()
     }
 
-    async onOpen(): Promise<void> {
+    override async onOpen(): Promise<void> {
         const previousVersion = Version.fromString(this.bookshelfPlugin.settings.previousVersion || '0.0.0')
 
         const items = Object.entries(releaseNotes)
