@@ -1,5 +1,5 @@
 import { Input } from '../input/input'
-import { useState } from 'react'
+import { MouseEvent, useState } from 'react'
 import { Book, ReadingStatus } from '../../bookshelf/book/book'
 import { Gallery } from '../gallery/gallery'
 import { Dropdown, DropdownOption } from '../dropdown/dropdown'
@@ -38,7 +38,7 @@ export interface Props {
     settingsChanged: (newSettings: Settings) => void
     books: Books
     sortOptions: Array<SortDropdownOption>
-    onBookClick: (book: Book) => void
+    onBookClick: (book: Book, event: MouseEvent) => void
     expressionFactory: ExpressionFactory
 }
 

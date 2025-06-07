@@ -1,7 +1,7 @@
 import { Bookshelf } from '../../bookshelf/bookshelf'
 import { Book } from '../../bookshelf/book/book'
 import { Dropdown } from '../dropdown/dropdown'
-import { useState } from 'react'
+import { MouseEvent, useState } from 'react'
 import { PagesReadChart } from './pages-read-chart/pages-read-chart'
 import { Gallery } from '../gallery/gallery'
 import { TagUsageChart } from './tag-usage-chart/tag-usage-chart'
@@ -10,7 +10,7 @@ import { useSyncedData } from '../hooks/use-synced-data'
 
 export interface Props {
     bookshelf: Bookshelf
-    onBookClick: (book: Book) => void
+    onBookClick: (book: Book, event: MouseEvent) => void
 }
 
 export function Statistics({ bookshelf, onBookClick }: Props) {

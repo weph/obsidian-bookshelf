@@ -1,5 +1,5 @@
 import { ItemView, ViewStateResult, WorkspaceLeaf } from 'obsidian'
-import { StrictMode, useEffect, useState } from 'react'
+import { MouseEvent, StrictMode, useEffect, useState } from 'react'
 import { createRoot, Root } from 'react-dom/client'
 import { Bookshelf } from '../../bookshelf/bookshelf'
 import { bookSortOptions } from '../../component/library/book-sort-options'
@@ -86,7 +86,7 @@ function SyncedLibrary({
     initialSettings: Settings
     settingsChanged: (settings: Settings) => void
     bookshelf: Bookshelf
-    onBookClick: (book: Book) => void
+    onBookClick: (book: Book, event: MouseEvent) => void
 }) {
     const [settings, setSettings] = useState<Settings>(initialSettings)
     const books = useSyncedData(bookshelf, (b) => b.all())
