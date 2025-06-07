@@ -1,4 +1,4 @@
-import { Plugin, TFile } from 'obsidian'
+import { App, Plugin, PluginManifest, TFile } from 'obsidian'
 import { Bookshelf } from '../bookshelf/bookshelf'
 import { LibraryView, VIEW_TYPE_LIBRARY } from './view/library-view'
 import { assign, debounce } from 'radashi'
@@ -27,20 +27,26 @@ export interface DailyNotesSettings {
 
 export default class BookshelfPlugin extends Plugin {
     public readonly version = Version.fromString('__bookshelf_plugin_version__')
+
     public settings: BookshelfPluginSettings
 
-    private notes: ObsidianNotes
+    private readonly notes: ObsidianNotes
 
-    private subscribers: Subscribers
+    private readonly subscribers: Subscribers
 
-    private bookshelf: BookshelfReference
+    private readonly bookshelf: BookshelfReference
 
-    async onload() {
-        await this.loadSettings()
+    constructor(app: App, manifest: PluginManifest) {
+        super(app, manifest)
 
+        this.settings = DEFAULT_SETTINGS
         this.notes = new ObsidianNotes(this.app)
         this.subscribers = new Subscribers()
         this.bookshelf = new BookshelfReference(new BookshelfDummy(this.subscribers))
+    }
+
+    async onload() {
+        await this.loadSettings()
 
         this.addSettingTab(new BookshelfSettingsTab(this.app, this))
         this.setupViews()

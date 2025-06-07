@@ -54,7 +54,7 @@ export interface BookshelfPluginSettings extends VersionedSettings {
     showReleaseNotes: boolean
 }
 
-export const DEFAULT_SETTINGS: Partial<BookshelfPluginSettings> = {
+export const DEFAULT_SETTINGS: BookshelfPluginSettings = {
     settingsVersion: VERSION,
     booksFolder: 'Books',
     bookProperties: {
