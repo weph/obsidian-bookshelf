@@ -54,7 +54,7 @@ class SingleTest implements TestCollection {
             return {
                 name: this.name,
                 result: 'failed',
-                error: error.message,
+                error: error instanceof Error ? error.message : undefined,
                 durationInMs: new Date().getMilliseconds() - start,
             }
         }

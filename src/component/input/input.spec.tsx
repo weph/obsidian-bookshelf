@@ -14,13 +14,13 @@ beforeEach(async () => {
 })
 
 describe('onUpdate', () => {
-    it.each(['input', 'keyUp', 'change'])('should notify about every %s event', (event: EventType) => {
+    it.each(['input', 'keyUp', 'change'])('should notify about every %s event', (event: string) => {
         render(<Input type={''} placeholder={''} value={''} onUpdate={onUpdate} />)
         const internalInput = screen.getByRole('textbox')
 
-        fireEvent[event](internalInput, { target: { value: 'f' } })
-        fireEvent[event](internalInput, { target: { value: 'fo' } })
-        fireEvent[event](internalInput, { target: { value: 'foo' } })
+        fireEvent[event as EventType](internalInput, { target: { value: 'f' } })
+        fireEvent[event as EventType](internalInput, { target: { value: 'fo' } })
+        fireEvent[event as EventType](internalInput, { target: { value: 'foo' } })
 
         expect(onUpdate).toHaveBeenCalledTimes(3)
         expect(onUpdate).toHaveBeenNthCalledWith(1, 'f')
