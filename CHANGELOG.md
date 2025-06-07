@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.15.0...main`][0.15.0...main].
 
+### Fixed
+
+- Hide "pages read" in book details view when the number couldn't be determined
+
 ## [`0.15.0`][0.15.0] - 2025-05-24
 
 For a full diff see [`0.14.0...0.15.0`][0.14.0...0.15.0].
