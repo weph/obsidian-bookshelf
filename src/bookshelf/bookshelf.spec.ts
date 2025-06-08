@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { Bookshelf } from './bookshelf'
-import { ReadingJourneyItem } from './reading-journey/reading-journey-log'
 import { Interval } from './reading-journey/statistics/statistics'
 import { DateTime } from 'luxon'
 import { FakeNote } from '../support/fake-note'
@@ -178,7 +177,7 @@ describe('Note processing', () => {
             ]),
         )
 
-        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+        expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-01: The Shining: started',
             '2025-01-01: The Shining: 10-150',
             '2025-01-02: The Shining: 151-250',
@@ -198,7 +197,7 @@ describe('Note processing', () => {
             ]),
         )
 
-        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+        expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-01: The Shining: started',
             '2025-01-01: The Shining: 0%-20%',
             '2025-01-02: The Shining: 21%-60%',
@@ -218,7 +217,7 @@ describe('Note processing', () => {
             ]),
         )
 
-        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+        expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-01: The Shining: started',
             '2025-01-01: The Shining: xii-xv',
             '2025-01-02: The Shining: xvi-xxiii',
@@ -240,7 +239,7 @@ describe('Note processing', () => {
         ]
         await bookshelf.process(note)
 
-        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+        expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-01: The Shining: started',
             '2025-01-01: The Shining: 10-150',
             '2025-01-02: The Shining: 151-250',
@@ -267,7 +266,7 @@ describe('Note processing', () => {
 
         const books = Array.from(bookshelf.all())
         expect(books).toHaveLength(1)
-        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([])
+        expect(bookshelf.readingJourney().map(String)).toEqual([])
     })
 
     test('It should create book note for book referenced in daily note if it does not exist yet', async () => {
@@ -315,7 +314,7 @@ describe('Note processing', () => {
             ]),
         )
 
-        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+        expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-01: The Shining: started',
             '2025-01-01: The Shining: 10-100',
             '2025-01-01: The Shining: 101-447',
@@ -335,7 +334,7 @@ describe('Note processing', () => {
             ]),
         )
 
-        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+        expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-01: The Shining: started',
             '2025-01-01: The Shining: 0%-30%',
             '2025-01-01: The Shining: 31%-100%',
@@ -356,7 +355,7 @@ describe('Note processing', () => {
             ]),
         )
 
-        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+        expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-01: The Shining: started',
             '2025-01-01: The Shining: xii-xv',
             '2025-01-01: The Shining: xvi-xxiii',
@@ -376,7 +375,7 @@ describe('Note processing', () => {
         ]
         await bookshelf.process(note)
 
-        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+        expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-01: The Shining: started',
             '2025-01-01: The Shining: 10-447',
             '2025-01-01: The Shining: finished',
@@ -399,7 +398,7 @@ describe('Note processing', () => {
 
         const books = Array.from(bookshelf.all())
         expect(books).toHaveLength(0)
-        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([])
+        expect(bookshelf.readingJourney().map(String)).toEqual([])
     })
 
     test('It should ignore daily notes if daily note patterns are disabled', async () => {
@@ -421,7 +420,7 @@ describe('Note processing', () => {
 
         const books = Array.from(bookshelf.all())
         expect(books).toHaveLength(0)
-        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([])
+        expect(bookshelf.readingJourney().map(String)).toEqual([])
     })
 
     test.each([['2000-50-99.md'], ['aaaa-bb-cc.md'], ['01/01/2025.md'], ['01.01.2025.md']])(
@@ -429,7 +428,7 @@ describe('Note processing', () => {
         async (path) => {
             await bookshelf.process(new FakeNote(path, new StaticMetadata({}), ['Started reading The Shining']))
 
-            expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([])
+            expect(bookshelf.readingJourney().map(String)).toEqual([])
         },
     )
 
@@ -466,7 +465,7 @@ describe('Note processing', () => {
 
         bookshelf.remove(animalFarm)
 
-        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+        expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-01: The Shining: started',
             '2025-01-01: Dracula: started',
         ])
@@ -527,7 +526,7 @@ describe('Note processing', () => {
         animalFarm.path = 'Notes/Animal Farm.md'
         await bookshelf.process(animalFarm)
 
-        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+        expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-01: The Shining: started',
             '2025-01-01: Dracula: started',
         ])
@@ -561,11 +560,11 @@ test('Reading journey should be reflected in book', async () => {
     await bookshelf.process(dracula)
     await bookshelf.process(shining)
 
-    expect(bookshelf.book(dracula).readingJourney.map(readingProgressAsString)).toEqual([
+    expect(bookshelf.book(dracula).readingJourney.map(String)).toEqual([
         '2025-02-03: Dracula: 1-10',
         '2025-02-05: Dracula: 11-20',
     ])
-    expect(bookshelf.book(shining).readingJourney.map(readingProgressAsString)).toEqual([
+    expect(bookshelf.book(shining).readingJourney.map(String)).toEqual([
         '2025-02-01: The Shining: 10-20',
         '2025-02-04: The Shining: 21-50',
     ])
@@ -917,7 +916,7 @@ describe('Adding items to reading journey', () => {
             '2025-01-05: 350',
             '2025-01-05: Finished reading',
         ])
-        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+        expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-02: Dracula: started',
             '2025-01-03: Dracula: 1-50',
             '2025-01-04: Dracula: abandoned',
@@ -983,7 +982,7 @@ describe('Adding items to reading journey', () => {
             'Read [[Dracula]]: 350',
             'Finished reading [[Dracula]]',
         ])
-        expect(bookshelf.readingJourney().map(readingProgressAsString)).toEqual([
+        expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-02: Dracula: started',
             '2025-01-03: Dracula: 1-50',
             '2025-01-04: Dracula: abandoned',
@@ -1086,12 +1085,4 @@ function bookMetadata(book: Book): BookMetadata {
         lists: book.metadata.lists,
         links: book.metadata.links,
     }
-}
-
-function readingProgressAsString(value: ReadingJourneyItem): string {
-    if (value.action !== 'progress') {
-        return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.metadata.title}: ${value.action}`
-    }
-
-    return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.metadata.title}: ${value.start}-${value.end}`
 }

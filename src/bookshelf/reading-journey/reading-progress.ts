@@ -2,6 +2,7 @@ import { Book } from '../book/book'
 import { Position } from './position/position'
 import { Note } from '../note/note'
 import { ReadingJourneyProgressItem } from './reading-journey-log'
+import { DateTime } from 'luxon'
 
 export class ReadingProgress implements ReadingJourneyProgressItem {
     public readonly action = 'progress'
@@ -36,5 +37,11 @@ export class ReadingProgress implements ReadingJourneyProgressItem {
         }
 
         return endPage - startPage + 1
+    }
+
+    public toString(): string {
+        const date = DateTime.fromJSDate(this.date).toFormat('yyyy-MM-dd')
+
+        return `${date}: ${this.book.metadata.title}: ${this.start}-${this.end}`
     }
 }

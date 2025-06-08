@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test } from 'vitest'
-import { ReadingJourneyItem, ReadingJourneyItemInput, ReadingJourneyLog } from './reading-journey-log'
+import { ReadingJourneyItemInput, ReadingJourneyLog } from './reading-journey-log'
 import { BookBuilder } from '../../support/book-builder'
 import { FakeNote } from '../../support/fake-note'
 import { StaticMetadata } from '../note/metadata'
@@ -34,7 +34,7 @@ describe('Reading journey', () => {
 
         const journey = log.readingJourney()
 
-        expect(journey.map(readingProgressAsString)).toEqual([
+        expect(journey.map(String)).toEqual([
             '2025-02-01: The Shining: started',
             '2025-02-01: The Shining: 10-20',
             '2025-02-03: Dracula: started',
@@ -57,7 +57,7 @@ describe('Reading journey', () => {
 
         const journey = log.readingJourney()
 
-        expect(journey.map(readingProgressAsString)).toEqual([
+        expect(journey.map(String)).toEqual([
             '2025-01-01: Dracula: 1-1',
             '2025-01-01: The Shining: 1-2',
             '2025-01-02: The Shining: 3-3',
@@ -72,7 +72,7 @@ describe('Reading journey', () => {
 
         const journey = log.readingJourney()
 
-        expect(journey.map(readingProgressAsString)).toEqual([
+        expect(journey.map(String)).toEqual([
             '2025-01-01: Dracula: 1-10',
             '2025-01-02: Dracula: 11-20',
             '2025-01-03: Dracula: 21-30',
@@ -100,7 +100,7 @@ describe('Reading journey', () => {
 
         log.removeBySource(shiningNote)
 
-        expect(log.readingJourney().map(readingProgressAsString)).toEqual([
+        expect(log.readingJourney().map(String)).toEqual([
             '2025-02-03: Dracula: started',
             '2025-02-03: Dracula: 1-10',
             '2025-02-04: Dracula: abandoned',
@@ -111,14 +111,6 @@ describe('Reading journey', () => {
         ])
     })
 })
-
-function readingProgressAsString(value: ReadingJourneyItem): string {
-    if (value.action !== 'progress') {
-        return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.metadata.title}: ${value.action}`
-    }
-
-    return `${value.date.getFullYear()}-${(value.date.getMonth() + 1).toString().padStart(2, '0')}-${value.date.getDate().toString().padStart(2, '0')}: ${value.book.metadata.title}: ${value.start?.toString()}-${value.end.toString()}`
-}
 
 function started(date: string, book: Book, source: Note): ReadingJourneyItemInput {
     return action('started', date, book, source)

@@ -3,6 +3,7 @@ import { ReadingJourney } from './reading-journey'
 import { Note } from '../note/note'
 import { Position } from './position/position'
 import { ReadingProgress } from './reading-progress'
+import { ReadingAction } from './reading-action'
 
 interface ReadingJournalItemBase {
     date: Date
@@ -50,7 +51,7 @@ export class ReadingJourneyLog {
     private addAction(item: ReadingJourneyItemActionInput): void {
         const { date, action, book, source } = item
 
-        this.items.splice(this.positionForDate(date), 0, { action, date, book, source })
+        this.items.splice(this.positionForDate(date), 0, new ReadingAction(date, book, source, action))
     }
 
     private addProgress(input: ReadingJourneyItemProgressInput): void {
