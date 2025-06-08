@@ -552,7 +552,7 @@ describe('Non-existing book', () => {
     })
 })
 
-test('reading journey should by reflected in book', async () => {
+test('Reading journey should be reflected in book', async () => {
     const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-02-03: 1-10', '2025-02-05: 20'])
     const shining = new FakeNote('Books/The Shining.md', new StaticMetadata({}), [
         '2025-02-01: 10-20',
