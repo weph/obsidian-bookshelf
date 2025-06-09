@@ -2,6 +2,7 @@ import { Book } from '../../book/book'
 import { Page } from './page'
 import { Percentage } from './percentage'
 import { RomanNumeral } from './roman-numeral'
+import { Time } from './time'
 
 export type Part = 'front-matter' | 'main'
 
@@ -34,10 +35,14 @@ export function position(value: number | string): Position {
             return new Percentage(parsedValue)
         }
 
-        try {
-            return RomanNumeral.fromString(trimmedValue)
-        } catch {
-            // this is a little ugly
+        const factories = [RomanNumeral.fromString, Time.fromString]
+
+        for (const factory of factories) {
+            try {
+                return factory(trimmedValue)
+            } catch {
+                // this is a little ugly
+            }
         }
     }
 

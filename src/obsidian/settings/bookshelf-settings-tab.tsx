@@ -172,6 +172,17 @@ export class BookshelfSettingsTab extends PluginSettingTab {
                     await this.plugin.saveSettings()
                 }),
             )
+
+        new Setting(containerEl)
+            .setName('Audiobook duration')
+            .setDesc('Name of the property that contains the total playtime of an audiobook')
+            .addText((text) =>
+                text.setValue(this.plugin.settings.bookProperties.duration).onChange(async (value) => {
+                    this.plugin.settings.bookProperties.duration = value.trim()
+
+                    await this.plugin.saveSettings()
+                }),
+            )
     }
 
     private addBookNoteSection(): void {

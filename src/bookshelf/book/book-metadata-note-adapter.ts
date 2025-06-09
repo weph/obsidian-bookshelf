@@ -3,6 +3,7 @@ import { BookMetadata, SeriesInfo } from './book'
 import { Reference } from 'obsidian'
 import { Note } from '../note/note'
 import { Link } from './link'
+import { Playtime } from '../shared/playtime'
 
 export type LinkToUri = (link: string) => string
 
@@ -18,6 +19,7 @@ export interface PropertyNames {
     links: string
     series: string
     positionInSeries: string
+    duration: string
 }
 
 export class BookMetadataNoteAdapter implements BookMetadata {
@@ -174,6 +176,16 @@ export class BookMetadataNoteAdapter implements BookMetadata {
         }
 
         return undefined
+    }
+
+    get duration(): Playtime | undefined {
+        const value = this.note.metadata.value(this.propertyNames.duration)
+
+        try {
+            return Playtime.fromString(String(value))
+        } catch {
+            return undefined
+        }
     }
 
     private isReference(value: PropertyValue | null) {

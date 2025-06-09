@@ -1,6 +1,7 @@
 import { ReadingJourney } from '../reading-journey/reading-journey'
 import { Note } from '../note/note'
 import { Link } from './link'
+import { Playtime } from '../shared/playtime'
 
 export type ReadingStatus = 'unread' | 'reading' | 'abandoned' | 'finished'
 
@@ -15,6 +16,7 @@ export interface BookMetadata {
     readonly authors: Array<string | Link>
     readonly published?: Date
     readonly pages?: number
+    readonly duration?: Playtime
     readonly tags?: Array<string>
     readonly rating?: number
     readonly lists: Array<string>

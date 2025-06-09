@@ -67,6 +67,13 @@ The date the book was published.
 The total number of pages in the book. If you track your reading progress using percentages, this value is used
 to calculate how many pages you've read.
 
+#### Audiobook duration
+
+**Property type:** Text\
+**Default name:** `duration`
+
+The total playtime of an audiobook. Use the format `H:MM` (e.g., `5:30` for 5 hours and 30 minutes).
+
 #### Tags
 
 **Property type:** Tags\

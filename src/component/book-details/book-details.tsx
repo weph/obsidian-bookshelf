@@ -19,7 +19,7 @@ interface Props {
 }
 
 export function BookDetails({ book, openLink, addProgress }: Props) {
-    const { cover, title, authors, published, pages, rating, tags, comment, links } = book.metadata
+    const { cover, title, authors, published, pages, rating, tags, comment, links, duration } = book.metadata
 
     const journeyItemText = (item: ReadingJourneyItem) => {
         switch (item.action) {
@@ -53,6 +53,7 @@ export function BookDetails({ book, openLink, addProgress }: Props) {
                     {authors.length > 0 && <Authors authors={authors} openLink={openLink} />}
                     <div className={styles.pagesAndDate}>
                         {pages && <div>{pages.toLocaleString()} pages</div>}
+                        {duration && <div>{duration.toString('verbose')}</div>}
                         {published && <div>{published.getFullYear()}</div>}
                         {rating && <StarRating value={rating} />}
                     </div>

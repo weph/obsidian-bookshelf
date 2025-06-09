@@ -30,6 +30,7 @@ const defaultConfiguration: Configuration = {
             links: 'links',
             series: 'series',
             positionInSeries: 'position-in-series',
+            duration: 'duration',
         },
         bookNote: {
             enabled: true,
@@ -202,6 +203,35 @@ describe('Note processing', () => {
             '2025-01-01: The Shining: 0%-20%',
             '2025-01-02: The Shining: 21%-60%',
             '2025-01-03: The Shining: 61%-100%',
+            '2025-01-03: The Shining: finished',
+        ])
+    })
+
+    test('It should create reading journey from book note (time)', async () => {
+        await bookshelf.process(
+            new FakeNote(
+                'Books/The Shining.md',
+                new StaticMetadata({
+                    duration: '5:00',
+                    pages: 500,
+                }),
+                [
+                    '2025-01-01: Started reading',
+                    '2025-01-01: 1:00',
+                    '2025-01-01: 3:00',
+                    '2025-01-01: 4:15',
+                    '2025-01-01: 5:00',
+                    '2025-01-03: Finished reading',
+                ],
+            ),
+        )
+
+        expect(bookshelf.readingJourney().map(String)).toEqual([
+            '2025-01-01: The Shining: started',
+            '2025-01-01: The Shining: 0:00-1:00 (100 pages)',
+            '2025-01-01: The Shining: 1:01-3:00 (200 pages)',
+            '2025-01-01: The Shining: 3:01-4:15 (125 pages)',
+            '2025-01-01: The Shining: 4:16-5:00 (75 pages)',
             '2025-01-03: The Shining: finished',
         ])
     })

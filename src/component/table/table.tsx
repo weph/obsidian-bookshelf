@@ -18,6 +18,7 @@ export function BookTable({ books, onBookClick }: Props) {
                     <th>Author</th>
                     <th className={styles.pubDate}>Published</th>
                     <th className={styles.pages}>Pages</th>
+                    <th className={styles.duration}>Duration</th>
                     <th>Rating</th>
                     <th>Tags</th>
                     <th>Status</th>
@@ -34,6 +35,7 @@ export function BookTable({ books, onBookClick }: Props) {
                         </td>
                         <td className={styles.pubDate}>{book.metadata.published?.getFullYear() || ''}</td>
                         <td className={styles.pages}>{book.metadata.pages?.toLocaleString() || ''}</td>
+                        <td className={styles.duration}>{book.metadata.duration?.toString('verbose') || ''}</td>
                         <td>
                             <StarRating value={book.metadata.rating || 0} />
                         </td>

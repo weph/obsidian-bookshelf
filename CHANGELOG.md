@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.15.0...main`][0.15.0...main].
 
+### Added
+
+- Track listening progress of audiobooks ([#9](https://github.com/weph/obsidian-bookshelf/issues/9))\
+  You can now track your audiobook listening progress. Bookshelf can also convert listening time into the equivalent
+  number of pages. See
+  the [Tracking Progress](https://weph.github.io/obsidian-bookshelf/docs/reading-progress#tracking-progress) section in
+  the documentation for details.
+
 ### Fixed
 
 - Hide "pages read" in book details view when the number couldn't be determined

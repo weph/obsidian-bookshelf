@@ -36,16 +36,22 @@ You can track reading progress by entering a start and end position, or just an 
 - **Page numbers** (`30`)
 - **Percentages** (`25%`)
 - **Roman numerals** (`xviii`)
+- **Time** (`2:34`)
 
-If you're using percentages, you have to set the [total number of pages property](book-notes#total-number-of-pages) in
-the book note so Bookshelf can convert them to page numbers in the statistics.
+If you're using percentages, make sure to set the [total number of pages property](book-notes#total-number-of-pages) in
+the book note. This allows Bookshelf to convert percentages to page numbers in the statistics.
+
+Bookshelf can also convert audiobook listening time into an equivalent number of pages. To enable this, make sure to set
+both the [total number of pages property](book-notes#total-number-of-pages) and
+the [audiobook duration property](book-notes.md#audiobook-duration).
 
 Bookshelf makes a few assumptions when interpreting progress entries:
 
 - If only an end position is given, it assumes you continued from the last recorded position.
 - If the last recorded position was a Roman numeral and the current one is a page number, it assumes you moved from the
   front matter into the main part (starting at page 1).
-- If there's no prior entry, it assumes you started reading from page 1 or 0%, depending on the type of entry.
+- If there's no prior entry, it assumes you started at page 1, 0%, or 0:00, depending on whether the entry is a page
+  number, percentage, or time.
 
 **Example**
 

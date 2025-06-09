@@ -12,7 +12,8 @@
     "comment": "comment",
     "links": "links",
     "series": "series",
-    "positionInSeries": "position-in-series"
+    "positionInSeries": "position-in-series",
+    "duration": "duration"
   },
   "bookNote": {
     "enabled": true,
@@ -38,7 +39,7 @@
     }
   },
   "readingProgress": {
-    "newEntryLocation": "dailyNote"
+    "newEntryLocation": "bookNote"
   },
   "previousVersion": "0.14.0",
   "showReleaseNotes": true

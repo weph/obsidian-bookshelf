@@ -4,6 +4,7 @@ import { FakeNote } from '../../support/fake-note'
 import { BookMetadataNoteAdapter, LinkToUri, PropertyNames } from './book-metadata-note-adapter'
 import { Note } from '../note/note'
 import { Link } from './link'
+import { Playtime } from '../shared/playtime'
 
 const propertyNames: PropertyNames = {
     cover: 'cover',
@@ -17,6 +18,7 @@ const propertyNames: PropertyNames = {
     links: 'links',
     series: 'series',
     positionInSeries: 'positionInSeries',
+    duration: 'duration',
 }
 
 const linkToUri: LinkToUri = (link) => `uri://${link}`
@@ -336,5 +338,20 @@ describe('series', () => {
         )
 
         expect(result.series).toEqual(expected)
+    })
+})
+
+describe('duration', () => {
+    test.each([
+        [null, undefined],
+        [true, undefined],
+        [123, undefined],
+        [[], undefined],
+        ['foo', undefined],
+        ['5:49', Playtime.fromString('5:49')],
+    ])('Duration "%o" should be %o', (duration, expected) => {
+        const result = bookMetadata(new FakeNote('Title', new StaticMetadata({ duration })))
+
+        expect(result.duration).toStrictEqual(expected)
     })
 })
