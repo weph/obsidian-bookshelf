@@ -179,9 +179,9 @@ describe('Note processing', () => {
 
         expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-01: The Shining: started',
-            '2025-01-01: The Shining: 10-150',
-            '2025-01-02: The Shining: 151-250',
-            '2025-01-03: The Shining: 251-447',
+            '2025-01-01: The Shining: 10-150 (141 pages)',
+            '2025-01-02: The Shining: 151-250 (100 pages)',
+            '2025-01-03: The Shining: 251-447 (197 pages)',
             '2025-01-03: The Shining: finished',
         ])
     })
@@ -219,9 +219,9 @@ describe('Note processing', () => {
 
         expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-01: The Shining: started',
-            '2025-01-01: The Shining: xii-xv',
-            '2025-01-02: The Shining: xvi-xxiii',
-            '2025-01-03: The Shining: 1-120',
+            '2025-01-01: The Shining: xii-xv (4 pages)',
+            '2025-01-02: The Shining: xvi-xxiii (8 pages)',
+            '2025-01-03: The Shining: 1-120 (120 pages)',
             '2025-01-03: The Shining: finished',
         ])
     })
@@ -241,9 +241,9 @@ describe('Note processing', () => {
 
         expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-01: The Shining: started',
-            '2025-01-01: The Shining: 10-150',
-            '2025-01-02: The Shining: 151-250',
-            '2025-01-03: The Shining: 251-447',
+            '2025-01-01: The Shining: 10-150 (141 pages)',
+            '2025-01-02: The Shining: 151-250 (100 pages)',
+            '2025-01-03: The Shining: 251-447 (197 pages)',
             '2025-01-03: The Shining: finished',
         ])
     })
@@ -316,8 +316,8 @@ describe('Note processing', () => {
 
         expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-01: The Shining: started',
-            '2025-01-01: The Shining: 10-100',
-            '2025-01-01: The Shining: 101-447',
+            '2025-01-01: The Shining: 10-100 (91 pages)',
+            '2025-01-01: The Shining: 101-447 (347 pages)',
             '2025-01-01: The Shining: finished',
         ])
     })
@@ -357,9 +357,9 @@ describe('Note processing', () => {
 
         expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-01: The Shining: started',
-            '2025-01-01: The Shining: xii-xv',
-            '2025-01-01: The Shining: xvi-xxiii',
-            '2025-01-01: The Shining: 1-120',
+            '2025-01-01: The Shining: xii-xv (4 pages)',
+            '2025-01-01: The Shining: xvi-xxiii (8 pages)',
+            '2025-01-01: The Shining: 1-120 (120 pages)',
             '2025-01-01: The Shining: finished',
         ])
     })
@@ -377,7 +377,7 @@ describe('Note processing', () => {
 
         expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-01: The Shining: started',
-            '2025-01-01: The Shining: 10-447',
+            '2025-01-01: The Shining: 10-447 (438 pages)',
             '2025-01-01: The Shining: finished',
         ])
     })
@@ -561,12 +561,12 @@ test('Reading journey should be reflected in book', async () => {
     await bookshelf.process(shining)
 
     expect(bookshelf.book(dracula).readingJourney.map(String)).toEqual([
-        '2025-02-03: Dracula: 1-10',
-        '2025-02-05: Dracula: 11-20',
+        '2025-02-03: Dracula: 1-10 (10 pages)',
+        '2025-02-05: Dracula: 11-20 (10 pages)',
     ])
     expect(bookshelf.book(shining).readingJourney.map(String)).toEqual([
-        '2025-02-01: The Shining: 10-20',
-        '2025-02-04: The Shining: 21-50',
+        '2025-02-01: The Shining: 10-20 (11 pages)',
+        '2025-02-04: The Shining: 21-50 (30 pages)',
     ])
 })
 
@@ -918,10 +918,10 @@ describe('Adding items to reading journey', () => {
         ])
         expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-02: Dracula: started',
-            '2025-01-03: Dracula: 1-50',
+            '2025-01-03: Dracula: 1-50 (50 pages)',
             '2025-01-04: Dracula: abandoned',
             '2025-01-05: Dracula: started',
-            '2025-01-05: Dracula: 51-350',
+            '2025-01-05: Dracula: 51-350 (300 pages)',
             '2025-01-05: Dracula: finished',
         ])
     })
@@ -984,10 +984,10 @@ describe('Adding items to reading journey', () => {
         ])
         expect(bookshelf.readingJourney().map(String)).toEqual([
             '2025-01-02: Dracula: started',
-            '2025-01-03: Dracula: 1-50',
+            '2025-01-03: Dracula: 1-50 (50 pages)',
             '2025-01-04: Dracula: abandoned',
             '2025-01-05: Dracula: started',
-            '2025-01-05: Dracula: 51-350',
+            '2025-01-05: Dracula: 51-350 (300 pages)',
             '2025-01-05: Dracula: finished',
         ])
     })

@@ -36,15 +36,15 @@ describe('Reading journey', () => {
 
         expect(journey.map(String)).toEqual([
             '2025-02-01: The Shining: started',
-            '2025-02-01: The Shining: 10-20',
+            '2025-02-01: The Shining: 10-20 (11 pages)',
             '2025-02-03: Dracula: started',
-            '2025-02-03: Dracula: 1-10',
+            '2025-02-03: Dracula: 1-10 (10 pages)',
             '2025-02-04: Dracula: abandoned',
-            '2025-02-04: The Shining: 21-50',
+            '2025-02-04: The Shining: 21-50 (30 pages)',
             '2025-02-04: The Shining: abandoned',
             '2025-02-05: Dracula: started',
-            '2025-02-05: Dracula: 11-20',
-            '2025-02-10: Dracula: 21-100',
+            '2025-02-05: Dracula: 11-20 (10 pages)',
+            '2025-02-10: Dracula: 21-100 (80 pages)',
             '2025-02-10: Dracula: finished',
         ])
     })
@@ -58,10 +58,10 @@ describe('Reading journey', () => {
         const journey = log.readingJourney()
 
         expect(journey.map(String)).toEqual([
-            '2025-01-01: Dracula: 1-1',
-            '2025-01-01: The Shining: 1-2',
-            '2025-01-02: The Shining: 3-3',
-            '2025-01-02: Dracula: 2-4',
+            '2025-01-01: Dracula: 1-1 (1 page)',
+            '2025-01-01: The Shining: 1-2 (2 pages)',
+            '2025-01-02: The Shining: 3-3 (1 page)',
+            '2025-01-02: Dracula: 2-4 (3 pages)',
         ])
     })
 
@@ -73,9 +73,9 @@ describe('Reading journey', () => {
         const journey = log.readingJourney()
 
         expect(journey.map(String)).toEqual([
-            '2025-01-01: Dracula: 1-10',
-            '2025-01-02: Dracula: 11-20',
-            '2025-01-03: Dracula: 21-30',
+            '2025-01-01: Dracula: 1-10 (10 pages)',
+            '2025-01-02: Dracula: 11-20 (10 pages)',
+            '2025-01-03: Dracula: 21-30 (10 pages)',
         ])
     })
 
@@ -102,11 +102,11 @@ describe('Reading journey', () => {
 
         expect(log.readingJourney().map(String)).toEqual([
             '2025-02-03: Dracula: started',
-            '2025-02-03: Dracula: 1-10',
+            '2025-02-03: Dracula: 1-10 (10 pages)',
             '2025-02-04: Dracula: abandoned',
             '2025-02-05: Dracula: started',
-            '2025-02-05: Dracula: 11-20',
-            '2025-02-10: Dracula: 21-100',
+            '2025-02-05: Dracula: 11-20 (10 pages)',
+            '2025-02-10: Dracula: 21-100 (80 pages)',
             '2025-02-10: Dracula: finished',
         ])
     })

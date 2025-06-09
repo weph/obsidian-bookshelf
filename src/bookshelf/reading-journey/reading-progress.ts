@@ -41,6 +41,11 @@ export class ReadingProgress implements ReadingJourneyProgressItem {
 
     public toString(): string {
         const date = DateTime.fromJSDate(this.date).toFormat('yyyy-MM-dd')
+        const pages = this.pages
+
+        if (pages !== null) {
+            return `${date}: ${this.book.metadata.title}: ${this.start}-${this.end} (${pages} page${pages > 1 ? 's' : ''})`
+        }
 
         return `${date}: ${this.book.metadata.title}: ${this.start}-${this.end}`
     }
