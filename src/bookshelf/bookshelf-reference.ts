@@ -5,6 +5,7 @@ import { Statistics } from './reading-journey/statistics/statistics'
 import { ReadingJourneyMatch } from './note-processing/note-processor'
 import { Bookshelf } from './bookshelf'
 import { Books } from './book/books'
+import { DateRange } from './shared/date-range'
 
 export class BookshelfReference implements Bookshelf {
     constructor(private bookshelf: Bookshelf) {}
@@ -37,8 +38,8 @@ export class BookshelfReference implements Bookshelf {
         return this.bookshelf.readingJourney()
     }
 
-    public statistics(year?: number): Statistics {
-        return this.bookshelf.statistics(year)
+    statistics(dateRange?: DateRange): Statistics {
+        return this.bookshelf.statistics(dateRange)
     }
 
     public async addToReadingJourney(item: ReadingJourneyMatch): Promise<void> {

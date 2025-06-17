@@ -9,6 +9,7 @@ import { InMemoryNotes } from '../support/in-memory-notes'
 import { position } from './reading-journey/position/position'
 import { Book, BookMetadata } from './book/book'
 import { Link } from './book/link'
+import { DateRange } from './shared/date-range'
 
 let bookshelf: Bookshelf
 
@@ -644,9 +645,21 @@ describe('Statistics', () => {
         })
 
         test('Filtered by year', () => {
-            expect(bookshelf.statistics(2024).actions()).toEqual({ started: 1, finished: 1, abandoned: 0 })
-            expect(bookshelf.statistics(2025).actions()).toEqual({ started: 2, finished: 1, abandoned: 1 })
-            expect(bookshelf.statistics(2026).actions()).toEqual({ started: 0, finished: 0, abandoned: 0 })
+            expect(bookshelf.statistics(DateRange.year(2024)).actions()).toEqual({
+                started: 1,
+                finished: 1,
+                abandoned: 0,
+            })
+            expect(bookshelf.statistics(DateRange.year(2025)).actions()).toEqual({
+                started: 2,
+                finished: 1,
+                abandoned: 1,
+            })
+            expect(bookshelf.statistics(DateRange.year(2026)).actions()).toEqual({
+                started: 0,
+                finished: 0,
+                abandoned: 0,
+            })
         })
     })
 
@@ -663,9 +676,9 @@ describe('Statistics', () => {
                 new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-01-01: 10', '2025-12-31: 20']),
             )
 
-            const result2024 = bookshelf.statistics(2024).pagesRead(Interval.Year)
-            const result2025 = bookshelf.statistics(2025).pagesRead(Interval.Year)
-            const result2026 = bookshelf.statistics(2026).pagesRead(Interval.Year)
+            const result2024 = bookshelf.statistics(DateRange.year(2024)).pagesRead(Interval.Year)
+            const result2025 = bookshelf.statistics(DateRange.year(2025)).pagesRead(Interval.Year)
+            const result2026 = bookshelf.statistics(DateRange.year(2026)).pagesRead(Interval.Year)
 
             expect(pagesReadAsObject(result2024)).toEqual({ '2024-01-01': 1 })
             expect(pagesReadAsObject(result2025)).toEqual({ '2025-01-01': 20 })
@@ -782,9 +795,9 @@ describe('Statistics', () => {
                 new FakeNote('Books/The Shining.md', new StaticMetadata({}), ['2025-01-01: 10', '2025-12-31: 20']),
             )
 
-            expect(bookshelf.statistics(2024).totalNumberOfPages()).toEqual(1)
-            expect(bookshelf.statistics(2025).totalNumberOfPages()).toEqual(20)
-            expect(bookshelf.statistics(2026).totalNumberOfPages()).toEqual(29)
+            expect(bookshelf.statistics(DateRange.year(2024)).totalNumberOfPages()).toEqual(1)
+            expect(bookshelf.statistics(DateRange.year(2025)).totalNumberOfPages()).toEqual(20)
+            expect(bookshelf.statistics(DateRange.year(2026)).totalNumberOfPages()).toEqual(29)
         })
     })
 
@@ -819,19 +832,19 @@ describe('Statistics', () => {
 
             expect(
                 bookshelf
-                    .statistics(2024)
+                    .statistics(DateRange.year(2024))
                     .books()
                     .map((b) => b.metadata.title),
             ).toEqual(['Dracula'])
             expect(
                 bookshelf
-                    .statistics(2025)
+                    .statistics(DateRange.year(2025))
                     .books()
                     .map((b) => b.metadata.title),
             ).toEqual(['Dracula', 'The Shining'])
             expect(
                 bookshelf
-                    .statistics(2026)
+                    .statistics(DateRange.year(2026))
                     .books()
                     .map((b) => b.metadata.title),
             ).toEqual(['The Shining'])

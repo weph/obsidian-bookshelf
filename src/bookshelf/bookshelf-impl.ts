@@ -9,6 +9,7 @@ import { Statistics } from './reading-journey/statistics/statistics'
 import { Bookshelf } from './bookshelf'
 import { Subscribers } from './subscriber/subscribers'
 import { Books } from './book/books'
+import { DateRange } from './shared/date-range'
 
 class BookshelfBook implements Book {
     constructor(
@@ -114,11 +115,11 @@ export class BookshelfImpl implements Bookshelf {
         return this.readingJourneyLog.readingJourney()
     }
 
-    public statistics(year: number | null = null): Statistics {
-        return year === null
+    statistics(dateRange?: DateRange): Statistics {
+        return dateRange === undefined
             ? this.readingJourney().statistics()
             : this.readingJourney()
-                  .filter((i) => i.date.getFullYear() === year)
+                  .filter((i) => dateRange!.contains(i.date))
                   .statistics()
     }
 

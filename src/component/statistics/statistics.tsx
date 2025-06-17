@@ -7,6 +7,7 @@ import { Gallery } from '../gallery/gallery'
 import { TagUsageChart } from './tag-usage-chart/tag-usage-chart'
 import styles from './statistics.module.scss'
 import { useSyncedData } from '../hooks/use-synced-data'
+import { DateRange } from '../../bookshelf/shared/date-range'
 
 export interface Props {
     bookshelf: Bookshelf
@@ -15,7 +16,9 @@ export interface Props {
 
 export function Statistics({ bookshelf, onBookClick }: Props) {
     const [year, setYear] = useState<number | undefined>(undefined)
-    const statistics = useSyncedData(bookshelf, (b) => b.statistics(year))
+    const statistics = useSyncedData(bookshelf, (b) =>
+        b.statistics(year === undefined ? undefined : DateRange.year(year)),
+    )
     const actions = statistics.actions()
     const yearOptions = useSyncedData(bookshelf, (b) => [
         { value: undefined, label: 'All' },
