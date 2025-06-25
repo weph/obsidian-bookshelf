@@ -131,7 +131,14 @@ export function ReadingJourneyForm({ book, add }: Props) {
 
     return (
         <div className={styles.readingJourneyForm}>
-            <Input className={styles.date} type="date" placeholder="" value={date} onUpdate={setDate} />
+            <Input
+                className={styles.date}
+                type="date"
+                placeholder=""
+                value={date}
+                onUpdate={setDate}
+                ariaLabel="Date"
+            />
             <Dropdown
                 className={styles.action}
                 label="Action"

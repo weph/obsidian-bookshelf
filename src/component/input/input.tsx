@@ -11,9 +11,21 @@ interface Props {
     autoFocus?: boolean
     id?: string
     className?: string
+    ariaLabel?: string
 }
 
-export function Input({ type, placeholder, value, onUpdate, clearable, error, autoFocus, id, className }: Props) {
+export function Input({
+    type,
+    placeholder,
+    value,
+    onUpdate,
+    clearable,
+    error,
+    autoFocus,
+    id,
+    className,
+    ariaLabel,
+}: Props) {
     const ref = useRef<HTMLInputElement>(null)
     const [currentValue, setCurrentValue] = useState(value)
 
@@ -45,6 +57,7 @@ export function Input({ type, placeholder, value, onUpdate, clearable, error, au
                 onKeyUp={() => handleUpdate()}
                 onChange={() => handleUpdate()}
                 autoFocus={autoFocus}
+                aria-label={ariaLabel}
             />
             {clearable && value && (
                 <div className={styles.clear} onClick={() => clear()} aria-label="Clear search"></div>
