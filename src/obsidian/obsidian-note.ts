@@ -27,12 +27,15 @@ interface UpdateInfo {
 class ObsidianMetadata implements Metadata {
     private links = new Map<string, FrontmatterLinkCache>()
 
+    private metadata: CachedMetadata
+
     constructor(
         private app: App,
         private file: TFile,
-        private metadata: CachedMetadata,
     ) {
-        for (const link of metadata.frontmatterLinks || []) {
+        this.metadata = this.app.metadataCache.getFileCache(this.file) || {}
+
+        for (const link of this.metadata.frontmatterLinks || []) {
             this.links.set(link.key, link)
         }
     }
@@ -59,11 +62,32 @@ export class ObsidianNote implements Note {
     ) {}
 
     get metadata(): Metadata {
-        return new ObsidianMetadata(this.app, this.file, this.obsidianMetadata)
+        return new ObsidianMetadata(this.app, this.file)
     }
 
-    private get obsidianMetadata() {
-        return this.app.metadataCache.getFileCache(this.file) || {}
+    /**
+     * After a note is created or modified, its metadata may not be immediately
+     * available. This isn't usually a problem for presentational views which
+     * will re-render when the metadata becomes available. However, when adding
+     * reading progress, metadata is required to locate an existing reading
+     * progress section.
+     *
+     * @return The note's metadata, or an empty object if unavailable after ~10 seconds
+     */
+    private async obsidianMetadata(): Promise<CachedMetadata> {
+        let i = 0
+
+        while (++i < 100) {
+            const metadata = this.app.metadataCache.getFileCache(this.file)
+
+            if (metadata !== null) {
+                return metadata
+            }
+
+            await new Promise((r) => setTimeout(r, 100))
+        }
+
+        return {}
     }
 
     get identifier(): string {
@@ -79,7 +103,9 @@ export class ObsidianNote implements Note {
     }
 
     get heading(): string | null {
-        const first = this.obsidianMetadata.headings?.[0]
+        const metadata = this.app.metadataCache.getFileCache(this.file) || {}
+
+        const first = metadata.headings?.[0]
 
         if (first === undefined || first.level !== 1) {
             return null
@@ -96,13 +122,15 @@ export class ObsidianNote implements Note {
         const lines = (await this.content()).split('\n')
         const locations = await this.locations(sectionHeading, lines)
 
-        if (locations.list === null || this.obsidianMetadata.listItems === undefined) {
+        const metadata = await this.obsidianMetadata()
+
+        if (locations.list === null || metadata.listItems === undefined) {
             return []
         }
 
         const result = []
 
-        for (const listItem of this.obsidianMetadata.listItems || []) {
+        for (const listItem of metadata.listItems || []) {
             const line = listItem.position.start.line
 
             if (line < locations.list?.start || line > locations.list?.end) {
@@ -201,7 +229,9 @@ export class ObsidianNote implements Note {
     private async locations(sectionHeading: string, lines: Array<string>): Promise<Locations> {
         const result: Locations = { section: null, list: null }
 
-        for (const section of this.obsidianMetadata.sections || []) {
+        const obsidianMetadata = await this.obsidianMetadata()
+
+        for (const section of obsidianMetadata.sections || []) {
             if (result.section === null) {
                 if (section.type !== 'heading') {
                     continue
