@@ -1,4 +1,10 @@
 export const releaseNotes = {
+    '0.16.1': `
+### Fixed
+
+- Prevent reading section from being added multiple times ([#35](https://github.com/weph/obsidian-bookshelf/issues/35))\\
+  This happened when a note's metadata wasn't yet available when adding reading progress. Bookshelf now waits for it to become available.
+`,
     '0.16.0': `
 ### Added
 
