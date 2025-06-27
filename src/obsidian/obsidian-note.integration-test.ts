@@ -355,12 +355,13 @@ new-field: new-value
             await context.updateFile('appendToList.md', ``)
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await note.appendToList('Relevant Heading', 'Item 1')
+            await note.appendToList('Relevant Heading', ['Item 1', 'Item 2'])
             await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`## Relevant Heading
 
-- Item 1`)
+- Item 1
+- Item 2`)
         })
 
         test('append new heading and list after frontmatter', async (context) => {
@@ -372,7 +373,7 @@ foo: bar
             )
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await note.appendToList('Relevant Heading', 'Item 1')
+            await note.appendToList('Relevant Heading', ['Item 1', 'Item 2'])
             await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`---
@@ -381,7 +382,8 @@ foo: bar
 
 ## Relevant Heading
 
-- Item 1`)
+- Item 1
+- Item 2`)
         })
 
         test('append new heading and list at the end of the note if heading does not exist yet', async (context) => {
@@ -395,7 +397,7 @@ Some text`,
             )
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await note.appendToList('Relevant Heading', 'Item 1')
+            await note.appendToList('Relevant Heading', ['Item 1', 'Item 2'])
             await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`# Note Title
@@ -406,19 +408,21 @@ Some text
 
 ## Relevant Heading
 
-- Item 1`)
+- Item 1
+- Item 2`)
         })
 
         test('append new list to existing heading (no content)', async (context) => {
             await context.updateFile('appendToList.md', `# Relevant Heading`)
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await note.appendToList('Relevant Heading', 'Item 1')
+            await note.appendToList('Relevant Heading', ['Item 1', 'Item 2'])
             await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`# Relevant Heading
 
 - Item 1
+- Item 2
 `)
         })
 
@@ -431,7 +435,7 @@ Lorem ipsum dolor sit amet`,
             )
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await note.appendToList('Relevant Heading', 'Item 1')
+            await note.appendToList('Relevant Heading', ['Item 1', 'Item 2'])
             await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`# Relevant Heading
@@ -439,6 +443,7 @@ Lorem ipsum dolor sit amet`,
 Lorem ipsum dolor sit amet
 
 - Item 1
+- Item 2
 `)
         })
 
@@ -453,7 +458,7 @@ Lorem ipsum dolor sit amet
             )
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await note.appendToList('Relevant Heading', 'Item 1')
+            await note.appendToList('Relevant Heading', ['Item 1', 'Item 2'])
             await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`# Heading 1
@@ -461,6 +466,7 @@ Lorem ipsum dolor sit amet
 # Relevant Heading
 
 - Item 1
+- Item 2
 
 # Heading 3`)
         })
@@ -474,13 +480,14 @@ Lorem ipsum dolor sit amet
             )
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await note.appendToList('Relevant Heading', 'Item 1')
+            await note.appendToList('Relevant Heading', ['Item 1', 'Item 2'])
             await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`# Heading 1
 # Relevant Heading
 
 - Item 1
+- Item 2
 
 # Heading 3`)
         })
@@ -494,13 +501,14 @@ Lorem ipsum dolor sit amet
             )
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await note.appendToList('Relevant Heading', 'Item 2')
+            await note.appendToList('Relevant Heading', ['Item 2', 'Item 3'])
             await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`# Relevant Heading
 
 - Item 1
-- Item 2`)
+- Item 2
+- Item 3`)
         })
 
         test('reuse list symbol', async (context) => {
@@ -512,13 +520,14 @@ Lorem ipsum dolor sit amet
             )
             const note = new ObsidianNote(context.file('appendToList.md'), context.app)
 
-            await note.appendToList('Relevant Heading', 'Item 2')
+            await note.appendToList('Relevant Heading', ['Item 2', 'Item 3'])
             await context.waitForUpdate('appendToList.md')
 
             expect(await note.content()).toEqual(`# Relevant Heading
 
 * Item 1
-* Item 2`)
+* Item 2
+* Item 3`)
         })
     })
 })

@@ -19,7 +19,7 @@ export class BookNoteReadingJourneyWriter implements ReadingJourneyWriter {
     ) {}
 
     public async add(item: ReadingJourneyMatch): Promise<Note> {
-        await item.bookNote.appendToList(this.heading, this.itemText(item))
+        await item.bookNote.appendToList(this.heading, [this.itemText(item)])
 
         return item.bookNote
     }

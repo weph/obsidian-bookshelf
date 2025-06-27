@@ -12,6 +12,18 @@ interface Locations {
     list: Location | null
 }
 
+interface UpdateInfo {
+    newlineBeforeSection: boolean
+    addSection: boolean
+
+    newlineBeforeList: boolean
+    newlineAfterList: boolean
+    listSymbol: string
+
+    line: number
+    linesToReplace: number
+}
+
 class ObsidianMetadata implements Metadata {
     private links = new Map<string, FrontmatterLinkCache>()
 
@@ -103,36 +115,87 @@ export class ObsidianNote implements Note {
         return result
     }
 
-    public async appendToList(sectionHeading: string, item: string): Promise<void> {
+    public async appendToList(sectionHeading: string, items: Array<string>): Promise<void> {
         const contents = await this.app.vault.read(this.file)
         const lines = contents.split('\n')
 
-        const { section, list } = await this.locations(sectionHeading, lines)
+        const update = await this.updateInfo(sectionHeading, lines)
 
-        if (section !== null) {
-            if (list !== null) {
-                const symbol = lines[list.start][0]
-                lines.splice(list.end + 1, 0, `${symbol} ${item}`)
-            } else {
-                const nextLine = lines[section.end + 1]
-                if (nextLine !== undefined && nextLine.trim() === '') {
-                    lines.splice(section.end + 1, 0, '', `- ${item}`)
-                } else {
-                    lines.splice(section.end + 1, 0, '', `- ${item}`, '')
-                }
-            }
-        } else {
-            const markdownHeading = `## ${sectionHeading}`
+        const newLines = []
 
-            if (lines.length === 1 && lines[0] === '') {
-                lines[0] = markdownHeading
-                lines.push('', `- ${item}`)
-            } else {
-                lines.push('', markdownHeading, '', `- ${item}`)
+        if (update.newlineBeforeSection) {
+            newLines.push('')
+        }
+
+        if (update.addSection) {
+            newLines.push(`## ${sectionHeading}`)
+        }
+
+        if (update.newlineBeforeList) {
+            newLines.push('')
+        }
+
+        newLines.push(...items.map((item) => `${update.listSymbol} ${item}`))
+
+        if (update.newlineAfterList) {
+            newLines.push('')
+        }
+
+        lines.splice(update.line, update.linesToReplace, ...newLines)
+
+        await this.app.vault.modify(this.file, lines.join('\n'))
+    }
+
+    private async updateInfo(sectionHeading: string, lines: Array<string>): Promise<UpdateInfo> {
+        // Default: Append new section at the end of note
+        const defaultCase = {
+            newlineBeforeSection: true,
+            addSection: true,
+
+            newlineBeforeList: true,
+            newlineAfterList: false,
+            listSymbol: '-',
+
+            line: lines.length + 1,
+            linesToReplace: 0,
+        }
+
+        // Replace empty note with section
+        if (lines.length === 1 && lines[0] === '') {
+            return {
+                ...defaultCase,
+                line: 0,
+                linesToReplace: lines.length,
+                newlineBeforeSection: false,
             }
         }
 
-        await this.app.vault.modify(this.file, lines.join('\n'))
+        const { section, list } = await this.locations(sectionHeading, lines)
+
+        // Reuse existing list
+        if (list !== null) {
+            return {
+                ...defaultCase,
+                addSection: false,
+                newlineBeforeList: false,
+                line: list.end + 1,
+                listSymbol: lines[list.start][0],
+                newlineBeforeSection: false,
+            }
+        }
+
+        // Reuse existing section
+        if (section !== null) {
+            return {
+                ...defaultCase,
+                addSection: false,
+                line: section.end + 1,
+                newlineBeforeSection: false,
+                newlineAfterList: lines[section.end + 1] === undefined || lines[section.end + 1].trim() !== '',
+            }
+        }
+
+        return defaultCase
     }
 
     private async locations(sectionHeading: string, lines: Array<string>): Promise<Locations> {

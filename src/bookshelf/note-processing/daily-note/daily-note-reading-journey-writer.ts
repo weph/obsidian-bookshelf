@@ -21,7 +21,7 @@ export class DailyNoteReadingJourneyWriter implements ReadingJourneyWriter {
     public async add(item: ReadingJourneyMatch): Promise<Note> {
         const note = await this.notes.dailyNote(item.date)
 
-        await note.appendToList(this.heading, this.itemText(item))
+        await note.appendToList(this.heading, [this.itemText(item)])
 
         return note
     }

@@ -26,7 +26,7 @@ export class FakeNote implements Note {
         return this.list
     }
 
-    public async appendToList(_sectionHeading: string, item: string): Promise<void> {
-        this.list.push(item)
+    public async appendToList(_sectionHeading: string, items: Array<string>): Promise<void> {
+        this.list.push(...items)
     }
 }
