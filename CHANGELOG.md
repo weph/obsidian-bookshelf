@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.16.1...main`][0.16.1...main].
 
+### Added
+
+- Track remaining progress when marking a book as finished ([#31](https://github.com/weph/obsidian-bookshelf/issues/31))
+  When you mark a book as finished in the book details modal, Bookshelf can now automatically log the remaining
+  progress. If you prefer to track it manually, that option is still available. Thanks to
+  [@VanWolfing](https://github.com/VanWolfing) for the suggestion!
+
 ## [`0.16.1`][0.16.1] - 2025-06-27
 
 For a full diff see [`0.16.0...0.16.1`][0.16.0...0.16.1].

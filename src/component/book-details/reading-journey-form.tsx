@@ -8,7 +8,7 @@ import { ReadingJourneyMatch } from '../../bookshelf/note-processing/note-proces
 import styles from './reading-journey-form.module.scss'
 import { Position, position } from '../../bookshelf/reading-journey/position/position'
 
-type Action = 'started' | 'finished' | 'abandoned' | 'progress'
+type Action = 'started' | 'finished' | 'abandoned' | 'progress' | 'progress+finish'
 
 function initialValues(book: Book): { action: Action; start: Position } {
     const lastItem = book.readingJourney.lastItem()
@@ -22,13 +22,6 @@ function initialValues(book: Book): { action: Action; start: Position } {
 
     return { action: 'started', start: position(1) }
 }
-
-const actions: Array<DropdownOption<Action>> = [
-    { value: 'progress', label: 'Read' },
-    { value: 'started', label: 'Started' },
-    { value: 'abandoned', label: 'Abandoned' },
-    { value: 'finished', label: 'Finished' },
-]
 
 interface Props {
     book: Book
@@ -68,6 +61,8 @@ export function ReadingJourneyForm({ book, add }: Props) {
     const startId = useId()
     const endId = useId()
 
+    const lastPosition = initial.start.last(book)
+
     const handleAdd = async () => {
         const dateObject = DateTime.fromISO(date).toJSDate()
 
@@ -76,6 +71,20 @@ export function ReadingJourneyForm({ book, add }: Props) {
             case 'abandoned':
             case 'finished':
                 await add({ action: action, bookNote: book.note!, date: dateObject })
+                break
+            case 'progress+finish':
+                if (lastPosition === null) {
+                    return
+                }
+
+                await add({
+                    action: 'progress',
+                    bookNote: book.note!,
+                    date: dateObject,
+                    start: null,
+                    end: lastPosition,
+                })
+                await add({ action: 'finished', bookNote: book.note!, date: dateObject })
                 break
             case 'progress':
                 if (end.positionValue === null) {
@@ -118,10 +127,26 @@ export function ReadingJourneyForm({ book, add }: Props) {
         setEnd(positionState(inputValue))
     }
 
+    const actions = (): Array<DropdownOption<Action>> => {
+        const result: Array<DropdownOption<Action>> = [
+            { value: 'progress', label: 'Read' },
+            { value: 'started', label: 'Start' },
+            { value: 'abandoned', label: 'Abandon' },
+            { value: 'finished', label: 'Finish' },
+        ]
+
+        if (book.metadata.pages !== undefined) {
+            result.push({ value: 'progress+finish', label: 'Finish (and track remaining progress)' })
+        }
+
+        return result
+    }
+
     const valid = (): boolean => {
         switch (action) {
             case 'started':
             case 'finished':
+            case 'progress+finish':
             case 'abandoned':
                 return DateTime.fromISO(date).isValid
             case 'progress':
@@ -143,7 +168,7 @@ export function ReadingJourneyForm({ book, add }: Props) {
                 className={styles.action}
                 label="Action"
                 value={action}
-                options={actions}
+                options={actions()}
                 onChange={(o) => setAction(o.value)}
             />
             {action === 'progress' && (

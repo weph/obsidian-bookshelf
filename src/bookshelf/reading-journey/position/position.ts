@@ -19,6 +19,13 @@ export interface Position {
     first(): Position
 
     /**
+     * The last possible position in the given book.
+     *
+     * @returns The last position or `null` if it cannot be determined.
+     */
+    last(book: Book): Position | null
+
+    /**
      * The position that follows this one, relative to the given book.
      */
     next(book: Book): Position

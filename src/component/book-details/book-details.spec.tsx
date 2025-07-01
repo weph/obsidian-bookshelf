@@ -16,6 +16,26 @@ beforeEach(() => {
 })
 
 describe('Reading progress', () => {
+    test('Hide "Finish (and track remaining progress)" action if total pages is not known', () => {
+        const book = new BookBuilder().build()
+        render(<BookDetails book={book} openLink={openLink} addProgress={addProgress} />)
+
+        expect(availableActions()).toEqual(['Read', 'Start', 'Abandon', 'Finish'])
+    })
+
+    test('Show "Finish (and track remaining progress)" action if total pages is known', () => {
+        const book = new BookBuilder().with('pages', 200).build()
+        render(<BookDetails book={book} openLink={openLink} addProgress={addProgress} />)
+
+        expect(availableActions()).toEqual([
+            'Read',
+            'Start',
+            'Abandon',
+            'Finish',
+            'Finish (and track remaining progress)',
+        ])
+    })
+
     test('Prevent tracking without end page', async () => {
         const book = new BookBuilder().build()
         render(<BookDetails book={book} openLink={openLink} addProgress={addProgress} />)
@@ -62,7 +82,31 @@ describe('Reading progress', () => {
             end: position(100),
         })
     })
+
+    test('Track pages when tracking "finish and track remaining progress"', async () => {
+        const book = new BookBuilder().with('pages', 200).build()
+        render(<BookDetails book={book} openLink={openLink} addProgress={addProgress} />)
+
+        await selectAction('Finish (and track remaining progress)')
+        await selectDate('2025-03-20')
+        await clickButton('add')
+
+        expect(addProgress).toHaveBeenCalledTimes(2)
+        expect(addProgress).toHaveBeenNthCalledWith(1, {
+            date: new Date(2025, 2, 20),
+            bookNote: book.note,
+            action: 'progress',
+            start: null,
+            end: position(200),
+        })
+    })
 })
+
+function availableActions(): Array<string> {
+    const select = screen.getByLabelText('Action') as HTMLSelectElement
+
+    return Array.from(select.options).map((o) => o.label)
+}
 
 async function selectAction(action: string): Promise<void> {
     await userEvent.selectOptions(await screen.findByLabelText('Action'), screen.getByText(action))

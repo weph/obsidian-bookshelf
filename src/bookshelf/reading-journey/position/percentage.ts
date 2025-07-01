@@ -8,6 +8,10 @@ export class Percentage implements Position {
         return new Percentage(0)
     }
 
+    public last(): Position {
+        return new Percentage(100)
+    }
+
     public next(book: Book): Position {
         const pages = book.metadata.pages
         const currentPage = this.pageInBook(book)

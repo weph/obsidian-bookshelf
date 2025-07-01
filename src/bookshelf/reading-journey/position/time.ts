@@ -13,6 +13,14 @@ export class Time implements Position {
         return new Time(Playtime.fromMinutes(0))
     }
 
+    public last(book: Book): Position | null {
+        if (book.metadata.duration === undefined) {
+            return null
+        }
+
+        return new Time(book.metadata.duration)
+    }
+
     public next(): Position {
         return new Time(Playtime.fromMinutes(this.value.inMinutes + 1))
     }

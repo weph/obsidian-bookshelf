@@ -12,6 +12,10 @@ export class RomanNumeral implements Position {
         return new RomanNumeral(1)
     }
 
+    public last(): null {
+        return null
+    }
+
     public next(): Position {
         return new RomanNumeral(this.value + 1)
     }
