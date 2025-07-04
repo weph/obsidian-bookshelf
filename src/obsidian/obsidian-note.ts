@@ -1,6 +1,7 @@
 import { App, CachedMetadata, FrontmatterLinkCache, TFile } from 'obsidian'
 import { Metadata, PropertyValue } from 'src/bookshelf/note/metadata'
 import { Note } from '../bookshelf/note/note'
+import { fromMarkdown } from 'mdast-util-from-markdown'
 
 interface Location {
     start: number
@@ -65,31 +66,6 @@ export class ObsidianNote implements Note {
         return new ObsidianMetadata(this.app, this.file)
     }
 
-    /**
-     * After a note is created or modified, its metadata may not be immediately
-     * available. This isn't usually a problem for presentational views which
-     * will re-render when the metadata becomes available. However, when adding
-     * reading progress, metadata is required to locate an existing reading
-     * progress section.
-     *
-     * @return The note's metadata, or an empty object if unavailable after ~10 seconds
-     */
-    private async obsidianMetadata(): Promise<CachedMetadata> {
-        let i = 0
-
-        while (++i < 100) {
-            const metadata = this.app.metadataCache.getFileCache(this.file)
-
-            if (metadata !== null) {
-                return metadata
-            }
-
-            await new Promise((r) => setTimeout(r, 100))
-        }
-
-        return {}
-    }
-
     get identifier(): string {
         return this.file.path
     }
@@ -121,8 +97,7 @@ export class ObsidianNote implements Note {
     public async listItems(sectionHeading: string): Promise<Array<string>> {
         const lines = (await this.content()).split('\n')
         const locations = await this.locations(sectionHeading, lines)
-
-        const metadata = await this.obsidianMetadata()
+        const metadata = this.app.metadataCache.getFileCache(this.file) || {}
 
         if (locations.list === null || metadata.listItems === undefined) {
             return []
@@ -229,28 +204,29 @@ export class ObsidianNote implements Note {
     private async locations(sectionHeading: string, lines: Array<string>): Promise<Locations> {
         const result: Locations = { section: null, list: null }
 
-        const obsidianMetadata = await this.obsidianMetadata()
+        const tree = fromMarkdown(lines.join('\n'))
 
-        for (const section of obsidianMetadata.sections || []) {
+        for (const child of tree.children) {
             if (result.section === null) {
-                if (section.type !== 'heading') {
+                if (child.type !== 'heading' || child.children.length === 0) {
                     continue
                 }
 
-                const heading = lines[section.position.start.line].replace(/^#+/, '').trim()
+                const headingChild = child.children[0]
+                const heading = headingChild.type === 'text' ? headingChild.value : ''
                 if (heading === sectionHeading) {
-                    result.section = { start: section.position.start.line, end: section.position.end.line }
+                    result.section = { start: child.position!.start.line - 1, end: child.position!.end.line - 1 }
                 }
             } else {
-                if (section.type === 'list') {
-                    result.list = { start: section.position.start.line, end: section.position.end.line }
+                if (child.type === 'list') {
+                    result.list = { start: child.position!.start.line - 1, end: child.position!.end.line - 1 }
                 }
 
-                if (section.type === 'heading') {
+                if (child.type === 'heading') {
                     break
                 }
 
-                result.section.end = section.position.start.line
+                result.section.end = child.position!.start.line - 1
             }
         }
 
