@@ -21,3 +21,10 @@ export const Clickable: Story = {
         onClick: fn(),
     },
 }
+
+export const DisabledClickable: Story = {
+    args: {
+        onClick: fn(),
+        disabled: true,
+    },
+}
