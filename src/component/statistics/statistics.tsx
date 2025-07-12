@@ -1,13 +1,13 @@
 import { Bookshelf } from '../../bookshelf/bookshelf'
 import { Book } from '../../bookshelf/book/book'
-import { Dropdown } from '../dropdown/dropdown'
 import { MouseEvent, useState } from 'react'
-import { PagesReadChart } from './pages-read-chart/pages-read-chart'
+import { AvailableInterval, PagesReadChart } from './pages-read-chart/pages-read-chart'
 import { Gallery } from '../gallery/gallery'
 import { TagUsageChart } from './tag-usage-chart/tag-usage-chart'
 import styles from './statistics.module.scss'
 import { useSyncedData } from '../hooks/use-synced-data'
 import { DateRange } from '../../bookshelf/shared/date-range'
+import { DateRangeSelection } from './date-range-selection/date-range-selection'
 
 export interface Props {
     bookshelf: Bookshelf
@@ -15,25 +15,27 @@ export interface Props {
 }
 
 export function Statistics({ bookshelf, onBookClick }: Props) {
-    const [year, setYear] = useState<number | undefined>(undefined)
-    const statistics = useSyncedData(bookshelf, (b) =>
-        b.statistics(year === undefined ? undefined : DateRange.year(year)),
-    )
+    const journey = useSyncedData(bookshelf, (b) => b.readingJourney())
+    const start = journey.items()[0]?.date || null
+    const end = journey.lastItem()?.date || null
+    const [dateRange, setDateRange] = useState<DateRange | null>(null)
+    const statistics = useSyncedData(bookshelf, (b) => {
+        return b.statistics(dateRange || undefined)
+    })
+
+    if (start === null || end === null) {
+        return <>No data</>
+    }
+
+    const totalRange = DateRange.custom(start, end)
+
     const actions = statistics.actions()
-    const yearOptions = useSyncedData(bookshelf, (b) => [
-        { value: undefined, label: 'All' },
-        ...b
-            .statistics()
-            .years()
-            .reverse()
-            .map((y) => ({ value: y, label: y.toString() })),
-    ])
 
     return (
         <div className={styles.statistics}>
-            <Dropdown label="Years" value={year} options={yearOptions} onChange={(o) => setYear(o.value)} />
+            {totalRange && <DateRangeSelection totalRange={totalRange} value={dateRange} onChange={setDateRange} />}
             <div className={styles.container}>
-                <h2>Books {year}</h2>
+                <h2>Books</h2>
                 <div className={styles.counts}>
                     <div>
                         <div className={styles.number}>{actions.started}</div>
@@ -59,9 +61,7 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
                 </div>
                 <PagesReadChart
                     statistics={statistics}
-                    availableIntervals={
-                        year === undefined ? ['year', 'month', 'week', 'day'] : ['month', 'week', 'day']
-                    }
+                    availableIntervals={availableIntervals(dateRange || totalRange)}
                 />
             </div>
             <div className={styles.container}>
@@ -74,4 +74,22 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
             </div>
         </div>
     )
+}
+
+function availableIntervals(dateRange: DateRange): Array<AvailableInterval> {
+    const duration = dateRange.distinctCalendarUnits()
+
+    if (duration.years > 1) {
+        return ['year', 'month', 'week', 'day']
+    }
+
+    if (duration.months > 1) {
+        return ['month', 'week', 'day']
+    }
+
+    if (duration.days > 7) {
+        return ['week', 'day']
+    }
+
+    return ['day']
 }

@@ -1,0 +1,11 @@
+.dateRangeSelection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    .month {
+        display: flex;
+        gap: 1rem;
+    }
+}

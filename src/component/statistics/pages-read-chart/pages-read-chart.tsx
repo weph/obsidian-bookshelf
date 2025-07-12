@@ -5,7 +5,7 @@ import { Dropdown, DropdownOption } from '../../dropdown/dropdown'
 import { useEffect, useState } from 'react'
 import { Bar } from 'react-chartjs-2'
 
-type AvailableInterval = 'year' | 'month' | 'week' | 'day'
+export type AvailableInterval = 'year' | 'month' | 'week' | 'day'
 
 interface Props {
     statistics: Statistics

@@ -12,6 +12,8 @@ interface Props {
     id?: string
     className?: string
     ariaLabel?: string
+    min?: string
+    max?: string
 }
 
 export function Input({
@@ -25,6 +27,8 @@ export function Input({
     id,
     className,
     ariaLabel,
+    min,
+    max,
 }: Props) {
     const ref = useRef<HTMLInputElement>(null)
     const [currentValue, setCurrentValue] = useState(value)
@@ -58,6 +62,8 @@ export function Input({
                 onChange={() => handleUpdate()}
                 autoFocus={autoFocus}
                 aria-label={ariaLabel}
+                min={min}
+                max={max}
             />
             {clearable && value && (
                 <div className={styles.clear} onClick={() => clear()} aria-label="Clear search"></div>
