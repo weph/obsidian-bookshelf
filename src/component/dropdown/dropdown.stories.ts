@@ -31,3 +31,13 @@ export const PreselectedValue: Story = {
         value: 'bar',
     },
 }
+
+export const DisabledOption: Story = {
+    args: {
+        options: [
+            { value: 'foo', label: 'Foo', disabled: false },
+            { value: 'bar', label: 'Bar', disabled: true },
+        ],
+        value: 'bar',
+    },
+}

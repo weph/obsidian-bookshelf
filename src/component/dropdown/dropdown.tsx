@@ -3,6 +3,7 @@ import styles from './dropdown.module.scss'
 export interface DropdownOption<T> {
     value: T
     label: string
+    disabled?: boolean
 }
 
 interface Props<TValue, T extends DropdownOption<TValue>> {
@@ -31,7 +32,7 @@ export function Dropdown<TValue, T extends DropdownOption<TValue>>({
             value={options.findIndex((v) => v.value === value)}
         >
             {options.map((o, i) => (
-                <option key={i} value={i.toString()}>
+                <option key={i} value={i.toString()} disabled={o.disabled || false}>
                     {o.label}
                 </option>
             ))}
