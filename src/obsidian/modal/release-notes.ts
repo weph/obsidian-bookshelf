@@ -1,4 +1,12 @@
 export const releaseNotes = {
+    '0.17.0': `
+### Added
+
+- Track remaining progress when marking a book as finished ([#31](https://github.com/weph/obsidian-bookshelf/issues/31))
+  When you mark a book as finished in the book details modal, Bookshelf can now automatically log the remaining progress. If you prefer to track it manually, that option is still available. Thanks to [@VanWolfing](https://github.com/VanWolfing) for the suggestion!
+- Support for custom date ranges in the statistics view ([#16](https://github.com/weph/obsidian-bookshelf/issues/16))
+  You can now filter your reading statistics using any date range you like.
+`,
     '0.16.1': `
 ### Fixed
 
