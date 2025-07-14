@@ -23,11 +23,27 @@ export class ReleaseNotesModal extends Modal {
     override async onOpen(): Promise<void> {
         const previousVersion = Version.fromString(this.bookshelfPlugin.settings.previousVersion || '0.0.0')
 
-        const items = Object.entries(releaseNotes)
-            .filter((entry) => Version.fromString(entry[0]).greaterThan(previousVersion))
-            .map((entry) => `## ${entry[0]}\n\n${entry[1]}`)
+        const items = this.releaseNotes(previousVersion)
 
         this.contentEl.className = styles.releaseNotesModal
         await MarkdownRenderer.render(this.app, items.join('\n\n'), this.contentEl, '', this.bookshelfPlugin)
+    }
+
+    private releaseNotes(previousVersion: Version): Array<string> {
+        if (previousVersion.asString() === '0.0.0') {
+            return [
+                `
+Thanks for giving Bookshelf a try!
+ 
+This dialog will show you what's new whenever Bookshelf gets updated. If you'd rather not see it in the future, you can disable release notes in the plugin settings.
+
+Make sure to check out the [documentation](https://weph.github.io/obsidian-bookshelf/). I've done my best to explain how everything works. If you run into any issues or have ideas for new features, feel free to open an issue or start a discussion on [GitHub](https://github.com/weph/obsidian-bookshelf).
+                `,
+            ]
+        }
+
+        return Object.entries(releaseNotes)
+            .filter((entry) => Version.fromString(entry[0]).greaterThan(previousVersion))
+            .map((entry) => `## ${entry[0]}\n\n${entry[1]}`)
     }
 }
