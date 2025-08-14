@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { GalleryCard } from './gallery-card'
-import { fn } from '@storybook/test'
+import { fn } from 'storybook/test'
 
 const meta = {
     title: 'Gallery Card',

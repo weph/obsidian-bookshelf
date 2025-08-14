@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { BookTable } from './table'
 import { Book } from '../../bookshelf/book/book'
 import { algorithms, books } from '../../support/book-fixtures'
-import { action } from '@storybook/addon-actions'
+import { action } from 'storybook/actions'
 
 const meta = {
     title: 'Table',

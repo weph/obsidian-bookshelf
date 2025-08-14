@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { Gallery } from './gallery'
 import { algorithms, books } from '../../support/book-fixtures'
-import { action } from '@storybook/addon-actions'
+import { action } from 'storybook/actions'
 import { Book } from '../../bookshelf/book/book'
 
 const meta = {

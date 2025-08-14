@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { DateRangeSelection } from './date-range-selection'
 import { DateRange } from '../../../bookshelf/shared/date-range'
-import { fn } from '@storybook/test'
-import { useArgs } from '@storybook/preview-api'
+import { fn } from 'storybook/test'
+import { useArgs } from 'storybook/preview-api'
 
 const meta = {
     title: 'Statistics/Date Range Selection',

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { Icon } from './icon'
 import { SlidersHorizontal } from 'lucide-react'
-import { fn } from '@storybook/test'
+import { fn } from 'storybook/test'
 
 const meta = {
     title: 'UI/Icon',

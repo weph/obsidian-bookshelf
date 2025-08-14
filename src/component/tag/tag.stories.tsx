@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { Tag } from './tag'
-import { fn } from '@storybook/test'
+import { fn } from 'storybook/test'
 
 const meta = {
     title: 'UI/Tag',

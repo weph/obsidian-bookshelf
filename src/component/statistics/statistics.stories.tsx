@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { FakeNote } from '../../support/fake-note'
 import { StaticMetadata } from '../../bookshelf/note/metadata'
 import { Statistics } from './statistics'
-import { fn } from '@storybook/test'
+import { fn } from 'storybook/test'
 import { BookshelfFactory } from '../../bookshelf/bookshelf-factory'
 import { InMemoryNotes } from '../../support/in-memory-notes'
 
