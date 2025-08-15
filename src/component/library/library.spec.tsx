@@ -140,6 +140,29 @@ describe('Clicking on a book cover', () => {
     })
 })
 
+test('Lists should be sorted alphabetically', () => {
+    const books = new Books([
+        new BookBuilder().with('lists', ['2000s', 'Thrillers']).build(),
+        new BookBuilder().with('lists', ['1980s', 'travel']).build(),
+        new BookBuilder().with('lists', ['1990s', 'Action']).build(),
+        new BookBuilder().with('lists', ['1990s', 'adult']).build(),
+    ])
+    renderLibrary({ books })
+
+    const select = screen.getByLabelText('List') as HTMLSelectElement
+
+    expect(Array.from(select.options).map((o) => o.label)).toEqual([
+        'All lists',
+        '1980s',
+        '1990s',
+        '2000s',
+        'Action',
+        'adult',
+        'Thrillers',
+        'travel',
+    ])
+})
+
 function mainContent(): Element {
     return screen.getByRole('main')
 }

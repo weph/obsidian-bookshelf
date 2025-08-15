@@ -56,7 +56,8 @@ const viewOptions: Array<DropdownOption<ViewType>> = [
 ]
 
 function listOptions(books: Books): Array<DropdownOption<string | null>> {
-    const lists = Array.from(new Set(books.map((b) => b.metadata.lists).flat()))
+    const lists = Array.from(new Set(books.map((b) => b.metadata.lists).flat())).sort((a, b) => a.localeCompare(b))
+
     if (lists.length === 0) {
         return []
     }

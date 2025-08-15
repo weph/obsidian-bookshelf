@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.17.0...main`][0.17.0...main].
 
+### Changed
+
+- Sort lists alphabetically in the library dropdown ([#38](https://github.com/weph/obsidian-bookshelf/issues/38))
+
 ## [`0.17.0`][0.17.0] - 2025-07-14
 
 For a full diff see [`0.16.1...0.17.0`][0.16.1...0.17.0].
