@@ -2,6 +2,7 @@ import { App, CachedMetadata, FrontmatterLinkCache, TFile } from 'obsidian'
 import { Metadata, PropertyValue } from 'src/bookshelf/note/metadata'
 import { Note } from '../bookshelf/note/note'
 import { fromMarkdown } from 'mdast-util-from-markdown'
+import { DateTime } from 'luxon'
 
 interface Location {
     start: number
@@ -57,10 +58,14 @@ class ObsidianMetadata implements Metadata {
 }
 
 export class ObsidianNote implements Note {
+    public readonly createdAt: Date
+
     constructor(
         private file: TFile,
         private app: App,
-    ) {}
+    ) {
+        this.createdAt = DateTime.fromMillis(this.file.stat.ctime).toJSDate()
+    }
 
     get metadata(): Metadata {
         return new ObsidianMetadata(this.app, this.file)

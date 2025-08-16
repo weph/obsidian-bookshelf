@@ -78,4 +78,14 @@ export const bookSortOptions: Array<SortDropdownOption> = [
         label: 'Pages: High-Low',
         compareFn: (a, b) => numberDifference(b.metadata.pages, a.metadata.pages),
     },
+    {
+        value: 'createdAt_desc',
+        label: 'Creation date: Newest-Oldest',
+        compareFn: (a, b) => numberDifference(b.note.createdAt.getTime(), a.note.createdAt.getTime()),
+    },
+    {
+        value: 'createdAt_asc',
+        label: 'Creation date: Oldest-Newest',
+        compareFn: (a, b) => numberDifference(a.note.createdAt.getTime(), b.note.createdAt.getTime()),
+    },
 ]

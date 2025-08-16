@@ -4,6 +4,7 @@ export interface Note {
     readonly path: string
     readonly basename: string
     readonly metadata: Metadata
+    readonly createdAt: Date
     readonly heading: string | null
     content: () => Promise<string>
     listItems: (sectionHeading: string) => Promise<Array<string>>

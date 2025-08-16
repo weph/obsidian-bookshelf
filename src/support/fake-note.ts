@@ -4,11 +4,15 @@ import { Metadata } from '../bookshelf/note/metadata'
 export class FakeNote implements Note {
     public heading: string | null = null
 
+    public createdAt: Date
+
     constructor(
         public path: string,
         public metadata: Metadata,
         public list: Array<string> = [],
-    ) {}
+    ) {
+        this.createdAt = new Date()
+    }
 
     get identifier(): string {
         return this.path
