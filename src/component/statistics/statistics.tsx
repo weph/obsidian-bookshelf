@@ -8,6 +8,7 @@ import styles from './statistics.module.scss'
 import { useSyncedData } from '../hooks/use-synced-data'
 import { DateRange } from '../../bookshelf/shared/date-range'
 import { DateRangeSelection } from './date-range-selection/date-range-selection'
+import { ReadingStreak } from './reading-streak/reading-streak'
 
 export interface Props {
     bookshelf: Bookshelf
@@ -63,6 +64,10 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
                     statistics={statistics}
                     availableIntervals={availableIntervals(dateRange || totalRange)}
                 />
+            </div>
+            <div className={styles.container}>
+                <h2>Reading Streak</h2>
+                <ReadingStreak statistics={statistics} />
             </div>
             <div className={styles.container}>
                 <h2>Tags</h2>

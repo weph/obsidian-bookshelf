@@ -668,6 +668,25 @@ describe('Statistics', () => {
             expect(pagesReadAsObject(bookshelf.statistics().pagesRead(Interval.Day))).toEqual({})
         })
 
+        test('should ignore actions', async () => {
+            await bookshelf.process(
+                new FakeNote('Books/Dracula.md', new StaticMetadata({}), [
+                    '2024-01-01: Started',
+                    '2024-12-31: 10',
+                    '2025-01-02: 60',
+                    '2025-02-01: Finished',
+                ]),
+            )
+
+            const result = bookshelf.statistics().pagesRead(Interval.Day)
+
+            expect(pagesReadAsObject(result)).toEqual({
+                '2024-12-31': 10,
+                '2025-01-01': 0,
+                '2025-01-02': 50,
+            })
+        })
+
         test('should be limited if given a year', async () => {
             await bookshelf.process(
                 new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2024-12-31: 1', '2026-01-01: 30']),

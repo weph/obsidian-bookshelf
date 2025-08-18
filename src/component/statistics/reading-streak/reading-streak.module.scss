@@ -1,0 +1,16 @@
+$item-size: 12px;
+
+.readingStreak {
+    display: grid;
+    grid-gap: 3px;
+    grid-template-columns: repeat(auto-fill, $item-size);
+
+    .item {
+        box-sizing: border-box;
+        width: $item-size;
+        height: $item-size;
+        border-radius: 3px;
+        background-color: var(--color-base-10);
+        border: 1px solid var(--color-base-25);
+    }
+}

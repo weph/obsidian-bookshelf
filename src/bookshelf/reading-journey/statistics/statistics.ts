@@ -45,7 +45,7 @@ export class Statistics {
     }
 
     public pagesRead(interval: Interval): Map<Date, number> {
-        const items = this.readingJourney.items()
+        const items = this.readingJourney.items().filter((i) => i.action === 'progress')
         if (items.length === 0) {
             return new Map<Date, number>()
         }
@@ -55,10 +55,6 @@ export class Statistics {
         const series = new AggregatedTimeSeries(start, end, interval)
 
         for (const item of items) {
-            if (item.action !== 'progress') {
-                continue
-            }
-
             series.add(item.date, item.pages || 0)
         }
 
