@@ -1,4 +1,14 @@
 export const releaseNotes = {
+    '0.18.0': `
+### Added
+
+- Add option to sort books by note creation date
+- Add reading streak chart to statistics
+
+### Changed
+
+- Sort lists alphabetically in the library dropdown ([#38](https://github.com/weph/obsidian-bookshelf/issues/38))
+`,
     '0.17.0': `
 ### Added
 
