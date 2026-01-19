@@ -2,7 +2,7 @@
     "name": "obsidian-bookshelf",
     "version": "0.18.0",
     "description": "Manage your books and reading progress in Obsidian",
-    "main": "main.js",
+    "main": "dist/main.js",
     "scripts": {
         "dev": "node esbuild.config.mjs",
         "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
@@ -28,6 +28,7 @@
         "@chromatic-com/storybook": "^4.1.0",
         "@eslint/compat": "^1.2.6",
         "@eslint/js": "^9.19.0",
+        "@storybook/addon-docs": "^9.1.2",
         "@storybook/react-vite": "^9.1.2",
         "@stryker-mutator/typescript-checker": "^9.0.1",
         "@stryker-mutator/vitest-runner": "^9.0.1",
@@ -57,12 +58,11 @@
         "prettier": "^3.5",
         "radashi": "^12.5.1",
         "storybook": "^9.1.2",
-        "ts-node": "^10.9.2",
+        "ts-node": "^1.7.1",
         "tslib": "^2.8.1",
         "typescript": "^5.7.0",
         "typescript-eslint": "^8.22.0",
-        "vitest": "^3.0.9",
-        "@storybook/addon-docs": "^9.1.2"
+        "vitest": "^3.0.9"
     },
     "engines": {
         "node": "^20"
