@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { Bookshelf } from './bookshelf'
-import { Interval } from './reading-journey/statistics/statistics'
+import { Interval, PagesRead } from './reading-journey/statistics/statistics'
 import { DateTime } from 'luxon'
 import { FakeNote } from '../support/fake-note'
 import { StaticMetadata } from './note/metadata'
@@ -681,9 +681,9 @@ describe('Statistics', () => {
             const result = bookshelf.statistics().pagesRead(Interval.Day)
 
             expect(pagesReadAsObject(result)).toEqual({
-                '2024-12-31': 10,
-                '2025-01-01': 0,
-                '2025-01-02': 50,
+                '2024-12-31': { total: 10, books: new Map([['Dracula', 10]]) },
+                '2025-01-01': { total: 0, books: new Map() },
+                '2025-01-02': { total: 50, books: new Map([['Dracula', 50]]) },
             })
         })
 
@@ -699,9 +699,24 @@ describe('Statistics', () => {
             const result2025 = bookshelf.statistics(DateRange.year(2025)).pagesRead(Interval.Year)
             const result2026 = bookshelf.statistics(DateRange.year(2026)).pagesRead(Interval.Year)
 
-            expect(pagesReadAsObject(result2024)).toEqual({ '2024-01-01': 1 })
-            expect(pagesReadAsObject(result2025)).toEqual({ '2025-01-01': 20 })
-            expect(pagesReadAsObject(result2026)).toEqual({ '2026-01-01': 29 })
+            expect(pagesReadAsObject(result2024)).toEqual({
+                '2024-01-01': {
+                    total: 1,
+                    books: new Map([['Dracula', 1]]),
+                },
+            })
+            expect(pagesReadAsObject(result2025)).toEqual({
+                '2025-01-01': {
+                    total: 20,
+                    books: new Map([['The Shining', 10]]),
+                },
+            })
+            expect(pagesReadAsObject(result2026)).toEqual({
+                '2026-01-01': {
+                    total: 29,
+                    books: new Map([['Dracula', 29]]),
+                },
+            })
         })
 
         test('can be grouped by day', async () => {
@@ -720,14 +735,20 @@ describe('Statistics', () => {
             const result = bookshelf.statistics().pagesRead(Interval.Day)
 
             expect(pagesReadAsObject(result)).toEqual({
-                '2024-12-31': 10,
-                '2025-01-01': 0,
-                '2025-01-02': 60,
-                '2025-01-03': 50,
-                '2025-01-04': 0,
-                '2025-01-05': 10,
-                '2025-01-06': 0,
-                '2025-01-07': 30,
+                '2024-12-31': { total: 10, books: new Map([['Dracula', 10]]) },
+                '2025-01-01': { total: 0, books: new Map() },
+                '2025-01-02': {
+                    total: 60,
+                    books: new Map([
+                        ['Dracula', 10],
+                        ['The Shining', 50],
+                    ]),
+                },
+                '2025-01-03': { total: 50, books: new Map([['The Shining', 50]]) },
+                '2025-01-04': { total: 0, books: new Map() },
+                '2025-01-05': { total: 10, books: new Map([['Dracula', 10]]) },
+                '2025-01-06': { total: 0, books: new Map() },
+                '2025-01-07': { total: 30, books: new Map([['Dracula', 30]]) },
             })
         })
 
@@ -745,11 +766,17 @@ describe('Statistics', () => {
             const result = bookshelf.statistics().pagesRead(Interval.Week)
 
             expect(pagesReadAsObject(result)).toEqual({
-                '2024-12-30': 10,
-                '2025-01-06': 10,
-                '2025-01-13': 0,
-                '2025-01-20': 110,
-                '2025-01-27': 30,
+                '2024-12-30': { total: 10, books: new Map([['Dracula', 10]]) },
+                '2025-01-06': { total: 10, books: new Map([['Dracula', 10]]) },
+                '2025-01-13': { total: 0, books: new Map() },
+                '2025-01-20': {
+                    total: 110,
+                    books: new Map([
+                        ['Dracula', 10],
+                        ['The Shining', 100],
+                    ]),
+                },
+                '2025-01-27': { total: 30, books: new Map([['Dracula', 30]]) },
             })
         })
 
@@ -767,11 +794,17 @@ describe('Statistics', () => {
             const result = bookshelf.statistics().pagesRead(Interval.Month)
 
             expect(pagesReadAsObject(result)).toEqual({
-                '2024-12-01': 10,
-                '2025-01-01': 10,
-                '2025-02-01': 110,
-                '2025-03-01': 0,
-                '2025-04-01': 30,
+                '2024-12-01': { total: 10, books: new Map([['Dracula', 10]]) },
+                '2025-01-01': { total: 10, books: new Map([['Dracula', 10]]) },
+                '2025-02-01': {
+                    total: 110,
+                    books: new Map([
+                        ['Dracula', 10],
+                        ['The Shining', 100],
+                    ]),
+                },
+                '2025-03-01': { total: 0, books: new Map() },
+                '2025-04-01': { total: 30, books: new Map([['Dracula', 30]]) },
             })
         })
 
@@ -784,17 +817,29 @@ describe('Statistics', () => {
             const result = bookshelf.statistics().pagesRead(Interval.Year)
 
             expect(pagesReadAsObject(result)).toEqual({
-                '2023-01-01': 10,
-                '2024-01-01': 0,
-                '2025-01-01': 140,
+                '2023-01-01': {
+                    total: 10,
+                    books: new Map([['Dracula', 10]]),
+                },
+                '2024-01-01': {
+                    total: 0,
+                    books: new Map(),
+                },
+                '2025-01-01': {
+                    total: 140,
+                    books: new Map([
+                        ['The Shining', 100],
+                        ['Dracula', 40],
+                    ]),
+                },
             })
         })
 
-        function pagesReadAsObject(input: Map<Date, number>): { [key: string]: number } {
-            const result: { [key: string]: number } = {}
+        function pagesReadAsObject(input: Map<Date, PagesRead>): { [key: string]: PagesRead } {
+            const result: { [key: string]: PagesRead } = {}
 
-            for (const [date, count] of input.entries()) {
-                result[DateTime.fromJSDate(date).toFormat('yyyy-MM-dd')] = count
+            for (const [date, item] of input.entries()) {
+                result[DateTime.fromJSDate(date).toFormat('yyyy-MM-dd')] = item
             }
 
             return result

@@ -1,6 +1,7 @@
 import { AggregatedTimeSeries } from './aggregated-time-series'
 import { Book } from '../../book/book'
 import { ReadingJourney } from '../reading-journey'
+import { ReadingJourneyProgressItem } from '../reading-journey-log'
 
 export enum Interval {
     Day,
@@ -13,6 +14,11 @@ type Actions = {
     started: number
     finished: number
     abandoned: number
+}
+
+export type PagesRead = {
+    total: number
+    books: Map<string, number>
 }
 
 export class Statistics {
@@ -44,18 +50,32 @@ export class Statistics {
         return result
     }
 
-    public pagesRead(interval: Interval): Map<Date, number> {
+    public pagesRead(interval: Interval): Map<Date, PagesRead> {
         const items = this.readingJourney.items().filter((i) => i.action === 'progress')
         if (items.length === 0) {
-            return new Map<Date, number>()
+            return new Map<Date, PagesRead>()
         }
 
         const start = items[0].date
         const end = items[items.length - 1].date
-        const series = new AggregatedTimeSeries(start, end, interval)
+        const series = new AggregatedTimeSeries(
+            start,
+            end,
+            interval,
+            (): PagesRead => ({ total: 0, books: new Map<string, number>() }),
+            (c, v: ReadingJourneyProgressItem) => {
+                if (!c.books.has(v.book.metadata.title)) {
+                    c.books.set(v.book.metadata.title, v.pages || 0)
+                }
+
+                c.total += v.pages || 0
+
+                return c
+            },
+        )
 
         for (const item of items) {
-            series.add(item.date, item.pages || 0)
+            series.add(item.date, item)
         }
 
         return series.asMap()

@@ -5,7 +5,13 @@ import { DateTime } from 'luxon'
 
 describe('Time series aggregated by year', () => {
     it('should have an entry for every year between start and end', () => {
-        const series = new AggregatedTimeSeries(new Date(2023, 0, 1), new Date(2026, 5, 15), Interval.Year)
+        const series = new AggregatedTimeSeries(
+            new Date(2023, 0, 1),
+            new Date(2026, 5, 15),
+            Interval.Year,
+            () => 0,
+            (c, v: number) => c + v,
+        )
 
         expect(iteratorAsObject(series.entries())).toEqual({
             '2023-01-01': 0,
@@ -16,7 +22,13 @@ describe('Time series aggregated by year', () => {
     })
 
     it('should aggregate values', () => {
-        const series = new AggregatedTimeSeries(new Date(2023, 0, 1), new Date(2026, 5, 15), Interval.Year)
+        const series = new AggregatedTimeSeries(
+            new Date(2023, 0, 1),
+            new Date(2026, 5, 15),
+            Interval.Year,
+            () => 0,
+            (c, v: number) => c + v,
+        )
 
         series.add(new Date(2023, 0, 1), 10)
         series.add(new Date(2023, 0, 1), 20)
@@ -35,7 +47,13 @@ describe('Time series aggregated by year', () => {
 
 describe('Time series aggregated by month', () => {
     it('should have an entry for every month between start and end', () => {
-        const series = new AggregatedTimeSeries(new Date(2024, 0, 15), new Date(2024, 3, 1), Interval.Month)
+        const series = new AggregatedTimeSeries(
+            new Date(2024, 0, 15),
+            new Date(2024, 3, 1),
+            Interval.Month,
+            () => 0,
+            (c, v: number) => c + v,
+        )
 
         expect(iteratorAsObject(series.entries())).toEqual({
             '2024-01-01': 0,
@@ -46,7 +64,13 @@ describe('Time series aggregated by month', () => {
     })
 
     it('should aggregate values', () => {
-        const series = new AggregatedTimeSeries(new Date(2024, 0, 15), new Date(2024, 3, 1), Interval.Month)
+        const series = new AggregatedTimeSeries(
+            new Date(2024, 0, 15),
+            new Date(2024, 3, 1),
+            Interval.Month,
+            () => 0,
+            (c, v: number) => c + v,
+        )
 
         series.add(new Date(2024, 0, 1), 10)
         series.add(new Date(2024, 0, 31), 15)
@@ -66,7 +90,13 @@ describe('Time series aggregated by month', () => {
 
 describe('Time series aggregated by week', () => {
     it('should have an entry for every week between start and end', () => {
-        const series = new AggregatedTimeSeries(new Date(2023, 11, 30), new Date(2024, 0, 17), Interval.Week)
+        const series = new AggregatedTimeSeries(
+            new Date(2023, 11, 30),
+            new Date(2024, 0, 17),
+            Interval.Week,
+            () => 0,
+            (c, v: number) => c + v,
+        )
 
         expect(iteratorAsObject(series.entries())).toEqual({
             '2023-12-25': 0,
@@ -77,7 +107,13 @@ describe('Time series aggregated by week', () => {
     })
 
     it('should aggregate values', () => {
-        const series = new AggregatedTimeSeries(new Date(2023, 11, 30), new Date(2024, 0, 17), Interval.Week)
+        const series = new AggregatedTimeSeries(
+            new Date(2023, 11, 30),
+            new Date(2024, 0, 17),
+            Interval.Week,
+            () => 0,
+            (c, v: number) => c + v,
+        )
 
         series.add(new Date(2024, 0, 1), 10)
         series.add(new Date(2024, 0, 1), 20)
@@ -96,7 +132,13 @@ describe('Time series aggregated by week', () => {
 
 describe('Time series aggregated by day', () => {
     it('should have an entry for every day between start and end', () => {
-        const series = new AggregatedTimeSeries(new Date(2023, 11, 30), new Date(2024, 0, 3), Interval.Day)
+        const series = new AggregatedTimeSeries(
+            new Date(2023, 11, 30),
+            new Date(2024, 0, 3),
+            Interval.Day,
+            () => 0,
+            (c, v: number) => c + v,
+        )
 
         expect(iteratorAsObject(series.entries())).toEqual({
             '2023-12-30': 0,
@@ -108,7 +150,13 @@ describe('Time series aggregated by day', () => {
     })
 
     it('should aggregate values', () => {
-        const series = new AggregatedTimeSeries(new Date(2023, 11, 30), new Date(2024, 0, 3), Interval.Day)
+        const series = new AggregatedTimeSeries(
+            new Date(2023, 11, 30),
+            new Date(2024, 0, 3),
+            Interval.Day,
+            () => 0,
+            (c, v: number) => c + v,
+        )
 
         series.add(new Date(2024, 0, 1), 10)
         series.add(new Date(2024, 0, 1), 20)

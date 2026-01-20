@@ -1,36 +1,38 @@
 import { Interval } from './statistics'
 import { DateTime } from 'luxon'
 
-export class AggregatedTimeSeries {
+export class AggregatedTimeSeries<TInput, TOutput> {
     private dateObjects = new Map<string, Date>()
 
-    private readonly result = new Map<Date, number>()
+    private readonly result = new Map<Date, TOutput>()
 
     constructor(
         public readonly start: Date,
         public readonly end: Date,
         public readonly interval: Interval,
+        public readonly initialValue: () => TOutput,
+        public readonly updatedValue: (current: TOutput, input: TInput) => TOutput,
     ) {
         const last = DateTime.fromJSDate(end)
         let current = DateTime.fromJSDate(start)
         while (current <= last) {
-            this.result.set(this.dateKey(current.toJSDate(), interval), 0)
+            this.result.set(this.dateKey(current.toJSDate(), interval), initialValue())
 
             current = current.plus({ day: 1 })
         }
     }
 
-    public add(date: Date, value: number): void {
+    public add(date: Date, value: TInput): void {
         const key = this.dateKey(date, this.interval)
 
-        this.result.set(key, (this.result.get(key) || 0) + value)
+        this.result.set(key, this.updatedValue(this.result.get(key) || this.initialValue(), value))
     }
 
-    public asMap(): Map<Date, number> {
+    public asMap(): Map<Date, TOutput> {
         return this.result
     }
 
-    public entries(): MapIterator<[Date, number]> {
+    public entries(): MapIterator<[Date, TOutput]> {
         return this.result.entries()
     }
 

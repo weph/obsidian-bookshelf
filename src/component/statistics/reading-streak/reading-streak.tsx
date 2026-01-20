@@ -1,5 +1,5 @@
 import styles from './reading-streak.module.scss'
-import { Interval, Statistics } from '../../../bookshelf/reading-journey/statistics/statistics'
+import { Interval, PagesRead, Statistics } from '../../../bookshelf/reading-journey/statistics/statistics'
 import { DateTime } from 'luxon'
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 
 export function ReadingStreak({ statistics }: Props) {
     const values = Array.from(statistics.pagesRead(Interval.Day).entries())
-    const max = Math.max(...values.map((v) => v[1]))
+    const max = Math.max(...values.map((v) => v[1].total))
 
     return (
         <div className={styles.readingStreak}>
@@ -19,14 +19,26 @@ export function ReadingStreak({ statistics }: Props) {
     )
 }
 
-function ReadingStreakItem({ date, v, max }: { date: Date; v: number; max: number }) {
-    const color = `rgba(var(--color-green-rgb), ${Math.ceil((v / max) * 5) / 5})`
+function ReadingStreakItem({ date, v, max }: { date: Date; v: PagesRead; max: number }) {
+    const color = `rgba(var(--color-green-rgb), ${Math.ceil((v.total / max) * 5) / 5})`
+    const extra = []
+
+    for (const [book, pages] of v.books.entries()) {
+        extra.push(`${book}: ${pages}`)
+    }
 
     return (
-        <div
-            aria-label={`${v} pages read on ${DateTime.fromJSDate(date).toLocaleString()}`}
-            style={v > 0 ? { backgroundColor: color, borderWidth: 0 } : {}}
-            className={styles.item}
-        ></div>
+        <div style={v.total > 0 ? { backgroundColor: color, borderWidth: 0 } : {}} className={styles.item}>
+            {v.total > 0 && (
+                <div className={styles.itemDetails}>
+                    {`${v.total} pages read on ${DateTime.fromJSDate(date).toLocaleString()}`}
+                    <ul>
+                        {Array.from(v.books.entries()).map((v) => (
+                            <li key={v[0]}>{`${v[0]}: ${v[1]}`}</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+        </div>
     )
 }

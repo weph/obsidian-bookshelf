@@ -6,11 +6,34 @@ $item-size: 12px;
     grid-template-columns: repeat(auto-fill, $item-size);
 
     .item {
+        position: relative;
         box-sizing: border-box;
         width: $item-size;
         height: $item-size;
         border-radius: 3px;
         background-color: var(--color-base-10);
         border: 1px solid var(--color-base-25);
+
+        &:hover > div {
+            opacity: 1;
+        }
+
+        > div {
+            pointer-events: none;
+            position: absolute;
+            transform: translateX(-50%);
+            opacity: 0;
+            min-width: 200px;
+            margin-top: 18px;
+            z-index: 100;
+            color: #fafafa;
+            background-color: var(--background-modifier-message);
+            padding: 0.5rem;
+            border-radius: var(--radius-s);
+
+            ul {
+                padding: 0 0 0 1.25rem;
+            }
+        }
     }
 }
