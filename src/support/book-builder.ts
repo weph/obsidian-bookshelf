@@ -15,6 +15,7 @@ export class BookBuilder {
         private readonly metadata: Partial<BookMetadata> = {},
         private readonly readingJourney: Array<OmitUnion<ReadingJourneyItem, 'book'>> = [],
         private readonly status: ReadingStatus = 'unread',
+        private readonly progress: number | null = null,
     ) {}
 
     public with<K extends keyof BookMetadata>(property: K, value: BookMetadata[K]): BookBuilder {
@@ -23,6 +24,10 @@ export class BookBuilder {
 
     public withStatus(status: ReadingStatus): BookBuilder {
         return new BookBuilder(this.note, this.metadata, this.readingJourney, status)
+    }
+
+    public withProgress(progress: number | null): BookBuilder {
+        return new BookBuilder(this.note, this.metadata, this.readingJourney, this.status, progress)
     }
 
     public withReadingProgress(date: Date, startPage: number, endPage: number): BookBuilder {
@@ -43,6 +48,7 @@ export class BookBuilder {
                 },
             ],
             this.status,
+            this.progress,
         )
     }
 
@@ -55,6 +61,7 @@ export class BookBuilder {
             },
             readingJourney: new ReadingJourney([]),
             status: this.status,
+            progress: this.progress,
         }
 
         book.readingJourney = new ReadingJourney(this.readingJourney.map((rp) => ({ ...rp, book })))

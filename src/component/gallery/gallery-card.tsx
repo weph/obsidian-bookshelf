@@ -1,14 +1,16 @@
 import styles from './gallery-card.module.scss'
 import { CoverPlaceholder } from '../cover-placeholder/cover-placeholder'
+import { ProgressBar } from '../progress-bar/progress-bar'
 import { MouseEvent, useId } from 'react'
 
 interface Props {
     cover?: string
     title: string
+    progress: number | null
     onClick: (event: MouseEvent) => void
 }
 
-export function GalleryCard({ cover, title, onClick }: Props) {
+export function GalleryCard({ cover, title, progress, onClick }: Props) {
     const titleId = useId()
 
     return (
@@ -19,6 +21,7 @@ export function GalleryCard({ cover, title, onClick }: Props) {
                     {title}
                 </span>
             </div>
+            {progress !== null && <ProgressBar percentage={progress} />}
         </div>
     )
 }

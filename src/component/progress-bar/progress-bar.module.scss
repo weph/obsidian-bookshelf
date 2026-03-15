@@ -1,0 +1,21 @@
+.progressBarContainer {
+    position: relative;
+    background-color: var(--color-base-30);
+    overflow: hidden;
+
+    .progressBar {
+        height: 1rem;
+        width: 0;
+        background-color: var(--color-green);
+    }
+
+    .percentage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 0.65rem;
+        line-height: 1rem;
+    }
+}

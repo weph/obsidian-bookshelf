@@ -102,6 +102,7 @@ export const tddByExample = new BookBuilder()
     .withReadingProgress(new Date(2025, 0, 4), 101, 120)
     .withReadingProgress(new Date(2025, 0, 5), 121, 190)
     .withReadingProgress(new Date(2025, 0, 6), 191, 220)
+    .withProgress(100)
     .build()
 
 export const mythicalManMonth = new BookBuilder()

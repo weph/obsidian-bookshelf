@@ -979,6 +979,61 @@ describe('Reading status', () => {
     })
 })
 
+describe('Reading progress', () => {
+    test('progress should be `null` if total number of pages is not known', async () => {
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: 1-20'])
+        await bookshelf.process(dracula)
+
+        const book = bookshelf.book(dracula)
+
+        expect(book.progress).toBe(null)
+    })
+
+    test('progress should be `null` if reading journey is empty', async () => {
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({ pages: 200 }), [])
+        await bookshelf.process(dracula)
+
+        const book = bookshelf.book(dracula)
+
+        expect(book.progress).toBe(null)
+    })
+
+    test('progress should reflect percentage of last progress item', async () => {
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({ pages: 200 }), [
+            '2025-01-02: 1-200',
+            '2025-01-06: Finished reading',
+            '2026-03-10: Started reading',
+            '2025-03-10: 1-150',
+        ])
+        await bookshelf.process(dracula)
+
+        const book = bookshelf.book(dracula)
+
+        expect(book.progress).toBe(75)
+    })
+
+    test('progress should be limited to 100% if pages read is greater than total pages', async () => {
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({ pages: 200 }), ['2025-01-02: 1-400'])
+        await bookshelf.process(dracula)
+
+        const book = bookshelf.book(dracula)
+
+        expect(book.progress).toBe(100)
+    })
+
+    test('progress should be 100% if last book has been finished even if last progress is smaller than total pages', async () => {
+        const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({ pages: 200 }), [
+            '2025-01-02: 1-100',
+            '2025-01-06: Finished reading',
+        ])
+        await bookshelf.process(dracula)
+
+        const book = bookshelf.book(dracula)
+
+        expect(book.progress).toBe(100)
+    })
+})
+
 describe('Adding items to reading journey', () => {
     test('Items should show up in book note and reading journey', async () => {
         const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-01-02: Started reading'])

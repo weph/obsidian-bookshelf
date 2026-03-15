@@ -12,6 +12,7 @@ For a full diff see [`0.18.0...main`][0.18.0...main].
 ### Changed
 
 - Show books in reading streak tooltip
+- Add reading progress bar to library view ([#46](https://github.com/weph/obsidian-bookshelf/issues/46))
 
 ## [`0.18.0`][0.18.0] - 2025-08-20
 

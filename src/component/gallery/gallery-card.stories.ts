@@ -17,6 +17,7 @@ export const Primary: Story = {
     args: {
         title: 'Animal Farm',
         cover: '/covers/animal-farm.jpg',
+        progress: 75,
     },
 }
 

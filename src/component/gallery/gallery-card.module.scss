@@ -1,5 +1,5 @@
 body {
-    --bookshelf--gallery-card--padding: 8px;
+    --bookshelf--gallery-card--padding: 0.5rem;
     --bookshelf--gallery-card--border-radius: 6px;
     --bookshelf--gallery-card--background-color: var(--background-primary-alt);
     --bookshelf--gallery-card--shadow: var(--shadow-s);
@@ -9,6 +9,7 @@ body {
 .galleryCard {
     display: flex;
     flex-flow: column;
+    gap: 0.5rem;
     justify-content: center;
     position: relative;
     width: 100%;

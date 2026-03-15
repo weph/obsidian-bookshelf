@@ -30,4 +30,5 @@ export interface Book {
     metadata: BookMetadata
     readingJourney: ReadingJourney
     status: ReadingStatus
+    progress: number | null
 }

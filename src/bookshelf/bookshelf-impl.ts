@@ -1,7 +1,7 @@
 import { Book, BookMetadata, ReadingStatus } from './book/book'
 import { Note } from './note/note'
 import { ReadingJourney } from './reading-journey/reading-journey'
-import { ReadingJourneyLog } from './reading-journey/reading-journey-log'
+import { ReadingJourneyLog, ReadingJourneyProgressItem } from './reading-journey/reading-journey-log'
 import { BookMetadataFactory } from './book/book-metadata-factory'
 import { NoteProcessor, ReadingJourneyMatch } from './note-processing/note-processor'
 import { ReadingJourneyWriter } from './note-processing/reading-journey-writer'
@@ -20,6 +20,24 @@ class BookshelfBook implements Book {
 
     get readingJourney(): ReadingJourney {
         return this.bookshelf.readingJourney().filter((rp) => rp.book === this)
+    }
+
+    get progress(): number | null {
+        if (this.readingJourney.lastItem()?.action === 'finished') {
+            return 100
+        }
+
+        const lastProgress = this.readingJourney
+            .filter((i) => i.action === 'progress')
+            .lastItem() as ReadingJourneyProgressItem
+
+        const currentPage = lastProgress?.end.pageInBook(this)
+        const totalPages = this.metadata.pages
+        if (totalPages === undefined || currentPage === undefined || currentPage === null) {
+            return null
+        }
+
+        return Math.min(Math.round((currentPage / totalPages) * 100), 100)
     }
 
     get status(): ReadingStatus {

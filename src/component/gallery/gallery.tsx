@@ -15,6 +15,7 @@ export function Gallery({ books, onBookClick }: Props) {
                 <GalleryCard
                     key={index}
                     title={book.metadata.title}
+                    progress={book.progress}
                     cover={book.metadata.cover}
                     onClick={(e) => onBookClick(book, e)}
                 />

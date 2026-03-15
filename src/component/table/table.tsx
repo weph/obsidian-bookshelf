@@ -3,6 +3,7 @@ import { StarRating } from '../star-rating/star-rating'
 import styles from './table.module.scss'
 import { TagList } from '../tag-list/tag-list'
 import { MouseEvent } from 'react'
+import { ProgressBar } from '../progress-bar/progress-bar'
 
 interface Props {
     books: Array<Book>
@@ -19,6 +20,7 @@ export function BookTable({ books, onBookClick }: Props) {
                     <th className={styles.pubDate}>Published</th>
                     <th className={styles.pages}>Pages</th>
                     <th className={styles.duration}>Duration</th>
+                    <th className={styles.progress}>Progress</th>
                     <th>Rating</th>
                     <th>Tags</th>
                     <th>Status</th>
@@ -36,6 +38,7 @@ export function BookTable({ books, onBookClick }: Props) {
                         <td className={styles.pubDate}>{book.metadata.published?.getFullYear() || ''}</td>
                         <td className={styles.pages}>{book.metadata.pages?.toLocaleString() || ''}</td>
                         <td className={styles.duration}>{book.metadata.duration?.toString('verbose') || ''}</td>
+                        <td>{book.progress && <ProgressBar percentage={book.progress} />}</td>
                         <td>
                             <StarRating value={book.metadata.rating || 0} />
                         </td>
