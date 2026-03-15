@@ -23,6 +23,7 @@ export interface BookMetadata {
     readonly comment?: string
     readonly links: Array<Link>
     readonly series?: SeriesInfo
+    readonly genre?: Array<string>
 }
 
 export interface Book {

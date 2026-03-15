@@ -28,6 +28,21 @@ export function groupedByList(books: Array<Book>): GroupedBooks {
     }
 }
 
+export function groupedByGenre(books: Array<Book>): GroupedBooks {
+    return {
+        groups: grouped(
+            books,
+            (b) => {
+                const genres = b.metadata.genre ?? []
+
+                return genres.length > 0 ? genres : [null]
+            },
+            'asc',
+        ),
+        nullLabel: 'No genres assigned',
+    }
+}
+
 export function groupedByTag(books: Array<Book>): GroupedBooks {
     return {
         groups: grouped(

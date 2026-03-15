@@ -10,6 +10,8 @@ tags:
 pages: 390
 series: "Hunger Games"
 position-in-series: 3
+genre:
+    - "Young Adult"
 ---
 
 ## Reading Journey

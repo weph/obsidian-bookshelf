@@ -29,6 +29,7 @@ const bookshelf = BookshelfFactory.fromConfiguration({
             series: 'series',
             positionInSeries: 'position-in-series',
             duration: 'duration',
+            genre: 'genre',
         },
         bookNote: {
             enabled: true,

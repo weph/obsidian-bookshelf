@@ -81,6 +81,13 @@ The total playtime of an audiobook. Use the format `H:MM` (e.g., `5:30` for 5 ho
 
 Tags you've assigned to the book.
 
+#### Genre
+
+**Property type:** List\
+**Default name:** `genre`
+
+Genre(s) you've assigned to the book.
+
 #### Rating
 
 **Property type:** Number\

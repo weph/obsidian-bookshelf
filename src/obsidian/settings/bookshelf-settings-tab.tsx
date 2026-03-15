@@ -163,6 +163,17 @@ export class BookshelfSettingsTab extends PluginSettingTab {
             )
 
         new Setting(containerEl)
+            .setName('Genre')
+            .setDesc("Name of the property that contains the book's genre(s)")
+            .addText((text) =>
+                text.setValue(this.plugin.settings.bookProperties.genre).onChange(async (value) => {
+                    this.plugin.settings.bookProperties.genre = value.trim()
+
+                    await this.plugin.saveSettings()
+                }),
+            )
+
+        new Setting(containerEl)
             .setName('Position in series')
             .setDesc("Name of the property that contains the book's position within its series")
             .addText((text) =>

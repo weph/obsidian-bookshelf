@@ -32,6 +32,7 @@ const defaultConfiguration: Configuration = {
             series: 'series',
             positionInSeries: 'position-in-series',
             duration: 'duration',
+            genre: 'genre',
         },
         bookNote: {
             enabled: true,

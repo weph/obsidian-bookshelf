@@ -22,6 +22,11 @@ export const bookGroupingOptions: Array<GroupingDropdownOption> = [
         grouped: grouping.groupedByList,
     },
     {
+        value: 'genre',
+        label: 'Genre',
+        grouped: grouping.groupedByGenre,
+    },
+    {
         value: 'series',
         label: 'Series',
         grouped: grouping.groupedBySeries,

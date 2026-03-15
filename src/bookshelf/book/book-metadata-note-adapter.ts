@@ -20,6 +20,7 @@ export interface PropertyNames {
     series: string
     positionInSeries: string
     duration: string
+    genre: string
 }
 
 export class BookMetadataNoteAdapter implements BookMetadata {
@@ -113,6 +114,20 @@ export class BookMetadataNoteAdapter implements BookMetadata {
 
     get lists(): Array<string> {
         const value = this.note.metadata.value(this.propertyNames.lists)
+
+        if (Array.isArray(value)) {
+            return value.map((v) => this.text(v))
+        }
+
+        if (typeof value === 'string') {
+            return [value]
+        }
+
+        return []
+    }
+
+    get genre(): Array<string> {
+        const value = this.note.metadata.value(this.propertyNames.genre)
 
         if (Array.isArray(value)) {
             return value.map((v) => this.text(v))

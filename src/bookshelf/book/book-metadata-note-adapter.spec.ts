@@ -19,6 +19,7 @@ const propertyNames: PropertyNames = {
     series: 'series',
     positionInSeries: 'positionInSeries',
     duration: 'duration',
+    genre: 'genre',
 }
 
 const linkToUri: LinkToUri = (link) => `uri://${link}`
@@ -269,6 +270,26 @@ describe('Lists', () => {
         const result = bookMetadata(new FakeNote('Title', new StaticMetadata({ lists: 'foo' })))
 
         expect(result.lists).toEqual(['foo'])
+    })
+})
+
+describe('Genre', () => {
+    it('should be an empty list if property is not set', () => {
+        const result = bookMetadata(new FakeNote('Title', new StaticMetadata({})))
+
+        expect(result.genre).toEqual([])
+    })
+
+    it('should be used as is if property value is an array', () => {
+        const result = bookMetadata(new FakeNote('Title', new StaticMetadata({ genre: ['foo', 'bar'] })))
+
+        expect(result.genre).toEqual(['foo', 'bar'])
+    })
+
+    it('should be converted to an array if it is a string', () => {
+        const result = bookMetadata(new FakeNote('Title', new StaticMetadata({ genre: 'foo' })))
+
+        expect(result.genre).toEqual(['foo'])
     })
 })
 

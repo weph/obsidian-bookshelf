@@ -6,6 +6,7 @@ import {
     groupedAlphabetically,
     GroupedBooks,
     groupedByAuthor,
+    groupedByGenre,
     groupedByList,
     groupedByPublicationYear,
     groupedByRating,
@@ -54,6 +55,22 @@ test('groupedByTag', () => {
         'novel: The Hunger Games, Darkly Dreaming Dexter, The Black Echo',
         'young-adult: The Hunger Games',
         'No tags assigned: The Grapes of Wrath',
+    ])
+})
+
+test('groupedByGenre', () => {
+    const result = groupedByGenre([
+        book('The Hunger Games', { genre: ['Fiction', 'Young Adult'] }),
+        book('Darkly Dreaming Dexter', { genre: ['Fiction', 'Crime'] }),
+        book('The Black Echo', { genre: ['Fiction', 'Crime'] }),
+        book('The Grapes of Wrath'),
+    ])
+
+    expect(groupedBooks(result)).toEqual([
+        'Crime: Darkly Dreaming Dexter, The Black Echo',
+        'Fiction: The Hunger Games, Darkly Dreaming Dexter, The Black Echo',
+        'Young Adult: The Hunger Games',
+        'No genres assigned: The Grapes of Wrath',
     ])
 })
 
