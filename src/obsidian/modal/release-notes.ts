@@ -1,4 +1,15 @@
 export const releaseNotes = {
+    '0.19.0': `
+### Added
+
+- Add reading progress bar to library view ([#46](https://github.com/weph/obsidian-bookshelf/issues/46))
+- Add option to group books by tag ([#39](https://github.com/weph/obsidian-bookshelf/issues/39))
+- Add genre metadata field ([#39](https://github.com/weph/obsidian-bookshelf/issues/39))
+
+### Changed
+
+- Show books in reading streak tooltip
+`,
     '0.18.0': `
 ### Added
 
