@@ -41,4 +41,9 @@ export const bookGroupingOptions: Array<GroupingDropdownOption> = [
         label: 'Rating',
         grouped: grouping.groupedByRating,
     },
+    {
+        value: 'tag',
+        label: 'Tag',
+        grouped: grouping.groupedByTag,
+    },
 ]

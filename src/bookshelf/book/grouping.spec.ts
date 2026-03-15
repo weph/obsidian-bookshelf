@@ -10,6 +10,7 @@ import {
     groupedByPublicationYear,
     groupedByRating,
     groupedBySeries,
+    groupedByTag,
 } from './grouping'
 
 test('groupedAlphabetically', () => {
@@ -37,6 +38,22 @@ test('groupedByList', () => {
         'Dystopic: The Hunger Games',
         'First in Series: The Hunger Games, Darkly Dreaming Dexter, The Black Echo',
         'No list assigned: The Grapes of Wrath',
+    ])
+})
+
+test('groupedByTag', () => {
+    const result = groupedByTag([
+        book('The Hunger Games', { tags: ['novel', 'young-adult'] }),
+        book('Darkly Dreaming Dexter', { tags: ['novel', 'crime'] }),
+        book('The Black Echo', { tags: ['novel', 'crime'] }),
+        book('The Grapes of Wrath'),
+    ])
+
+    expect(groupedBooks(result)).toEqual([
+        'crime: Darkly Dreaming Dexter, The Black Echo',
+        'novel: The Hunger Games, Darkly Dreaming Dexter, The Black Echo',
+        'young-adult: The Hunger Games',
+        'No tags assigned: The Grapes of Wrath',
     ])
 })
 
