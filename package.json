@@ -1,6 +1,6 @@
 {
     "name": "obsidian-bookshelf",
-    "version": "0.19.0",
+    "version": "0.19.1",
     "description": "Manage your books and reading progress in Obsidian",
     "main": "dist/main.js",
     "scripts": {

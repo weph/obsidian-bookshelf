@@ -1,4 +1,9 @@
 export const releaseNotes = {
+    '0.19.1': `
+### Fixed
+
+- Fixed broken chart view ([#47](https://github.com/weph/obsidian-bookshelf/issues/47))
+`,
     '0.19.0': `
 ### Added
 

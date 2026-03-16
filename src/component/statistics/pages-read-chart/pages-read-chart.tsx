@@ -56,10 +56,12 @@ export function PagesReadChart({ statistics, availableIntervals }: Props) {
         }
     }, [availableIntervals])
 
-    const data = Array.from(statistics.pagesRead(interval.statistics).entries()).map((entry) => ({
-        x: entry[0].getTime(),
-        y: entry[1],
-    }))
+    const data: Array<{ x: number; y: number }> = Array.from(statistics.pagesRead(interval.statistics).entries()).map(
+        (entry) => ({
+            x: entry[0].getTime(),
+            y: entry[1].total,
+        }),
+    )
 
     return (
         <>

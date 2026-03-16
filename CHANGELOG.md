@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-For a full diff see [`0.19.0...main`][0.19.0...main].
+For a full diff see [`0.19.1...main`][0.19.1...main].
+
+## [`0.19.1`][0.19.1] - 2026-03-16
+
+For a full diff see [`0.19.0...0.19.1`][0.19.0...0.19.1].
+
+### Fixed
+
+- Fixed broken chart view ([#47](https://github.com/weph/obsidian-bookshelf/issues/47))
 
 ## [`0.19.0`][0.19.0] - 2026-03-15
 
@@ -354,6 +362,7 @@ For a full diff see [`0.2.2...0.3.0`][0.2.2...0.3.0].
 [0.17.0]: https://github.com/weph/obsidian-bookshelf/releases/tag/0.17.0
 [0.18.0]: https://github.com/weph/obsidian-bookshelf/releases/tag/0.18.0
 [0.19.0]: https://github.com/weph/obsidian-bookshelf/releases/tag/0.19.0
+[0.19.1]: https://github.com/weph/obsidian-bookshelf/releases/tag/0.19.1
 [0.2.2...0.3.0]: https://github.com/weph/obsidian-bookshelf/compare/0.2.2...0.3.0
 [0.3.0...0.3.1]: https://github.com/weph/obsidian-bookshelf/compare/0.3.0...0.3.1
 [0.3.1...0.4.0]: https://github.com/weph/obsidian-bookshelf/compare/0.3.1...0.4.0
@@ -375,4 +384,5 @@ For a full diff see [`0.2.2...0.3.0`][0.2.2...0.3.0].
 [0.16.1...0.17.0]: https://github.com/weph/obsidian-bookshelf/compare/0.16.1...0.17.0
 [0.17.0...0.18.0]: https://github.com/weph/obsidian-bookshelf/compare/0.17.0...0.18.0
 [0.18.0...0.19.0]: https://github.com/weph/obsidian-bookshelf/compare/0.18.0...0.19.0
-[0.19.0...main]: https://github.com/weph/obsidian-bookshelf/compare/0.19.0...main
+[0.19.0...0.19.1]: https://github.com/weph/obsidian-bookshelf/compare/0.19.0...0.19.1
+[0.19.1...main]: https://github.com/weph/obsidian-bookshelf/compare/0.19.1...main
