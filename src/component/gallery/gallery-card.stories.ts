@@ -16,7 +16,13 @@ type Story = StoryObj<typeof GalleryCard>
 
 export const Primary: Story = {
     args: {
-        book: books.algorithms,
+        book: books.tddByExample,
+    },
+}
+
+export const Abandoned: Story = {
+    args: {
+        book: books.mythicalManMonth,
     },
 }
 

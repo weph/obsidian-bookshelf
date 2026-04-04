@@ -21,10 +21,40 @@ body {
     box-shadow: var(--bookshelf--gallery-card--shadow);
     border-radius: var(--bookshelf--gallery-card--border-radius);
 
+    &[data-status='finished'] {
+        --status-color: var(--color-green);
+    }
+
+    &[data-status='abandoned'] {
+        --status-color: var(--color-base-70);
+    }
+
     img {
         display: block;
         width: 100%;
         border-radius: var(--bookshelf--gallery-card--image--border-radius);
+    }
+
+    .ribbon {
+        position: absolute;
+        top: 0;
+        right: 10%;
+        z-index: 2;
+        display: block;
+        padding: 0.5rem 0.25rem;
+        filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.5));
+
+        &:before {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: '';
+            background-color: var(--status-color);
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+        }
     }
 
     .title {
@@ -44,6 +74,7 @@ body {
         top: 0;
         width: 100%;
         height: 100%;
+        z-index: 1;
         padding: var(--bookshelf--gallery-card--padding);
         background-color: rgb(from var(--bookshelf--gallery-card--background-color) r g b / 0.8);
         box-sizing: border-box;

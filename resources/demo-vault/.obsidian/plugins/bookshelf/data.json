@@ -13,7 +13,8 @@
     "links": "links",
     "series": "series",
     "positionInSeries": "position-in-series",
-    "duration": "duration"
+    "duration": "duration",
+    "genre": "genre"
   },
   "bookNote": {
     "enabled": true,
@@ -41,6 +42,6 @@
   "readingProgress": {
     "newEntryLocation": "bookNote"
   },
-  "previousVersion": "0.14.0",
+  "previousVersion": "0.19.1",
   "showReleaseNotes": true
 }

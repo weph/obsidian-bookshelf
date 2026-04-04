@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.19.1...main`][0.19.1...main].
 
+### Added
+
+- Add ribbon to show reading status (finished, abandoned) in gallery view
+
 ## [`0.19.1`][0.19.1] - 2026-03-16
 
 For a full diff see [`0.19.0...0.19.1`][0.19.0...0.19.1].
