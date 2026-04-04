@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { GalleryCard } from './gallery-card'
 import { fn } from 'storybook/test'
+import { books } from '../../support/book-fixtures'
 
 const meta = {
     title: 'Gallery Card',
@@ -15,14 +16,12 @@ type Story = StoryObj<typeof GalleryCard>
 
 export const Primary: Story = {
     args: {
-        title: 'Animal Farm',
-        cover: '/covers/animal-farm.jpg',
-        progress: 75,
+        book: books.algorithms,
     },
 }
 
 export const NoCover: Story = {
     args: {
-        title: 'Animal Farm',
+        book: books.bookWithoutMetadata,
     },
 }

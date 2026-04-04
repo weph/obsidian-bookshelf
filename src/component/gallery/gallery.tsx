@@ -12,13 +12,7 @@ export function Gallery({ books, onBookClick }: Props) {
     return (
         <div className={styles.gallery} role="list">
             {books.map((book, index) => (
-                <GalleryCard
-                    key={index}
-                    title={book.metadata.title}
-                    progress={book.progress}
-                    cover={book.metadata.cover}
-                    onClick={(e) => onBookClick(book, e)}
-                />
+                <GalleryCard key={index} book={book} onClick={(e) => onBookClick(book, e)} />
             ))}
         </div>
     )

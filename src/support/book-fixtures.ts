@@ -129,6 +129,8 @@ export const legacyCode = new BookBuilder()
     .with('lists', ['Patterns'])
     .build()
 
+export const bookWithoutMetadata = new BookBuilder().build()
+
 export const books = {
     algorithms,
     continuousDelivery,
@@ -144,4 +146,5 @@ export const books = {
     mythicalManMonth,
     pragmaticProgrammer,
     legacyCode,
+    bookWithoutMetadata,
 }
