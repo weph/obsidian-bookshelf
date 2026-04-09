@@ -19,11 +19,17 @@ export class BookBuilder {
     ) {}
 
     public with<K extends keyof BookMetadata>(property: K, value: BookMetadata[K]): BookBuilder {
-        return new BookBuilder(this.note, { ...this.metadata, [property]: value }, this.readingJourney, this.status)
+        return new BookBuilder(
+            this.note,
+            { ...this.metadata, [property]: value },
+            this.readingJourney,
+            this.status,
+            this.progress,
+        )
     }
 
     public withStatus(status: ReadingStatus): BookBuilder {
-        return new BookBuilder(this.note, this.metadata, this.readingJourney, status)
+        return new BookBuilder(this.note, this.metadata, this.readingJourney, status, this.progress)
     }
 
     public withProgress(progress: number | null): BookBuilder {

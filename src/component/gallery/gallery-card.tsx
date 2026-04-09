@@ -1,6 +1,6 @@
 import styles from './gallery-card.module.scss'
 import { CoverPlaceholder } from '../cover-placeholder/cover-placeholder'
-import { ProgressBar } from '../progress-bar/progress-bar'
+import { BookProgressBar } from '../progress-bar/book-progress-bar'
 import * as react from 'react'
 import { MouseEvent, useId } from 'react'
 import { Book, ReadingStatus } from '../../bookshelf/book/book'
@@ -14,7 +14,7 @@ interface Props {
 
 type IconType = react.ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & react.RefAttributes<SVGSVGElement>>
 
-const ribbonIcons: Record<ReadingStatus, IconType | null> = {
+const ribbonIcon: Record<ReadingStatus, IconType | null> = {
     unread: null,
     reading: null,
     finished: Check,
@@ -25,8 +25,7 @@ export function GalleryCard({ book, onClick }: Props) {
     const titleId = useId()
     const cover = book.metadata.cover
     const title = book.metadata.title
-    const progress = book.progress
-    const icon = ribbonIcons[book.status]
+    const icon = ribbonIcon[book.status]
 
     return (
         <div
@@ -47,7 +46,7 @@ export function GalleryCard({ book, onClick }: Props) {
                     {title}
                 </span>
             </div>
-            {progress !== null && <ProgressBar percentage={progress} />}
+            <BookProgressBar book={book} />
         </div>
     )
 }

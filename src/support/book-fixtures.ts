@@ -113,6 +113,7 @@ export const mythicalManMonth = new BookBuilder()
     .with('published', new Date(1975, 0, 1))
     .with('lists', ['Classic'])
     .withStatus('abandoned')
+    .withProgress(20)
     .build()
 
 export const pragmaticProgrammer = new BookBuilder()

@@ -1,12 +1,21 @@
+.active {
+    --background-color: var(--color-green);
+}
+
+.inactive {
+    --background-color: var(--color-base-70);
+}
+
 .progressBarContainer {
     position: relative;
     background-color: var(--color-base-30);
     overflow: hidden;
+    border-radius: 4px;
 
     .progressBar {
         height: 1rem;
         width: 0;
-        background-color: var(--color-green);
+        background-color: var(--background-color);
     }
 
     .percentage {

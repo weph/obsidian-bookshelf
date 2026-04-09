@@ -13,6 +13,10 @@ For a full diff see [`0.19.1...main`][0.19.1...main].
 
 - Add ribbon to show reading status (finished, abandoned) in gallery view
 
+### Changed
+
+- Progress bar now reflects reading status via color
+
 ## [`0.19.1`][0.19.1] - 2026-03-16
 
 For a full diff see [`0.19.0...0.19.1`][0.19.0...0.19.1].
