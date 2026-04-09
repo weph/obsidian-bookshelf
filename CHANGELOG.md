@@ -13,6 +13,7 @@ For a full diff see [`0.19.1...main`][0.19.1...main].
 
 - Add ribbon to show reading status (finished, abandoned) in gallery view
 - Show genre in table view
+- Add support for tags and genres in search ([#49](https://github.com/weph/obsidian-bookshelf/issues/49))
 
 ### Changed
 

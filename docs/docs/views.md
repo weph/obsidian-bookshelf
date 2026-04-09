@@ -81,11 +81,13 @@ For example:
 | -------- | ------------------------------------------ |
 | `author` | Author names                               |
 | `list`   | List name                                  |
-| `rating` | rating (numeric)                           |
+| `rating` | Rating (numeric)                           |
 | `series` | Book series                                |
 | `status` | Reading status (e.g., reading, finished)   |
 | `title`  | Book title                                 |
 | `date`   | Reading progress date (format: YYYY-MM-DD) |
+| `tag`    | Tag without `#`                            |
+| `genre`  | Genre                                      |
 
 #### Operators
 

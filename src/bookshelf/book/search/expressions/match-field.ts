@@ -31,6 +31,10 @@ export class MatchField implements Expression {
                 return book.metadata.title
             case 'date':
                 return book.readingJourney.map((item) => DateTime.fromJSDate(item.date).toFormat('yyyy-MM-dd'))
+            case 'tag':
+                return book.metadata.tags || null
+            case 'genre':
+                return book.metadata.genre || null
         }
 
         return null
