@@ -23,6 +23,7 @@ export function BookTable({ books, onBookClick }: Props) {
                     <th className={styles.progress}>Progress</th>
                     <th>Rating</th>
                     <th>Tags</th>
+                    <th>Genres</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -43,6 +44,7 @@ export function BookTable({ books, onBookClick }: Props) {
                             <StarRating value={book.metadata.rating || 0} />
                         </td>
                         <td>{book.metadata.tags && <TagList tags={book.metadata.tags} />}</td>
+                        <td>{book.metadata.genre && book.metadata.genre.join(', ')}</td>
                         <td>{book.status}</td>
                     </tr>
                 ))}

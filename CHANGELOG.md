@@ -12,6 +12,7 @@ For a full diff see [`0.19.1...main`][0.19.1...main].
 ### Added
 
 - Add ribbon to show reading status (finished, abandoned) in gallery view
+- Show genre in table view
 
 ### Changed
 
