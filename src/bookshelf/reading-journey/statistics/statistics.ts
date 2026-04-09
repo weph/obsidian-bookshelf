@@ -91,7 +91,7 @@ export class Statistics {
         return Array.from(this.readingJourney.books())
     }
 
-    public tagUsage(): Map<string, number> {
-        return this.readingJourney.tagUsage()
+    public frequencyMap<T>(keys: (book: Book) => undefined | T | Array<T>): Map<T, number> {
+        return this.readingJourney.frequencyMap(keys)
     }
 }

@@ -70,8 +70,8 @@ describe('lastItem', () => {
     })
 })
 
-describe('Tag Usage', () => {
-    test('should be empty if no tags have been used', () => {
+describe('Frequency Map', () => {
+    test('result should be empty if there are no keys', () => {
         const date = new Date(2025, 1, 1)
         const thriller = new BookBuilder().with('tags', undefined).build()
         const horror = new BookBuilder().with('tags', undefined).build()
@@ -84,28 +84,12 @@ describe('Tag Usage', () => {
             { action: 'started', date, book: nonFiction, source },
         ])
 
-        const result = journey.tagUsage()
+        const result = journey.frequencyMap((book) => book.metadata.tags || [])
 
         expect(Object.fromEntries(result.entries())).toEqual({})
     })
 
-    test('tags should be counted only per book', () => {
-        const date = new Date(2025, 1, 1)
-        const thriller = new BookBuilder().with('tags', ['fiction', 'thriller']).build()
-        const journey = new ReadingJourney([
-            { action: 'started', date, book: thriller, source },
-            { action: 'finished', date, book: thriller, source },
-        ])
-
-        const result = journey.tagUsage()
-
-        expect(Object.fromEntries(result.entries())).toEqual({
-            fiction: 1,
-            thriller: 1,
-        })
-    })
-
-    test('tags should be counted across different books', () => {
+    test('keys should be counted across different books', () => {
         const date = new Date(2025, 1, 1)
         const thriller = new BookBuilder().with('tags', ['fiction', 'thriller']).build()
         const horror = new BookBuilder().with('tags', ['fiction', 'horror']).build()
@@ -118,7 +102,7 @@ describe('Tag Usage', () => {
             { action: 'started', date, book: nonFiction, source },
         ])
 
-        const result = journey.tagUsage()
+        const result = journey.frequencyMap((book) => book.metadata.tags || [])
 
         expect(Object.fromEntries(result.entries())).toEqual({
             fiction: 2,

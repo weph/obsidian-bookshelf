@@ -3,7 +3,7 @@ import { Book } from '../../bookshelf/book/book'
 import { MouseEvent, useState } from 'react'
 import { AvailableInterval, PagesReadChart } from './pages-read-chart/pages-read-chart'
 import { Gallery } from '../gallery/gallery'
-import { TagUsageChart } from './tag-usage-chart/tag-usage-chart'
+import { DistributionChart } from './distribution-chart/distribution-chart'
 import styles from './statistics.module.scss'
 import { useSyncedData } from '../hooks/use-synced-data'
 import { DateRange } from '../../bookshelf/shared/date-range'
@@ -70,8 +70,8 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
                 <ReadingStreak statistics={statistics} />
             </div>
             <div className={styles.container}>
-                <h2>Tags</h2>
-                <TagUsageChart statistics={statistics} />
+                <h2>Distribution</h2>
+                <DistributionChart statistics={statistics} />
             </div>
             <div className={styles.container}>
                 <h2>Books</h2>

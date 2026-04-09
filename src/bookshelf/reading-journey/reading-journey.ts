@@ -35,12 +35,18 @@ export class ReadingJourney {
         return result
     }
 
-    public tagUsage(): Map<string, number> {
+    public frequencyMap<T>(keys: (book: Book) => undefined | T | Array<T>): Map<T, number> {
         const result = new Map()
 
         for (const book of this.books()) {
-            for (const tag of book.metadata.tags || []) {
-                result.set(tag, (result.get(tag) || 0) + 1)
+            const bookKeys = keys(book)
+
+            if (bookKeys === undefined) {
+                continue
+            }
+
+            for (const key of Array.isArray(bookKeys) ? bookKeys : [bookKeys]) {
+                result.set(key, (result.get(key) || 0) + 1)
             }
         }
 
