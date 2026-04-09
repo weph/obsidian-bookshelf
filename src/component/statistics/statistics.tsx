@@ -34,8 +34,12 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
 
     return (
         <div className={styles.statistics}>
-            {totalRange && <DateRangeSelection totalRange={totalRange} value={dateRange} onChange={setDateRange} />}
-            <div className={styles.container}>
+            {totalRange && (
+                <div className={styles.controls}>
+                    <DateRangeSelection totalRange={totalRange} value={dateRange} onChange={setDateRange} />
+                </div>
+            )}
+            <div className={styles.smallContainer}>
                 <h2>Books</h2>
                 <div className={styles.counts}>
                     <div>
@@ -52,7 +56,7 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
                     </div>
                 </div>
             </div>
-            <div className={styles.container}>
+            <div className={styles.smallContainer}>
                 <h2>Pages</h2>
                 <div className={styles.counts}>
                     <div>
@@ -60,13 +64,16 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
                         total
                     </div>
                 </div>
+            </div>
+            <div className={styles.container}>
+                <h2>Pages read</h2>
                 <PagesReadChart
                     statistics={statistics}
                     availableIntervals={availableIntervals(dateRange || totalRange)}
                 />
             </div>
             <div className={styles.container}>
-                <h2>Reading Streak</h2>
+                <h2>Reading streak</h2>
                 <ReadingStreak statistics={statistics} />
             </div>
             <div className={styles.container}>

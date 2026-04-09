@@ -4,6 +4,7 @@ import { Interval, Statistics } from '../../../bookshelf/reading-journey/statist
 import { Dropdown, DropdownOption } from '../../dropdown/dropdown'
 import { useEffect, useState } from 'react'
 import { Bar } from 'react-chartjs-2'
+import styles from './pages-read-chart.module.scss'
 
 export type AvailableInterval = 'year' | 'month' | 'week' | 'day'
 
@@ -65,12 +66,14 @@ export function PagesReadChart({ statistics, availableIntervals }: Props) {
 
     return (
         <>
-            <Dropdown
-                label="Interval"
-                value={interval.value}
-                options={availableIntervalOptions}
-                onChange={(o) => setInterval(o)}
-            />
+            <div className={styles.controls}>
+                <Dropdown
+                    label="Interval"
+                    value={interval.value}
+                    options={availableIntervalOptions}
+                    onChange={(o) => setInterval(o)}
+                />
+            </div>
 
             <div style={{ width: '100%', aspectRatio: '2/1' }}>
                 <Bar

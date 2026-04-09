@@ -4,6 +4,7 @@ $item-size: 12px;
     display: grid;
     grid-gap: 3px;
     grid-template-columns: repeat(auto-fill, $item-size);
+    padding-top: 1rem;
 
     .item {
         position: relative;

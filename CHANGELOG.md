@@ -19,6 +19,7 @@ For a full diff see [`0.19.1...main`][0.19.1...main].
 
 - Progress bar now reflects reading status via color
 - Replace "Tags" section in statistics with "Distribution" ([#48](https://github.com/weph/obsidian-bookshelf/issues/48))
+- Gave the statistics view a facelift
 
 ## [`0.19.1`][0.19.1] - 2026-03-16
 
