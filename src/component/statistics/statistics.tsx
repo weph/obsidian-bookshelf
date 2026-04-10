@@ -61,6 +61,18 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
                             <div className={styles.number}>{statistics.totalNumberOfPages().toLocaleString()}</div>
                             total
                         </div>
+                        <div>
+                            <div className={styles.number}>
+                                {(
+                                    statistics.totalNumberOfPages() /
+                                    (dateRange || totalRange).distinctCalendarUnits().days
+                                ).toLocaleString(undefined, {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                })}
+                            </div>
+                            ⌀ per day
+                        </div>
                     </div>
                 </StatisticsPanel>
             </div>

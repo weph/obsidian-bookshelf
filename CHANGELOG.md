@@ -14,6 +14,7 @@ For a full diff see [`0.19.1...main`][0.19.1...main].
 - Added ribbon to show reading status (finished, abandoned) in gallery view
 - Added genre column to table view
 - Added support for tags and genres in search ([#49](https://github.com/weph/obsidian-bookshelf/issues/49))
+- Added average pages read per day to statistics view
 
 ### Changed
 
