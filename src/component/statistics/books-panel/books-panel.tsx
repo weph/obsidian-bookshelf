@@ -1,26 +1,26 @@
-import { StatisticsPanel } from '../statistics-panel/statistics-panel'
-import styles from '../statistics.module.scss'
 import { Statistics } from '../../../bookshelf/reading-journey/statistics/statistics'
+import { KeyMetricsPanel } from '../key-metrics-panel/key-metrics-panel'
 
 export function BooksPanel({ statistics }: { statistics: Statistics }) {
     const actions = statistics.actions()
 
     return (
-        <StatisticsPanel title="Books">
-            <div className={styles.counts}>
-                <div>
-                    <div className={styles.number}>{actions.started}</div>
-                    started
-                </div>
-                <div>
-                    <div className={styles.number}>{actions.finished}</div>
-                    finished
-                </div>
-                <div>
-                    <div className={styles.number}>{actions.abandoned}</div>
-                    abandoned
-                </div>
-            </div>
-        </StatisticsPanel>
+        <KeyMetricsPanel
+            title="Books"
+            metrics={[
+                {
+                    title: 'started',
+                    value: actions.started,
+                },
+                {
+                    title: 'finished',
+                    value: actions.finished,
+                },
+                {
+                    title: 'abandoned',
+                    value: actions.abandoned,
+                },
+            ]}
+        />
     )
 }

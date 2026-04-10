@@ -1,0 +1,17 @@
+.counts {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 5rem;
+
+    div {
+        text-align: center;
+    }
+
+    .number {
+        font-size: 3rem;
+        line-height: 3.5rem;
+    }
+}
