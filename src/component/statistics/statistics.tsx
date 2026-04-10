@@ -10,6 +10,8 @@ import { DateRange } from '../../bookshelf/shared/date-range'
 import { DateRangeSelection } from './date-range-selection/date-range-selection'
 import { ReadingStreak } from './reading-streak/reading-streak'
 import { StatisticsPanel } from './statistics-panel/statistics-panel'
+import { BooksPanel } from './books-panel/books-panel'
+import { PagesPanel } from './pages-panel/pages-panel'
 
 export interface Props {
     bookshelf: Bookshelf
@@ -31,50 +33,14 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
 
     const totalRange = DateRange.custom(start, end)
 
-    const actions = statistics.actions()
-
     return (
         <div className={styles.statistics}>
             <DateRangeSelection totalRange={totalRange} value={dateRange} onChange={setDateRange} />
             <div className={styles.halfWidth}>
-                <StatisticsPanel title="Books">
-                    <div className={styles.counts}>
-                        <div>
-                            <div className={styles.number}>{actions.started}</div>
-                            started
-                        </div>
-                        <div>
-                            <div className={styles.number}>{actions.finished}</div>
-                            finished
-                        </div>
-                        <div>
-                            <div className={styles.number}>{actions.abandoned}</div>
-                            abandoned
-                        </div>
-                    </div>
-                </StatisticsPanel>
+                <BooksPanel statistics={statistics} />
             </div>
             <div className={styles.halfWidth}>
-                <StatisticsPanel title="Pages">
-                    <div className={styles.counts}>
-                        <div>
-                            <div className={styles.number}>{statistics.totalNumberOfPages().toLocaleString()}</div>
-                            total
-                        </div>
-                        <div>
-                            <div className={styles.number}>
-                                {(
-                                    statistics.totalNumberOfPages() /
-                                    (dateRange || totalRange).distinctCalendarUnits().days
-                                ).toLocaleString(undefined, {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                })}
-                            </div>
-                            ⌀ per day
-                        </div>
-                    </div>
-                </StatisticsPanel>
+                <PagesPanel dateRange={dateRange || totalRange} statistics={statistics} />
             </div>
             <PagesReadChart statistics={statistics} availableIntervals={availableIntervals(dateRange || totalRange)} />
             <ReadingStreak statistics={statistics} />
