@@ -2,16 +2,15 @@ import { Bookshelf } from '../../bookshelf/bookshelf'
 import { Book } from '../../bookshelf/book/book'
 import { MouseEvent, useState } from 'react'
 import { AvailableInterval, PagesReadChart } from './pages-read-chart/pages-read-chart'
-import { Gallery } from '../gallery/gallery'
 import { DistributionChart } from './distribution-chart/distribution-chart'
 import styles from './statistics.module.scss'
 import { useSyncedData } from '../hooks/use-synced-data'
 import { DateRange } from '../../bookshelf/shared/date-range'
 import { DateRangeSelection } from './date-range-selection/date-range-selection'
 import { ReadingStreak } from './reading-streak/reading-streak'
-import { StatisticsPanel } from './statistics-panel/statistics-panel'
 import { BookMetricsPanel } from './book-metrics-panel/book-metrics-panel'
 import { PageReadMetricsPanel } from './page-read-metrics-panel/page-read-metrics-panel'
+import { BookGalleryPanel } from './book-gallery-panel/book-gallery-panel'
 
 export interface Props {
     bookshelf: Bookshelf
@@ -45,9 +44,7 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
             <PagesReadChart statistics={statistics} availableIntervals={availableIntervals(dateRange || totalRange)} />
             <ReadingStreak statistics={statistics} />
             <DistributionChart statistics={statistics} />
-            <StatisticsPanel title="Books">
-                <Gallery books={statistics.books()} onBookClick={onBookClick} />
-            </StatisticsPanel>
+            <BookGalleryPanel statistics={statistics} onBookClick={onBookClick} />
         </div>
     )
 }
