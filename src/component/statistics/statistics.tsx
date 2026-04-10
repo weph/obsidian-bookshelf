@@ -34,11 +34,10 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
 
     return (
         <div className={styles.statistics}>
-            {totalRange && (
-                <div className={styles.controls}>
-                    <DateRangeSelection totalRange={totalRange} value={dateRange} onChange={setDateRange} />
-                </div>
-            )}
+            <div className={styles.container}>
+                <h2>Statistics</h2>
+                <DateRangeSelection totalRange={totalRange} value={dateRange} onChange={setDateRange} />
+            </div>
             <div className={styles.smallContainer}>
                 <h2>Books</h2>
                 <div className={styles.counts}>

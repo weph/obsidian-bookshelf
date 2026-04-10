@@ -50,8 +50,8 @@ export function DateRangeSelection({ totalRange, value, onChange }: Props) {
     const unit = value?.unit || null
 
     return (
-        <div className={styles.dateRangeSelection}>
-            <div>
+        <>
+            <div className={styles.controls}>
                 <Dropdown
                     label="Unit"
                     value={unit}
@@ -61,7 +61,7 @@ export function DateRangeSelection({ totalRange, value, onChange }: Props) {
             </div>
 
             {value && <Selection totalRange={totalRange} value={value} onChange={onChange} />}
-        </div>
+        </>
     )
 }
 
@@ -79,7 +79,7 @@ function Selection({ totalRange, value, onChange }: SelectionProps) {
     const nextDisabled = !(totalRange.contains(next.start) || totalRange.contains(next.end))
 
     return (
-        <div className={styles.month}>
+        <div className={styles.selection}>
             <Icon disabled={prevDisabled} icon={ChevronLeft} onClick={() => onChange(previous)} ariaLabel="Previous" />
             {unit === 'month' && <MonthSelection totalRange={totalRange} value={value} onChange={onChange} />}
             {unit === 'year' && <YearSelection totalRange={totalRange} value={value} onChange={onChange} />}

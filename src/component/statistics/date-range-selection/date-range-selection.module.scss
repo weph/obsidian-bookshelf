@@ -9,3 +9,15 @@
         gap: 1rem;
     }
 }
+
+.selection {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 2rem;
+}
