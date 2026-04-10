@@ -1,7 +1,11 @@
 .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 150px);
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     grid-gap: 15px;
     justify-content: center;
     align-items: center;
+
+    @media (width > 720px) {
+        grid-template-columns: repeat(auto-fit, 150px);
+    }
 }
