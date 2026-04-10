@@ -1,4 +1,24 @@
 export const releaseNotes = {
+    '0.20.0': `
+### Added
+
+- Added ribbon to show reading status (finished, abandoned) in gallery view
+- Added genre column to table view
+- Added support for tags and genres in search ([#49](https://github.com/weph/obsidian-bookshelf/issues/49))
+- Added average pages read per day to the statistics view
+- Added a dropdown in the statistics view to filter books by status
+
+### Changed
+
+- Progress bar color now reflects reading status
+- Replaced "Tags" section in statistics with "Distribution" ([#48](https://github.com/weph/obsidian-bookshelf/issues/48))
+- Gave the statistics view a facelift
+- Improved gallery view on mobile
+
+### Fixed
+
+- Reading streak tooltip doesn't cause horizontal scrolling anymore
+`,
     '0.19.1': `
 ### Fixed
 
