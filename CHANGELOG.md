@@ -21,6 +21,10 @@ For a full diff see [`0.19.1...main`][0.19.1...main].
 - Replaced "Tags" section in statistics with "Distribution" ([#48](https://github.com/weph/obsidian-bookshelf/issues/48))
 - Gave the statistics view a facelift
 
+### Fixed
+
+- Reading streak tooltip doesn't cause horizontal scrolling anymore
+
 ## [`0.19.1`][0.19.1] - 2026-03-16
 
 For a full diff see [`0.19.0...0.19.1`][0.19.0...0.19.1].

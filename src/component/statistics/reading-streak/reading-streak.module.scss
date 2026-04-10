@@ -7,7 +7,6 @@ $item-size: 12px;
     padding-top: 1rem;
 
     .item {
-        position: relative;
         box-sizing: border-box;
         width: $item-size;
         height: $item-size;
@@ -15,26 +14,16 @@ $item-size: 12px;
         background-color: var(--color-base-10);
         border: 1px solid var(--color-base-25);
 
-        &:hover > div {
-            opacity: 1;
+        & > div {
+            display: none;
         }
+    }
+}
 
-        > div {
-            pointer-events: none;
-            position: absolute;
-            transform: translateX(-50%);
-            opacity: 0;
-            min-width: 200px;
-            margin-top: 18px;
-            z-index: 100;
-            color: #fafafa;
-            background-color: var(--background-modifier-message);
-            padding: 0.5rem;
-            border-radius: var(--radius-s);
+.tooltip {
+    text-align: left;
 
-            ul {
-                padding: 0 0 0 1.25rem;
-            }
-        }
+    ul {
+        padding: 0 0 0 1.25rem;
     }
 }

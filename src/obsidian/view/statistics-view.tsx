@@ -1,9 +1,10 @@
-import { ItemView, WorkspaceLeaf } from 'obsidian'
+import { displayTooltip, ItemView, WorkspaceLeaf } from 'obsidian'
 import { Bookshelf } from '../../bookshelf/bookshelf'
 import { createRoot } from 'react-dom/client'
 import { StrictMode } from 'react'
 import { Statistics } from '../../component/statistics/statistics'
 import BookshelfPlugin from '../bookshelf-plugin'
+import { AppContext } from '../../component/app-context'
 
 export const VIEW_TYPE_STATISTICS = 'statistics'
 
@@ -29,10 +30,12 @@ export class StatisticsView extends ItemView {
     protected override async onOpen(): Promise<void> {
         createRoot(this.containerEl.children[1]).render(
             <StrictMode>
-                <Statistics
-                    bookshelf={this.bookshelf}
-                    onBookClick={this.bookshelfPlugin.handleBookClick.bind(this.bookshelfPlugin)}
-                />
+                <AppContext value={{ displayTooltip }}>
+                    <Statistics
+                        bookshelf={this.bookshelf}
+                        onBookClick={this.bookshelfPlugin.handleBookClick.bind(this.bookshelfPlugin)}
+                    />
+                </AppContext>
             </StrictMode>,
         )
     }
