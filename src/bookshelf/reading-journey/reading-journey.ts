@@ -1,8 +1,11 @@
 import { ReadingJourneyItem } from './reading-journey-log'
 import { Book } from '../book/book'
 import { Statistics } from './statistics/statistics'
+import { Books } from '../book/books'
 
 export class ReadingJourney {
+    private _books: Books | null = null
+
     constructor(private _items: Array<ReadingJourneyItem>) {}
 
     public items(): Array<ReadingJourneyItem> {
@@ -25,14 +28,18 @@ export class ReadingJourney {
         return this._items.map(callback)
     }
 
-    public books(): Set<Book> {
-        const result = new Set<Book>()
+    public books(): Books {
+        if (this._books === null) {
+            const result = new Set<Book>()
 
-        for (const item of this._items) {
-            result.add(item.book)
+            for (const item of this._items) {
+                result.add(item.book)
+            }
+
+            this._books = new Books(Array.from(result))
         }
 
-        return result
+        return this._books
     }
 
     public frequencyMap<T>(keys: (book: Book) => undefined | T | Array<T>): Map<T, number> {

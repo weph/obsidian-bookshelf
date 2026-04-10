@@ -2,9 +2,10 @@ import { Book } from '../../bookshelf/book/book'
 import { GalleryCard } from './gallery-card'
 import styles from './gallery.module.scss'
 import { MouseEvent } from 'react'
+import { Books } from '../../bookshelf/book/books'
 
 interface Props {
-    books: Array<Book>
+    books: Books
     onBookClick: (book: Book, event: MouseEvent) => void
 }
 

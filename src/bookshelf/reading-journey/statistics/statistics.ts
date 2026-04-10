@@ -2,6 +2,7 @@ import { AggregatedTimeSeries } from './aggregated-time-series'
 import { Book } from '../../book/book'
 import { ReadingJourney } from '../reading-journey'
 import { ReadingJourneyProgressItem } from '../reading-journey-log'
+import { Books } from '../../book/books'
 
 export enum Interval {
     Day,
@@ -87,8 +88,8 @@ export class Statistics {
             .reduce((acc, item) => acc + (item.action === 'progress' ? item.pages || 0 : 0), 0)
     }
 
-    public books(): Array<Book> {
-        return Array.from(this.readingJourney.books())
+    public books(): Books {
+        return this.readingJourney.books()
     }
 
     public frequencyMap<T>(keys: (book: Book) => undefined | T | Array<T>): Map<T, number> {

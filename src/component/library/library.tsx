@@ -99,7 +99,7 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
         }
 
         if (groupingOption.grouped) {
-            const groupedBooks = groupingOption.grouped(Array.from(filteredBooks))
+            const groupedBooks = groupingOption.grouped(filteredBooks)
             return (
                 <>
                     <BookCount total={books.length} filtered={filteredBooks.length} />
@@ -119,7 +119,7 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
         return (
             <>
                 <BookCount total={books.length} filtered={filteredBooks.length} />
-                <ViewComponent books={Array.from(filteredBooks)} onBookClick={onBookClick} />
+                <ViewComponent books={filteredBooks} onBookClick={onBookClick} />
             </>
         )
     }

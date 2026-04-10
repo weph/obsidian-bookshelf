@@ -868,7 +868,7 @@ describe('Statistics', () => {
 
     describe('Books', () => {
         test('should be empty if there is no reading progress', () => {
-            expect(bookshelf.statistics().books()).toEqual([])
+            expect(bookshelf.statistics().books().length).toBe(0)
         })
 
         test('should return a unique list of books', async () => {

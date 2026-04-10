@@ -13,26 +13,25 @@ import {
     groupedBySeries,
     groupedByTag,
 } from './grouping'
+import { Books } from './books'
 
 test('groupedAlphabetically', () => {
-    const result = groupedAlphabetically([
-        book('Algorithms'),
-        book('Dracula'),
-        book('Dexter'),
-        book('Frankenstein'),
-        book(''),
-    ])
+    const result = groupedAlphabetically(
+        new Books([book('Algorithms'), book('Dracula'), book('Dexter'), book('Frankenstein'), book('')]),
+    )
 
     expect(groupedBooks(result)).toEqual(['A: Algorithms', 'D: Dracula, Dexter', 'F: Frankenstein', 'Other: '])
 })
 
 test('groupedByList', () => {
-    const result = groupedByList([
-        book('The Hunger Games', { lists: ['First in Series', 'Dystopic'] }),
-        book('Darkly Dreaming Dexter', { lists: ['First in Series', 'Crime'] }),
-        book('The Black Echo', { lists: ['First in Series', 'Crime'] }),
-        book('The Grapes of Wrath'),
-    ])
+    const result = groupedByList(
+        new Books([
+            book('The Hunger Games', { lists: ['First in Series', 'Dystopic'] }),
+            book('Darkly Dreaming Dexter', { lists: ['First in Series', 'Crime'] }),
+            book('The Black Echo', { lists: ['First in Series', 'Crime'] }),
+            book('The Grapes of Wrath'),
+        ]),
+    )
 
     expect(groupedBooks(result)).toEqual([
         'Crime: Darkly Dreaming Dexter, The Black Echo',
@@ -43,12 +42,14 @@ test('groupedByList', () => {
 })
 
 test('groupedByTag', () => {
-    const result = groupedByTag([
-        book('The Hunger Games', { tags: ['novel', 'young-adult'] }),
-        book('Darkly Dreaming Dexter', { tags: ['novel', 'crime'] }),
-        book('The Black Echo', { tags: ['novel', 'crime'] }),
-        book('The Grapes of Wrath'),
-    ])
+    const result = groupedByTag(
+        new Books([
+            book('The Hunger Games', { tags: ['novel', 'young-adult'] }),
+            book('Darkly Dreaming Dexter', { tags: ['novel', 'crime'] }),
+            book('The Black Echo', { tags: ['novel', 'crime'] }),
+            book('The Grapes of Wrath'),
+        ]),
+    )
 
     expect(groupedBooks(result)).toEqual([
         'crime: Darkly Dreaming Dexter, The Black Echo',
@@ -59,12 +60,14 @@ test('groupedByTag', () => {
 })
 
 test('groupedByGenre', () => {
-    const result = groupedByGenre([
-        book('The Hunger Games', { genre: ['Fiction', 'Young Adult'] }),
-        book('Darkly Dreaming Dexter', { genre: ['Fiction', 'Crime'] }),
-        book('The Black Echo', { genre: ['Fiction', 'Crime'] }),
-        book('The Grapes of Wrath'),
-    ])
+    const result = groupedByGenre(
+        new Books([
+            book('The Hunger Games', { genre: ['Fiction', 'Young Adult'] }),
+            book('Darkly Dreaming Dexter', { genre: ['Fiction', 'Crime'] }),
+            book('The Black Echo', { genre: ['Fiction', 'Crime'] }),
+            book('The Grapes of Wrath'),
+        ]),
+    )
 
     expect(groupedBooks(result)).toEqual([
         'Crime: Darkly Dreaming Dexter, The Black Echo',
@@ -75,12 +78,14 @@ test('groupedByGenre', () => {
 })
 
 test('groupedBySeries', () => {
-    const result = groupedBySeries([
-        book('The Hunger Games', { series: { name: 'Hunger Games' } }),
-        book('Catching Fire', { series: { name: 'Hunger Games' } }),
-        book('Dracula'),
-        book('Darkly Dreaming Dexter', { series: { name: 'Dexter' } }),
-    ])
+    const result = groupedBySeries(
+        new Books([
+            book('The Hunger Games', { series: { name: 'Hunger Games' } }),
+            book('Catching Fire', { series: { name: 'Hunger Games' } }),
+            book('Dracula'),
+            book('Darkly Dreaming Dexter', { series: { name: 'Dexter' } }),
+        ]),
+    )
 
     expect(groupedBooks(result)).toEqual([
         'Dexter: Darkly Dreaming Dexter',
@@ -90,11 +95,13 @@ test('groupedBySeries', () => {
 })
 
 test('groupedByAuthor', () => {
-    const result = groupedByAuthor([
-        book('Authorless'),
-        book('One Author', { authors: ['Joe Schmoe'] }),
-        book('Two Authors', { authors: ['Joe Schmoe', Link.from({ link: 'Jane Doe', original: '[[Jane Doe]]' })] }),
-    ])
+    const result = groupedByAuthor(
+        new Books([
+            book('Authorless'),
+            book('One Author', { authors: ['Joe Schmoe'] }),
+            book('Two Authors', { authors: ['Joe Schmoe', Link.from({ link: 'Jane Doe', original: '[[Jane Doe]]' })] }),
+        ]),
+    )
 
     expect(groupedBooks(result)).toEqual([
         'Jane Doe: Two Authors',
@@ -104,12 +111,14 @@ test('groupedByAuthor', () => {
 })
 
 test('groupedByPublicationYear', () => {
-    const result = groupedByPublicationYear([
-        book('Book 80/1', { published: new Date(1980, 0, 1) }),
-        book('Book 80/2', { published: new Date(1980, 11, 31) }),
-        book('Book 90/1', { published: new Date(1990, 6, 1) }),
-        book('Book without metadata'),
-    ])
+    const result = groupedByPublicationYear(
+        new Books([
+            book('Book 80/1', { published: new Date(1980, 0, 1) }),
+            book('Book 80/2', { published: new Date(1980, 11, 31) }),
+            book('Book 90/1', { published: new Date(1990, 6, 1) }),
+            book('Book without metadata'),
+        ]),
+    )
 
     expect(groupedBooks(result)).toEqual([
         '1990: Book 90/1',
@@ -119,15 +128,17 @@ test('groupedByPublicationYear', () => {
 })
 
 test('groupedByRating', () => {
-    const result = groupedByRating([
-        book('Epic Book 1', { rating: 5 }),
-        book('Epic Book 2', { rating: 5 }),
-        book('So Close', { rating: 4.75 }),
-        book('Average Book', { rating: 3 }),
-        book('Meh Book', { rating: 1.5 }),
-        book('Never Again', { rating: 0 }),
-        book('Unread book'),
-    ])
+    const result = groupedByRating(
+        new Books([
+            book('Epic Book 1', { rating: 5 }),
+            book('Epic Book 2', { rating: 5 }),
+            book('So Close', { rating: 4.75 }),
+            book('Average Book', { rating: 3 }),
+            book('Meh Book', { rating: 1.5 }),
+            book('Never Again', { rating: 0 }),
+            book('Unread book'),
+        ]),
+    )
 
     expect(groupedBooks(result)).toEqual([
         '5 stars: Epic Book 1, Epic Book 2',

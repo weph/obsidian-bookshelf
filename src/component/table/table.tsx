@@ -4,9 +4,10 @@ import styles from './table.module.scss'
 import { TagList } from '../tag-list/tag-list'
 import { MouseEvent } from 'react'
 import { BookProgressBar } from '../progress-bar/book-progress-bar'
+import { Books } from '../../bookshelf/book/books'
 
 interface Props {
-    books: Array<Book>
+    books: Books
     onBookClick: (book: Book, event: MouseEvent) => void
 }
 

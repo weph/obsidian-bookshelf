@@ -1,11 +1,12 @@
 import { Book } from './book'
+import { Books } from './books'
 
 export interface GroupedBooks {
-    groups: Map<string | null, Array<Book>>
+    groups: Map<string | null, Books>
     nullLabel: string
 }
 
-export function groupedAlphabetically(books: Array<Book>): GroupedBooks {
+export function groupedAlphabetically(books: Books): GroupedBooks {
     function startingLetter(book: Book): string | null {
         const title = book.metadata.title
         if (title.length === 0) {
@@ -21,14 +22,14 @@ export function groupedAlphabetically(books: Array<Book>): GroupedBooks {
     }
 }
 
-export function groupedByList(books: Array<Book>): GroupedBooks {
+export function groupedByList(books: Books): GroupedBooks {
     return {
         groups: grouped(books, (b) => (b.metadata.lists.length > 0 ? b.metadata.lists : [null]), 'asc'),
         nullLabel: 'No list assigned',
     }
 }
 
-export function groupedByGenre(books: Array<Book>): GroupedBooks {
+export function groupedByGenre(books: Books): GroupedBooks {
     return {
         groups: grouped(
             books,
@@ -43,7 +44,7 @@ export function groupedByGenre(books: Array<Book>): GroupedBooks {
     }
 }
 
-export function groupedByTag(books: Array<Book>): GroupedBooks {
+export function groupedByTag(books: Books): GroupedBooks {
     return {
         groups: grouped(
             books,
@@ -58,7 +59,7 @@ export function groupedByTag(books: Array<Book>): GroupedBooks {
     }
 }
 
-export function groupedBySeries(books: Array<Book>): GroupedBooks {
+export function groupedBySeries(books: Books): GroupedBooks {
     function seriesName(book: Book): string | null {
         const series = book.metadata.series
         if (series === undefined) {
@@ -74,7 +75,7 @@ export function groupedBySeries(books: Array<Book>): GroupedBooks {
     }
 }
 
-export function groupedByAuthor(books: Array<Book>): GroupedBooks {
+export function groupedByAuthor(books: Books): GroupedBooks {
     function authors(book: Book): Array<string | null> {
         const authors = book.metadata.authors
 
@@ -91,14 +92,14 @@ export function groupedByAuthor(books: Array<Book>): GroupedBooks {
     }
 }
 
-export function groupedByPublicationYear(books: Array<Book>): GroupedBooks {
+export function groupedByPublicationYear(books: Books): GroupedBooks {
     return {
         groups: grouped(books, (b) => [b.metadata.published?.getFullYear().toString() || null], 'desc'),
         nullLabel: 'Publication date unknown',
     }
 }
 
-export function groupedByRating(books: Array<Book>): GroupedBooks {
+export function groupedByRating(books: Books): GroupedBooks {
     function rating(book: Book): string | null {
         const rating = book.metadata.rating
         if (rating === undefined) {
@@ -117,10 +118,10 @@ export function groupedByRating(books: Array<Book>): GroupedBooks {
 }
 
 function grouped(
-    books: Array<Book>,
+    books: Books,
     groups: (book: Book) => Array<string | null>,
     order: 'asc' | 'desc',
-): Map<string | null, Array<Book>> {
+): Map<string | null, Books> {
     const result = new Map<string | null, Array<Book>>()
 
     for (const book of books) {
@@ -134,19 +135,21 @@ function grouped(
     }
 
     return new Map(
-        [...result].sort((a, b) => {
-            const aTitle = a[0]
-            const bTitle = b[0]
+        [...result]
+            .map((item): [string | null, Books] => [item[0], new Books(item[1])])
+            .sort((a, b) => {
+                const aTitle = a[0]
+                const bTitle = b[0]
 
-            if (aTitle === null) {
-                return 1
-            }
+                if (aTitle === null) {
+                    return 1
+                }
 
-            if (bTitle === null) {
-                return -1
-            }
+                if (bTitle === null) {
+                    return -1
+                }
 
-            return order === 'asc' ? aTitle.localeCompare(bTitle) : bTitle.localeCompare(aTitle)
-        }),
+                return order === 'asc' ? aTitle.localeCompare(bTitle) : bTitle.localeCompare(aTitle)
+            }),
     )
 }
