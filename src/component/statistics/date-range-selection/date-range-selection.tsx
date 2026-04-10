@@ -52,7 +52,7 @@ export function DateRangeSelection({ totalRange, value, onChange }: Props) {
 
     return (
         <StatisticsPanel
-            title="Statistics"
+            title="Date range"
             controls={
                 <Dropdown
                     label="Unit"
