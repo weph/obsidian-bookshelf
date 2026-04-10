@@ -9,6 +9,7 @@ import { useSyncedData } from '../hooks/use-synced-data'
 import { DateRange } from '../../bookshelf/shared/date-range'
 import { DateRangeSelection } from './date-range-selection/date-range-selection'
 import { ReadingStreak } from './reading-streak/reading-streak'
+import { StatisticsPanel } from './statistics-panel/statistics-panel'
 
 export interface Props {
     bookshelf: Bookshelf
@@ -34,55 +35,41 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
 
     return (
         <div className={styles.statistics}>
-            <div className={styles.container}>
-                <h2>Statistics</h2>
-                <DateRangeSelection totalRange={totalRange} value={dateRange} onChange={setDateRange} />
-            </div>
-            <div className={styles.smallContainer}>
-                <h2>Books</h2>
-                <div className={styles.counts}>
-                    <div>
-                        <div className={styles.number}>{actions.started}</div>
-                        started
+            <DateRangeSelection totalRange={totalRange} value={dateRange} onChange={setDateRange} />
+            <div className={styles.halfWidth}>
+                <StatisticsPanel title="Books">
+                    <div className={styles.counts}>
+                        <div>
+                            <div className={styles.number}>{actions.started}</div>
+                            started
+                        </div>
+                        <div>
+                            <div className={styles.number}>{actions.finished}</div>
+                            finished
+                        </div>
+                        <div>
+                            <div className={styles.number}>{actions.abandoned}</div>
+                            abandoned
+                        </div>
                     </div>
-                    <div>
-                        <div className={styles.number}>{actions.finished}</div>
-                        finished
+                </StatisticsPanel>
+            </div>
+            <div className={styles.halfWidth}>
+                <StatisticsPanel title="Pages">
+                    <div className={styles.counts}>
+                        <div>
+                            <div className={styles.number}>{statistics.totalNumberOfPages().toLocaleString()}</div>
+                            total
+                        </div>
                     </div>
-                    <div>
-                        <div className={styles.number}>{actions.abandoned}</div>
-                        abandoned
-                    </div>
-                </div>
+                </StatisticsPanel>
             </div>
-            <div className={styles.smallContainer}>
-                <h2>Pages</h2>
-                <div className={styles.counts}>
-                    <div>
-                        <div className={styles.number}>{statistics.totalNumberOfPages().toLocaleString()}</div>
-                        total
-                    </div>
-                </div>
-            </div>
-            <div className={styles.container}>
-                <h2>Pages read</h2>
-                <PagesReadChart
-                    statistics={statistics}
-                    availableIntervals={availableIntervals(dateRange || totalRange)}
-                />
-            </div>
-            <div className={styles.container}>
-                <h2>Reading streak</h2>
-                <ReadingStreak statistics={statistics} />
-            </div>
-            <div className={styles.container}>
-                <h2>Distribution</h2>
-                <DistributionChart statistics={statistics} />
-            </div>
-            <div className={styles.container}>
-                <h2>Books</h2>
+            <PagesReadChart statistics={statistics} availableIntervals={availableIntervals(dateRange || totalRange)} />
+            <ReadingStreak statistics={statistics} />
+            <DistributionChart statistics={statistics} />
+            <StatisticsPanel title="Books">
                 <Gallery books={statistics.books()} onBookClick={onBookClick} />
-            </div>
+            </StatisticsPanel>
         </div>
     )
 }

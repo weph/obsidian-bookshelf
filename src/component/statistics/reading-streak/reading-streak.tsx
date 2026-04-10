@@ -1,6 +1,7 @@
 import styles from './reading-streak.module.scss'
 import { Interval, PagesRead, Statistics } from '../../../bookshelf/reading-journey/statistics/statistics'
 import { DateTime } from 'luxon'
+import { StatisticsPanel } from '../statistics-panel/statistics-panel'
 
 interface Props {
     statistics: Statistics
@@ -11,11 +12,13 @@ export function ReadingStreak({ statistics }: Props) {
     const max = Math.max(...values.map((v) => v[1].total))
 
     return (
-        <div className={styles.readingStreak}>
-            {values.map((v, i) => (
-                <ReadingStreakItem key={i} date={v[0]} v={v[1]} max={max} />
-            ))}
-        </div>
+        <StatisticsPanel title="Reading streak">
+            <div className={styles.readingStreak}>
+                {values.map((v, i) => (
+                    <ReadingStreakItem key={i} date={v[0]} v={v[1]} max={max} />
+                ))}
+            </div>
+        </StatisticsPanel>
     )
 }
 

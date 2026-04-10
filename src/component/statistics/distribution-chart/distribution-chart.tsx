@@ -3,7 +3,7 @@ import { TagCloud } from '../../tag-cloud/tag-cloud'
 import { Dropdown, DropdownOption } from '../../dropdown/dropdown'
 import { useState } from 'react'
 import { Book } from '../../../bookshelf/book/book'
-import styles from './distribution-chart.module.scss'
+import { StatisticsPanel } from '../statistics-panel/statistics-panel'
 
 interface Props {
     statistics: Statistics
@@ -41,16 +41,18 @@ export function DistributionChart({ statistics }: Props) {
     const tags = Object.fromEntries(statistics.frequencyMap(dimension.keys).entries())
 
     return (
-        <>
-            <div className={styles.controls}>
+        <StatisticsPanel
+            title="Distribution"
+            controls={
                 <Dropdown
                     label="Dimension"
                     value={dimension.value}
                     options={dimensionOptions}
                     onChange={(o) => setDimension(o)}
                 />
-            </div>
+            }
+        >
             <TagCloud tags={tags} />
-        </>
+        </StatisticsPanel>
     )
 }

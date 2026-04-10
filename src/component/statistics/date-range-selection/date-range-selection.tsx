@@ -5,6 +5,7 @@ import { DateTime } from 'luxon'
 import styles from './date-range-selection.module.scss'
 import { Icon } from '../../icon/icon'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { StatisticsPanel } from '../statistics-panel/statistics-panel'
 
 interface Props {
     totalRange: DateRange
@@ -50,18 +51,19 @@ export function DateRangeSelection({ totalRange, value, onChange }: Props) {
     const unit = value?.unit || null
 
     return (
-        <>
-            <div className={styles.controls}>
+        <StatisticsPanel
+            title="Statistics"
+            controls={
                 <Dropdown
                     label="Unit"
                     value={unit}
                     options={unitOptions}
                     onChange={(o) => onChange(rangeForUnit(o.value, value || totalRange, totalRange))}
                 />
-            </div>
-
+            }
+        >
             {value && <Selection totalRange={totalRange} value={value} onChange={onChange} />}
-        </>
+        </StatisticsPanel>
     )
 }
 
