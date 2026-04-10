@@ -1,7 +1,7 @@
 import { Statistics } from '../../../bookshelf/reading-journey/statistics/statistics'
 import { KeyMetricsPanel } from '../key-metrics-panel/key-metrics-panel'
 
-export function BooksPanel({ statistics }: { statistics: Statistics }) {
+export function BookMetricsPanel({ statistics }: { statistics: Statistics }) {
     const actions = statistics.actions()
 
     return (

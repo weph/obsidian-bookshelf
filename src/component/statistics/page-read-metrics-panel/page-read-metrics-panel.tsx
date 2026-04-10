@@ -2,7 +2,7 @@ import { Statistics } from '../../../bookshelf/reading-journey/statistics/statis
 import { DateRange } from '../../../bookshelf/shared/date-range'
 import { KeyMetricsPanel } from '../key-metrics-panel/key-metrics-panel'
 
-export function PagesPanel({ dateRange, statistics }: { dateRange: DateRange; statistics: Statistics }) {
+export function PageReadMetricsPanel({ dateRange, statistics }: { dateRange: DateRange; statistics: Statistics }) {
     return (
         <KeyMetricsPanel
             title="Pages"

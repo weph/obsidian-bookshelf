@@ -10,8 +10,8 @@ import { DateRange } from '../../bookshelf/shared/date-range'
 import { DateRangeSelection } from './date-range-selection/date-range-selection'
 import { ReadingStreak } from './reading-streak/reading-streak'
 import { StatisticsPanel } from './statistics-panel/statistics-panel'
-import { BooksPanel } from './books-panel/books-panel'
-import { PagesPanel } from './pages-panel/pages-panel'
+import { BookMetricsPanel } from './book-metrics-panel/book-metrics-panel'
+import { PageReadMetricsPanel } from './page-read-metrics-panel/page-read-metrics-panel'
 
 export interface Props {
     bookshelf: Bookshelf
@@ -37,10 +37,10 @@ export function Statistics({ bookshelf, onBookClick }: Props) {
         <div className={styles.statistics}>
             <DateRangeSelection totalRange={totalRange} value={dateRange} onChange={setDateRange} />
             <div className={styles.halfWidth}>
-                <BooksPanel statistics={statistics} />
+                <BookMetricsPanel statistics={statistics} />
             </div>
             <div className={styles.halfWidth}>
-                <PagesPanel dateRange={dateRange || totalRange} statistics={statistics} />
+                <PageReadMetricsPanel dateRange={dateRange || totalRange} statistics={statistics} />
             </div>
             <PagesReadChart statistics={statistics} availableIntervals={availableIntervals(dateRange || totalRange)} />
             <ReadingStreak statistics={statistics} />
