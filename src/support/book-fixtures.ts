@@ -1,5 +1,6 @@
 import { BookBuilder } from './book-builder'
 import { Link } from '../bookshelf/book/link'
+import { Page } from '../bookshelf/reading-journey/position/page'
 
 export const algorithms = new BookBuilder()
     .with('title', 'Algorithms')
@@ -102,7 +103,7 @@ export const tddByExample = new BookBuilder()
     .withReadingProgress(new Date(2025, 0, 4), 101, 120)
     .withReadingProgress(new Date(2025, 0, 5), 121, 190)
     .withReadingProgress(new Date(2025, 0, 6), 191, 220)
-    .withProgress(100)
+    .withLastPosition(new Page(100))
     .withStatus('finished')
     .build()
 
@@ -113,7 +114,7 @@ export const mythicalManMonth = new BookBuilder()
     .with('published', new Date(1975, 0, 1))
     .with('lists', ['Classic'])
     .withStatus('abandoned')
-    .withProgress(20)
+    .withLastPosition(new Page(20))
     .build()
 
 export const pragmaticProgrammer = new BookBuilder()

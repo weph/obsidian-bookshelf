@@ -24,6 +24,15 @@ export class Page implements Position {
         return this.value
     }
 
+    asPercentage(book: Book): number | null {
+        const totalPages = book.metadata.pages
+        if (totalPages === undefined) {
+            return null
+        }
+
+        return Math.min(Math.round((this.value / totalPages) * 100), 100)
+    }
+
     public toString(): string {
         return this.value.toString()
     }

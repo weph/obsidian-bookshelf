@@ -24,6 +24,10 @@ export class RomanNumeral implements Position {
         return this.value
     }
 
+    asPercentage(): number | null {
+        return null
+    }
+
     public toString(): string {
         return romans.romanize(this.value).toLowerCase()
     }

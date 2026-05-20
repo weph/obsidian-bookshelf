@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.20.0...main`][0.20.0...main].
 
+### Changed
+
+- Hide progress bar after book has been finished
+- Show progress bar with current position instead of percentage if total pages/duration is unknown
+
 ## [`0.20.0`][0.20.0] - 2026-04-10
 
 For a full diff see [`0.19.1...0.20.0`][0.19.1...0.20.0].

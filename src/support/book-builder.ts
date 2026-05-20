@@ -4,7 +4,7 @@ import { ReadingJourney } from '../bookshelf/reading-journey/reading-journey'
 import { Note } from '../bookshelf/note/note'
 import { FakeNote } from './fake-note'
 import { StaticMetadata } from '../bookshelf/note/metadata'
-import { position } from '../bookshelf/reading-journey/position/position'
+import { Position, position } from '../bookshelf/reading-journey/position/position'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type OmitUnion<T, K extends keyof any> = T extends any ? Omit<T, K> : never
@@ -15,7 +15,7 @@ export class BookBuilder {
         private readonly metadata: Partial<BookMetadata> = {},
         private readonly readingJourney: Array<OmitUnion<ReadingJourneyItem, 'book'>> = [],
         private readonly status: ReadingStatus = 'unread',
-        private readonly progress: number | null = null,
+        private readonly lastPosition: Position | null = null,
     ) {}
 
     public with<K extends keyof BookMetadata>(property: K, value: BookMetadata[K]): BookBuilder {
@@ -24,16 +24,16 @@ export class BookBuilder {
             { ...this.metadata, [property]: value },
             this.readingJourney,
             this.status,
-            this.progress,
+            this.lastPosition,
         )
     }
 
     public withStatus(status: ReadingStatus): BookBuilder {
-        return new BookBuilder(this.note, this.metadata, this.readingJourney, status, this.progress)
+        return new BookBuilder(this.note, this.metadata, this.readingJourney, status, this.lastPosition)
     }
 
-    public withProgress(progress: number | null): BookBuilder {
-        return new BookBuilder(this.note, this.metadata, this.readingJourney, this.status, progress)
+    public withLastPosition(position: Position | null): BookBuilder {
+        return new BookBuilder(this.note, this.metadata, this.readingJourney, this.status, position)
     }
 
     public withReadingProgress(date: Date, startPage: number, endPage: number): BookBuilder {
@@ -54,7 +54,7 @@ export class BookBuilder {
                 },
             ],
             this.status,
-            this.progress,
+            this.lastPosition,
         )
     }
 
@@ -67,7 +67,7 @@ export class BookBuilder {
             },
             readingJourney: new ReadingJourney([]),
             status: this.status,
-            progress: this.progress,
+            lastPosition: this.lastPosition,
         }
 
         book.readingJourney = new ReadingJourney(this.readingJourney.map((rp) => ({ ...rp, book })))

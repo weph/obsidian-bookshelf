@@ -36,6 +36,10 @@ export class Percentage implements Position {
         return Math.round((pages / 100) * this.value)
     }
 
+    asPercentage(): number | null {
+        return this.value
+    }
+
     public toString(): string {
         return `${this.value}%`
     }

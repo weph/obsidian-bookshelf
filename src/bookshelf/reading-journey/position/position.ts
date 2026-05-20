@@ -38,6 +38,13 @@ export interface Position {
     pageInBook(book: Book): number | null
 
     /**
+     * Percentage equivalent of this position in the given book.
+     *
+     * @returns The percentage (0-100) or `null` if conversion isn't possible
+     */
+    asPercentage(book: Book): number | null
+
+    /**
      * Human-readable representation (e.g., "25%", "xv", "1:15").
      */
     toString(): string

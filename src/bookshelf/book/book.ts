@@ -2,6 +2,7 @@ import { ReadingJourney } from '../reading-journey/reading-journey'
 import { Note } from '../note/note'
 import { Link } from './link'
 import { Playtime } from '../shared/playtime'
+import { Position } from '../reading-journey/position/position'
 
 export type ReadingStatus = 'unread' | 'reading' | 'abandoned' | 'finished'
 
@@ -31,5 +32,5 @@ export interface Book {
     metadata: BookMetadata
     readingJourney: ReadingJourney
     status: ReadingStatus
-    progress: number | null
+    lastPosition: Position | null
 }

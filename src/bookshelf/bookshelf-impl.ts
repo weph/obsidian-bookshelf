@@ -10,6 +10,7 @@ import { Bookshelf } from './bookshelf'
 import { Subscribers } from './subscriber/subscribers'
 import { Books } from './book/books'
 import { DateRange } from './shared/date-range'
+import { Position } from './reading-journey/position/position'
 
 class BookshelfBook implements Book {
     constructor(
@@ -22,22 +23,11 @@ class BookshelfBook implements Book {
         return this.bookshelf.readingJourney().filter((rp) => rp.book === this)
     }
 
-    get progress(): number | null {
-        if (this.readingJourney.lastItem()?.action === 'finished') {
-            return 100
-        }
-
-        const lastProgress = this.readingJourney
-            .filter((i) => i.action === 'progress')
-            .lastItem() as ReadingJourneyProgressItem
-
-        const currentPage = lastProgress?.end.pageInBook(this)
-        const totalPages = this.metadata.pages
-        if (totalPages === undefined || currentPage === undefined || currentPage === null) {
-            return null
-        }
-
-        return Math.min(Math.round((currentPage / totalPages) * 100), 100)
+    get lastPosition(): Position | null {
+        return (
+            (this.readingJourney.filter((i) => i.action === 'progress').lastItem() as ReadingJourneyProgressItem | null)
+                ?.end || null
+        )
     }
 
     get status(): ReadingStatus {

@@ -36,6 +36,17 @@ export class Time implements Position {
         return Math.max(1, Math.floor((book.metadata.pages * current) / total))
     }
 
+    asPercentage(book: Book): number | null {
+        if (book.metadata.duration === undefined) {
+            return null
+        }
+
+        const current = this.value.inMinutes
+        const total = book.metadata.duration.inMinutes
+
+        return Math.min(Math.round((current / total) * 100), 100)
+    }
+
     public toString(): string {
         return this.value.toString()
     }

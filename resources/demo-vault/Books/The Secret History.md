@@ -6,7 +6,6 @@ published: 1992-09-16
 tags:
   - mystery
   - thriller
-pages: 559
 ---
 
 ## Reading Journey
