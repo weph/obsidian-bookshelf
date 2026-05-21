@@ -203,7 +203,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         const heading = new Setting(containerEl).setName('Book note patterns').setHeading()
 
-        const settingsContainer = containerEl.createEl('div')
+        const settingsContainer = containerEl.createDiv()
 
         heading.addToggle((toggle) => {
             toggle.setValue(showSettings)
@@ -322,7 +322,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         const heading = new Setting(containerEl).setName('Daily note patterns').setHeading()
 
-        const settingsContainer = containerEl.createEl('div')
+        const settingsContainer = containerEl.createDiv()
 
         heading.addToggle((toggle) => {
             if (!dailyNotesEnabled) {
