@@ -38,7 +38,7 @@ function ReadingStreakItem({ date, v, max }: { date: Date; v: PagesRead; max: nu
             return
         }
 
-        const frag = document.createDocumentFragment()
+        const frag = activeDocument.createDocumentFragment()
         frag.appendChild(elem.childNodes[0].cloneNode(true))
 
         app.displayTooltip(elem, frag)

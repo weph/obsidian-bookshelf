@@ -226,7 +226,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
     }
 
     private addBookNoteSettings(containerEl: HTMLElement): void {
-        const fragment = document.createDocumentFragment()
+        const fragment = activeDocument.createDocumentFragment()
 
         let root: Root
         flushSync(() => {
