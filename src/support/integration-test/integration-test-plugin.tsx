@@ -153,7 +153,7 @@ export default class IntegrationTestPlugin extends Plugin {
             return
         }
 
-        await this.app.vault.delete(file)
+        await this.app.fileManager.trashFile(file)
     }
 
     private async waitForUpdate(name: string): Promise<void> {
