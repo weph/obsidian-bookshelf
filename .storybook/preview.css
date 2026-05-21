@@ -110,7 +110,7 @@ body {
     --divider-vertical-height: calc(100% - var(--header-height));
     /* Dragging */
     --drag-ghost-background: rgba(0, 0, 0, 0.85);
-    --drag-ghost-text-color: #fff;
+    --drag-ghost-text-color: #ffffff;
     /* Dropdowns */
     --dropdown-background: var(--interactive-normal);
     --dropdown-background-blend-mode: hard-light;
