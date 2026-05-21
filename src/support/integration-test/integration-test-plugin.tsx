@@ -170,7 +170,7 @@ export default class IntegrationTestPlugin extends Plugin {
                 throw new Error(`File has not been updated in ${iterations * timeout}ms`)
             }
 
-            await new Promise((fn) => setTimeout(fn, timeout))
+            await new Promise((fn) => activeWindow.setTimeout(fn, timeout))
         }
     }
 
