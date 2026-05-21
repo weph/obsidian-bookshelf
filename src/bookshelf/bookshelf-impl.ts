@@ -127,7 +127,7 @@ export class BookshelfImpl implements Bookshelf {
         return dateRange === undefined
             ? this.readingJourney().statistics()
             : this.readingJourney()
-                  .filter((i) => dateRange!.contains(i.date))
+                  .filter((i) => dateRange.contains(i.date))
                   .statistics()
     }
 

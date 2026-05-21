@@ -70,7 +70,7 @@ export function ReadingJourneyForm({ book, add }: Props) {
             case 'started':
             case 'abandoned':
             case 'finished':
-                await add({ action: action, bookNote: book.note!, date: dateObject })
+                await add({ action: action, bookNote: book.note, date: dateObject })
                 break
             case 'progress+finish':
                 if (lastPosition === null) {
@@ -79,12 +79,12 @@ export function ReadingJourneyForm({ book, add }: Props) {
 
                 await add({
                     action: 'progress',
-                    bookNote: book.note!,
+                    bookNote: book.note,
                     date: dateObject,
                     start: null,
                     end: lastPosition,
                 })
-                await add({ action: 'finished', bookNote: book.note!, date: dateObject })
+                await add({ action: 'finished', bookNote: book.note, date: dateObject })
                 break
             case 'progress':
                 if (end.positionValue === null) {
@@ -93,7 +93,7 @@ export function ReadingJourneyForm({ book, add }: Props) {
 
                 await add({
                     action: action,
-                    bookNote: book.note!,
+                    bookNote: book.note,
                     date: dateObject,
                     start: start.positionValue,
                     end: end.positionValue,
