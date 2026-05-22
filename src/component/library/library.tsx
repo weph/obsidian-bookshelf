@@ -81,7 +81,7 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
     try {
         filteredBooks = books.matching(expressionFactory.fromQuery(settings)).sort(sortOption?.compareFn)
     } catch (e) {
-        console.error(`Error filtering books: ${e}`)
+        console.error(`Error filtering books`, e)
     }
 
     const content = () => {

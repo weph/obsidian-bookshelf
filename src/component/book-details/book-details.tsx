@@ -27,12 +27,16 @@ export function BookDetails({ book, openLink, addProgress }: Props) {
             case 'finished':
             case 'abandoned':
                 return item.action
-            case 'progress':
+            case 'progress': {
+                const start = item.start?.toString() || ''
+                const end = item.end.toString()
+
                 if (item.pages !== null) {
-                    return `${item.start}-${item.end} (${item.pages} pages)`
+                    return `${start}-${end} (${item.pages} pages)`
                 }
 
-                return `${item.start}-${item.end}`
+                return `${start}-${end}`
+            }
         }
     }
 
@@ -97,7 +101,7 @@ function Series({ book }: { book: Book }) {
 
     return (
         <div className={styles.series}>
-            {series.position ? `#${series.position} in ${series.name}` : `Part of ${series.name}`}
+            {series.position ? `#${series.position} in ${series.name.toString()}` : `Part of ${series.name.toString()}`}
         </div>
     )
 }

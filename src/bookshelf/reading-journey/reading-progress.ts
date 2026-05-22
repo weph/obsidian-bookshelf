@@ -44,9 +44,9 @@ export class ReadingProgress implements ReadingJourneyProgressItem {
         const pages = this.pages
 
         if (pages !== null) {
-            return `${date}: ${this.book.metadata.title}: ${this.start}-${this.end} (${pages} page${pages > 1 ? 's' : ''})`
+            return `${date}: ${this.book.metadata.title}: ${this.start.toString()}-${this.end.toString()} (${pages} page${pages > 1 ? 's' : ''})`
         }
 
-        return `${date}: ${this.book.metadata.title}: ${this.start}-${this.end}`
+        return `${date}: ${this.book.metadata.title}: ${this.start.toString()}-${this.end.toString()}`
     }
 }
