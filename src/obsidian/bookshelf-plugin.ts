@@ -1,4 +1,4 @@
-import { App, Plugin, PluginManifest, TAbstractFile, TFile } from 'obsidian'
+import { App, Platform, Plugin, PluginManifest, TAbstractFile, TFile } from 'obsidian'
 import { Bookshelf } from '../bookshelf/bookshelf'
 import { LibraryView, VIEW_TYPE_LIBRARY } from './view/library-view'
 import { assign, debounce } from 'radashi'
@@ -102,7 +102,7 @@ export default class BookshelfPlugin extends Plugin {
     }
 
     public async handleBookClick(book: Book, event: MouseEvent): Promise<void> {
-        const isMac = window.navigator.userAgent.toLowerCase().includes('mac')
+        const isMac = Platform.isMacOS
         const modifierPressed = (isMac && event.metaKey) || (!isMac && event.ctrlKey)
 
         if (modifierPressed) {
