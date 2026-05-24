@@ -4,7 +4,7 @@ import { createRoot, Root } from 'react-dom/client'
 import { StrictMode } from 'react'
 import { DateFormatDescription } from '../../component/date-format-description/date-format-description'
 import { flushSync } from 'react-dom'
-import { BOOK_NOTE, DAILY_NOTE, NoteType } from './bookshelf-plugin-settings'
+import { BOOK_NOTE, BookshelfPluginSettings, DAILY_NOTE, NoteType } from './bookshelf-plugin-settings'
 
 export class BookshelfSettingsTab extends PluginSettingTab {
     plugin: BookshelfPlugin
@@ -63,133 +63,39 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl).setName('Book note properties').setHeading()
 
-        new Setting(containerEl)
-            .setName('Cover')
-            .setDesc("Name of the property that holds the book's cover link, filename or URL")
+        this.addBookPropertySetting('cover', 'Cover', 'Property name for the cover (link, filename, or URL)')
+        this.addBookPropertySetting('author', 'Author', 'Property name for the author(s)')
+        this.addBookPropertySetting('published', 'Published', 'Property name for the publishing date')
+        this.addBookPropertySetting('pages', 'Pages', 'Property name for the page count')
+        this.addBookPropertySetting('rating', 'Rating', 'Property name for the rating')
+        this.addBookPropertySetting('lists', 'Lists', 'Property name for the reading lists the book belongs to')
+        this.addBookPropertySetting('comment', 'Comment', 'Property name for your personal comment')
+        this.addBookPropertySetting(
+            'links',
+            'Links',
+            'Property name for external or internal links related to the book',
+        )
+        this.addBookPropertySetting('series', 'Series', 'Property name for the series name')
+        this.addBookPropertySetting('genre', 'Genre', 'Property name for the genre(s)')
+        this.addBookPropertySetting(
+            'positionInSeries',
+            'Position in series',
+            "Property name for the book's position within its series",
+        )
+        this.addBookPropertySetting('duration', 'Audiobook duration', 'Property name for the total audiobook duration')
+    }
+
+    private addBookPropertySetting(
+        property: keyof BookshelfPluginSettings['bookProperties'],
+        name: string,
+        description: string,
+    ) {
+        new Setting(this.containerEl)
+            .setName(name)
+            .setDesc(description)
             .addText((text) =>
-                text.setValue(this.plugin.settings.bookProperties.cover).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.cover = value.trim()
-
-                    await this.plugin.saveSettings()
-                }),
-            )
-
-        new Setting(containerEl)
-            .setName('Author')
-            .setDesc("Name of the property that holds the author's name(s)")
-            .addText((text) =>
-                text.setValue(this.plugin.settings.bookProperties.author).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.author = value.trim()
-
-                    await this.plugin.saveSettings()
-                }),
-            )
-
-        new Setting(containerEl)
-            .setName('Published')
-            .setDesc("Name of the property that holds the book's publishing date")
-            .addText((text) =>
-                text.setValue(this.plugin.settings.bookProperties.published).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.published = value.trim()
-
-                    await this.plugin.saveSettings()
-                }),
-            )
-
-        new Setting(containerEl)
-            .setName('Pages')
-            .setDesc("Name of the property that holds the book's number of pages")
-            .addText((text) =>
-                text.setValue(this.plugin.settings.bookProperties.pages).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.pages = value.trim()
-
-                    await this.plugin.saveSettings()
-                }),
-            )
-
-        new Setting(containerEl)
-            .setName('Rating')
-            .setDesc("Name of the property that holds the book's rating")
-            .addText((text) =>
-                text.setValue(this.plugin.settings.bookProperties.rating).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.rating = value.trim()
-
-                    await this.plugin.saveSettings()
-                }),
-            )
-
-        new Setting(containerEl)
-            .setName('Lists')
-            .setDesc('Name of the property that contains the lists a book is on')
-            .addText((text) =>
-                text.setValue(this.plugin.settings.bookProperties.lists).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.lists = value.trim()
-
-                    await this.plugin.saveSettings()
-                }),
-            )
-
-        new Setting(containerEl)
-            .setName('Comment')
-            .setDesc('Name of the property that contains your personal comment about the book')
-            .addText((text) =>
-                text.setValue(this.plugin.settings.bookProperties.comment).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.comment = value.trim()
-
-                    await this.plugin.saveSettings()
-                }),
-            )
-
-        new Setting(containerEl)
-            .setName('Links')
-            .setDesc('Name of the property that holds links to external websites or internal notes related to the book')
-            .addText((text) =>
-                text.setValue(this.plugin.settings.bookProperties.links).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.links = value.trim()
-
-                    await this.plugin.saveSettings()
-                }),
-            )
-
-        new Setting(containerEl)
-            .setName('Series')
-            .setDesc("Name of the property that contains the book's series name")
-            .addText((text) =>
-                text.setValue(this.plugin.settings.bookProperties.series).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.series = value.trim()
-
-                    await this.plugin.saveSettings()
-                }),
-            )
-
-        new Setting(containerEl)
-            .setName('Genre')
-            .setDesc("Name of the property that contains the book's genre(s)")
-            .addText((text) =>
-                text.setValue(this.plugin.settings.bookProperties.genre).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.genre = value.trim()
-
-                    await this.plugin.saveSettings()
-                }),
-            )
-
-        new Setting(containerEl)
-            .setName('Position in series')
-            .setDesc("Name of the property that contains the book's position within its series")
-            .addText((text) =>
-                text.setValue(this.plugin.settings.bookProperties.positionInSeries).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.positionInSeries = value.trim()
-
-                    await this.plugin.saveSettings()
-                }),
-            )
-
-        new Setting(containerEl)
-            .setName('Audiobook duration')
-            .setDesc('Name of the property that contains the total playtime of an audiobook')
-            .addText((text) =>
-                text.setValue(this.plugin.settings.bookProperties.duration).onChange(async (value) => {
-                    this.plugin.settings.bookProperties.duration = value.trim()
+                text.setValue(this.plugin.settings.bookProperties[property]).onChange(async (value) => {
+                    this.plugin.settings.bookProperties[property] = value.trim()
 
                     await this.plugin.saveSettings()
                 }),
