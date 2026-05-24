@@ -17,6 +17,7 @@ const bookshelf = BookshelfFactory.fromConfiguration({
     settings: {
         booksFolder: 'Books',
         bookProperties: {
+            title: 'title',
             cover: 'cover',
             author: 'author',
             published: 'published',

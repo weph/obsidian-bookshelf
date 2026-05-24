@@ -8,6 +8,7 @@ import { Playtime } from '../shared/playtime'
 export type LinkToUri = (link: string) => string
 
 export interface PropertyNames {
+    title: string
     cover: string
     author: string
     published: string
@@ -31,6 +32,11 @@ export class BookMetadataNoteAdapter implements BookMetadata {
     ) {}
 
     get title(): string {
+        const propertyTitle = this.firstValue(this.propertyNames.title)
+        if (typeof propertyTitle === 'string') {
+            return propertyTitle
+        }
+
         return this.note.heading?.trim() || this.note.basename
     }
 

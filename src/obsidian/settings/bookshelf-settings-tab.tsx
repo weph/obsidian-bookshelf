@@ -63,6 +63,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl).setName('Book note properties').setHeading()
 
+        this.addBookPropertySetting('title', 'Title', 'Property name for the book title')
         this.addBookPropertySetting('cover', 'Cover', 'Property name for the cover (link, filename, or URL)')
         this.addBookPropertySetting('author', 'Author', 'Property name for the author(s)')
         this.addBookPropertySetting('published', 'Published', 'Property name for the publishing date')

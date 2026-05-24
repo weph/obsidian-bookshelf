@@ -12,6 +12,7 @@ export const VERSION = 20250408
 export interface BookshelfPluginSettings extends VersionedSettings {
     booksFolder: string
     bookProperties: {
+        title: string
         cover: string
         author: string
         published: string
@@ -60,6 +61,7 @@ export const DEFAULT_SETTINGS: BookshelfPluginSettings = {
     settingsVersion: VERSION,
     booksFolder: 'Books',
     bookProperties: {
+        title: 'title',
         cover: 'cover',
         author: 'author',
         published: 'published',

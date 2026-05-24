@@ -2,6 +2,7 @@
   "settingsVersion": 20250406,
   "booksFolder": "Books",
   "bookProperties": {
+    "title": "title",
     "cover": "cover",
     "author": "author",
     "published": "published",
@@ -42,6 +43,6 @@
   "readingProgress": {
     "newEntryLocation": "bookNote"
   },
-  "previousVersion": "0.19.1",
+  "previousVersion": "0.20.0",
   "showReleaseNotes": true
 }

@@ -9,8 +9,14 @@ Bookshelf collects book notes from the folder specified in the **Books folder** 
 
 ## Book Title
 
-Bookshelf takes the book title from the first level-one heading (`#`) in the note. If the first heading is a different
-level (like `##` or `###`) or there's no heading at all, it will fall back to using the note's filename as the title.
+Bookshelf resolves a note's title using the following priority list:
+
+1. **Title property**: if a title property is present in the note's frontmatter, its value is used.
+2. **First heading**: the first heading in the note, regardless of level (`#`, `##`, …).
+3. **Filename**: the file name if the note contains no headings.
+
+The explicit title property always wins over the fallbacks.\
+You can rename this property in the **Book note properties** settings if you prefer a different name.
 
 ## Properties
 
@@ -34,6 +40,13 @@ Bookshelf tries to interpret your data even if you use a different type, but it'
 Sticking to the suggested types ensures the best results.
 
 ### Supported Properties
+
+#### Title
+
+**Property type:** Text\
+**Default name:** `title`
+
+The book title.
 
 #### Cover
 

@@ -21,6 +21,7 @@ const defaultConfiguration: Configuration = {
     settings: {
         booksFolder: 'Books',
         bookProperties: {
+            title: 'title',
             cover: 'cover',
             author: 'author',
             published: 'published',

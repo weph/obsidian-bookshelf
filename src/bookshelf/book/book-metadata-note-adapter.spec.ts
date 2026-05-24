@@ -7,6 +7,7 @@ import { Link } from './link'
 import { Playtime } from '../shared/playtime'
 
 const propertyNames: PropertyNames = {
+    title: 'title',
     cover: 'cover',
     author: 'author',
     published: 'published',
@@ -29,7 +30,15 @@ function bookMetadata(note: Note): BookMetadataNoteAdapter {
 }
 
 describe('Title', () => {
-    it('should be note heading', () => {
+    it('should use title property', () => {
+        const note = new FakeNote('book-note.md', new StaticMetadata({ title: 'Property Title' }))
+        note.heading = 'The Book Title'
+        const result = bookMetadata(note)
+
+        expect(result.title).toBe('Property Title')
+    })
+
+    it('should be note heading if title property is not set', () => {
         const note = new FakeNote('book-note.md', new StaticMetadata({}))
         note.heading = 'The Book Title'
         const result = bookMetadata(note)

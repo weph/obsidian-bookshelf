@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 For a full diff see [`0.20.0...main`][0.20.0...main].
 
+### Added
+
+- Added property to override book title ([#44](https://github.com/weph/obsidian-bookshelf/issues/44))
+
 ### Changed
 
 - Hide progress bar after book has been finished

@@ -1,4 +1,5 @@
 ---
+title: "Design Patterns: Elements of Reusable Object-Oriented Software"
 cover: "[[design-patterns.jpg]]"
 author:
   - "[[Erich Gamma]]"
