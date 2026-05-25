@@ -12,6 +12,8 @@ import { SlidersHorizontal } from 'lucide-react'
 import { Button } from '../button/button'
 import { Books } from '../../bookshelf/book/books'
 import { ExpressionFactory } from '../../bookshelf/book/search/expression-factory'
+import { GroupedBooks } from './grouped-books/grouped-books'
+import { pluralize } from './pluralize'
 
 type ViewType = 'gallery' | 'table'
 
@@ -65,10 +67,6 @@ function listOptions(books: Books): Array<DropdownOption<string | null>> {
     return [{ value: null, label: 'All lists' }, ...lists.map((l) => ({ value: l, label: l }))]
 }
 
-function pluralize(count: number, noun: string, suffix = 's'): string {
-    return `${count} ${noun}${count !== 1 ? suffix : ''}`
-}
-
 export function Library({ settings, settingsChanged, books, sortOptions, onBookClick, expressionFactory }: Props) {
     const groupingOption = bookGroupingOptions.find((v) => v.value === settings.grouping) || bookGroupingOptions[0]
     const sortOption = sortOptions.find((o) => o.value === settings.sort) || sortOptions[0]
@@ -103,15 +101,7 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
             return (
                 <>
                     <BookCount total={books.length} filtered={filteredBooks.length} />
-                    {Array.from(groupedBooks.groups).map((entry) => (
-                        <div className={styles.group} key={entry[0]}>
-                            <div className={`${styles.groupHeading} ${entry[0] === null ? styles.fallbackGroup : ''}`}>
-                                <h2>{entry[0] === null ? groupedBooks.nullLabel : entry[0]}</h2>
-                                <div className={styles.booksInGroup}>{pluralize(entry[1].length, 'book')}</div>
-                            </div>
-                            <ViewComponent books={entry[1]} onBookClick={onBookClick} />
-                        </div>
-                    ))}
+                    <GroupedBooks books={groupedBooks} onBookClick={onBookClick} ViewComponent={ViewComponent} />
                 </>
             )
         }
