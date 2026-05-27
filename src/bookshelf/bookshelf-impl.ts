@@ -99,20 +99,15 @@ export class BookshelfImpl implements Bookshelf {
             return
         }
 
-        const book = new BookshelfBook(note, this.bookMetadataFactory.create(note), this)
-
-        this.bookNotes.set(note, book)
-        this.books.push(book)
+        this.books.push(this.book(note))
     }
 
     public book(note: Note): Book {
-        const result = this.bookNotes.get(note)
-
-        if (result === undefined) {
-            throw new Error(`There is no book for note "${note.path}"`)
+        if (!this.has(note)) {
+            this.bookNotes.set(note, new BookshelfBook(note, this.bookMetadataFactory.create(note), this))
         }
 
-        return result
+        return this.bookNotes.get(note)!
     }
 
     public all(): Books {

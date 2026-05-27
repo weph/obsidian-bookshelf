@@ -11,6 +11,7 @@ For a full diff see [`0.20.0...main`][0.20.0...main].
 
 ### Added
 
+- New Bases view "Bookshelf gallery"
 - Added property to override book title ([#44](https://github.com/weph/obsidian-bookshelf/issues/44))
 
 ### Changed

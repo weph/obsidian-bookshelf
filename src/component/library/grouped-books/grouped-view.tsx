@@ -1,4 +1,4 @@
-import styles from './grouped-books.module.scss'
+import styles from './grouped-view.module.scss'
 import type { GroupedBooks } from '../../../bookshelf/book/grouping'
 import { Book } from '../../../bookshelf/book/book'
 import { ComponentType, MouseEvent } from 'react'
@@ -11,7 +11,7 @@ interface Props {
     ViewComponent: ComponentType<{ books: Books; onBookClick: (book: Book, event: MouseEvent) => void }>
 }
 
-export function GroupedBooks({ books, onBookClick, ViewComponent }: Props) {
+export function GroupedView({ books, onBookClick, ViewComponent }: Props) {
     return Array.from(books.groups).map((entry) => (
         <div className={styles.group} key={entry[0]}>
             <div className={`${styles.groupHeading} ${entry[0] === null ? styles.fallbackGroup : ''}`}>

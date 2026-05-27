@@ -12,7 +12,7 @@ import { SlidersHorizontal } from 'lucide-react'
 import { Button } from '../button/button'
 import { Books } from '../../bookshelf/book/books'
 import { ExpressionFactory } from '../../bookshelf/book/search/expression-factory'
-import { GroupedBooks } from './grouped-books/grouped-books'
+import { GroupedView } from './grouped-books/grouped-view'
 import { pluralize } from './pluralize'
 
 type ViewType = 'gallery' | 'table'
@@ -101,7 +101,7 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
             return (
                 <>
                     <BookCount total={books.length} filtered={filteredBooks.length} />
-                    <GroupedBooks books={groupedBooks} onBookClick={onBookClick} ViewComponent={ViewComponent} />
+                    <GroupedView books={groupedBooks} onBookClick={onBookClick} ViewComponent={ViewComponent} />
                 </>
             )
         }

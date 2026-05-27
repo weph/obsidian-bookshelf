@@ -1,0 +1,15 @@
+views:
+  - type: bookshelf-gallery
+    name: Books
+    filters:
+      and:
+        - file.ext == "md"
+        - file.folder == "Books"
+    groupBy:
+      property: series
+      direction: ASC
+    order:
+      - file.name
+    sort:
+      - property: position-in-series
+        direction: ASC

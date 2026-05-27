@@ -577,14 +577,6 @@ test('It should return all books added to the bookshelf', async () => {
     expect(Array.from(result).map((b) => b.metadata.title)).toEqual(['The Shining', 'Animal Farm', 'Dracula'])
 })
 
-describe('Non-existing book', () => {
-    test('cannot be retrieved', () => {
-        expect(() => bookshelf.book(new FakeNote('the-shining', new StaticMetadata({}), []))).toThrow(
-            'There is no book for note "the-shining"',
-        )
-    })
-})
-
 test('Reading journey should be reflected in book', async () => {
     const dracula = new FakeNote('Books/Dracula.md', new StaticMetadata({}), ['2025-02-03: 1-10', '2025-02-05: 20'])
     const shining = new FakeNote('Books/The Shining.md', new StaticMetadata({}), [

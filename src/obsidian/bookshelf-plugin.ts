@@ -18,6 +18,7 @@ import { BookshelfDummy } from '../bookshelf/bookshelf-dummy'
 import { ReleaseNotesModal } from './modal/release-notes-modal'
 import { Version } from './modal/version'
 import { Link } from '../bookshelf/book/link'
+import { GalleryView, GalleryViewType } from './bases/gallery-view'
 
 export interface DailyNotesSettings {
     enabled: boolean
@@ -50,6 +51,7 @@ export default class BookshelfPlugin extends Plugin {
 
         this.addSettingTab(new BookshelfSettingsTab(this.app, this))
         this.setupViews()
+        this.setupBasesViews()
         this.setupRibbon()
         this.setupCommands()
 
@@ -60,6 +62,15 @@ export default class BookshelfPlugin extends Plugin {
     private setupViews(): void {
         this.registerView(VIEW_TYPE_LIBRARY, (leaf) => new LibraryView(leaf, this, this.bookshelf))
         this.registerView(VIEW_TYPE_STATISTICS, (leaf) => new StatisticsView(leaf, this, this.bookshelf))
+    }
+
+    private setupBasesViews(): void {
+        this.registerBasesView(GalleryViewType, {
+            name: 'Bookshelf gallery',
+            icon: 'library-big',
+            factory: (controller, containerEl) =>
+                new GalleryView(controller, containerEl, this.notes, this.bookshelf, this),
+        })
     }
 
     private setupRibbon(): void {
