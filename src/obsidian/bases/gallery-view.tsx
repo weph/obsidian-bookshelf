@@ -2,13 +2,13 @@ import { BasesView, QueryController } from 'obsidian'
 import { Bookshelf } from '../../bookshelf/bookshelf'
 import BookshelfPlugin from '../bookshelf-plugin'
 import { createRoot, Root } from 'react-dom/client'
-import { GroupedBooks } from '../../bookshelf/book/grouping'
-import { Books } from '../../bookshelf/book/books'
+import { GroupedData } from '../../bookshelf/book/grouping'
 import { ObsidianNotes } from '../obsidian-notes'
 import { StrictMode } from 'react'
 import { GroupedView } from '../../component/library/grouped-books/grouped-view'
 import { Gallery } from '../../component/library/gallery/gallery'
 import styles from './gallery-view.module.scss'
+import { BookViewItem } from '../../component/library/book-view-item'
 
 export const GalleryViewType = 'bookshelf-gallery'
 
@@ -29,8 +29,8 @@ export class GalleryView extends BasesView {
     }
 
     public onDataUpdated(): void {
-        const result: GroupedBooks = {
-            groups: new Map<string | null, Books>(),
+        const result: GroupedData<Array<BookViewItem>> = {
+            groups: new Map<string | null, Array<BookViewItem>>(),
             nullLabel: 'Ungrouped',
         }
 
@@ -39,7 +39,7 @@ export class GalleryView extends BasesView {
 
             result.groups.set(
                 key,
-                new Books(group.entries.map((entry) => this.bookshelf.book(this.notes.noteByFile(entry.file)))),
+                group.entries.map((entry) => ({ book: this.bookshelf.book(this.notes.noteByFile(entry.file)) })),
             )
         }
 
@@ -47,7 +47,7 @@ export class GalleryView extends BasesView {
             <StrictMode>
                 <div className={styles.galleryView}>
                     <GroupedView
-                        books={result}
+                        items={result}
                         onBookClick={this.bookshelfPlugin.handleBookClick.bind(this.bookshelfPlugin)}
                         ViewComponent={Gallery}
                     />

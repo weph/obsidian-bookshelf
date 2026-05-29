@@ -14,6 +14,8 @@ import { Books } from '../../bookshelf/book/books'
 import { ExpressionFactory } from '../../bookshelf/book/search/expression-factory'
 import { GroupedView } from './grouped-books/grouped-view'
 import { pluralize } from './pluralize'
+import { GroupedData } from '../../bookshelf/book/grouping'
+import { BookViewItem } from './book-view-item'
 
 type ViewType = 'gallery' | 'table'
 
@@ -98,10 +100,18 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
 
         if (groupingOption.grouped) {
             const groupedBooks = groupingOption.grouped(filteredBooks)
+
+            const groupedBookViewItems: GroupedData<Array<BookViewItem>> = {
+                groups: new Map(
+                    Array.from(groupedBooks.groups).map(([key, value]) => [key, value.map((book) => ({ book }))]),
+                ),
+                nullLabel: groupedBooks.nullLabel,
+            }
+
             return (
                 <>
                     <BookCount total={books.length} filtered={filteredBooks.length} />
-                    <GroupedView books={groupedBooks} onBookClick={onBookClick} ViewComponent={ViewComponent} />
+                    <GroupedView items={groupedBookViewItems} onBookClick={onBookClick} ViewComponent={ViewComponent} />
                 </>
             )
         }
@@ -109,7 +119,7 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
         return (
             <>
                 <BookCount total={books.length} filtered={filteredBooks.length} />
-                <ViewComponent books={filteredBooks} onBookClick={onBookClick} />
+                <ViewComponent items={filteredBooks.map((book) => ({ book }))} onBookClick={onBookClick} />
             </>
         )
     }

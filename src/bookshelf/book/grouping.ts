@@ -1,10 +1,12 @@
 import { Book } from './book'
 import { Books } from './books'
 
-export interface GroupedBooks {
-    groups: Map<string | null, Books>
+export interface GroupedData<T> {
+    groups: Map<string | null, T>
     nullLabel: string
 }
+
+export type GroupedBooks = GroupedData<Books>
 
 export function groupedAlphabetically(books: Books): GroupedBooks {
     function startingLetter(book: Book): string | null {

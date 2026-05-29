@@ -3,12 +3,13 @@ import { CoverPlaceholder } from '../../cover-placeholder/cover-placeholder'
 import { BookProgressBar } from '../../progress-bar/book-progress-bar'
 import * as react from 'react'
 import { MouseEvent, useId } from 'react'
-import { Book, ReadingStatus } from '../../../bookshelf/book/book'
+import { ReadingStatus } from '../../../bookshelf/book/book'
 import { Check, LucideProps, X } from 'lucide-react'
 import { Icon } from '../../icon/icon'
+import { BookViewItem } from '../book-view-item'
 
 interface Props {
-    book: Book
+    item: BookViewItem
     onClick: (event: MouseEvent) => void
 }
 
@@ -21,11 +22,11 @@ const ribbonIcon: Record<ReadingStatus, IconType | null> = {
     abandoned: X,
 }
 
-export function GalleryCard({ book, onClick }: Props) {
+export function GalleryCard({ item, onClick }: Props) {
     const titleId = useId()
-    const cover = book.metadata.cover
-    const title = book.metadata.title
-    const icon = ribbonIcon[book.status]
+    const cover = item.book.metadata.cover
+    const title = item.book.metadata.title
+    const icon = ribbonIcon[item.book.status]
 
     return (
         <div
@@ -33,7 +34,7 @@ export function GalleryCard({ book, onClick }: Props) {
             role="listitem"
             onClick={onClick}
             aria-labelledby={titleId}
-            data-status={book.status}
+            data-status={item.book.status}
         >
             {icon && (
                 <div className={styles.ribbon}>
@@ -46,7 +47,7 @@ export function GalleryCard({ book, onClick }: Props) {
                     {title}
                 </span>
             </div>
-            <BookProgressBar book={book} />
+            <BookProgressBar book={item.book} />
         </div>
     )
 }

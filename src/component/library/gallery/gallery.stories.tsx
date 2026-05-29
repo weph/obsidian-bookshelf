@@ -3,7 +3,6 @@ import { Gallery } from './gallery'
 import { algorithms, books } from '../../../support/book-fixtures'
 import { action } from 'storybook/actions'
 import { Book } from '../../../bookshelf/book/book'
-import { Books } from '../../../bookshelf/book/books'
 
 const meta = {
     title: 'Library/Gallery',
@@ -14,7 +13,7 @@ export default meta
 type Story = StoryObj<typeof Gallery>
 
 function renderFunction(books: Array<Book>) {
-    return () => <Gallery books={new Books(books)} onBookClick={action('onBookClick')} />
+    return () => <Gallery items={books.map((book) => ({ book }))} onBookClick={action('onBookClick')} />
 }
 
 export const Primary: Story = {

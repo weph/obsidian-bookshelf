@@ -3,7 +3,6 @@ import { BookTable } from './table'
 import { Book } from '../../../bookshelf/book/book'
 import { algorithms, books } from '../../../support/book-fixtures'
 import { action } from 'storybook/actions'
-import { Books } from '../../../bookshelf/book/books'
 
 const meta = {
     title: 'Library/Table',
@@ -13,7 +12,7 @@ export default meta
 type Story = StoryObj<typeof BookTable>
 
 function renderFunction(books: Array<Book>) {
-    return () => <BookTable books={new Books(books)} onBookClick={action('onBookClick')} />
+    return () => <BookTable items={books.map((book) => ({ book }))} onBookClick={action('onBookClick')} />
 }
 
 export const Primary: Story = {
