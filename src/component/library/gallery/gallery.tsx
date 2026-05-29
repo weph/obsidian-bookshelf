@@ -1,8 +1,8 @@
-import { Book } from '../../bookshelf/book/book'
+import { Book } from '../../../bookshelf/book/book'
 import { GalleryCard } from './gallery-card'
 import styles from './gallery.module.scss'
 import { MouseEvent } from 'react'
-import { Books } from '../../bookshelf/book/books'
+import { Books } from '../../../bookshelf/book/books'
 
 interface Props {
     books: Books

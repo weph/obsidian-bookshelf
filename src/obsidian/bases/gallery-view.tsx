@@ -7,7 +7,7 @@ import { Books } from '../../bookshelf/book/books'
 import { ObsidianNotes } from '../obsidian-notes'
 import { StrictMode } from 'react'
 import { GroupedView } from '../../component/library/grouped-books/grouped-view'
-import { Gallery } from '../../component/gallery/gallery'
+import { Gallery } from '../../component/library/gallery/gallery'
 import styles from './gallery-view.module.scss'
 
 export const GalleryViewType = 'bookshelf-gallery'

@@ -1,20 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Gallery } from './gallery'
-import { algorithms, books } from '../../support/book-fixtures'
+import { BookTable } from './table'
+import { Book } from '../../../bookshelf/book/book'
+import { algorithms, books } from '../../../support/book-fixtures'
 import { action } from 'storybook/actions'
-import { Book } from '../../bookshelf/book/book'
-import { Books } from '../../bookshelf/book/books'
+import { Books } from '../../../bookshelf/book/books'
 
 const meta = {
-    title: 'Gallery',
-    component: Gallery,
-} satisfies Meta<typeof Gallery>
+    title: 'Library/Table',
+} satisfies Meta<typeof BookTable>
 
 export default meta
-type Story = StoryObj<typeof Gallery>
+type Story = StoryObj<typeof BookTable>
 
 function renderFunction(books: Array<Book>) {
-    return () => <Gallery books={new Books(books)} onBookClick={action('onBookClick')} />
+    return () => <BookTable books={new Books(books)} onBookClick={action('onBookClick')} />
 }
 
 export const Primary: Story = {

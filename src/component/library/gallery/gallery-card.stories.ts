@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { GalleryCard } from './gallery-card'
 import { fn } from 'storybook/test'
-import { books } from '../../support/book-fixtures'
+import { books } from '../../../support/book-fixtures'
 
 const meta = {
-    title: 'Gallery Card',
+    title: 'Library/Gallery/Card',
     component: GalleryCard,
     args: {
         onClick: fn(),

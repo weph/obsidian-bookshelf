@@ -1,11 +1,11 @@
 import styles from './gallery-card.module.scss'
-import { CoverPlaceholder } from '../cover-placeholder/cover-placeholder'
-import { BookProgressBar } from '../progress-bar/book-progress-bar'
+import { CoverPlaceholder } from '../../cover-placeholder/cover-placeholder'
+import { BookProgressBar } from '../../progress-bar/book-progress-bar'
 import * as react from 'react'
 import { MouseEvent, useId } from 'react'
-import { Book, ReadingStatus } from '../../bookshelf/book/book'
+import { Book, ReadingStatus } from '../../../bookshelf/book/book'
 import { Check, LucideProps, X } from 'lucide-react'
-import { Icon } from '../icon/icon'
+import { Icon } from '../../icon/icon'
 
 interface Props {
     book: Book

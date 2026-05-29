@@ -1,5 +1,5 @@
 import { StatisticsPanel } from '../statistics-panel/statistics-panel'
-import { Gallery } from '../../gallery/gallery'
+import { Gallery } from '../../library/gallery/gallery'
 import { Statistics } from '../../../bookshelf/reading-journey/statistics/statistics'
 import { Book, ReadingStatus } from '../../../bookshelf/book/book'
 import { MouseEvent, useState } from 'react'

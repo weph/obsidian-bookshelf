@@ -1,10 +1,10 @@
-import { Book } from '../../bookshelf/book/book'
-import { StarRating } from '../star-rating/star-rating'
+import { Book } from '../../../bookshelf/book/book'
+import { StarRating } from '../../star-rating/star-rating'
 import styles from './table.module.scss'
-import { TagList } from '../tag-list/tag-list'
+import { TagList } from '../../tag-list/tag-list'
 import { MouseEvent } from 'react'
-import { BookProgressBar } from '../progress-bar/book-progress-bar'
-import { Books } from '../../bookshelf/book/books'
+import { BookProgressBar } from '../../progress-bar/book-progress-bar'
+import { Books } from '../../../bookshelf/book/books'
 
 interface Props {
     books: Books

@@ -1,0 +1,30 @@
+import type { Meta, StoryObj } from '@storybook/react'
+import { Gallery } from './gallery'
+import { algorithms, books } from '../../../support/book-fixtures'
+import { action } from 'storybook/actions'
+import { Book } from '../../../bookshelf/book/book'
+import { Books } from '../../../bookshelf/book/books'
+
+const meta = {
+    title: 'Library/Gallery',
+    component: Gallery,
+} satisfies Meta<typeof Gallery>
+
+export default meta
+type Story = StoryObj<typeof Gallery>
+
+function renderFunction(books: Array<Book>) {
+    return () => <Gallery books={new Books(books)} onBookClick={action('onBookClick')} />
+}
+
+export const Primary: Story = {
+    render: renderFunction(Object.values(books)),
+}
+
+export const Empty: Story = {
+    render: renderFunction([]),
+}
+
+export const SingleBook: Story = {
+    render: renderFunction([algorithms]),
+}
