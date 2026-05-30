@@ -1,4 +1,4 @@
-import { BasesView, QueryController } from 'obsidian'
+import { BasesEntry, BasesView, QueryController } from 'obsidian'
 import { Bookshelf } from '../../bookshelf/bookshelf'
 import BookshelfPlugin from '../bookshelf-plugin'
 import { createRoot, Root } from 'react-dom/client'
@@ -39,7 +39,7 @@ export class GalleryView extends BasesView {
 
             result.groups.set(
                 key,
-                group.entries.map((entry) => ({ book: this.bookshelf.book(this.notes.noteByFile(entry.file)) })),
+                group.entries.map((entry) => this.bookViewItemFromBaseEntry(entry)),
             )
         }
 
@@ -54,5 +54,17 @@ export class GalleryView extends BasesView {
                 </div>
             </StrictMode>,
         )
+    }
+
+    private bookViewItemFromBaseEntry(entry: BasesEntry): BookViewItem {
+        return {
+            book: this.bookshelf.book(this.notes.noteByFile(entry.file)),
+            fields: this.data.properties.map((p) => {
+                return {
+                    name: this.config.getDisplayName(p),
+                    renderTo: (e: HTMLElement) => entry.getValue(p)!.renderTo(e, this.app.renderContext),
+                }
+            }),
+        }
     }
 }

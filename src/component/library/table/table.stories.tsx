@@ -12,7 +12,24 @@ export default meta
 type Story = StoryObj<typeof BookTable>
 
 function renderFunction(books: Array<Book>) {
-    return () => <BookTable items={books.map((book) => ({ book }))} onBookClick={action('onBookClick')} />
+    return () => (
+        <BookTable
+            items={books.map((book) => ({
+                book,
+                fields: [
+                    {
+                        name: 'Published',
+                        renderTo: (e) => (e.innerText = book.metadata.published?.getFullYear().toString() || ''),
+                    },
+                    {
+                        name: 'Comment',
+                        renderTo: (e) => (e.innerText = book.metadata.comment || ''),
+                    },
+                ],
+            }))}
+            onBookClick={action('onBookClick')}
+        />
+    )
 }
 
 export const Primary: Story = {

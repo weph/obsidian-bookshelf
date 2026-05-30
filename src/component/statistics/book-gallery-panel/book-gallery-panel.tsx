@@ -37,7 +37,7 @@ export function BookGalleryPanel({ statistics, onBookClick }: Props) {
                 />
             }
         >
-            <Gallery items={books.map((book) => ({ book }))} onBookClick={onBookClick} />
+            <Gallery items={books.map((book) => ({ book, fields: [] }))} onBookClick={onBookClick} />
         </StatisticsPanel>
     )
 }

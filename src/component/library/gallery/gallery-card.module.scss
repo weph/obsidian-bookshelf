@@ -90,3 +90,13 @@ body {
         display: flex;
     }
 }
+
+.fieldName {
+    font-size: var(--font-ui-smaller);
+}
+
+.fieldValue {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

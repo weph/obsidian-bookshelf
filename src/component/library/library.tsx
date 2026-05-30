@@ -16,6 +16,10 @@ import { GroupedView } from './grouped-books/grouped-view'
 import { pluralize } from './pluralize'
 import { GroupedData } from '../../bookshelf/book/grouping'
 import { BookViewItem } from './book-view-item'
+import { createRoot } from 'react-dom/client'
+import { BookProgressBar } from '../progress-bar/book-progress-bar'
+import { StarRating } from '../star-rating/star-rating'
+import { TagList } from '../tag-list/tag-list'
 
 type ViewType = 'gallery' | 'table'
 
@@ -69,6 +73,72 @@ function listOptions(books: Books): Array<DropdownOption<string | null>> {
     return [{ value: null, label: 'All lists' }, ...lists.map((l) => ({ value: l, label: l }))]
 }
 
+function bookViewItem(viewType: ViewType, book: Book): BookViewItem {
+    if (viewType === 'gallery') {
+        return { book, fields: [] }
+    }
+
+    return {
+        book,
+        fields: [
+            {
+                name: 'Title',
+                renderTo: (e) => (e.innerText = book.metadata.title),
+            },
+            {
+                name: 'Author',
+                renderTo: (e) => {
+                    createRoot(e).render(
+                        <>
+                            {(book.metadata.authors || []).map((author, i) => (
+                                <div key={i}>{author.toString()}</div>
+                            ))}
+                        </>,
+                    )
+                },
+            },
+            {
+                name: 'Published',
+                renderTo: (e) => (e.innerText = book.metadata.published?.getFullYear().toString() || ''),
+            },
+            {
+                name: 'Pages',
+                renderTo: (e) => (e.innerText = book.metadata.pages?.toLocaleString() || ''),
+            },
+            {
+                name: 'Duration',
+                renderTo: (e) => (e.innerText = book.metadata.duration?.toString('verbose') || ''),
+            },
+            {
+                name: 'Progress',
+                renderTo: (e) => {
+                    createRoot(e).render(<BookProgressBar book={book} />)
+                },
+            },
+            {
+                name: 'Rating',
+                renderTo: (e) => {
+                    createRoot(e).render(<StarRating value={book.metadata.rating || 0} />)
+                },
+            },
+            {
+                name: 'Tags',
+                renderTo: (e) => {
+                    createRoot(e).render(<TagList tags={book.metadata.tags || []} />)
+                },
+            },
+            {
+                name: 'Genres',
+                renderTo: (e) => (e.innerText = book.metadata.genre?.join(', ') || ''),
+            },
+            {
+                name: 'Status',
+                renderTo: (e) => (e.innerText = book.status),
+            },
+        ],
+    }
+}
+
 export function Library({ settings, settingsChanged, books, sortOptions, onBookClick, expressionFactory }: Props) {
     const groupingOption = bookGroupingOptions.find((v) => v.value === settings.grouping) || bookGroupingOptions[0]
     const sortOption = sortOptions.find((o) => o.value === settings.sort) || sortOptions[0]
@@ -103,7 +173,10 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
 
             const groupedBookViewItems: GroupedData<Array<BookViewItem>> = {
                 groups: new Map(
-                    Array.from(groupedBooks.groups).map(([key, value]) => [key, value.map((book) => ({ book }))]),
+                    Array.from(groupedBooks.groups).map(([key, value]) => [
+                        key,
+                        value.map((book) => bookViewItem(settings.view, book)),
+                    ]),
                 ),
                 nullLabel: groupedBooks.nullLabel,
             }
@@ -119,7 +192,10 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
         return (
             <>
                 <BookCount total={books.length} filtered={filteredBooks.length} />
-                <ViewComponent items={filteredBooks.map((book) => ({ book }))} onBookClick={onBookClick} />
+                <ViewComponent
+                    items={filteredBooks.map((book) => bookViewItem(settings.view, book))}
+                    onBookClick={onBookClick}
+                />
             </>
         )
     }

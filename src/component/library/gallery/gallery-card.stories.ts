@@ -18,6 +18,12 @@ export const Primary: Story = {
     args: {
         item: {
             book: books.tddByExample,
+            fields: [
+                {
+                    name: 'Comment',
+                    renderTo: (e) => (e.innerText = books.tddByExample.metadata.comment || ''),
+                },
+            ],
         },
     },
 }
@@ -26,6 +32,7 @@ export const Abandoned: Story = {
     args: {
         item: {
             book: books.mythicalManMonth,
+            fields: [],
         },
     },
 }
@@ -34,6 +41,7 @@ export const NoCover: Story = {
     args: {
         item: {
             book: books.bookWithoutMetadata,
+            fields: [],
         },
     },
 }
