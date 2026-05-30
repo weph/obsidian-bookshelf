@@ -10,6 +10,7 @@ export function RenderedField({ renderTo }: Props) {
     useEffect(() => {
         const el = ref.current
         if (el) {
+            el.empty?.()
             renderTo(el)
         }
     }, [renderTo])
