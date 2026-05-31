@@ -88,7 +88,7 @@ function bookViewItem(viewType: ViewType, book: Book): BookViewItem {
             {
                 name: 'Author',
                 renderTo: (e) => {
-                    createRoot(e).render(
+                    createRoot(e.createDiv()).render(
                         <>
                             {(book.metadata.authors || []).map((author, i) => (
                                 <div key={i}>{author.toString()}</div>
@@ -112,19 +112,19 @@ function bookViewItem(viewType: ViewType, book: Book): BookViewItem {
             {
                 name: 'Progress',
                 renderTo: (e) => {
-                    createRoot(e).render(<BookProgressBar book={book} />)
+                    createRoot(e.createDiv()).render(<BookProgressBar book={book} />)
                 },
             },
             {
                 name: 'Rating',
                 renderTo: (e) => {
-                    createRoot(e).render(<StarRating value={book.metadata.rating || 0} />)
+                    createRoot(e.createDiv()).render(<StarRating value={book.metadata.rating || 0} />)
                 },
             },
             {
                 name: 'Tags',
                 renderTo: (e) => {
-                    createRoot(e).render(<TagList tags={book.metadata.tags || []} />)
+                    createRoot(e.createDiv()).render(<TagList tags={book.metadata.tags || []} />)
                 },
             },
             {

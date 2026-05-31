@@ -71,12 +71,14 @@ export default class BookshelfPlugin extends Plugin {
             icon: 'layout-grid',
             factory: (controller, containerEl) =>
                 new GalleryView(controller, containerEl, this.notes, this.bookshelf, this),
+            options: GalleryView.options,
         })
         this.registerBasesView(TableViewType, {
             name: 'Bookshelf table',
             icon: 'table',
             factory: (controller, containerEl) =>
                 new TableView(controller, containerEl, this.notes, this.bookshelf, this),
+            options: TableView.options,
         })
     }
 

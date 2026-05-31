@@ -14,16 +14,16 @@ export function BookTable({ items, onBookClick }: Props) {
         <table className={styles.bookTable}>
             <thead>
                 <tr>
-                    {items[0].fields.map((field) => (
-                        <th>{field.name}</th>
+                    {items[0].fields.map((field, index) => (
+                        <th key={index}>{field.name}</th>
                     ))}
                 </tr>
             </thead>
             <tbody>
-                {items.map((item, index) => (
-                    <tr key={index} onClick={(e) => onBookClick(item.book, e)}>
-                        {item.fields.map((field) => (
-                            <td>
+                {items.map((item, itemIndex) => (
+                    <tr key={itemIndex} onClick={(e) => onBookClick(item.book, e)}>
+                        {item.fields.map((field, fieldIndex) => (
+                            <td key={fieldIndex}>
                                 <RenderedField renderTo={field.renderTo} />
                             </td>
                         ))}

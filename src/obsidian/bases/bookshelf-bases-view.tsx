@@ -1,4 +1,4 @@
-import { BasesEntry, BasesView, QueryController } from 'obsidian'
+import { BasesAllOptions, BasesEntry, BasesPropertyId, BasesView, QueryController } from 'obsidian'
 import { Bookshelf } from '../../bookshelf/bookshelf'
 import BookshelfPlugin from '../bookshelf-plugin'
 import { createRoot, Root } from 'react-dom/client'
@@ -7,7 +7,7 @@ import { ObsidianNotes } from '../obsidian-notes'
 import { ComponentType, MouseEvent, StrictMode } from 'react'
 import { GroupedView } from '../../component/library/grouped-books/grouped-view'
 import styles from './bookshelf-bases-view.module.scss'
-import { BookViewItem } from '../../component/library/book-view-item'
+import { BookViewField, BookViewItem } from '../../component/library/book-view-item'
 import { Book } from '../../bookshelf/book/book'
 
 export abstract class BookshelfBasesView extends BasesView {
@@ -21,13 +21,17 @@ export abstract class BookshelfBasesView extends BasesView {
     constructor(
         controller: QueryController,
         parentEl: HTMLElement,
-        private readonly notes: ObsidianNotes,
-        private readonly bookshelf: Bookshelf,
-        private bookshelfPlugin: BookshelfPlugin,
+        protected readonly notes: ObsidianNotes,
+        protected readonly bookshelf: Bookshelf,
+        protected bookshelfPlugin: BookshelfPlugin,
     ) {
         super(controller)
 
-        this.root = createRoot(parentEl)
+        this.root = createRoot(parentEl.createDiv())
+    }
+
+    static options(): Array<BasesAllOptions> {
+        return []
     }
 
     public onDataUpdated(): void {
@@ -41,7 +45,7 @@ export abstract class BookshelfBasesView extends BasesView {
 
             result.groups.set(
                 key,
-                group.entries.map((entry) => this.bookViewItemFromBaseEntry(entry)),
+                group.entries.map((entry) => this.bookViewItemFromBasesEntry(entry)),
             )
         }
 
@@ -58,15 +62,12 @@ export abstract class BookshelfBasesView extends BasesView {
         )
     }
 
-    private bookViewItemFromBaseEntry(entry: BasesEntry): BookViewItem {
+    protected abstract bookViewItemFromBasesEntry(entry: BasesEntry): BookViewItem
+
+    protected bookViewFieldFromBasesPropertyId(entry: BasesEntry, id: BasesPropertyId): BookViewField {
         return {
-            book: this.bookshelf.book(this.notes.noteByFile(entry.file)),
-            fields: this.data.properties.map((p) => {
-                return {
-                    name: this.config.getDisplayName(p),
-                    renderTo: (e: HTMLElement) => entry.getValue(p)!.renderTo(e, this.app.renderContext),
-                }
-            }),
+            name: this.config.getDisplayName(id),
+            renderTo: (e: HTMLElement) => entry.getValue(id)!.renderTo(e, this.app.renderContext),
         }
     }
 }
