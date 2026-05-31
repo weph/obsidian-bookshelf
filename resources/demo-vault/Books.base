@@ -1,15 +1,27 @@
+filters:
+  and:
+    - file.folder == "Books"
+    - file.ext == "md"
 views:
   - type: bookshelf-gallery
-    name: Books
-    filters:
-      and:
-        - file.ext == "md"
-        - file.folder == "Books"
+    name: Book Gallery
     groupBy:
       property: series
       direction: ASC
-    order:
-      - file.name
+    order: []
     sort:
       - property: position-in-series
         direction: ASC
+  - type: bookshelf-table
+    name: Book Table
+    order:
+      - file.name
+      - pages
+      - published
+      - rating
+      - series
+      - tags
+      - lists
+      - genre
+      - comment
+      - author

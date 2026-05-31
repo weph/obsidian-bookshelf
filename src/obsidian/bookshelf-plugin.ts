@@ -19,6 +19,7 @@ import { ReleaseNotesModal } from './modal/release-notes-modal'
 import { Version } from './modal/version'
 import { Link } from '../bookshelf/book/link'
 import { GalleryView, GalleryViewType } from './bases/gallery-view'
+import { TableView, TableViewType } from './bases/table-view'
 
 export interface DailyNotesSettings {
     enabled: boolean
@@ -67,9 +68,15 @@ export default class BookshelfPlugin extends Plugin {
     private setupBasesViews(): void {
         this.registerBasesView(GalleryViewType, {
             name: 'Bookshelf gallery',
-            icon: 'library-big',
+            icon: 'layout-grid',
             factory: (controller, containerEl) =>
                 new GalleryView(controller, containerEl, this.notes, this.bookshelf, this),
+        })
+        this.registerBasesView(TableViewType, {
+            name: 'Bookshelf table',
+            icon: 'table',
+            factory: (controller, containerEl) =>
+                new TableView(controller, containerEl, this.notes, this.bookshelf, this),
         })
     }
 
