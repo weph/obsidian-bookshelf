@@ -25,3 +25,7 @@ views:
       - genre
       - comment
       - author
+    field_title: true
+    field_cover: true
+    field_progress: true
+    field_status: true

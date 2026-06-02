@@ -2,13 +2,33 @@ import { BookshelfBasesView } from './bookshelf-bases-view'
 import { BookTable } from '../../component/library/table/table'
 import { BasesAllOptions, BasesEntry } from 'obsidian'
 import { BookViewField, BookViewItem } from '../../component/library/book-view-item'
-import { createRoot } from 'react-dom/client'
-import { BookProgressBar } from '../../component/progress-bar/book-progress-bar'
+import { cover, progress, status, title } from '../../component/library/render-functions'
 
 const CONFIG_FIELDS_TITLE = 'field_title'
 const CONFIG_FIELDS_COVER = 'field_cover'
 const CONFIG_FIELDS_PROGRESS = 'field_progress'
 const CONFIG_FIELDS_STATUS = 'field_status'
+
+const configFields = [CONFIG_FIELDS_TITLE, CONFIG_FIELDS_COVER, CONFIG_FIELDS_PROGRESS, CONFIG_FIELDS_STATUS] as const
+
+const viewFields: { [key in (typeof configFields)[number]]: BookViewField } = {
+    [CONFIG_FIELDS_TITLE]: {
+        name: 'Title',
+        renderTo: title,
+    },
+    [CONFIG_FIELDS_COVER]: {
+        name: 'Cover',
+        renderTo: cover,
+    },
+    [CONFIG_FIELDS_PROGRESS]: {
+        name: 'Progress',
+        renderTo: progress,
+    },
+    [CONFIG_FIELDS_STATUS]: {
+        name: 'Status',
+        renderTo: status,
+    },
+}
 
 export const TableViewType = 'bookshelf-table'
 
@@ -21,68 +41,20 @@ export class TableView extends BookshelfBasesView {
             {
                 type: 'group',
                 displayName: 'Fields',
-                items: [
-                    {
-                        type: 'toggle',
-                        key: CONFIG_FIELDS_TITLE,
-                        displayName: 'Title',
-                    },
-                    {
-                        type: 'toggle',
-                        key: CONFIG_FIELDS_COVER,
-                        displayName: 'Cover',
-                    },
-                    {
-                        type: 'toggle',
-                        key: CONFIG_FIELDS_PROGRESS,
-                        displayName: 'Progress',
-                    },
-                    {
-                        type: 'toggle',
-                        key: CONFIG_FIELDS_STATUS,
-                        displayName: 'Status',
-                    },
-                ],
+                items: Object.entries(viewFields).map(([key, value]) => ({
+                    type: 'toggle',
+                    key,
+                    displayName: value.name,
+                })),
             },
         ]
     }
 
     protected bookViewItemFromBasesEntry(entry: BasesEntry): BookViewItem {
-        const book = this.bookshelf.book(this.notes.noteByFile(entry.file))
-
-        const bookshelfFields: Array<BookViewField> = []
-        if (this.config.get(CONFIG_FIELDS_TITLE)) {
-            bookshelfFields.push({
-                name: 'Title',
-                renderTo: (e) => (e.innerText = book.metadata.title),
-            })
-        }
-
-        if (this.config.get(CONFIG_FIELDS_COVER)) {
-            bookshelfFields.push({
-                name: 'Cover',
-                renderTo: (e) => createRoot(e.createDiv()).render(<img src={book.metadata.cover} />),
-            })
-        }
-
-        if (this.config.get(CONFIG_FIELDS_PROGRESS)) {
-            bookshelfFields.push({
-                name: 'Progress',
-                renderTo: (e) => createRoot(e.createDiv()).render(<BookProgressBar book={book} />),
-            })
-        }
-
-        if (this.config.get(CONFIG_FIELDS_STATUS)) {
-            bookshelfFields.push({
-                name: 'Status',
-                renderTo: (e) => (e.innerText = book.status),
-            })
-        }
-
         return {
-            book: book,
+            book: this.bookshelf.book(this.notes.noteByFile(entry.file)),
             fields: [
-                ...bookshelfFields,
+                ...configFields.filter((f) => this.config.get(f)).map((f) => viewFields[f]),
                 ...this.data.properties.map((id) => this.bookViewFieldFromBasesPropertyId(entry, id)),
             ],
         }

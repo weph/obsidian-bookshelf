@@ -15,11 +15,8 @@ import { ExpressionFactory } from '../../bookshelf/book/search/expression-factor
 import { GroupedView } from './grouped-books/grouped-view'
 import { pluralize } from './pluralize'
 import { GroupedData } from '../../bookshelf/book/grouping'
-import { BookViewItem } from './book-view-item'
-import { createRoot } from 'react-dom/client'
-import { BookProgressBar } from '../progress-bar/book-progress-bar'
-import { StarRating } from '../star-rating/star-rating'
-import { TagList } from '../tag-list/tag-list'
+import { BookViewField, BookViewItem } from './book-view-item'
+import { author, duration, genres, pages, progress, published, rating, status, tags, title } from './render-functions'
 
 type ViewType = 'gallery' | 'table'
 
@@ -63,6 +60,52 @@ const viewOptions: Array<DropdownOption<ViewType>> = [
     { value: 'table', label: 'Table' },
 ]
 
+const bookViewItemFields: { [key in ViewType]: Array<BookViewField> } = {
+    gallery: [],
+    table: [
+        {
+            name: 'Title',
+            renderTo: title,
+        },
+        {
+            name: 'Author',
+            renderTo: author,
+        },
+        {
+            name: 'Published',
+            renderTo: published,
+        },
+        {
+            name: 'Pages',
+            renderTo: pages,
+        },
+        {
+            name: 'Duration',
+            renderTo: duration,
+        },
+        {
+            name: 'Progress',
+            renderTo: progress,
+        },
+        {
+            name: 'Rating',
+            renderTo: rating,
+        },
+        {
+            name: 'Tags',
+            renderTo: tags,
+        },
+        {
+            name: 'Genres',
+            renderTo: genres,
+        },
+        {
+            name: 'Status',
+            renderTo: status,
+        },
+    ],
+}
+
 function listOptions(books: Books): Array<DropdownOption<string | null>> {
     const lists = Array.from(new Set(books.map((b) => b.metadata.lists).flat())).sort((a, b) => a.localeCompare(b))
 
@@ -74,69 +117,7 @@ function listOptions(books: Books): Array<DropdownOption<string | null>> {
 }
 
 function bookViewItem(viewType: ViewType, book: Book): BookViewItem {
-    if (viewType === 'gallery') {
-        return { book, fields: [] }
-    }
-
-    return {
-        book,
-        fields: [
-            {
-                name: 'Title',
-                renderTo: (e) => (e.innerText = book.metadata.title),
-            },
-            {
-                name: 'Author',
-                renderTo: (e) => {
-                    createRoot(e.createDiv()).render(
-                        <>
-                            {(book.metadata.authors || []).map((author, i) => (
-                                <div key={i}>{author.toString()}</div>
-                            ))}
-                        </>,
-                    )
-                },
-            },
-            {
-                name: 'Published',
-                renderTo: (e) => (e.innerText = book.metadata.published?.getFullYear().toString() || ''),
-            },
-            {
-                name: 'Pages',
-                renderTo: (e) => (e.innerText = book.metadata.pages?.toLocaleString() || ''),
-            },
-            {
-                name: 'Duration',
-                renderTo: (e) => (e.innerText = book.metadata.duration?.toString('verbose') || ''),
-            },
-            {
-                name: 'Progress',
-                renderTo: (e) => {
-                    createRoot(e.createDiv()).render(<BookProgressBar book={book} />)
-                },
-            },
-            {
-                name: 'Rating',
-                renderTo: (e) => {
-                    createRoot(e.createDiv()).render(<StarRating value={book.metadata.rating || 0} />)
-                },
-            },
-            {
-                name: 'Tags',
-                renderTo: (e) => {
-                    createRoot(e.createDiv()).render(<TagList tags={book.metadata.tags || []} />)
-                },
-            },
-            {
-                name: 'Genres',
-                renderTo: (e) => (e.innerText = book.metadata.genre?.join(', ') || ''),
-            },
-            {
-                name: 'Status',
-                renderTo: (e) => (e.innerText = book.status),
-            },
-        ],
-    }
+    return { book, fields: bookViewItemFields[viewType] }
 }
 
 export function Library({ settings, settingsChanged, books, sortOptions, onBookClick, expressionFactory }: Props) {

@@ -53,7 +53,7 @@ export function GalleryCard({ item, onClick }: Props) {
                 <div key={index}>
                     <div className={styles.fieldName}>{field.name}</div>
                     <div className={styles.fieldValue}>
-                        <RenderedField renderTo={field.renderTo} />
+                        <RenderedField book={item.book} renderTo={field.renderTo} />
                     </div>
                 </div>
             ))}

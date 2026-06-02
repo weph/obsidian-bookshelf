@@ -24,7 +24,7 @@ export function BookTable({ items, onBookClick }: Props) {
                     <tr key={itemIndex} onClick={(e) => onBookClick(item.book, e)}>
                         {item.fields.map((field, fieldIndex) => (
                             <td key={fieldIndex}>
-                                <RenderedField renderTo={field.renderTo} />
+                                <RenderedField book={item.book} renderTo={field.renderTo} />
                             </td>
                         ))}
                     </tr>

@@ -1,8 +1,9 @@
 import { Book } from '../../bookshelf/book/book'
+import { RenderFunction } from './render-functions'
 
 export interface BookViewField {
     name: string
-    renderTo: (element: HTMLElement) => void
+    renderTo: RenderFunction
 }
 
 export interface BookViewItem {
