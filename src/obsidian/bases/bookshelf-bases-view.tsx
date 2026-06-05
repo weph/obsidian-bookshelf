@@ -34,6 +34,23 @@ export abstract class BookshelfBasesView extends BasesView {
     }
 
     public onDataUpdated(): void {
+        this.root.render(
+            <StrictMode>
+                <div className={styles.container}>
+                    <this.viewComponent
+                        items={this.items()}
+                        onBookClick={this.bookshelfPlugin.handleBookClick.bind(this.bookshelfPlugin)}
+                    />
+                </div>
+            </StrictMode>,
+        )
+    }
+
+    private items(): GroupedData<Array<BookViewItem>> | Array<BookViewItem> {
+        if (this.data.groupedData.length === 1 && !this.data.groupedData[0].key) {
+            return this.data.data.map((entry) => this.bookViewItemFromBasesEntry(entry))
+        }
+
         const result: GroupedData<Array<BookViewItem>> = {
             groups: new Map<string | null, Array<BookViewItem>>(),
             nullLabel: 'Ungrouped',
@@ -48,16 +65,7 @@ export abstract class BookshelfBasesView extends BasesView {
             )
         }
 
-        this.root.render(
-            <StrictMode>
-                <div className={styles.container}>
-                    <this.viewComponent
-                        items={result}
-                        onBookClick={this.bookshelfPlugin.handleBookClick.bind(this.bookshelfPlugin)}
-                    />
-                </div>
-            </StrictMode>,
-        )
+        return result
     }
 
     protected abstract bookViewItemFromBasesEntry(entry: BasesEntry): BookViewItem
