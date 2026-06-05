@@ -5,7 +5,6 @@ import { createRoot, Root } from 'react-dom/client'
 import { GroupedData } from '../../bookshelf/book/grouping'
 import { ObsidianNotes } from '../obsidian-notes'
 import { ComponentType, MouseEvent, StrictMode } from 'react'
-import { GroupedView } from '../../component/library/grouped-books/grouped-view'
 import styles from './bookshelf-bases-view.module.scss'
 import { BookViewField, BookViewItem } from '../../component/library/book-view-item'
 import { Book } from '../../bookshelf/book/book'
@@ -14,7 +13,7 @@ export abstract class BookshelfBasesView extends BasesView {
     private root: Root
 
     abstract readonly viewComponent: ComponentType<{
-        items: Array<BookViewItem>
+        items: GroupedData<Array<BookViewItem>> | Array<BookViewItem>
         onBookClick: (book: Book, event: MouseEvent) => void
     }>
 
@@ -52,10 +51,9 @@ export abstract class BookshelfBasesView extends BasesView {
         this.root.render(
             <StrictMode>
                 <div className={styles.container}>
-                    <GroupedView
+                    <this.viewComponent
                         items={result}
                         onBookClick={this.bookshelfPlugin.handleBookClick.bind(this.bookshelfPlugin)}
-                        ViewComponent={this.viewComponent}
                     />
                 </div>
             </StrictMode>,

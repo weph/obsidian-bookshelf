@@ -1,9 +1,9 @@
-import { Book } from '../../bookshelf/book/book'
+import { Book } from '../../../bookshelf/book/book'
 import { createRoot } from 'react-dom/client'
 import { ReactNode } from 'react'
-import { BookProgressBar } from '../progress-bar/book-progress-bar'
-import { StarRating } from '../star-rating/star-rating'
-import { TagList } from '../tag-list/tag-list'
+import { BookProgressBar } from '../../progress-bar/book-progress-bar'
+import { StarRating } from '../../star-rating/star-rating'
+import { TagList } from '../../tag-list/tag-list'
 
 export type RenderFunction = (element: HTMLElement, book: Book) => void
 

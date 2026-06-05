@@ -1,8 +1,8 @@
 import { BookshelfBasesView } from './bookshelf-bases-view'
-import { BookTable } from '../../component/library/table/table'
+import { BookTable } from '../../component/library/view/table/table'
 import { BasesAllOptions, BasesEntry } from 'obsidian'
 import { BookViewField, BookViewItem } from '../../component/library/book-view-item'
-import { cover, progress, status, title } from '../../component/library/render-functions'
+import { cover, progress, status, title } from '../../component/library/view/render-functions'
 
 const CONFIG_FIELDS_TITLE = 'field_title'
 const CONFIG_FIELDS_COVER = 'field_cover'

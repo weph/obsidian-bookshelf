@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Book } from '../../bookshelf/book/book'
+import { Book } from '../../../bookshelf/book/book'
 import { RenderFunction } from './render-functions'
 
 interface Props {

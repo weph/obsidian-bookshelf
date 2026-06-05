@@ -1,9 +1,9 @@
 import { Input } from '../input/input'
 import { MouseEvent, useState } from 'react'
 import { Book, ReadingStatus } from '../../bookshelf/book/book'
-import { Gallery } from './gallery/gallery'
+import { Gallery } from './view/gallery/gallery'
 import { Dropdown, DropdownOption } from '../dropdown/dropdown'
-import { BookTable } from './table/table'
+import { BookTable } from './view/table/table'
 import styles from './library.module.scss'
 import { SortDropdownOption } from './book-sort-options'
 import { bookGroupingOptions } from './book-grouping-options'
@@ -12,11 +12,21 @@ import { SlidersHorizontal } from 'lucide-react'
 import { Button } from '../button/button'
 import { Books } from '../../bookshelf/book/books'
 import { ExpressionFactory } from '../../bookshelf/book/search/expression-factory'
-import { GroupedView } from './grouped-books/grouped-view'
 import { pluralize } from './pluralize'
 import { GroupedData } from '../../bookshelf/book/grouping'
 import { BookViewField, BookViewItem } from './book-view-item'
-import { author, duration, genres, pages, progress, published, rating, status, tags, title } from './render-functions'
+import {
+    author,
+    duration,
+    genres,
+    pages,
+    progress,
+    published,
+    rating,
+    status,
+    tags,
+    title,
+} from './view/render-functions'
 
 type ViewType = 'gallery' | 'table'
 
@@ -165,7 +175,7 @@ export function Library({ settings, settingsChanged, books, sortOptions, onBookC
             return (
                 <>
                     <BookCount total={books.length} filtered={filteredBooks.length} />
-                    <GroupedView items={groupedBookViewItems} onBookClick={onBookClick} ViewComponent={ViewComponent} />
+                    <ViewComponent items={groupedBookViewItems} onBookClick={onBookClick} />
                 </>
             )
         }

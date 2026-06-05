@@ -1,5 +1,5 @@
 import { Book } from '../../bookshelf/book/book'
-import { RenderFunction } from './render-functions'
+import { RenderFunction } from './view/render-functions'
 
 export interface BookViewField {
     name: string

@@ -1,5 +1,5 @@
 import { BookshelfBasesView } from './bookshelf-bases-view'
-import { Gallery } from '../../component/library/gallery/gallery'
+import { Gallery } from '../../component/library/view/gallery/gallery'
 import { BasesEntry } from 'obsidian'
 import { BookViewItem } from '../../component/library/book-view-item'
 

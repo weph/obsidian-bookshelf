@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { GalleryCard } from './gallery-card'
 import { fn } from 'storybook/test'
-import { books } from '../../../support/book-fixtures'
+import { books } from '../../../../support/book-fixtures'
 
 const meta = {
     title: 'Library/Gallery/Card',

@@ -2,6 +2,16 @@
     width: 100%;
     border-collapse: collapse;
 
+    .groupHeading {
+        td {
+            border: none;
+        }
+
+        &:not(:first-child) td {
+            padding-top: 4rem;
+        }
+    }
+
     td,
     th {
         vertical-align: top;
