@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 # Getting Started
@@ -10,7 +10,7 @@ sidebar_position: 1
 - Search for "Bookshelf" in Obsidian's community plugins browser
 - Install and enable the plugin
 
-## Accessing the views
+## Accessing the built-in views
 
 Bookshelf adds three views to Obsidian:
 

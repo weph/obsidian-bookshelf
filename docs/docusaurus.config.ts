@@ -30,6 +30,7 @@ const config: Config = {
             'classic',
             {
                 docs: {
+                    routeBasePath: '/',
                     sidebarPath: './sidebars.ts',
                     editUrl: 'https://github.com/weph/obsidian-bookshelf/tree/main/docs/',
                 },
