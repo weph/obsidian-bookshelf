@@ -8,7 +8,7 @@ import { ComponentType, MouseEvent, StrictMode } from 'react'
 import styles from './bookshelf-bases-view.module.scss'
 import { BookViewField, BookViewItem } from '../../component/library/book-view-item'
 import { Book } from '../../bookshelf/book/book'
-import { RenderedField } from '../../component/library/view/rendered-field'
+import { RenderedField } from '../../component/library/view/rendered-field/rendered-field'
 
 export abstract class BookshelfBasesView extends BasesView {
     private root: Root

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
-import { Book } from '../../../bookshelf/book/book'
+import { Book } from '../../../../bookshelf/book/book'
+import styles from './rendered-field.module.scss'
 
 interface Props {
     book: Book
@@ -17,5 +18,5 @@ export function RenderedField({ book, renderTo }: Props) {
         }
     }, [renderTo])
 
-    return <span ref={ref}></span>
+    return <span className={styles.field} ref={ref}></span>
 }
