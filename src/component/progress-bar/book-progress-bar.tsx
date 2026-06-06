@@ -15,12 +15,12 @@ const statusClass: Record<ReadingStatus, string> = {
 export function BookProgressBar({ book }: Props) {
     const currentPosition = book.lastPosition
 
-    if (book.status === 'finished' || currentPosition === null) {
-        return <></>
-    }
+    // if (book.status === 'finished' || currentPosition === null) {
+    //     return <></>
+    // }
 
-    const percentage = currentPosition.asPercentage(book) || 0
-    const value = percentage ? `${percentage}%` : currentPosition.toString()
+    const percentage = currentPosition?.asPercentage(book) || 0
+    const value = percentage ? `${percentage}%` : currentPosition?.toString() || '0%'
 
     return (
         <div className={`${styles.progressBarContainer} ${statusClass[book.status]}`}>

@@ -5,13 +5,12 @@ filters:
 views:
   - type: bookshelf-gallery
     name: Book Gallery
-    groupBy:
-      property: series
-      direction: ASC
     order: []
     sort:
       - property: position-in-series
         direction: ASC
+    progress_always: true
+    progress_show: true
   - type: bookshelf-table
     name: Book Table
     order:

@@ -1,6 +1,5 @@
 import styles from './gallery-card.module.scss'
 import { CoverPlaceholder } from '../../../cover-placeholder/cover-placeholder'
-import { BookProgressBar } from '../../../progress-bar/book-progress-bar'
 import * as react from 'react'
 import { MouseEvent, useId } from 'react'
 import { ReadingStatus } from '../../../../bookshelf/book/book'
@@ -48,7 +47,6 @@ export function GalleryCard({ item, onClick }: Props) {
                     {title}
                 </span>
             </div>
-            <BookProgressBar book={item.book} />
             {item.fields.map((field, index) => (
                 <div key={index}>
                     <div className={styles.fieldName}>{field.name}</div>
