@@ -3,7 +3,7 @@ import { RenderFunction } from './view/render-functions'
 
 export interface BookViewField {
     name: string
-    renderTo: RenderFunction
+    value: RenderFunction
 }
 
 export interface BookViewItem {

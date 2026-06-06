@@ -14,19 +14,19 @@ const configFields = [CONFIG_FIELDS_TITLE, CONFIG_FIELDS_COVER, CONFIG_FIELDS_PR
 const viewFields: { [key in (typeof configFields)[number]]: BookViewField } = {
     [CONFIG_FIELDS_TITLE]: {
         name: 'Title',
-        renderTo: title,
+        value: title,
     },
     [CONFIG_FIELDS_COVER]: {
         name: 'Cover',
-        renderTo: cover,
+        value: cover,
     },
     [CONFIG_FIELDS_PROGRESS]: {
         name: 'Progress',
-        renderTo: progress,
+        value: progress,
     },
     [CONFIG_FIELDS_STATUS]: {
         name: 'Status',
-        renderTo: status,
+        value: status,
     },
 }
 

@@ -74,49 +74,49 @@ const bookViewItemFields: { [key in ViewType]: Array<BookViewField> } = {
     gallery: [
         {
             name: '',
-            renderTo: (element, book) => book.status === 'reading' && progress(element, book),
+            value: (book) => (book.status === 'reading' ? progress(book) : <></>),
         },
     ],
     table: [
         {
             name: 'Title',
-            renderTo: title,
+            value: title,
         },
         {
             name: 'Author',
-            renderTo: author,
+            value: author,
         },
         {
             name: 'Published',
-            renderTo: published,
+            value: published,
         },
         {
             name: 'Pages',
-            renderTo: pages,
+            value: pages,
         },
         {
             name: 'Duration',
-            renderTo: duration,
+            value: duration,
         },
         {
             name: 'Progress',
-            renderTo: progress,
+            value: progress,
         },
         {
             name: 'Rating',
-            renderTo: rating,
+            value: rating,
         },
         {
             name: 'Tags',
-            renderTo: tags,
+            value: tags,
         },
         {
             name: 'Genres',
-            renderTo: genres,
+            value: genres,
         },
         {
             name: 'Status',
-            renderTo: status,
+            value: status,
         },
     ],
 }

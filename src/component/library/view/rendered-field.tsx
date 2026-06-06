@@ -1,10 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { Book } from '../../../bookshelf/book/book'
-import { RenderFunction } from './render-functions'
 
 interface Props {
     book: Book
-    renderTo: RenderFunction
+    renderTo: (e: HTMLElement, b: Book) => void
 }
 
 export function RenderedField({ book, renderTo }: Props) {

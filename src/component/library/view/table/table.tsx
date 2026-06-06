@@ -2,7 +2,6 @@ import { Book } from '../../../../bookshelf/book/book'
 import styles from './table.module.scss'
 import { MouseEvent } from 'react'
 import { BookViewItem } from '../../book-view-item'
-import { RenderedField } from '../rendered-field'
 import type { GroupedData } from '../../../../bookshelf/book/grouping'
 import { GroupHeading } from '../group-heading/group-heading'
 
@@ -80,9 +79,7 @@ function BookRows({
             {items.map((item, itemIndex) => (
                 <tr key={itemIndex} onClick={(e) => onBookClick(item.book, e)}>
                     {item.fields.map((field, fieldIndex) => (
-                        <td key={fieldIndex}>
-                            <RenderedField book={item.book} renderTo={field.renderTo} />
-                        </td>
+                        <td key={fieldIndex}>{field.value(item.book)}</td>
                     ))}
                 </tr>
             ))}

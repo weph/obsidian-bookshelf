@@ -19,11 +19,11 @@ function renderFunction(books: Array<Book>) {
                 fields: [
                     {
                         name: 'Published',
-                        renderTo: (e) => (e.innerText = book.metadata.published?.getFullYear().toString() || ''),
+                        value: (book) => <>{book.metadata.published?.getFullYear().toString() || ''}</>,
                     },
                     {
                         name: 'Comment',
-                        renderTo: (e) => (e.innerText = book.metadata.comment || ''),
+                        value: (book) => <>{book.metadata.comment || ''}</>,
                     },
                 ],
             }))}

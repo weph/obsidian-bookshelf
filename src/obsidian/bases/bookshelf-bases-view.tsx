@@ -8,6 +8,7 @@ import { ComponentType, MouseEvent, StrictMode } from 'react'
 import styles from './bookshelf-bases-view.module.scss'
 import { BookViewField, BookViewItem } from '../../component/library/book-view-item'
 import { Book } from '../../bookshelf/book/book'
+import { RenderedField } from '../../component/library/view/rendered-field'
 
 export abstract class BookshelfBasesView extends BasesView {
     private root: Root
@@ -73,7 +74,16 @@ export abstract class BookshelfBasesView extends BasesView {
     protected bookViewFieldFromBasesPropertyId(entry: BasesEntry, id: BasesPropertyId): BookViewField {
         return {
             name: this.config.getDisplayName(id),
-            renderTo: (e: HTMLElement) => entry.getValue(id)!.renderTo(e, this.app.renderContext),
+            value: (book: Book) => {
+                return (
+                    <RenderedField
+                        book={book}
+                        renderTo={(element: HTMLElement) =>
+                            entry.getValue(id)!.renderTo(element, this.app.renderContext)
+                        }
+                    />
+                )
+            },
         }
     }
 }

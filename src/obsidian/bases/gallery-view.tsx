@@ -42,7 +42,7 @@ export class GalleryView extends BookshelfBasesView {
         const bookshelfFields = []
         if (this.config.get(CONFIG_PROGRESS_SHOW)) {
             if (this.config.get(CONFIG_PROGRESS_ALWAYS) || book.status === 'reading') {
-                bookshelfFields.push({ name: '', renderTo: progress })
+                bookshelfFields.push({ name: '', value: progress })
             }
         }
 

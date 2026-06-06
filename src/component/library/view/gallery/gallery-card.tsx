@@ -6,7 +6,6 @@ import { ReadingStatus } from '../../../../bookshelf/book/book'
 import { Check, LucideProps, X } from 'lucide-react'
 import { Icon } from '../../../icon/icon'
 import { BookViewItem } from '../../book-view-item'
-import { RenderedField } from '../rendered-field'
 
 interface Props {
     item: BookViewItem
@@ -50,9 +49,7 @@ export function GalleryCard({ item, onClick }: Props) {
             {item.fields.map((field, index) => (
                 <div key={index}>
                     <div className={styles.fieldName}>{field.name}</div>
-                    <div className={styles.fieldValue}>
-                        <RenderedField book={item.book} renderTo={field.renderTo} />
-                    </div>
+                    <div className={styles.fieldValue}>{field.value(item.book)}</div>
                 </div>
             ))}
         </div>

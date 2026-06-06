@@ -21,7 +21,7 @@ export const Primary: Story = {
             fields: [
                 {
                     name: 'Comment',
-                    renderTo: (e) => (e.innerText = books.tddByExample.metadata.comment || ''),
+                    value: (book) => <>{book.metadata.comment || ''}</>,
                 },
             ],
         },
