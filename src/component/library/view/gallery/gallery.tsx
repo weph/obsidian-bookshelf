@@ -1,5 +1,5 @@
 import { Book } from '../../../../bookshelf/book/book'
-import { GalleryCard } from './gallery-card'
+import { GalleryCard, ProgressBarOptions } from './gallery-card'
 import styles from './gallery.module.scss'
 import { MouseEvent } from 'react'
 import { BookViewItem } from '../../book-view-item'
@@ -9,14 +9,20 @@ import { GroupHeading } from '../group-heading/group-heading'
 interface Props {
     items: GroupedData<Array<BookViewItem>> | Array<BookViewItem>
     onBookClick: (book: Book, event: MouseEvent) => void
+    progressBar?: ProgressBarOptions
 }
 
-export function Gallery({ items, onBookClick }: Props) {
+export function Gallery({ items, onBookClick, progressBar }: Props) {
     if (Array.isArray(items)) {
         return (
             <div className={styles.gallery} role="list">
                 {items.map((item, index) => (
-                    <GalleryCard key={index} item={item} onClick={(e) => onBookClick(item.book, e)} />
+                    <GalleryCard
+                        key={index}
+                        item={item}
+                        onClick={(e) => onBookClick(item.book, e)}
+                        progressBar={progressBar || 'only-reading'}
+                    />
                 ))}
             </div>
         )
@@ -31,7 +37,12 @@ export function Gallery({ items, onBookClick }: Props) {
             />
             <div className={styles.gallery} role="list">
                 {entry[1].map((item, index) => (
-                    <GalleryCard key={index} item={item} onClick={(e) => onBookClick(item.book, e)} />
+                    <GalleryCard
+                        key={index}
+                        item={item}
+                        onClick={(e) => onBookClick(item.book, e)}
+                        progressBar={progressBar || 'only-reading'}
+                    />
                 ))}
             </div>
         </div>

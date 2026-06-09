@@ -4,19 +4,12 @@ import BookshelfPlugin from '../bookshelf-plugin'
 import { createRoot, Root } from 'react-dom/client'
 import { GroupedData } from '../../bookshelf/book/grouping'
 import { ObsidianNotes } from '../obsidian-notes'
-import { ComponentType, MouseEvent, StrictMode } from 'react'
-import styles from './bookshelf-bases-view.module.scss'
 import { BookViewField, BookViewItem } from '../../component/library/book-view-item'
 import { Book } from '../../bookshelf/book/book'
 import { RenderedField } from '../../component/library/view/rendered-field/rendered-field'
 
 export abstract class BookshelfBasesView extends BasesView {
-    private root: Root
-
-    abstract readonly viewComponent: ComponentType<{
-        items: GroupedData<Array<BookViewItem>> | Array<BookViewItem>
-        onBookClick: (book: Book, event: MouseEvent) => void
-    }>
+    protected root: Root
 
     constructor(
         controller: QueryController,
@@ -35,17 +28,10 @@ export abstract class BookshelfBasesView extends BasesView {
     }
 
     public onDataUpdated(): void {
-        this.root.render(
-            <StrictMode>
-                <div className={styles.container}>
-                    <this.viewComponent
-                        items={this.items()}
-                        onBookClick={this.bookshelfPlugin.handleBookClick.bind(this.bookshelfPlugin)}
-                    />
-                </div>
-            </StrictMode>,
-        )
+        this.render(this.items())
     }
+
+    protected abstract render(items: GroupedData<Array<BookViewItem>> | Array<BookViewItem>): void
 
     private items(): GroupedData<Array<BookViewItem>> | Array<BookViewItem> {
         if (this.data.groupedData.length === 1 && !this.data.groupedData[0].key) {

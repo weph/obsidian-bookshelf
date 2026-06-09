@@ -71,12 +71,7 @@ const viewOptions: Array<DropdownOption<ViewType>> = [
 ]
 
 const bookViewItemFields: { [key in ViewType]: Array<BookViewField> } = {
-    gallery: [
-        {
-            name: '',
-            value: (book) => (book.status === 'reading' ? progress(book) : <></>),
-        },
-    ],
+    gallery: [],
     table: [
         {
             name: 'Title',

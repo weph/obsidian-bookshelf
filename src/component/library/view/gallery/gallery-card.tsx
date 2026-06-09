@@ -6,10 +6,14 @@ import { ReadingStatus } from '../../../../bookshelf/book/book'
 import { Check, LucideProps, X } from 'lucide-react'
 import { Icon } from '../../../icon/icon'
 import { BookViewItem } from '../../book-view-item'
+import { BookProgressBar } from '../../../progress-bar/book-progress-bar'
+
+export type ProgressBarOptions = 'never' | 'only-reading' | 'always'
 
 interface Props {
     item: BookViewItem
     onClick: (event: MouseEvent) => void
+    progressBar: ProgressBarOptions
 }
 
 type IconType = react.ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & react.RefAttributes<SVGSVGElement>>
@@ -21,7 +25,7 @@ const ribbonIcon: Record<ReadingStatus, IconType | null> = {
     abandoned: X,
 }
 
-export function GalleryCard({ item, onClick }: Props) {
+export function GalleryCard({ item, onClick, progressBar }: Props) {
     const titleId = useId()
     const cover = item.book.metadata.cover
     const title = item.book.metadata.title
@@ -46,6 +50,9 @@ export function GalleryCard({ item, onClick }: Props) {
                     {title}
                 </span>
             </div>
+            {(progressBar === 'always' || (progressBar === 'only-reading' && item.book.status === 'reading')) && (
+                <BookProgressBar book={item.book} />
+            )}
             {item.fields.map((field, index) => (
                 <div key={index}>
                     <div className={styles.fieldName}>{field.name}</div>

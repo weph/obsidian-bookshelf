@@ -3,6 +3,9 @@ import { BookTable } from '../../component/library/view/table/table'
 import { BasesAllOptions, BasesEntry } from 'obsidian'
 import { BookViewField, BookViewItem } from '../../component/library/book-view-item'
 import { cover, progress, status, title } from '../../component/library/view/render-functions'
+import { GroupedData } from '../../bookshelf/book/grouping'
+import { StrictMode } from 'react'
+import styles from './bookshelf-bases-view.module.scss'
 
 const CONFIG_FIELDS_TITLE = 'field_title'
 const CONFIG_FIELDS_COVER = 'field_cover'
@@ -34,7 +37,6 @@ export const TableViewType = 'bookshelf-table'
 
 export class TableView extends BookshelfBasesView {
     readonly type = TableViewType
-    override viewComponent = BookTable
 
     static override options(): Array<BasesAllOptions> {
         return [
@@ -48,6 +50,19 @@ export class TableView extends BookshelfBasesView {
                 })),
             },
         ]
+    }
+
+    protected render(items: GroupedData<Array<BookViewItem>> | Array<BookViewItem>): void {
+        this.root.render(
+            <StrictMode>
+                <div className={styles.container}>
+                    <BookTable
+                        items={items}
+                        onBookClick={this.bookshelfPlugin.handleBookClick.bind(this.bookshelfPlugin)}
+                    />
+                </div>
+            </StrictMode>,
+        )
     }
 
     protected bookViewItemFromBasesEntry(entry: BasesEntry): BookViewItem {
