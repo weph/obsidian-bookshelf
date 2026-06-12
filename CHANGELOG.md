@@ -11,12 +11,12 @@ For a full diff see [`0.20.0...main`][0.20.0...main].
 
 ### Added
 
-- New Bases view "Bookshelf gallery"
+- New Bases layouts: **Bookshelf gallery** and **Bookshelf table**\
+  In addition to the built-in views, you can now create custom Bases views for your library, using Bookshelf-specific fields alongside your existing note properties.
 - Added property to override book title ([#44](https://github.com/weph/obsidian-bookshelf/issues/44))
 
 ### Changed
 
-- Hide progress bar after book has been finished
 - Show progress bar with current position instead of percentage if total pages/duration is unknown
 
 ## [`0.20.0`][0.20.0] - 2026-04-10
