@@ -126,8 +126,7 @@ export default class BookshelfPlugin extends Plugin {
         const modifierPressed = (isMac && event.metaKey) || (!isMac && event.ctrlKey)
 
         if (modifierPressed) {
-            this.openLink(book).catch((reason) => console.error(`Error opening link: ${reason}`))
-            return
+            return this.openLink(book)
         }
 
         this.openBookModal(book)
@@ -137,17 +136,15 @@ export default class BookshelfPlugin extends Plugin {
         new BookModal(this.app, this, this.bookshelf, book).open()
     }
 
-    public async openLink(book: Book | Link): Promise<void> {
-        if (book instanceof Link) {
-            if (book.type === 'external') {
-                location.href = book.target
-            } else {
-                await this.app.workspace.openLinkText(book.target, '')
-            }
+    public openLink(book: Book | Link): void {
+        if (book instanceof Link && book.type === 'external') {
+            location.href = book.target
             return
         }
 
-        await this.app.workspace.openLinkText(book.note.basename, '')
+        const linkText = book instanceof Link ? book.target : book.note.basename
+
+        this.app.workspace.openLinkText(linkText, '').catch((reason) => console.error(`Error opening link: ${reason}`))
     }
 
     private newBookshelfInstance(): Bookshelf {

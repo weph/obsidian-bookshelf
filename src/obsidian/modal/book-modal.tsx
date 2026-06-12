@@ -24,9 +24,9 @@ export class BookModal extends Modal {
                 <SyncedBookDetails
                     bookshelf={this.bookshelf}
                     book={this.book}
-                    openLink={async (book: Book | Link) => {
+                    openLink={(book: Book | Link) => {
                         this.close()
-                        await this.bookshelfPlugin.openLink(book)
+                        this.bookshelfPlugin.openLink(book)
                     }}
                 />
             </StrictMode>,
