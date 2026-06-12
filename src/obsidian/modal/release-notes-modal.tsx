@@ -14,10 +14,14 @@ export class ReleaseNotesModal extends Modal {
         this.setTitle('Bookshelf release notes')
     }
 
-    override async onClose(): Promise<void> {
-        await this.bookshelfPlugin.loadSettings()
-        this.bookshelfPlugin.settings.previousVersion = this.bookshelfPlugin.version.asString()
-        await this.bookshelfPlugin.saveSettings()
+    override onClose(): void {
+        this.bookshelfPlugin
+            .loadSettings()
+            .then(() => {
+                this.bookshelfPlugin.settings.previousVersion = this.bookshelfPlugin.version.asString()
+                this.bookshelfPlugin.saveSettings().catch((reason) => console.error(`Error saving settings" ${reason}`))
+            })
+            .catch((reason) => console.error(`Error loading settings" ${reason}`))
     }
 
     override async onOpen(): Promise<void> {
