@@ -1,4 +1,4 @@
-import { beforeEach, expect, it, vi } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Dropdown } from './dropdown'
@@ -6,10 +6,6 @@ import { Dropdown } from './dropdown'
 const fooOption = { value: 'foo', label: 'Foo' }
 const barOption = { value: 'bar', label: 'Bar' }
 const onChange = vi.fn()
-
-beforeEach(() => {
-    document.body.innerHTML = ''
-})
 
 it('should show selected value', async () => {
     render(

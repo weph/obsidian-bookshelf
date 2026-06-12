@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, test, vi } from 'vitest'
+import { describe, expect, it, test, vi } from 'vitest'
 import { Input } from './input'
 import { fireEvent } from '@testing-library/dom'
 import { EventType } from '@testing-library/dom/types/events'
@@ -6,12 +6,6 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 const onUpdate = vi.fn()
-
-beforeEach(async () => {
-    vi.resetAllMocks()
-
-    document.body.innerHTML = ''
-})
 
 describe('onUpdate', () => {
     it.each(['input', 'keyUp', 'change'])('should notify about every %s event', (event: string) => {

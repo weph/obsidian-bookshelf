@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { BookDetails } from './book-details'
 import { BookBuilder } from '../../support/book-builder'
@@ -8,12 +8,6 @@ import { fireEvent } from '@testing-library/dom'
 
 const openLink = vi.fn()
 const addProgress = vi.fn()
-
-beforeEach(() => {
-    vi.resetAllMocks()
-
-    document.body.innerHTML = ''
-})
 
 describe('Reading progress', () => {
     test('Hide "Finish (and track remaining progress)" action if total pages is not known', () => {

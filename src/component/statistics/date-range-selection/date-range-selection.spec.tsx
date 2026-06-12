@@ -8,10 +8,6 @@ const onChange = vi.fn()
 let user: UserEvent
 
 beforeEach(() => {
-    vi.resetAllMocks()
-
-    document.body.innerHTML = ''
-
     user = userEvent.setup()
 })
 

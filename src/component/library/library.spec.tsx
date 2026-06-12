@@ -27,10 +27,6 @@ function renderLibrary(props: Partial<Props>): void {
 }
 
 beforeEach(() => {
-    vi.resetAllMocks()
-
-    document.body.innerHTML = ''
-
     user = userEvent.setup()
 })
 
@@ -170,7 +166,7 @@ function mainContent(): Element {
 function cardTitles(): Array<string> {
     const items = screen.queryAllByRole('listitem')
 
-    return items.map((i) => document.getElementById(i.getAttribute('aria-labelledby') || '')?.textContent || '')
+    return items.map((i) => activeDocument.getElementById(i.getAttribute('aria-labelledby') || '')?.textContent || '')
 }
 
 function book(title: string): Book {
