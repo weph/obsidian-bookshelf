@@ -43,7 +43,7 @@ export class ReadingJourney {
     }
 
     public frequencyMap<T>(keys: (book: Book) => undefined | T | Array<T>): Map<T, number> {
-        const result = new Map()
+        const result = new Map<T, number>()
 
         for (const book of this.books()) {
             const bookKeys = keys(book)
