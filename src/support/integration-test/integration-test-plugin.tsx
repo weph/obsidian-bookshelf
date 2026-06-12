@@ -20,7 +20,7 @@ class TestRunnerView extends ItemView {
     }
 
     getDisplayText(): string {
-        return 'Test Runner'
+        return 'Test runner'
     }
 
     protected override async onOpen(): Promise<void> {
