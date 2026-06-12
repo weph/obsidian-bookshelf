@@ -1,5 +1,5 @@
 import { Input } from '../input/input'
-import { MouseEvent, useState } from 'react'
+import { useState } from 'react'
 import { Book, ReadingStatus } from '../../bookshelf/book/book'
 import { Gallery } from './view/gallery/gallery'
 import { Dropdown, DropdownOption } from '../dropdown/dropdown'
@@ -27,6 +27,7 @@ import {
     tags,
     title,
 } from './view/render-functions'
+import { BookClickCallback } from '../types'
 
 type ViewType = 'gallery' | 'table'
 
@@ -53,7 +54,7 @@ export interface Props {
     settingsChanged: (newSettings: Settings) => void
     books: Books
     sortOptions: Array<SortDropdownOption>
-    onBookClick: (book: Book, event: MouseEvent) => void
+    onBookClick: BookClickCallback
     expressionFactory: ExpressionFactory
 }
 

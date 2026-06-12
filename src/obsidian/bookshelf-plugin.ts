@@ -121,12 +121,13 @@ export default class BookshelfPlugin extends Plugin {
         })
     }
 
-    public async handleBookClick(book: Book, event: MouseEvent): Promise<void> {
+    public handleBookClick(book: Book, event: MouseEvent): void {
         const isMac = Platform.isMacOS
         const modifierPressed = (isMac && event.metaKey) || (!isMac && event.ctrlKey)
 
         if (modifierPressed) {
-            return this.openLink(book)
+            this.openLink(book).catch((reason) => console.error(`Error opening link: ${reason}`))
+            return
         }
 
         this.openBookModal(book)

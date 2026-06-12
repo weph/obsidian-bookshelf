@@ -1,13 +1,12 @@
-import { Book } from '../../../../bookshelf/book/book'
 import styles from './table.module.scss'
-import { MouseEvent } from 'react'
 import { BookViewItem } from '../../book-view-item'
 import type { GroupedData } from '../../../../bookshelf/book/grouping'
 import { GroupHeading } from '../group-heading/group-heading'
+import { BookClickCallback } from '../../../types'
 
 interface Props {
     items: GroupedData<Array<BookViewItem>> | Array<BookViewItem>
-    onBookClick: (book: Book, event: MouseEvent) => void
+    onBookClick: BookClickCallback
 }
 
 export function BookTable({ items, onBookClick }: Props) {
@@ -42,7 +41,7 @@ interface BookGroupProps {
     heading: string
     fallback: boolean
     items: Array<BookViewItem>
-    onBookClick: (book: Book, event: MouseEvent) => void
+    onBookClick: BookClickCallback
 }
 
 function BookGroup({ heading, fallback, items, onBookClick }: BookGroupProps) {
@@ -58,13 +57,7 @@ function BookGroup({ heading, fallback, items, onBookClick }: BookGroupProps) {
     )
 }
 
-function BookRows({
-    items,
-    onBookClick,
-}: {
-    items: Array<BookViewItem>
-    onBookClick: (book: Book, event: MouseEvent) => void
-}) {
+function BookRows({ items, onBookClick }: { items: Array<BookViewItem>; onBookClick: BookClickCallback }) {
     if (items.length === 0) {
         return null
     }

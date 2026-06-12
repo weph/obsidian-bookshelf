@@ -1,15 +1,16 @@
 import { StatisticsPanel } from '../statistics-panel/statistics-panel'
 import { Gallery } from '../../library/view/gallery/gallery'
 import { Statistics } from '../../../bookshelf/reading-journey/statistics/statistics'
-import { Book, ReadingStatus } from '../../../bookshelf/book/book'
-import { MouseEvent, useState } from 'react'
+import { ReadingStatus } from '../../../bookshelf/book/book'
+import { useState } from 'react'
 import { Dropdown, DropdownOption } from '../../dropdown/dropdown'
 import { MatchField } from '../../../bookshelf/book/search/expressions/match-field'
 import { Equals } from '../../../bookshelf/book/search/conditions/equals'
+import { BookClickCallback } from '../../types'
 
 interface Props {
     statistics: Statistics
-    onBookClick: (book: Book, event: MouseEvent) => void
+    onBookClick: BookClickCallback
 }
 
 const statusFilterOptions: Array<DropdownOption<ReadingStatus | null>> = [

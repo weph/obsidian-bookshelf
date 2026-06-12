@@ -1,6 +1,5 @@
 import { Bookshelf } from '../../bookshelf/bookshelf'
-import { Book } from '../../bookshelf/book/book'
-import { MouseEvent, useState } from 'react'
+import { useState } from 'react'
 import { AvailableInterval, PagesReadChart } from './pages-read-chart/pages-read-chart'
 import { DistributionChart } from './distribution-chart/distribution-chart'
 import styles from './statistics.module.scss'
@@ -11,10 +10,11 @@ import { ReadingStreak } from './reading-streak/reading-streak'
 import { BookMetricsPanel } from './book-metrics-panel/book-metrics-panel'
 import { PageReadMetricsPanel } from './page-read-metrics-panel/page-read-metrics-panel'
 import { BookGalleryPanel } from './book-gallery-panel/book-gallery-panel'
+import { BookClickCallback } from '../types'
 
 export interface Props {
     bookshelf: Bookshelf
-    onBookClick: (book: Book, event: MouseEvent) => void
+    onBookClick: BookClickCallback
 }
 
 export function Statistics({ bookshelf, onBookClick }: Props) {

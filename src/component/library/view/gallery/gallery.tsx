@@ -1,14 +1,13 @@
-import { Book } from '../../../../bookshelf/book/book'
 import { GalleryCard, ProgressBarOptions } from './gallery-card'
 import styles from './gallery.module.scss'
-import { MouseEvent } from 'react'
 import { BookViewItem } from '../../book-view-item'
 import type { GroupedData } from '../../../../bookshelf/book/grouping'
 import { GroupHeading } from '../group-heading/group-heading'
+import { BookClickCallback } from '../../../types'
 
 interface Props {
     items: GroupedData<Array<BookViewItem>> | Array<BookViewItem>
-    onBookClick: (book: Book, event: MouseEvent) => void
+    onBookClick: BookClickCallback
     progressBar?: ProgressBarOptions
 }
 
