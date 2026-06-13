@@ -1,4 +1,15 @@
 export const releaseNotes = {
+    '0.21.0': `
+### Added
+
+- New Bases layouts: **Bookshelf gallery** and **Bookshelf table**\\
+  In addition to the built-in views, you can now create custom Bases views for your library, using Bookshelf-specific fields alongside your existing note properties. Let me know what you think in the [GitHub discussion](https://github.com/weph/obsidian-bookshelf/discussions/55) 
+- Added property to override book title ([#44](https://github.com/weph/obsidian-bookshelf/issues/44))
+
+### Changed
+
+- Show progress bar with current position instead of percentage if total pages/duration is unknown
+`,
     '0.20.0': `
 ### Added
 

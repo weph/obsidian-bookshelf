@@ -12,7 +12,7 @@ For a full diff see [`0.20.0...main`][0.20.0...main].
 ### Added
 
 - New Bases layouts: **Bookshelf gallery** and **Bookshelf table**\
-  In addition to the built-in views, you can now create custom Bases views for your library, using Bookshelf-specific fields alongside your existing note properties.
+  In addition to the built-in views, you can now create custom Bases views for your library, using Bookshelf-specific fields alongside your existing note properties. Let me know what you think in the [GitHub discussion](https://github.com/weph/obsidian-bookshelf/discussions/55)
 - Added property to override book title ([#44](https://github.com/weph/obsidian-bookshelf/issues/44))
 
 ### Changed
