@@ -70,15 +70,23 @@ const bookshelf = BookshelfFactory.fromConfiguration({
     linkToUri: (link) => link,
 })
 
-bookshelf.process(
-    new FakeNote(
-        'Books/Book.md',
-        new StaticMetadata({
-            tags: ['fiction', 'fantasy'],
-        }),
-        ['2025-01-01: 1-50', '2025-01-02: 51-110', '2025-02-01: 111-130', '2025-03-05: 131-200', '2025-03-06: 201-240'],
-    ),
-)
+bookshelf
+    .process(
+        new FakeNote(
+            'Books/Book.md',
+            new StaticMetadata({
+                tags: ['fiction', 'fantasy'],
+            }),
+            [
+                '2025-01-01: 1-50',
+                '2025-01-02: 51-110',
+                '2025-02-01: 111-130',
+                '2025-03-05: 131-200',
+                '2025-03-06: 201-240',
+            ],
+        ),
+    )
+    .catch((reason) => console.error(`Error processing note: ${reason}`))
 
 export const Primary: Story = {
     render: () => <Statistics bookshelf={bookshelf} onBookClick={fn()} />,
