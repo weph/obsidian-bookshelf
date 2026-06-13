@@ -11,6 +11,12 @@ const preview: Preview = {
             },
         },
     },
+    decorators: [
+        (story) => {
+            document.body.className = 'theme-light'
+            return story()
+        },
+    ],
 }
 
 window.moment = moment
