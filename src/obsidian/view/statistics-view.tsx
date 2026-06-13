@@ -30,12 +30,12 @@ export class StatisticsView extends ItemView {
     protected override async onOpen(): Promise<void> {
         createRoot(this.containerEl.children[1]).render(
             <StrictMode>
-                <AppContext value={{ displayTooltip }}>
+                <AppContext.Provider value={{ displayTooltip }}>
                     <Statistics
                         bookshelf={this.bookshelf}
                         onBookClick={this.bookshelfPlugin.handleBookClick.bind(this.bookshelfPlugin)}
                     />
-                </AppContext>
+                </AppContext.Provider>
             </StrictMode>,
         )
     }

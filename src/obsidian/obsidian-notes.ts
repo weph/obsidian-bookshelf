@@ -34,6 +34,12 @@ export class ObsidianNotes implements Notes {
             return this.noteByFile(file)
         }
 
-        return this.noteByFile(await createDailyNote(window.moment(date)))
+        const dailyNoteFile = await createDailyNote(window.moment(date))
+
+        if (dailyNoteFile === undefined) {
+            throw new Error('Unable to create daily note')
+        }
+
+        return this.noteByFile(dailyNoteFile)
     }
 }
