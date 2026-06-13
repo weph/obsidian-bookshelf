@@ -21,7 +21,7 @@ export interface Configuration {
     notes: Notes
     subscribers?: Subscribers
 
-    linkToUri(link: string): string
+    linkToUri(this: void, link: string): string
 }
 
 export class BookshelfFactory {

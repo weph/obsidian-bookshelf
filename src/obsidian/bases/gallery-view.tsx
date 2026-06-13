@@ -14,7 +14,7 @@ export const GalleryViewType = 'bookshelf-gallery'
 export class GalleryView extends BookshelfBasesView {
     readonly type = GalleryViewType
 
-    static override options(): Array<BasesAllOptions> {
+    static override options(this: void): Array<BasesAllOptions> {
         return [
             {
                 type: 'dropdown',

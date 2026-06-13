@@ -38,7 +38,7 @@ export const TableViewType = 'bookshelf-table'
 export class TableView extends BookshelfBasesView {
     readonly type = TableViewType
 
-    static override options(): Array<BasesAllOptions> {
+    static override options(this: void): Array<BasesAllOptions> {
         return [
             {
                 type: 'group',

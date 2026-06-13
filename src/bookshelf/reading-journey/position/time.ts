@@ -5,7 +5,7 @@ import { Playtime } from '../../shared/playtime'
 export class Time implements Position {
     constructor(private value: Playtime) {}
 
-    public static fromString(input: string): Time {
+    public static fromString(this: void, input: string): Time {
         return new Time(Playtime.fromString(input))
     }
 

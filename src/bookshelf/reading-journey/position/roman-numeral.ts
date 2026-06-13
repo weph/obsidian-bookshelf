@@ -4,7 +4,7 @@ import * as romans from 'romans'
 export class RomanNumeral implements Position {
     constructor(private value: number) {}
 
-    public static fromString(input: string): RomanNumeral {
+    public static fromString(this: void, input: string): RomanNumeral {
         return new RomanNumeral(romans.deromanize(input.toUpperCase()))
     }
 

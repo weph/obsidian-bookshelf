@@ -22,7 +22,7 @@ function seriesDifference(a: BookMetadata, b: BookMetadata): number {
 }
 
 export interface SortDropdownOption extends DropdownOption<string> {
-    compareFn(a: Book, b: Book): number
+    compareFn(this: void, a: Book, b: Book): number
 }
 
 export const bookSortOptions: Array<SortDropdownOption> = [
