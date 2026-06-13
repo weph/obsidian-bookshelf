@@ -15,7 +15,7 @@ export class BookshelfSettingsTab extends PluginSettingTab {
         this.plugin = plugin
     }
 
-    display(): void {
+    override display(): void {
         this.containerEl.empty()
 
         this.addGeneralSettings()

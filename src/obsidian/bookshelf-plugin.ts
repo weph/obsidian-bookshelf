@@ -30,7 +30,7 @@ export interface DailyNotesSettings {
 export default class BookshelfPlugin extends Plugin {
     public readonly version = Version.fromString('__bookshelf_plugin_version__')
 
-    public settings: BookshelfPluginSettings
+    public override settings: BookshelfPluginSettings
 
     private readonly notes: ObsidianNotes
 
