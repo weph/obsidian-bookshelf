@@ -5,11 +5,14 @@ on:
         tags:
             - '*'
 
+permissions:
+    id-token: write
+    contents: write
+    attestations: write
+
 jobs:
     build:
         runs-on: ubuntu-latest
-        permissions:
-            contents: write
         steps:
             - uses: actions/checkout@v3
 
@@ -22,6 +25,15 @@ jobs:
               run: |
                   npm install
                   npm run build
+
+            - name: Generate artifact attestations
+              uses: actions/attest@v4
+              continue-on-error: true
+              with:
+                  subject-path: |
+                      dist/main.js
+                      dist/manifest.json
+                      dist/styles.css
 
             - name: Create release
               env:
