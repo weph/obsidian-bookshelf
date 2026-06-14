@@ -3,7 +3,7 @@ import { Playtime } from './playtime'
 
 describe('Playtime', () => {
     test('Invalid values must not be accepted', () => {
-        expect(() => Playtime.fromString('1:2345')).toThrowError('Playtime "1:2345" is not in format <hours>:<minutes>')
+        expect(() => Playtime.fromString('1:2345')).toThrow('Playtime "1:2345" is not in format <hours>:<minutes>')
     })
 
     test('Query hours', () => {
