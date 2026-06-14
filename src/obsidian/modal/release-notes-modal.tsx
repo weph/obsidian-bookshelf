@@ -29,6 +29,10 @@ export class ReleaseNotesModal extends Modal {
 
         const items = this.releaseNotes(previousVersion)
 
+        if (items.length === 0) {
+            this.close()
+        }
+
         this.contentEl.className = styles.releaseNotesModal
         await MarkdownRenderer.render(this.app, items.join('\n\n'), this.contentEl, '', this.bookshelfPlugin)
     }
