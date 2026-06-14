@@ -49,7 +49,11 @@ function SyncedBookDetails({
         <BookDetails
             book={book}
             openLink={openLink}
-            addProgress={async (item) => await bookshelf.addToReadingJourney(item)}
+            addProgress={(item) => {
+                bookshelf
+                    .addToReadingJourney(item)
+                    .catch((reason) => console.error(`Error adding item to reading journey: ${reason}`))
+            }}
         />
     )
 }

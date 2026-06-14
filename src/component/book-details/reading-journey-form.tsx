@@ -25,7 +25,7 @@ function initialValues(book: Book): { action: Action; start: Position } {
 
 interface Props {
     book: Book
-    add: (item: ReadingJourneyMatch) => Promise<void>
+    add: (item: ReadingJourneyMatch) => void
 }
 
 interface PositionState {
@@ -63,35 +63,35 @@ export function ReadingJourneyForm({ book, add }: Props) {
 
     const lastPosition = initial.start.last(book)
 
-    const handleAdd = async () => {
+    const handleAdd = () => {
         const dateObject = DateTime.fromISO(date).toJSDate()
 
         switch (action) {
             case 'started':
             case 'abandoned':
             case 'finished':
-                await add({ action: action, bookNote: book.note, date: dateObject })
+                add({ action: action, bookNote: book.note, date: dateObject })
                 break
             case 'progress+finish':
                 if (lastPosition === null) {
                     return
                 }
 
-                await add({
+                add({
                     action: 'progress',
                     bookNote: book.note,
                     date: dateObject,
                     start: null,
                     end: lastPosition,
                 })
-                await add({ action: 'finished', bookNote: book.note, date: dateObject })
+                add({ action: 'finished', bookNote: book.note, date: dateObject })
                 break
             case 'progress':
                 if (end.positionValue === null) {
                     throw new Error('Cannot add progress without end position')
                 }
 
-                await add({
+                add({
                     action: action,
                     bookNote: book.note,
                     date: dateObject,

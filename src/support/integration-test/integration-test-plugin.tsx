@@ -143,7 +143,7 @@ export default class IntegrationTestPlugin extends Plugin {
 
     private async updateFile(name: string, content: string): Promise<void> {
         this.updatedFiles.delete(name)
-        this.app.vault.modify(this.file(name), content)
+        await this.app.vault.modify(this.file(name), content)
         await this.waitForFileUpdate(name)
     }
 

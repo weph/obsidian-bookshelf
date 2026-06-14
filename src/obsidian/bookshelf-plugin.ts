@@ -159,7 +159,7 @@ export default class BookshelfPlugin extends Plugin {
 
     private processAllNotesOnceWorkspaceIsReady(): void {
         if (this.app.workspace.layoutReady) {
-            this.initialNoteProcessing()
+            this.initialNoteProcessing().catch((reason) => console.error(`Error processing notes: ${reason}`))
         } else {
             this.app.workspace.onLayoutReady(() => this.initialNoteProcessing())
         }
