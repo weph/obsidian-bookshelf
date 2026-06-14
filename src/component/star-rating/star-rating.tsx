@@ -7,7 +7,7 @@ interface Props {
 export function StarRating({ value }: Props) {
     const full = Math.trunc(value)
     const fraction = value - full
-    const percentages = Array(full).fill(1).concat(fraction)
+    const percentages = Array<number>(full).fill(1).concat(fraction)
 
     return (
         <div className={styles.starRating}>
