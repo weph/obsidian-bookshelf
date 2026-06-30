@@ -1,4 +1,9 @@
 export const releaseNotes = {
+    '0.21.3': `
+### Fixed
+
+- 'Finish (and track remaining progress)' adds remaining pages properly again ([#56](https://github.com/weph/obsidian-bookshelf/issues/56))
+`,
     '0.21.0': `
 ### Added
 

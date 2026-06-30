@@ -49,13 +49,15 @@ describe('Reading progress', () => {
         await enterEndPosition('100')
         await clickButton('add')
 
-        expect(addProgress).toHaveBeenCalledWith({
-            date: new Date(2025, 2, 20),
-            bookNote: book.note,
-            action: 'progress',
-            start: null,
-            end: position(100),
-        })
+        expect(addProgress).toHaveBeenCalledExactlyOnceWith([
+            {
+                date: new Date(2025, 2, 20),
+                bookNote: book.note,
+                action: 'progress',
+                start: null,
+                end: position(100),
+            },
+        ])
     })
 
     test('Track progress with start and end page', async () => {
@@ -68,13 +70,15 @@ describe('Reading progress', () => {
         await enterEndPosition('100')
         await clickButton('add')
 
-        expect(addProgress).toHaveBeenCalledWith({
-            date: new Date(2025, 2, 20),
-            bookNote: book.note,
-            action: 'progress',
-            start: position(10),
-            end: position(100),
-        })
+        expect(addProgress).toHaveBeenCalledExactlyOnceWith([
+            {
+                date: new Date(2025, 2, 20),
+                bookNote: book.note,
+                action: 'progress',
+                start: position(10),
+                end: position(100),
+            },
+        ])
     })
 
     test('Track pages when tracking "finish and track remaining progress"', async () => {
@@ -85,14 +89,20 @@ describe('Reading progress', () => {
         await selectDate('2025-03-20')
         await clickButton('add')
 
-        expect(addProgress).toHaveBeenCalledTimes(2)
-        expect(addProgress).toHaveBeenNthCalledWith(1, {
-            date: new Date(2025, 2, 20),
-            bookNote: book.note,
-            action: 'progress',
-            start: null,
-            end: position(200),
-        })
+        expect(addProgress).toHaveBeenCalledExactlyOnceWith([
+            {
+                date: new Date(2025, 2, 20),
+                bookNote: book.note,
+                action: 'progress',
+                start: null,
+                end: position(200),
+            },
+            {
+                date: new Date(2025, 2, 20),
+                bookNote: book.note,
+                action: 'finished',
+            },
+        ])
     })
 })
 

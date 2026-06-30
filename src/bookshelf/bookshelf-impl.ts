@@ -126,8 +126,10 @@ export class BookshelfImpl implements Bookshelf {
                   .statistics()
     }
 
-    public async addToReadingJourney(item: ReadingJourneyMatch): Promise<void> {
-        await this.process(await this.readingJourneyWriter.add(item))
+    public async addToReadingJourney(items: Array<ReadingJourneyMatch>): Promise<void> {
+        for (const item of items) {
+            await this.process(await this.readingJourneyWriter.add(item))
+        }
     }
 
     public subscribe(subscriber: () => void): () => void {

@@ -25,7 +25,7 @@ function initialValues(book: Book): { action: Action; start: Position } {
 
 interface Props {
     book: Book
-    add: (item: ReadingJourneyMatch) => void
+    add: (items: Array<ReadingJourneyMatch>) => void
 }
 
 interface PositionState {
@@ -70,34 +70,38 @@ export function ReadingJourneyForm({ book, add }: Props) {
             case 'started':
             case 'abandoned':
             case 'finished':
-                add({ action: action, bookNote: book.note, date: dateObject })
+                add([{ action: action, bookNote: book.note, date: dateObject }])
                 break
             case 'progress+finish':
                 if (lastPosition === null) {
                     return
                 }
 
-                add({
-                    action: 'progress',
-                    bookNote: book.note,
-                    date: dateObject,
-                    start: null,
-                    end: lastPosition,
-                })
-                add({ action: 'finished', bookNote: book.note, date: dateObject })
+                add([
+                    {
+                        action: 'progress',
+                        bookNote: book.note,
+                        date: dateObject,
+                        start: null,
+                        end: lastPosition,
+                    },
+                    { action: 'finished', bookNote: book.note, date: dateObject },
+                ])
                 break
             case 'progress':
                 if (end.positionValue === null) {
                     throw new Error('Cannot add progress without end position')
                 }
 
-                add({
-                    action: action,
-                    bookNote: book.note,
-                    date: dateObject,
-                    start: start.positionValue,
-                    end: end.positionValue,
-                })
+                add([
+                    {
+                        action: action,
+                        bookNote: book.note,
+                        date: dateObject,
+                        start: start.positionValue,
+                        end: end.positionValue,
+                    },
+                ])
                 break
         }
 

@@ -49,10 +49,10 @@ function SyncedBookDetails({
         <BookDetails
             book={book}
             openLink={openLink}
-            addProgress={(item) => {
+            addProgress={(items) => {
                 bookshelf
-                    .addToReadingJourney(item)
-                    .catch((reason) => console.error(`Error adding item to reading journey: ${reason}`))
+                    .addToReadingJourney(items)
+                    .catch((reason) => console.error(`Error adding items to reading journey: ${reason}`))
             }}
         />
     )

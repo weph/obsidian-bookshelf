@@ -15,7 +15,7 @@ import { TextLink } from '../text-link/text-link'
 interface Props {
     book: Book
     openLink: (book: Book | Link) => void
-    addProgress: (item: ReadingJourneyMatch) => void
+    addProgress: (items: Array<ReadingJourneyMatch>) => void
 }
 
 export function BookDetails({ book, openLink, addProgress }: Props) {

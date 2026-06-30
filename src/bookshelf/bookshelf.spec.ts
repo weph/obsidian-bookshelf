@@ -1006,35 +1006,37 @@ describe('Adding items to reading journey', () => {
         notes.add(dracula)
         await bookshelf.process(dracula)
 
-        await bookshelf.addToReadingJourney({
-            action: 'progress',
-            bookNote: dracula,
-            date: new Date(2025, 0, 3),
-            start: position(1),
-            end: position(50),
-        })
-        await bookshelf.addToReadingJourney({
-            action: 'abandoned',
-            bookNote: dracula,
-            date: new Date(2025, 0, 4),
-        })
-        await bookshelf.addToReadingJourney({
-            action: 'started',
-            bookNote: dracula,
-            date: new Date(2025, 0, 5),
-        })
-        await bookshelf.addToReadingJourney({
-            action: 'progress',
-            bookNote: dracula,
-            date: new Date(2025, 0, 5),
-            start: null,
-            end: position(350),
-        })
-        await bookshelf.addToReadingJourney({
-            action: 'finished',
-            bookNote: dracula,
-            date: new Date(2025, 0, 5),
-        })
+        await bookshelf.addToReadingJourney([
+            {
+                action: 'progress',
+                bookNote: dracula,
+                date: new Date(2025, 0, 3),
+                start: position(1),
+                end: position(50),
+            },
+            {
+                action: 'abandoned',
+                bookNote: dracula,
+                date: new Date(2025, 0, 4),
+            },
+            {
+                action: 'started',
+                bookNote: dracula,
+                date: new Date(2025, 0, 5),
+            },
+            {
+                action: 'progress',
+                bookNote: dracula,
+                date: new Date(2025, 0, 5),
+                start: null,
+                end: position(350),
+            },
+            {
+                action: 'finished',
+                bookNote: dracula,
+                date: new Date(2025, 0, 5),
+            },
+        ])
 
         expect(await dracula.listItems()).toEqual([
             '2025-01-02: Started reading',
@@ -1069,35 +1071,37 @@ describe('Adding items to reading journey', () => {
         notes.add(dracula)
         await bookshelf.process(dracula)
 
-        await bookshelf.addToReadingJourney({
-            action: 'progress',
-            bookNote: dracula,
-            date: new Date(2025, 0, 3),
-            start: position(1),
-            end: position(50),
-        })
-        await bookshelf.addToReadingJourney({
-            action: 'abandoned',
-            bookNote: dracula,
-            date: new Date(2025, 0, 4),
-        })
-        await bookshelf.addToReadingJourney({
-            action: 'started',
-            bookNote: dracula,
-            date: new Date(2025, 0, 5),
-        })
-        await bookshelf.addToReadingJourney({
-            action: 'progress',
-            bookNote: dracula,
-            date: new Date(2025, 0, 5),
-            start: null,
-            end: position(350),
-        })
-        await bookshelf.addToReadingJourney({
-            action: 'finished',
-            bookNote: dracula,
-            date: new Date(2025, 0, 5),
-        })
+        await bookshelf.addToReadingJourney([
+            {
+                action: 'progress',
+                bookNote: dracula,
+                date: new Date(2025, 0, 3),
+                start: position(1),
+                end: position(50),
+            },
+            {
+                action: 'abandoned',
+                bookNote: dracula,
+                date: new Date(2025, 0, 4),
+            },
+            {
+                action: 'started',
+                bookNote: dracula,
+                date: new Date(2025, 0, 5),
+            },
+            {
+                action: 'progress',
+                bookNote: dracula,
+                date: new Date(2025, 0, 5),
+                start: null,
+                end: position(350),
+            },
+            {
+                action: 'finished',
+                bookNote: dracula,
+                date: new Date(2025, 0, 5),
+            },
+        ])
 
         expect(await (await notes.dailyNote(new Date(2025, 0, 3))).listItems('Reading')).toEqual([
             'Read [[Dracula]]: 1-50',
@@ -1179,7 +1183,7 @@ describe('Subscribers', () => {
         subscriber1.mockReset()
         subscriber2.mockReset()
 
-        await bookshelf.addToReadingJourney({ action: 'started', bookNote: dracula, date: new Date(2025, 3, 10) })
+        await bookshelf.addToReadingJourney([{ action: 'started', bookNote: dracula, date: new Date(2025, 3, 10) }])
 
         expect(subscriber1).toHaveBeenCalledOnce()
         expect(subscriber2).toHaveBeenCalledOnce()

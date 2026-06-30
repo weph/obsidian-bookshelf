@@ -21,7 +21,7 @@ export interface Bookshelf {
 
     statistics(dateRange?: DateRange): Statistics
 
-    addToReadingJourney(item: ReadingJourneyMatch): Promise<void>
+    addToReadingJourney(items: Array<ReadingJourneyMatch>): Promise<void>
 
     subscribe(subscriber: () => void): () => void
 }
